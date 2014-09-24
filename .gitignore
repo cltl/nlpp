@@ -1,0 +1,11 @@
+# .Gitignore
+
+*~
+
+bin
+
+# Modules
+modules/morphosyntactic_parser_nl
+modules/tokenizer-base
+modules/Alpino
+
