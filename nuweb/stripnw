@@ -1,0 +1,8 @@
+#!/bin/bash
+#stripnw -- perform preprocessing on nuweb/M4 files
+RAWFIL=a_$1.w
+M4FIL=m4_$1.w
+NUWEBFIL=$1.w
+gawk '{if(match($0, "@%")) {printf("%s", substr($0,1,RSTART-1))} else print}' $RAWFIL \
+ | gawk  '{gsub(/[\\][\$]/, "$");print}'  >$M4FIL
+m4 -P $M4FIL >$NUWEBFIL

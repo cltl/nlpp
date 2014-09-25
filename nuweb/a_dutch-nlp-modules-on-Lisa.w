@@ -16,14 +16,60 @@ m4_include(texinclusions.m4)m4_dnl
 \begin{document}
 \maketitle
 \begin{abstract}
-  This is the abstract
+  This is a description and documentation of the installation of the current NLP
+  modules on Lisa, so that they can be used in pipelines
 \end{abstract}
 \tableofcontents
 
 \section{Introduction}
 \label{sec:Introduction}
 
-Introduce your problem and the strategy to solve it.
+
+\subsection{List of the modules to be installed}
+
+\begin{table}[hbtp]
+  \centering
+  \begin{tabular}{lllll}
+   \textbf{module}      & \textbf{directory} & \textbf{source} & \textbf{script} & \textbf{Bijzonderheden} \\
+     Tokenizer          & m4_tokenizerdir & Github    & m4_tokenizerscript  &               \\
+     Morphosynt. parser & m4_morphpardir  & Github    & m4_morphparscript   & Needs Alpino  \\
+     Alpinohack         & clean_hack      & This doc. & m4_alpinohackscript &              \\
+     \textsc{ner}       & m4_jardir       & Lisa      & m4_nerscript        & Open source?  \\
+     \textsc{wsd}       & m4_wsddir       & Lisa      & m4_wsdscript        &  \\
+     Onto               & m4_ontodir      & Lisa      & m4_ontoscript       &  \\
+     Heidel             & m4_heideldir    & Lisa      & m4_heidelscript     &  \\
+     SRL                & m4_srldir       & Lisa      & m4_srlscript        &  \\
+     Alpino             & m4_alpinodir    & \textsc{rug} & m4_Alpinoscript  & \\
+     Ticcutils          & m4_ticcsrc      & \textsc{ilk} & &
+  \end{tabular}
+  \caption{List of the modules to be installed}
+  \label{tab:modulelist}
+\end{table}
+
+
+\begin{table}[hbtp]
+  \centering
+  \begin{tabular}{lll}
+   \textbf{module} & \textbf{source} & {\small\textbf{URL}}  \\
+   Tokenizer          & Github & m4_tokenizergit \\
+   Morphosynt. parser & Github & m4_morphpargit \\
+   Alpino             & \textsc{rug}  & m4_alpinosrc \\
+   Ticcutils          & \textsc{ilk}  & m4_ticcsrc \\
+   Timble            & \textsc{ilk} & m4_timblsrc \\
+  \end{tabular}
+  \caption{Sources of the modules}
+  \label{tab:modulesources}
+\end{table}
+
+
+  
+
+
+List of the modules:
+
+
+
+
 
 \section{The program}
 \label{sec:program}
