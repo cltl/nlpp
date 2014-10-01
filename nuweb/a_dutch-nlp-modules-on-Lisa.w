@@ -17,7 +17,7 @@ m4_include(texinclusions.m4)m4_dnl
 \maketitle
 \begin{abstract}
   This is a description and documentation of the installation of the current NLP
-  modules on Lisa, so that they can be used in pipelines
+  modules on Lisa, so that they can be used in pipelines.
 \end{abstract}
 \tableofcontents
 
@@ -25,56 +25,783 @@ m4_include(texinclusions.m4)m4_dnl
 \label{sec:Introduction}
 
 
+
+
 \subsection{List of the modules to be installed}
 
+Table~\ref{tab:modulelist}
 \begin{table}[hbtp]
   \centering
   \begin{tabular}{lllll}
-   \textbf{module}      & \textbf{directory} & \textbf{source} & \textbf{script} & \textbf{Bijzonderheden} \\
-     Tokenizer          & m4_tokenizerdir & Github    & m4_tokenizerscript  &               \\
-     Morphosynt. parser & m4_morphpardir  & Github    & m4_morphparscript   & Needs Alpino  \\
-     Alpinohack         & clean_hack      & This doc. & m4_alpinohackscript &              \\
-     \textsc{ner}       & m4_jardir       & Lisa      & m4_nerscript        & Open source?  \\
-     \textsc{wsd}       & m4_wsddir       & Lisa      & m4_wsdscript        &  \\
-     Onto               & m4_ontodir      & Lisa      & m4_ontoscript       &  \\
-     Heidel             & m4_heideldir    & Lisa      & m4_heidelscript     &  \\
-     SRL                & m4_srldir       & Lisa      & m4_srlscript        &  \\
-     Alpino             & m4_alpinodir    & \textsc{rug} & m4_Alpinoscript  & \\
-     Ticcutils          & m4_ticcsrc      & \textsc{ilk} & &
+   \textbf{module}      & \textbf{directory} & \textbf{source} & \textbf{script} & \textbf{Details} \\
+     Tokenizer          & \verb|m4_tokenizerdir| & Github    & m4_tokenizerscript  &               \\
+     Morphosynt. p.     & \verb|m4_morphpardir|  & Github    & \verb|m4_morphparscript|   & Needs Alpino  \\
+     Alpinohack         & \verb|clean_hack|      & This doc. & m4_alpinohackscript &              \\
+     \textsc{ner}       & \verb|m4_jardir|       & Lisa      & m4_nerscript        & Open source?  \\
+     \textsc{wsd}       & \verb|m4_wsddir|       & Lisa      & m4_wsdscript        &  \\
+     Onto               & \verb|m4_ontodir|      & Lisa      & m4_ontoscript       &  \\
+     Heidel             & \verb|m4_heideldir|    & Lisa      & m4_heidelscript     &  \\
+     SRL                & \verb|m4_srldir|       & Lisa      & m4_srlscript        &  \\
+@%     Alpino             & \verb|m4_alpinodir|    & \textsc{rug} & m4_Alpinoscript  & \\
+@%     Ticcutils          & \verb|m4_ticcdir|      & \textsc{ilk} & & \\
+@%     Timbl              & \verb|m4_timbldir|     & \textsc{ilk} & & \\
+@%     Treetagger         &                        &              & & \\
   \end{tabular}
-  \caption{List of the modules to be installed}
+  \caption{List of the modules to be installed. Column description:
+    \textbf{directory:} Name of the subdirectory below \texttt{mod} in
+    which it is installed; \textbf{Source:} From where the module has
+    been obtained; \textbf{script:} Script to be included in a pipeline.}
   \label{tab:modulelist}
 \end{table}
-
-
+lists the modules in the pipeline. The column \emph{source} indicated
+the origin of the module. Ideally, modules are directly obtained from
+a public repository, e.g. Github or a website of the organisation
+where the module has been built. However, some of the modules are not yet
+available in this way and only a snapshot has been installed by hand in
+Lisa. Table~/ref{tab:modulesources} provides the \textsc{url}'s of the
+sources that have been obtained from a public repository.
 \begin{table}[hbtp]
   \centering
+  \begin{footnotesize}
   \begin{tabular}{lll}
    \textbf{module} & \textbf{source} & {\small\textbf{URL}}  \\
    Tokenizer          & Github & m4_tokenizergit \\
-   Morphosynt. parser & Github & m4_morphpargit \\
-   Alpino             & \textsc{rug}  & m4_alpinosrc \\
+   Morphosynt. p. & Github & \verb|m4_morphpargit| \\
+   Alpino             & \textsc{rug}  & \verb|m4_alpinosrc| \\
    Ticcutils          & \textsc{ilk}  & m4_ticcsrc \\
    Timble            & \textsc{ilk} & m4_timblsrc \\
   \end{tabular}
+  \end{footnotesize}
   \caption{Sources of the modules}
   \label{tab:modulesources}
 \end{table}
 
+Table~\ref{tab:utillist}
+\begin{table}[hbtp]
+  \centering
+  \begin{tabular}{llll}
+   \textbf{module}      & \textbf{directory}  & \textbf{source}  & \textbf{Details} \\
+     KafNafParserPy     & \verb|m4_kafnafdir| & Github           & \\
+     Alpino             & \verb|m4_alpinodir| & \textsc{rug}     &  \\
+     Ticcutils          & \verb|m4_ticcdir|   & \textsc{ilk}     & \\
+     Timbl              & \verb|m4_timbldir|  & \textsc{ilk}     & \\
+     Treetagger         &                     &                  & \\
+  \end{tabular}
+  \caption{List of the modules to be installed. Column description:
+    \textbf{directory:} Name of the subdirectory below \texttt{mod} in
+    which it is installed; \textbf{Source:} From where the module has
+    been obtained; \textbf{script:} Script to be included in a pipeline.}
+  \label{tab:modulelist}
+\end{table}
 
-  
-
-
-List of the modules:
 
 
 
+\section{Installation}
+\label{sec:install}
+
+The modules are placed in subdirectory mods and scripts to apply the
+modules in a pipeline are placed in subdirectory \texttt{bin}. The
+modules directory has a subdirectories \verb|python| for for python
+utilities resp java modules.
+
+@d directories to create @{m4_amoddir @| @}
+@d directories to create @{m4_abindir @| @}
+@d directories to create @{m4_ausrlocaldir m4_ausrlocaldir<!!>/bin m4_ausrlocaldir<!!>/lib @| @}
+@d directories to create @{m4_amoddir/python @| @}
+@d directories to create @{m4_ajardir @| @}
+
+Make the Python utilities findable with the following macro:
+
+@d set pythonpath @{@%
+export PYTHONPATH=m4_amoddir/python:\$PYTHONPATH
+@| @}
+
+Similarly, make binaries of utilities findable:
+
+@d set local bin directory @{@%
+export PATH=m4_ausrlocaldir<!!>/bin:$PATH
+@| @}
 
 
-\section{The program}
-\label{sec:program}
 
-Construct and describe your program.
+
+
+@o m4_bindir/install_modules @{@%
+#!/bin/bash
+@< variables of install\_modules @>
+@% @< install the tokenizer @>
+@% @< install kafnafparserpy @>
+@% @< install Alpino @>
+@% @< install the morphosyntactic parser @>
+@% @< install the NER module @>
+@% @< install the WSD module @>
+@% @< install the onto module @>
+@< install the heideltime module @>
+@< install the srl module @>
+@< install the treetagger utility @>
+@< install the ticcutils utility @>
+@< install the timbl utility @>
+
+@| @}
+
+@d make scripts executable @{@%
+chmod 775  m4_abindir/install_modules
+@| @}
+
+
+Installation goes as follows:
+
+\begin{enumerate}
+\item If the module exists already, move it to a temporary place.
+\item Try to install the module from the source.
+\item If that is successful, remove the old version. Otherwise, move
+  the old version back to its original place.
+\end{enumerate}
+
+@d move module  @{@%
+if
+ [ -e @1 ]
+then
+   mv @1 old.@1
+fi
+@| @}
+
+
+@d remove old module  @{@%
+rm -rf old.@1
+@| @}
+
+
+@d re-instate old module @{@%
+mv old.@1 @1
+MESS="Replaced previous version of @1"
+@< logmess @($MESS@) @>
+
+@| @}
+
+
+@d install from github @{@%
+MODNAM=@1
+DIRN=@2
+GITU=@3
+@< find leave and tree @>
+@< logmess @("TREE: \$TREE; LEAVE: \$LEAVE"@) @>
+cd $TREE
+@< move module @(\$LEAVE@) @>
+git clone $GITU
+if
+  [ $? -gt 0 ]
+then
+  @< logmess @(Cannot install current $MODNAM version@) @>
+  @< re-instate old module @(\$LEAVE@) @>
+else
+  @< remove old module @(\$LEAVE@) @>
+fi
+
+@| @}
+
+
+Note: Par.~1: Directory; par~2: path to directory; par~3: directory name.
+
+@d find leave and tree @{@%
+FULLDIR=m4_amoddir/$DIRN
+LEAVE=${FULLDIR##*/}
+TREE=${FULLDIR%%\$LEAVE}
+@| @}
+
+
+\subsection{Install tokenizer}
+\label{sec:installtokenizer}
+
+\subsubsection{Module}
+\label{sec:install-tokenizermodule}
+
+@d install the tokenizer @{@%
+@< install from github @(tokenizer@,m4_tokenizerdir@,m4_tokenizergit@) @>
+@| @}
+
+
+@% @d install the tokenizer @{@%
+@% cd m4_amoddir
+@% @< move module @(m4_tokenizerdir@) @>
+@% git clone m4_tokenizergit
+@% if
+@%   [ $? -gt 0 ]
+@% then
+@%   @< logmess @(Cannot install current tokenizer version@) @>
+@%   @< re-instate old module @(m4_tokenizerdir@) @>
+@% else
+@%   @< remove old module @(m4_tokenizerdir@) @>
+@% fi
+@% @| @} 
+
+\subsubsection{Script}
+\label{sec:tokenizerscript}
+
+The script just runs the tokenizerscript in Perl.
+
+@o m4_bindir/m4_tokenizerscript @{@%
+#!/bin/bash
+ROOT=m4_aprojroot
+TOKBINDIR=m4_amoddir/<!!>m4_tokenizerdir<!!>/core
+cat | perl \$TOKBINDIR/tokenizer-cli.pl -l nl t  
+
+@| @}
+
+@d make scripts executable @{@%
+chmod 775  m4_abindir/m4_tokenizerscript
+@| @}
+
+
+\subsection{Install Alpino}
+\label{sec:install-alpino}
+
+Install Alpino from the website of Gertjan van Noort.
+
+\subsubsection{Module}
+\label{sec:installalpinomodule}
+
+@d install Alpino @{@%
+SUCCES=0
+cd m4_amoddir
+@< move module @(Alpino@) @>
+wget m4_alpinourl
+SUCCES=\$?
+if
+  [ \$SUCCES -eq 0 ]
+then
+  tar -xzf m4_alpinosrc
+  SUCCES=\$?
+  rm -rf m4_alpinosrc
+fi
+if
+  [ $SUCCES -eq 0 ]
+then
+  @< logmess @(Installed Alpino@) @>
+  @< remove old module @(Alpino@) @>
+else
+  @< re-instate old module @(Alpino@) @>
+fi
+@|SUCCES @}
+
+Currently, alpino is not used as a pipeline-module on its own, but it
+is included in other pipeline-modules. Modules that use Alpino should
+set the following variables:
+
+@d set alpinohome @{@%
+export ALPINO_HOME=m4_amoddir/Alpino
+@| ALPINO_HOME @}
+
+
+\subsection{Morphosyntactic parser}
+\label{sec:install-morphsynt-parser}
+
+
+\subsubsection{Module}
+\label{sec:install-tokenizermodule}
+
+@d install the morphosyntactic parser @{@%
+@< install from github @(morphsynparser@,m4_morphpardir@,m4_morphpargit@) @>
+@| @}
+
+
+@% @d install the morphosyntactic parser @{@%
+@% cd m4_amoddir
+@% @< move module @(m4_morphpardir@) @>
+@% git clone m4_morphpargit
+@% if
+@%   [ $? -gt 0 ]
+@% then
+@%   @< logmess @(Cannot install current tokenizer version@) @>
+@%   @< re-instate old module @(m4_tokenizerdir@) @>
+@% else
+@%   @< remove old module @(m4_tokenizerdir@) @>
+@% fi
+@% @| @} 
+
+\subsubsection{Script}
+\label{sec:morphparserscript}
+
+@o m4_bindir/m4_morphparscript @{@%
+#!/bin/bash
+ROOT=m4_aprojroot
+MODDIR=m4_amoddir/<!!>m4_morphpardir<!!>
+@< set alpinohome @>
+@< set pythonpath @>
+cat | python \$MODDIR/core/morph_syn_parser.py
+@| @}
+
+@d make scripts executable @{@%
+chmod 775  m4_abindir/m4_morphparscript
+@| @}
+
+\subsection{Alpino hack}
+\label{sec:alpinohack}
+
+Install a hack that removes output from Alpino that cannot be
+interpreted by following modules. It is just a small python script.
+
+\subsubsection{Module}
+\label{sec:alpinohack}
+
+@d directories to create @{m4_amoddir/m4_alpinohackdir @| @}
+
+@o m4_moddir/m4_alpinohackdir/m4_alpinohackpythonscript @{@%
+#!/usr/bin/python
+import sys
+
+input = sys.stdin
+
+output = ''
+
+for line in input:
+    line = line.replace('"--','"#')
+    line = line.replace('--"','#"')
+    output += line
+
+print output
+
+@| @}
+
+\subsubsection{Script}
+\label{sec:script}
+
+@o m4_bindir/m4_alpinohackscript @{@%
+#!/bin/bash
+ROOT=m4_aprojroot
+HACKDIR=m4_amoddir/m4_alpinohackdir
+cat | python  \$HACKDIR/clean_hack.py 
+
+@| @}
+
+@d make scripts executable @{@%
+chmod 775  m4_abindir/m4_alpinohackscript
+@| @}
+
+
+
+\subsection{Named entity recognition}
+\label{sec:nermodule}
+
+\subsubsection{Module}
+\label{sec:module}
+
+We do not (yet have the source code of the NER module. A snapshot is
+comprised in a jar library.
+
+@d install the NER module @{@%
+cp m4_asnapshotroot/jars/m4_nerjar m4_jardir/
+@| @}
+
+\subsubsection{Script}
+\label{sec:nerscript}
+
+@o m4_bindir/m4_nerscript @{@%
+#!/bin/bash
+ROOT=m4_aprojroot
+JARDIR=m4_ajardir
+cat | java -jar \$JARDIR/m4_nerjar tag
+@| @}
+
+@d make scripts executable @{@%
+chmod 775  m4_abindir/m4_nerscript
+@| @}
+
+
+\subsection{Wordsense-disambiguation}
+\label{sec:wsd}
+
+We do not yet have a source-repository of the wsd module. Therefore,
+install from a snapshot on Lisa.
+
+\subsubsection{Module}
+\label{sec:wsd-module}
+
+@d install the WSD module @{@%
+cp -r m4_asnapshotroot/m4_wsddir m4_amoddir/
+@| @}
+
+
+\subsubsection{Script}
+\label{sec:wsdscript}
+
+@o m4_bindir/m4_wsdscript @{@%
+#!/bin/bash
+# WSD -- wrapper for word-sense disambiguation
+# 8 Jan 2014 Ruben Izquierdo
+# 16 sep 2014 Paul Huygen
+ROOT=m4_aprojroot
+WSDDIR=m4_amoddir/m4_wsddir
+WSDSCRIPT=kaf_annotate_senses.pl
+UKB=\$WSDDIR/ukb_wsd_2.0
+POSMAP=$WSDDIR/posmap.NGV.txt
+
+if [ "$1" = "nl" ]
+then
+  GRAPH=\$WSDDIR/cdb2.0-nld-all.infv.0.0.no-allwords.bin
+  DICT=\$WSDDIR/dictionary
+else
+  GRAPH=\$WSDDIR/wn30g_eng.v20.bin
+  DICT=\$WSDDIR/wn30_eng_dict.txt
+fi
+
+iconv -t utf-8//IGNORE | \$WSDDIR/\$WSDSCRIPT -x \$UKB -M \$GRAPH -W \$DICT -m \$POSMAP
+@| @}
+
+@d make scripts executable @{@%
+chmod 775  m4_abindir/m4_wsdscript
+@| @}
+
+
+\subsection{Ontotagger}
+\label{sec:onto}
+
+We do not yet have a source-repository of the Ontotagger module. Therefore,
+install from a snapshot on Lisa.
+
+\subsubsection{Module}
+\label{sec:wsd-module}
+
+@d install the onto module @{@%
+cp -r m4_asnapshotroot/m4_ontodir m4_amoddir/
+@| @}
+
+
+\subsubsection{Script}
+\label{sec:ontoscript}
+
+@o m4_bindir/m4_ontoscript @{@%
+#!/bin/bash
+ROOT=/home/phuijgen
+ONTODIR=m4_amoddir/m4_ontodir
+JARDIR=\$ONTODIR/lib
+RESOURCESDIR=\$ONTODIR/resources
+PREDICATEMATRIX="\$RESOURCESDIR/PredicateMatrix.v1.1/PredicateMatrix.v1.1.role.nl-1.merged"
+GRAMMATICALWORDS="\$RESOURCESDIR/grammaticals/Grammatical-words.nl"
+TMPFIL=`mktemp -t stap6.XXXXXX`
+cat >$TMPFIL
+
+CLASSPATH=\$JARDIR/ontotagger-1.0-jar-with-dependencies.jar
+JAVASCRIPT=eu.kyotoproject.main.KafPredicateMatrixTagger
+
+
+@% JAVA_ARGS="-Xmx1812m"
+@% JAVA_ARGS=\$JAVA_ARGS " -cp \$JARDIR/ontotagger-1.0-jar-with-dependencies.jar"
+@% JAVA_ARGS=\$JAVA_ARGS " eu.kyotoproject.main.KafPredicateMatrixTagger"
+JAVA_ARGS="--mappings \"fn;pb;nb\" "
+JAVA_ARGS="\$JAVA_ARGS  --key odwn-eq"
+JAVA_ARGS="\$JAVA_ARGS  --version 1.1"
+JAVA_ARGS="\$JAVA_ARGS  --predicate-matrix \$PREDICATEMATRIX"
+JAVA_ARGS="\$JAVA_ARGS  --grammatical-words \$GRAMMATICALWORDS"
+JAVA_ARGS="\$JAVA_ARGS  --naf-file \$TMPFIL"
+java -Xmx1812m -cp \$CLASSPATH \$JAVASCRIPT \$JAVA_ARGS
+
+@% @< onto javacommand @>
+@% java \$JAVA_ARGS
+@% java -Xmx1812m -cp $JARDIR/ontotagger-1.0-jar-with-dependencies.jar \
+@%      eu.kyotoproject.main.KafPredicateMatrixTagger \
+@%      --mappings "fn;pb;nb" --key odwn-eq --version 1.1 \
+@%      --predicate-matrix \
+@%        "\$RESOURCESDIR/PredicateMatrix.v1.1/PredicateMatrix.v1.1.role.nl-1.merged" \ 
+@%        --grammatical-words \
+@%      "\$RESOURCESDIR/grammaticals/Grammatical-words.nl" \
+@%       --naf-file $TMPFIL 
+rm -rf \$TMPFIL
+
+@| @}
+
+
+@% The Java command for the onto-tagger is very long. I tried to make it
+@% more readable and could only come up with the following method:
+@% 
+@% @d onto javacommand @{java -Xmx1812m @| @}
+@% @d onto javacommand @{-cp \$CLASSPATH @| @}
+@% @d onto javacommand @{\$JAVASCRIPT  @| @}
+@% @d onto javacommand @{--mappings "fn;pb;nb" @| @}
+@% @d onto javacommand @{ --key odwn-eq @| @}
+@% @d onto javacommand @{--version 1.1 @| @}
+@% @d onto javacommand @{--predicate-matrix \$PREDICATEMATRIX @| @}
+@% @d onto javacommand @{ --grammatical-words "\$GRAMMATICALWORDS" @| @}
+@% @d onto javacommand @{--naf-file $TMPFIL
+@% @| @}
+
+
+
+@d make scripts executable @{@%
+chmod 775  m4_abindir/m4_ontoscript
+@| @}
+
+
+
+\subsection{Heideltime}
+\label{sec:heideltime}
+
+\subsubsection{Module}
+\label{sec:heideltimmodule}
+
+@d install the heideltime module @{@%
+@< install from github @(heideltime@,m4_heideldir@,m4_heidelgit@) @>
+@< adapt heideltime's config.props @>
+
+@| @}
+
+@d adapt heideltime's config.props @{@%
+CONFIL=m4_heideldir/config.props
+tempfil=`mktemp -t heideltmp.XXXXXX`
+mv $CONFIL \$tempfil
+MODDIR=m4_amoddir
+TREETAGDIR=m4_treetagdir
+AWKCOMMAND='/^treeTaggerHome/ {\$0="treeTaggerHome = m4_amoddir/m4_treetagdir"}; {print}'
+gawk "\$AWKCOMMAND" \$tempfil >\$CONFIL
+@| @}
+
+
+\subsubsection{Script}
+\label{sec:script}
+
+@o m4_bindir/m4_heidelscript @{@%
+#!/bin/bash
+ROOT=m4_aprojroot
+HEIDELDIR=m4_amoddir/m4_heideldir
+cd $HEIDELDIR
+@< set pythonpath @>
+iconv -t utf-8//IGNORE | python \$HEIDELDIR/HeidelTime_NafKaf.py \$HEIDELDIR/heideltime-standalone/ \$HEIDELDIR/tmp/
+@| @}
+
+@d make scripts executable @{@%
+chmod 775  m4_abindir/m4_heidelscript
+@| @}
+
+\subsection{Semantic Role labelling}
+\label{sec:SRL}
+
+\subsubsection{Module}
+\label{sec:SRL-module}
+
+@d install the srl module @{@%
+cp -r m4_asnapshotroot/m4_srldir m4_amoddir/
+
+@| @}
+
+
+\subsubsection{Script}
+\label{sec:SRLscript}
+
+@o m4_bindir/m4_srlscript @{@%
+#!/bin/bash
+ROOT=m4_aprojroot
+SRLDIR=m4_amoddir/m4_srldir
+cd \$SRLDIR
+@< set local bin directory @>
+@< set pythonpath @>
+cat | \$SRLDIR/getSRLinfo.py \$SRLDIR/srlModule/ \$SRLDIR/tmp
+
+@| @}
+
+@d make scripts executable @{@%
+chmod 775  m4_abindir/m4_heidelscript
+@| @}
+
+
+
+\subsection{KafNafParserPy}
+\label{sec:KafNafParserPy}
+
+Several modules use KafNafParserpy to read and write \textsc{naf}
+files.
+
+\subsubsection{Module}
+\label{sec:install-kafnafparserpy}
+
+@d install kafnafparserpy @{@%
+@< install from github @(kafnafparserpy@,m4_kafnafdir@,m4_kafnafgit@) @>
+@| @}
+
+
+\section{Utilities}
+\label{sec:utilities}
+
+\subsection{Test script}
+\label{sec:testscript}
+
+The following script pushes a single sentence through the modules of
+the pipeline.
+
+@o m4_bindir/test @{@%
+#!/bin/bash
+ROOT=m4_aprojroot
+BIND=\$ROOT/bin
+echo "De hond eet jus." | \$BIND/tok | \$BIND/mor | \
+\$BIND/m4_alpinohackscript | \$BIND/m4_nerscript  | \$BIND/m4_wsdscript | \
+\$BIND/m4_ontoscript | \$BIND/m4_heidelscript | \$BIND/m4_srlscript  > \$ROOT/test.out
+@| @}
+
+@d make scripts executable @{@%
+chmod 775  m4_abindir/test
+@| @}
+
+
+\subsection{Treetagger}
+\label{sec:installtreetagger}
+
+\subsubsection{Module}
+\label{sec:mdule}
+
+@d install the treetagger utility @{@%
+TREETAGSRC=m4_treetagsrc
+TREETAGURL=m4_treetagurl
+TREETAGDIR=m4_treetagdir
+SUCCES=0
+mkdir -p m4_amoddir/\$TREETAGDIR
+cd m4_amoddir/\$TREETAGDIR
+@% @< move module @(Alpino@) @>
+wget \$TREETAGURL
+SUCCES=\$?
+if
+  [ \$SUCCES -eq 0 ]
+then
+  tar -xzf \$TREETAGSRC
+  SUCCES=\$?
+  rm -rf \$TREETAGSRC
+fi
+if
+  [ $SUCCES -eq 0 ]
+then
+  @< logmess @(Installed treetagger@) @>
+@%   @< remove old module @(treetager@) @>
+@% else
+@%   @< re-instate old module @(Alpino@) @>
+fi
+@| @}
+
+
+\subsection{Timbl and ticcutils}
+\label{sec:timbl}
+
+
+
+\subsubsection{Module}
+\label{sec:timblmodule}
+
+Timbl and ticcutils are installed from their source-tarballs. The
+installation is not (yet?) completely reproducibe because it uses the currently
+available c-compiler. Installation involves:
+
+\begin{enumerate}
+\item Download the tarball in a temporary directory.
+\item Unpack the tarball.
+\item cd to the unpacked directory and perform \verb|./configure|,
+  \verb|make| and \verb|make install|. Note the argument that causes
+  the files to be installed in the \verb|usrlocal| subdirectory of the
+  modules directory.
+\end{enumerate}
+
+@d install the ticcutils utility @{@%
+URL=m4_ticcurl
+TARB=m4_ticcsrc
+DIR=m4_ticcdir
+@< unpack ticcutils or timbl @>
+@| @}
+
+@d install the timbl utility @{@%
+URL=m4_timblurl
+TARB=m4_timblsrc
+DIR=m4_timbldir
+@< unpack ticcutils or timbl @>
+@| @}
+
+
+@d unpack ticcutils or tibml @{@%
+SUCCES=0
+ticbeldir=`mktemp -t -d tickbel.XXXXXX`
+cd \$ticbeldir
+wget \$URL
+SUCCES=\$?
+if
+  [ \$SUCCES -eq 0 ]
+then
+  tar -xzf \$TARB
+  SUCCES=\$?
+  rm -rf \$TARB
+fi
+if
+  [ \$SUCCES -eq 0 ]
+then
+  cd \$DIR
+  ./configure --prefix=m4_ausrlocaldir
+  make
+  make install
+fi
+cd m4_aprojroot
+rm -rf \$ticbeldir
+if
+  [ \$SUCCES -eq 0 ]
+then
+  @< logmess @(Installed \$DIR @>
+else
+  @< logmess @(NOT installed \$DIR @>
+fi
+@| @}
+
+
+
+\subsection{Logging}
+\label{sec:logging}
+
+Write log messages to standard out if variable \verb|LOGLEVEL| is
+equal to~1.
+
+@d variables of install\_modules @{@%
+LOGLEVEL=1
+@| @}
+
+@d logmess @{@%
+if
+ [ $LOGLEVEL -gt 0 ]
+then
+ echo @1
+fi 
+@| @}
+
+\subsection{Misc}
+\label{sec:misc}
+
+Install a module from a tarball: The macro expects the following three
+variables to be present:
+
+\begin{description}
+\item[URL:] The \textsc{url} tfrom where the taball can be downloaded.
+\item[TARB:] The name of the tarball.
+\item[DIR;] Name of the directory for the module.
+\end{description}
+
+Arg 1: URL; Arg 2: tarball; Arg 3: directory.
+
+@d install from tarball @{@%
+SUCCES=0
+cd m4_amoddir
+@< move module @(\$DIR@) @>
+wget \$URL
+SUCCES=\$?
+if
+  [ \$SUCCES -eq 0 ]
+then
+  tar -xzf \$TARB
+  SUCCES=\$?
+  rm -rf \$TARB
+fi
+if
+  [ $SUCCES -eq 0 ]
+then
+  @< logmess @(Installed \$DIR@) @>
+  @< remove old module @(\$DIR@) @>
+else
+  @< re-instate old module @(\$DIR@) @>
+fi
+@| @}
+
+
 
 \appendix
 
@@ -144,7 +871,7 @@ The raw document is named
 \verb|a_<!!>m4_progname<!!>.w|. Figure~\ref{fig:fileschema}
 \begin{figure}[hbtp]
   \centering
-  \includegraphics{fileschema.fig}
+@%  \includegraphics{fileschema.fig}
   \caption{Translation of the raw code of this document into
     printable/viewable documents and into program sources. The figure
     shows the pathways and the main files involved.}
@@ -220,7 +947,8 @@ constructed the \texttt{make} utility. Add these suffixes to the list.
 \subsection{Pre-processing}
 \label{sec:pre-processing}
 
-To make usable things from the raw input \verb|a_<!!>m4_progname<!!>.w|, do the following:
+To make usable things from the raw input
+\verb|a_<!!>m4_progname<!!>.w|, do the following:
 
 \begin{enumerate}
 \item Process \verb|\$| characters.
@@ -262,7 +990,7 @@ m4_<!!>m4_progname<!!>.w : a_<!!>m4_progname<!!>.w
 \label{sec:run_M4}
 
 @d  expliciete make regels @{@%
-m4_progname<!!>.w : m4_<!!>m4_progname<!!>.w
+m4_progname<!!>.w : m4_<!!>m4_progname<!!>.w inst.m4
 	m4 -P m4_<!!>m4_progname<!!>.w > m4_progname<!!>.w
 
 @| @}
@@ -424,6 +1152,9 @@ develop this thing, while it resides on a remote computer that is
 connected via the \verb|sshfs| filesystem. On my home computer I
 cannot run executables on this system, but on my work-computer I
 can. Therefore, place the following script on a local directory.
+
+@d directories to create @{m4_nuwebbindir @| @}
+
 
 @d parameters in Makefile @{@%
 W2PDF=m4_nuwebbindir/w2pdf
@@ -742,6 +1473,7 @@ sources : m4_progname.w \$(DIRS)
 @%	cd m4_bindir && chmod 775 createdirs
 @%	m4_bindir/createdirs
 	\$(NUWEB) m4_progname.w
+	@< make scripts executable @>
 
 jetty : sources
 	cd .. && mvn jetty:run

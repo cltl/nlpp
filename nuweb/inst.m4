@@ -10,15 +10,16 @@ m4_dnl
 m4_dnl Paths and URL's
 m4_dnl
 m4_dnl
-m4_define(m4_aprojroot, `m4_regexp(m4_esyscmd(pwd), `\(^[a-zA-Z0-9/]+\)/nuweb$', `\1')')m4_dnl
+m4_define(m4_aprojroot, m4_regexp(m4_esyscmd(pwd), `\(^[a-zA-Z0-9/-]+\)/nuweb$', `\1'))m4_dnl
 m4_define(m4_projroot, `..')m4_dnl
 m4_define(m4_abindir, m4_aprojroot`/bin')m4_dnl     Binaries
 m4_define(m4_bindir, m4_projroot`/bin')m4_dnl     Binaries
 m4_define(m4_amoddir, m4_aprojroot`/modules')m4_dnl     Modules
 m4_define(m4_moddir, m4_projroot`/modules')m4_dnl     Modules
-m4_define(m4_ajardir, m4_aprojroot`/jars')m4_dnl     jars
-m4_define(m4_jardir, m4_projroot`/jars')m4_dnl     jars
+m4_define(m4_ajardir, m4_amoddir`/jars')m4_dnl     jars
+m4_define(m4_jardir, m4_moddir`/jars')m4_dnl     jars
 m4_define(m4_lisanlproot, /home/phuijgen/nlp)m4_dnl
+m4_define(m4_asnapshotroot, m4_lisanlproot/snapshots)m4_dnl
 m4_dnl
 m4_dnl Modules
 m4_dnl
@@ -32,42 +33,61 @@ m4_define(m4_morphpargit, https://github.com/cltl/morphosyntactic_parser_nl.git)
 m4_define(m4_morphpardir, morphosyntactic_parser_nl)m4_dnl  Subdir. of modules
 m4_define(m4_morphparscript, mor)m4_dnl
 m4_dnl
+m4_dnl Alpino_hack
+m4_dnl
+m4_define(m4_alpinohackdir, alpinohack)m4_dnl
+m4_define(m4_alpinohackscript, alpinohack)m4_dnl
+m4_define(m4_alpinohackpythonscript, clean_hack.py)m4_dnl
 m4_dnl NER
+m4_define(m4_nerjar, ixa-pipe-nerc-1.1.0.jar)m4_dnl
 m4_define(m4_nerdir, ner)m4_dnl  Subdir. of modules
 m4_define(m4_nerscript, ner)m4_dnl
 m4_dnl
 m4_dnl WSD
 m4_dnl m4_define(m4_wsdsrc, m4_lisanlproot/mods/ukb)m4_dnl  Subdir. of modules
-m4_define(m4_wsddir, ukb)m4_dnl  Subdir. of modules
+m4_define(m4_wsddir, wsd)m4_dnl
 m4_define(m4_wsdscript, wsd)m4_dnl
 m4_dnl
 m4_dnl ONTO
-m4_define(m4_ontosrc, m4_lisanlproot/mods/ontotagger)m4_dnl  Subdir. of modules
-m4_define(m4_ontodir, ontotaqgger)m4_dnl  Subdir. of modules
+m4_define(m4_ontodir, ontotagger)m4_dnl  Subdir. of modules
 m4_define(m4_ontoscript, onto)m4_dnl
 m4_dnl
 m4_dnl Heideltime
-m4_define(m4_heidelsrc, m4_lisanlproot/mods/HeidelTimeModule)m4_dnl  Subdir. of modules
-m4_define(m4_heideldir, HeidelTimeModule)m4_dnl  Subdir. of modules
+m4_dnl m4_define(m4_heidelsrc, m4_lisanlproot/mods/HeidelTimeModule)m4_dnl  Subdir. of modules
+m4_dnl m4_define(m4_heideldir, HeidelTimeModule)m4_dnl  Subdir. of modules
+m4_dnl m4_define(m4_heidelscript, heideltime)m4_dnl
+m4_define(m4_heidelgit, git@@github.com:cltl/NAF-HeidelTime.git)m4_dnl  Subdir. of modules
+m4_define(m4_heideldir, NAF-HeidelTime)m4_dnl  Subdir. of modules
 m4_define(m4_heidelscript, heideltime)m4_dnl
 m4_dnl
 m4_dnl SRL
-m4_define(m4_srlsrc, m4_lisanlproot/mods/srlModuleForBN)m4_dnl  Subdir. of modules
-m4_define(m4_srldir, HeidelTimeModule)m4_dnl  Subdir. of modules
+m4_define(m4_srlsrc, m4_asnapshotroot/srlModuleForBN)m4_dnl  Subdir. of modules
+m4_define(m4_srldir, srlModuleForBN)m4_dnl  Subdir. of modules
 m4_define(m4_srlscript, srl)m4_dnl
 m4_dnl
 m4_dnl Alpino
-m4_define(m4_alpinosrc, http://www.let.rug.nl/vannoord/alp/Alpino/binary/versions/Alpino-x86_64-linux-glibc2.5-20548-sicstus.tar.gz)m4_dnl  Subdir. of modules
+m4_define(m4_alpinosrc, Alpino-x86_64-linux-glibc2.5-20548-sicstus.tar.gz)
+m4_define(m4_alpinourl, http://www.let.rug.nl/vannoord/alp/Alpino/binary/versions/m4_alpinosrc)m4_dnl  
 m4_define(m4_alpinodir, Alpino)m4_dnl  Subdir. of modules
 m4_define(m4_Alpinoscript, alpino)m4_dnl
 m4_dnl
 m4_dnl Timble
-m4_define(m4_timblsrc, http://www.let.rug.nl/vannoord/alp/Alpino/binary/versions/Alpino-x86-linux-glibc2.3-19327.tar.gz)m4_dnl
-m4_define(m4_alpinodir, Alpino)m4_dnl  Subdir. of modules
-m4_define(m4_Alpinoscript, alpino)m4_dnl
+m4_define(m4_timblsrc, http://ilk.uvt.nl/timbl/download-timbl.php)m4_dnl
+m4_define(m4_timbldir, timbl-6.4.5)m4_dnl  Subdir. of modules
+m4_dnl m4_define(m4_timblscript, )m4_dnl
 m4_dnl
 m4_dnl Ticcutils
 m4_define(m4_ticcsrc, http://software.ticc.uvt.nl/ticcutils-0.7.tar.gz)m4_dnl
+m4_define(m4_ticcdir, ticcutils-0.7)m4_dnl
+m4_dnl
+m4_dnl KafNafParserPy
+m4_define(m4_kafnafgit, https://github.com/cltl/KafNafParserPy.git)m4_dnl
+m4_define(m4_kafnafdir, python/KafNafParserPy)m4_dnl
+m4_dnl
+m4_dnl Treetagger
+m4_define(m4_treetagsrc, tree-tagger-linux-3.2.tar.gz)m4_dnl
+m4_define(m4_treetagurl, http://www.cis.uni-muenchen.de/%7Eschmid/tools/TreeTagger/data/m4_treetagsrc)m4_dnl
+m4_define(m4_treetagdir, treetagger)m4_dnl
 m4_dnl
 m4_dnl Locations of programs and system-dependent definitions
 m4_dnl
@@ -75,12 +95,20 @@ m4_define(m4_mkportbib, `/home/paul/bin/mkportbib')m4_dnl
 m4_define(m4_printpdf, `lpr '$1`.pdf')m4_dnl
 m4_define(m4_viewpdf, `evince '$1`.pdf')m4_dnl
 m4_define(m4_latex, `pdflatex '$1)m4_dnl
-m4_define(m4_nuwebbinary, `/usr/local/bin/nuweb')m4_dnl
+m4_dnl m4_define(m4_nuwebbinary, `/usr/local/bin/nuweb')m4_dnl
+m4_define(m4_nuwebbinary, m4_esyscmd(which nuweb))m4_dnl
 m4_dnl
 m4_dnl    subdirs 
 m4_dnl
 m4_define(m4_abindir, m4_aprojroot`/bin')m4_dnl     Binaries
 m4_define(m4_bindir, m4_projroot`/bin')m4_dnl     Binaries
+m4_dnl
+m4_dnl    miscellaneous
+m4_dnl
+m4_define(m4_walltime, 30:00)m4_dnl   Max duration of a job
+
+
+
 m4_dnl
 m4_dnl internal URL's and their templates
 m4_dnl 

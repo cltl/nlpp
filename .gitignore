@@ -1,11 +1,22 @@
 # .Gitignore
 
 *~
+*.log
+/auto/
 
 bin
+modules
+nuweb/*.aux
+nuweb/*.bbl
+nuweb/*.blg
+nuweb/*.idx
+nuweb/*.ilg
+nuweb/*.out
+nuweb/*.tex
+nuweb/*.toc
+nuweb/dutch-nlp-modules-on-Lisa.w
+nuweb/m4_dutch-nlp-modules-on-Lisa.w
+nuweb/w2html
 
-# Modules
-modules/morphosyntactic_parser_nl
-modules/tokenizer-base
-modules/Alpino
+
 
