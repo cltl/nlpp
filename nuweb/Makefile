@@ -88,7 +88,7 @@ view : dutch-nlp-modules-on-Lisa.pdf
 
 html : m4_htmltarget
 
-DIRS = /home/phuijgen/nlp/dutch-nlp-modules-on-Lisa/modules /home/phuijgen/nlp/dutch-nlp-modules-on-Lisa/bin /home/phuijgen/nlp/dutch-nlp-modules-on-Lisa/modules/python /home/phuijgen/nlp/dutch-nlp-modules-on-Lisa/modules/jars /home/phuijgen/nlp/dutch-nlp-modules-on-Lisa/modules/alpinohack ../nuweb/bin 
+DIRS = /home/phuijgen/nlp/dutch-nlp-modules-on-Lisa/modules /home/phuijgen/nlp/dutch-nlp-modules-on-Lisa/bin /home/phuijgen/nlp/dutch-nlp-modules-on-Lisa/modules/usrlocal /home/phuijgen/nlp/dutch-nlp-modules-on-Lisa/modules/usrlocal/bin /home/phuijgen/nlp/dutch-nlp-modules-on-Lisa/modules/usrlocal/lib /home/phuijgen/nlp/dutch-nlp-modules-on-Lisa/modules/python /home/phuijgen/nlp/dutch-nlp-modules-on-Lisa/modules/jars /home/phuijgen/nlp/dutch-nlp-modules-on-Lisa/modules/alpinohack ../nuweb/bin 
 
 $(DIRS) : 
 	$(MKDIR) $@
@@ -103,6 +103,7 @@ sources : dutch-nlp-modules-on-Lisa.w $(DIRS)
 	chmod 775  /home/phuijgen/nlp/dutch-nlp-modules-on-Lisa/bin/wsd
 	chmod 775  /home/phuijgen/nlp/dutch-nlp-modules-on-Lisa/bin/onto
 	chmod 775  /home/phuijgen/nlp/dutch-nlp-modules-on-Lisa/bin/heideltime
+	chmod 775  /home/phuijgen/nlp/dutch-nlp-modules-on-Lisa/bin/srl
 	chmod 775  /home/phuijgen/nlp/dutch-nlp-modules-on-Lisa/bin/test
 	
 

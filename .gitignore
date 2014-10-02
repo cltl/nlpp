@@ -6,17 +6,19 @@
 
 bin
 modules
+nuweb/auto/
 nuweb/*.aux
 nuweb/*.bbl
 nuweb/*.blg
 nuweb/*.idx
 nuweb/*.ilg
+nuweb/*.ind
 nuweb/*.out
 nuweb/*.tex
 nuweb/*.toc
 nuweb/dutch-nlp-modules-on-Lisa.w
 nuweb/m4_dutch-nlp-modules-on-Lisa.w
 nuweb/w2html
-
-
+nuweb/.fuse*
+test.*
 

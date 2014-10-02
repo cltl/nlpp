@@ -32,21 +32,23 @@ m4_include(texinclusions.m4)m4_dnl
 Table~\ref{tab:modulelist}
 \begin{table}[hbtp]
   \centering
-  \begin{tabular}{lllll}
-   \textbf{module}      & \textbf{directory} & \textbf{source} & \textbf{script} & \textbf{Details} \\
-     Tokenizer          & \verb|m4_tokenizerdir| & Github    & m4_tokenizerscript  &               \\
-     Morphosynt. p.     & \verb|m4_morphpardir|  & Github    & \verb|m4_morphparscript|   & Needs Alpino  \\
-     Alpinohack         & \verb|clean_hack|      & This doc. & m4_alpinohackscript &              \\
-     \textsc{ner}       & \verb|m4_jardir|       & Lisa      & m4_nerscript        & Open source?  \\
-     \textsc{wsd}       & \verb|m4_wsddir|       & Lisa      & m4_wsdscript        &  \\
-     Onto               & \verb|m4_ontodir|      & Lisa      & m4_ontoscript       &  \\
-     Heidel             & \verb|m4_heideldir|    & Lisa      & m4_heidelscript     &  \\
-     SRL                & \verb|m4_srldir|       & Lisa      & m4_srlscript        &  \\
-@%     Alpino             & \verb|m4_alpinodir|    & \textsc{rug} & m4_Alpinoscript  & \\
-@%     Ticcutils          & \verb|m4_ticcdir|      & \textsc{ilk} & & \\
-@%     Timbl              & \verb|m4_timbldir|     & \textsc{ilk} & & \\
-@%     Treetagger         &                        &              & & \\
-  \end{tabular}
+  \begin{footnotesize}
+    \begin{tabular}{lllll}
+     \textbf{module}      & \textbf{directory} & \textbf{source} & \textbf{script} & \textbf{Details} \\
+       Tokenizer          & \verb|m4_tokenizerdir| & Github    & m4_tokenizerscript  &               \\
+       Morphosynt. p.     & \verb|m4_morphpardir|  & Github    & \verb|m4_morphparscript|   & Needs Alpino  \\
+       Alpinohack         & \verb|clean_hack|      & This doc. & m4_alpinohackscript &              \\
+       \textsc{ner}       & \verb|m4_jardir|       & Lisa      & m4_nerscript        & Open source?  \\
+       \textsc{wsd}       & \verb|m4_wsddir|       & Lisa      & m4_wsdscript        &  \\
+       Onto               & \verb|m4_ontodir|      & Lisa      & m4_ontoscript       &  \\
+       Heidel             & \verb|m4_heideldir|    & Github      & m4_heidelscript     &  \\
+       SRL                & \verb|m4_srldir|       & Lisa      & m4_srlscript        &  \\
+@%       Alpino             & \verb|m4_alpinodir|    & \textsc{rug} & m4_Alpinoscript  & \\
+@%       Ticcutils          & \verb|m4_ticcdir|      & \textsc{ilk} & & \\
+@%       Timbl              & \verb|m4_timbldir|     & \textsc{ilk} & & \\
+@%       Treetagger         &                        &              & & \\
+    \end{tabular}
+  \enD{footnotesize}
   \caption{List of the modules to be installed. Column description:
     \textbf{directory:} Name of the subdirectory below \texttt{mod} in
     which it is installed; \textbf{Source:} From where the module has
@@ -67,6 +69,7 @@ sources that have been obtained from a public repository.
    \textbf{module} & \textbf{source} & {\small\textbf{URL}}  \\
    Tokenizer          & Github & m4_tokenizergit \\
    Morphosynt. p. & Github & \verb|m4_morphpargit| \\
+   heideltime. & Github & \verb|m4_morphpargit| \\
    Alpino             & \textsc{rug}  & \verb|m4_alpinosrc| \\
    Ticcutils          & \textsc{ilk}  & m4_ticcsrc \\
    Timble            & \textsc{ilk} & m4_timblsrc \\
@@ -138,10 +141,10 @@ export PATH=m4_ausrlocaldir<!!>/bin:$PATH
 @% @< install the WSD module @>
 @% @< install the onto module @>
 @< install the heideltime module @>
-@< install the srl module @>
+@%@< install the srl module @>
 @< install the treetagger utility @>
-@< install the ticcutils utility @>
-@< install the timbl utility @>
+@% @< install the ticcutils utility @>
+@% @< install the timbl utility @>
 
 @| @}
 
@@ -564,9 +567,10 @@ gawk "\$AWKCOMMAND" \$tempfil >\$CONFIL
 #!/bin/bash
 ROOT=m4_aprojroot
 HEIDELDIR=m4_amoddir/m4_heideldir
+TEMPDIR=`mktemp -t -d heideltmp.XXXXXX`
 cd $HEIDELDIR
 @< set pythonpath @>
-iconv -t utf-8//IGNORE | python \$HEIDELDIR/HeidelTime_NafKaf.py \$HEIDELDIR/heideltime-standalone/ \$HEIDELDIR/tmp/
+iconv -t utf-8//IGNORE | python \$HEIDELDIR/HeidelTime_NafKaf.py \$HEIDELDIR/heideltime-standalone/ \$TEMPDIR
 @| @}
 
 @d make scripts executable @{@%
@@ -600,7 +604,7 @@ cat | \$SRLDIR/getSRLinfo.py \$SRLDIR/srlModule/ \$SRLDIR/tmp
 @| @}
 
 @d make scripts executable @{@%
-chmod 775  m4_abindir/m4_heidelscript
+chmod 775  m4_abindir/m4_srlscript
 @| @}
 
 
@@ -634,7 +638,9 @@ ROOT=m4_aprojroot
 BIND=\$ROOT/bin
 echo "De hond eet jus." | \$BIND/tok | \$BIND/mor | \
 \$BIND/m4_alpinohackscript | \$BIND/m4_nerscript  | \$BIND/m4_wsdscript | \
-\$BIND/m4_ontoscript | \$BIND/m4_heidelscript | \$BIND/m4_srlscript  > \$ROOT/test.out
+\$BIND/m4_ontoscript  > \$ROOT/test.onto
+cat \$ROOT/test.onto | \$BIND/m4_heidelscript  > \$ROOT/test.heidel
+@% \$BIND/m4_ontoscript | \$BIND/m4_heidelscript | \$BIND/m4_srlscrip  > \$ROOT/test.out
 @| @}
 
 @d make scripts executable @{@%
@@ -648,32 +654,70 @@ chmod 775  m4_abindir/test
 \subsubsection{Module}
 \label{sec:mdule}
 
+Installation goes as follows (See
+\href{http://www.cis.uni-muenchen.de/~schmid/tools/TreeTagger/}{Treetagger's homepage}:
+
+\begin{enumerate}
+\item Download and unpack the treetagger tarball. This generates the
+  subdirectories \verb|bin|, \verb|cmd| and \verb|doc|
+\item Download and unpack the tagger-scripts tarball
+\end{enumerate}
+
+The locatioan where treetager comes from and the location where it is going to reside:
+
+@d install the treetagger utility @{@%
+TREETAGDIR=m4_treetagdir
+TTREETAG_BASIS_URL=m4_treetag_base_url
+@| @}
+
+The source tarball, scripts and the installation-script:
+
 @d install the treetagger utility @{@%
 TREETAGSRC=m4_treetagsrc
-TREETAGURL=m4_treetagurl
-TREETAGDIR=m4_treetagdir
-SUCCES=0
+TREETAGSCRIPTS=m4_treetagger_scripts
+TREETAG_INSTALLSCRIPT=m4_treetagger_installscript
+@| @}
+
+Parametersets:
+
+@d install the treetagger utility @{@%
+DUTCHPARS_UTF_GZ=m4_treetag_dutchparms       
+DUTCH_TAGSET=m4_treetag_dutch_tagset 
+DUTCHPARS_2_GZ=m4_treetag_dutchparms2
+@| @}
+
+Download everything in the target directory:
+
+@d install the treetagger utility @{@%
 mkdir -p m4_amoddir/\$TREETAGDIR
 cd m4_amoddir/\$TREETAGDIR
-@% @< move module @(Alpino@) @>
-wget \$TREETAGURL
-SUCCES=\$?
-if
-  [ \$SUCCES -eq 0 ]
-then
-  tar -xzf \$TREETAGSRC
-  SUCCES=\$?
-  rm -rf \$TREETAGSRC
-fi
-if
-  [ $SUCCES -eq 0 ]
-then
-  @< logmess @(Installed treetagger@) @>
-@%   @< remove old module @(treetager@) @>
-@% else
-@%   @< re-instate old module @(Alpino@) @>
-fi
+wget \$TREETAGURL/\$TREETAGSRC
+wget \$TREETAGURL/\$TREETAGSCRIPTS
+wget \$TREETAGURL/\$TREETAG_INSTALLSCRIPT
+wget \$TREETAGURL/\$DUTCHPARS_UTF_GZ
+wget \$TREETAGURL/\$DUTCH_TAGSET    
+wget \$TREETAGURL/\$DUTCHPARS_2_GZ  
 @| @}
+
+Rub the install-script:
+
+@d install the treetagger utility @{@%
+chmod 775 \$TREETAG_INSTALLSCRIPT
+./\$TREETAG_INSTALLSCRIPT
+@| @}
+
+Remove the tarballs:
+
+@d install the treetagger utility @{@%
+rm \$TREETAGSRC
+rm \$TREETAGSCRIPTS
+rm \$TREETAG_INSTALLSCRIPT
+rm \$DUTCHPARS_UTF_GZ
+rm \$DUTCH_TAGSET    
+rm \$DUTCHPARS_2_GZ
+@| @}
+
+
 
 
 \subsection{Timbl and ticcutils}
@@ -712,7 +756,7 @@ DIR=m4_timbldir
 @| @}
 
 
-@d unpack ticcutils or tibml @{@%
+@d unpack ticcutils or timbl @{@%
 SUCCES=0
 ticbeldir=`mktemp -t -d tickbel.XXXXXX`
 cd \$ticbeldir
@@ -738,9 +782,9 @@ rm -rf \$ticbeldir
 if
   [ \$SUCCES -eq 0 ]
 then
-  @< logmess @(Installed \$DIR @>
+  @< logmess @(Installed \$DIR@) @>
 else
-  @< logmess @(NOT installed \$DIR @>
+  @< logmess @(NOT installed \$DIR@) @>
 fi
 @| @}
 

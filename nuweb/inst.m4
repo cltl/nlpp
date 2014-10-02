@@ -18,6 +18,8 @@ m4_define(m4_amoddir, m4_aprojroot`/modules')m4_dnl     Modules
 m4_define(m4_moddir, m4_projroot`/modules')m4_dnl     Modules
 m4_define(m4_ajardir, m4_amoddir`/jars')m4_dnl     jars
 m4_define(m4_jardir, m4_moddir`/jars')m4_dnl     jars
+m4_define(m4_usrlocaldir, m4_moddir`/usrlocal')m4_dnl     jars
+m4_define(m4_ausrlocaldir, m4_amoddir`/usrlocal')m4_dnl     jars
 m4_define(m4_lisanlproot, /home/phuijgen/nlp)m4_dnl
 m4_define(m4_asnapshotroot, m4_lisanlproot/snapshots)m4_dnl
 m4_dnl
@@ -56,7 +58,8 @@ m4_dnl Heideltime
 m4_dnl m4_define(m4_heidelsrc, m4_lisanlproot/mods/HeidelTimeModule)m4_dnl  Subdir. of modules
 m4_dnl m4_define(m4_heideldir, HeidelTimeModule)m4_dnl  Subdir. of modules
 m4_dnl m4_define(m4_heidelscript, heideltime)m4_dnl
-m4_define(m4_heidelgit, git@@github.com:cltl/NAF-HeidelTime.git)m4_dnl  Subdir. of modules
+m4_dnl m4_define(m4_heidelgit, git@@github.com:cltl/NAF-HeidelTime.git)m4_dnl  Subdir. of modules
+m4_define(m4_heidelgit, `git@@github.com:PaulHuygen/NAF-HeidelTime.git' )m4_dnl  Subdir. of modules
 m4_define(m4_heideldir, NAF-HeidelTime)m4_dnl  Subdir. of modules
 m4_define(m4_heidelscript, heideltime)m4_dnl
 m4_dnl
@@ -71,23 +74,40 @@ m4_define(m4_alpinourl, http://www.let.rug.nl/vannoord/alp/Alpino/binary/version
 m4_define(m4_alpinodir, Alpino)m4_dnl  Subdir. of modules
 m4_define(m4_Alpinoscript, alpino)m4_dnl
 m4_dnl
-m4_dnl Timble
-m4_define(m4_timblsrc, http://ilk.uvt.nl/timbl/download-timbl.php)m4_dnl
-m4_define(m4_timbldir, timbl-6.4.5)m4_dnl  Subdir. of modules
+m4_dnl Timbl
+m4_dnl m4_define(m4_timblsrc, http://ilk.uvt.nl/timbl/download-timbl.php)m4_dnl
+m4_define(m4_timblversion, 6.4.6)m4_dnl
+m4_define(m4_timblsrc,  timbl-`'m4_timblversion`'.tar.gz)m4_dnl
+m4_define(m4_timblurl,  http://software.ticc.uvt.nl/m4_timblsrc`')m4_dnl
+m4_define(m4_timbldir, timbl-m4_timblversion)m4_dnl  Subdir. of modules
 m4_dnl m4_define(m4_timblscript, )m4_dnl
 m4_dnl
 m4_dnl Ticcutils
-m4_define(m4_ticcsrc, http://software.ticc.uvt.nl/ticcutils-0.7.tar.gz)m4_dnl
-m4_define(m4_ticcdir, ticcutils-0.7)m4_dnl
+m4_define(m4_ticcutilsversion, 0.7)m4_dnl
+m4_define(m4_ticcsrc, ticcutils-`'m4_ticcutilsversion`'.tar.gz)m4_dnl
+m4_define(m4_ticcurl, http://software.ticc.uvt.nl/`'m4_ticcsrc`')m4_dnl
+m4_define(m4_ticcdir, ticcutils-`'m4_ticcutilsversion`')m4_dnl
 m4_dnl
 m4_dnl KafNafParserPy
 m4_define(m4_kafnafgit, https://github.com/cltl/KafNafParserPy.git)m4_dnl
 m4_define(m4_kafnafdir, python/KafNafParserPy)m4_dnl
 m4_dnl
 m4_dnl Treetagger
+m4_define(m4_treetag_base_url, `http://www.cis.uni-muenchen.de/%7Eschmid/tools/TreeTagger/data/')m4_dnl<
 m4_define(m4_treetagsrc, tree-tagger-linux-3.2.tar.gz)m4_dnl
-m4_define(m4_treetagurl, http://www.cis.uni-muenchen.de/%7Eschmid/tools/TreeTagger/data/m4_treetagsrc)m4_dnl
+m4_define(m4_treetag_dutchparms, dutch-par-linux-3.2-utf8.bin.gz)m4_dnl
+m4_define(m4_treetag_dutchparms2, dutch2-par-linux-3.2-utf8.bin.gz)m4_dnl
+m4_define(m4_treetag_dutch_tagset, dutch-tagset.txt)m4_dnl
+m4_define(m4_treetagger_scripts, tagger-scripts.tar.gz)m4_dnl
+m4_define(m4_treetagger_installscript, install-tagger.sh)m4_dnl
+m4_define(m4_treetagger-main-webpage, `http://www.cis.uni-muenchen.de/~schmid/tools/TreeTagger/')m4_dnl
+
+
+m4_define(m4_treetagurl, `http://www.cis.uni-muenchen.de/%7Eschmid/tools/TreeTagger/data/m4_treetagsrc')m4_dnl
+m4_define(m4_treetag_dutchabburl, http://www.cis.uni-muenchen.de/~schmid/tools/TreeTagger/data/dutch-par-linux-3.2-utf8.bin.gz)m4_dnl
 m4_define(m4_treetagdir, treetagger)m4_dnl
+
+
 m4_dnl
 m4_dnl Locations of programs and system-dependent definitions
 m4_dnl
