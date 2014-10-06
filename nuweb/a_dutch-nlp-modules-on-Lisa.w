@@ -9,6 +9,8 @@ m4_include(inst.m4)m4_dnl
 \newcommand{\thedoctitle}{m4_doctitle}
 \newcommand{\theauthor}{m4_author}
 \newcommand{\thesubject}{m4_subject}
+\newcommand{\CLTL}{\textsc{cltl}}
+\newcommand{\NAF}{\textsc{naf}}
 \title{\thedoctitle}
 \author{\theauthor}
 \date{m4_docdate}
@@ -24,7 +26,21 @@ m4_include(texinclusions.m4)m4_dnl
 \section{Introduction}
 \label{sec:Introduction}
 
+This document describes the current set-up of pipeline that annotates
+dutch texts in order to extract knowledge. The pipeline has been set
+up by the Computational Lexicology an Terminology Lab
+(\CLTL{}~\footnote{\url{http://wordpress.let.vupr.nl}}) as part
+of the newsreader~\footnote{http://www.newsreader-project.eu}. 
 
+Apart from describing the pipeline set-up, the document actually constructs
+the pipeline. The described version has been made with an aim to run
+it on a specific supercomputer (Lisa, Surfsara,
+Amsterdam~\footnote{https://surfsara.nl/systems/lisa}), but it can
+probably be implemented on other unix-like systems without problems.
+
+The installation has been parameterized. The locations and names that
+you read (and that will be used to build the pipeline) have been read
+from variables in file \texttt{inst.m4} in the nuweb directory.  
 
 
 \subsection{List of the modules to be installed}
@@ -36,9 +52,10 @@ Table~\ref{tab:modulelist}
     \begin{tabular}{lllll}
      \textbf{module}      & \textbf{directory} & \textbf{source} & \textbf{script} & \textbf{Details} \\
        Tokenizer          & \verb|m4_tokenizerdir| & Github    & m4_tokenizerscript  &               \\
-       Morphosynt. p.     & \verb|m4_morphpardir|  & Github    & \verb|m4_morphparscript|   & Needs Alpino  \\
-       Alpinohack         & \verb|clean_hack|      & This doc. & m4_alpinohackscript &              \\
-       \textsc{ner}       & \verb|m4_jardir|       & Lisa      & m4_nerscript        & Open source?  \\
+       morphosyntactic parser     & \verb|m4_morphpardir|  & Github    & \verb|m4_morphparscript|   &   \\
+       alpinohack         & \verb|clean_hack|      & This doc. &  m4_alpinohackscript  & \footnote{not a  module, but an
+                                                                                          encoding hack} \\
+       \textsc{ner}       & \verb|m4_jardir|       & Lisa      & m4_nerscript        &   \\
        \textsc{wsd}       & \verb|m4_wsddir|       & Lisa      & m4_wsdscript        &  \\
        Onto               & \verb|m4_ontodir|      & Lisa      & m4_ontoscript       &  \\
        Heidel             & \verb|m4_heideldir|    & Github      & m4_heidelscript     &  \\
@@ -48,20 +65,44 @@ Table~\ref{tab:modulelist}
 @%       Timbl              & \verb|m4_timbldir|     & \textsc{ilk} & & \\
 @%       Treetagger         &                        &              & & \\
     \end{tabular}
-  \enD{footnotesize}
+  \end{footnotesize}
   \caption{List of the modules to be installed. Column description:
-    \textbf{directory:} Name of the subdirectory below \texttt{mod} in
+    \textbf{directory:} Name of the subdirectory below subdirectory \texttt{modules} in
     which it is installed; \textbf{Source:} From where the module has
     been obtained; \textbf{script:} Script to be included in a pipeline.}
   \label{tab:modulelist}
 \end{table}
-lists the modules in the pipeline. The column \emph{source} indicated
+lists the modules in the pipeline. The column \emph{source} indicates
 the origin of the module. Ideally, modules are directly obtained from
-a public repository, e.g. Github or a website of the organisation
+a public repository, e.g. Github, or from a website of the organisation
 where the module has been built. However, some of the modules are not yet
 available in this way and only a snapshot has been installed by hand in
 Lisa. Table~/ref{tab:modulesources} provides the \textsc{url}'s of the
 sources that have been obtained from a public repository.
+
+The modules themselves use other utilities like dependency-taggers and
+POS taggers. These utilities are listed in
+table~\ref{tab:utillist}.
+\begin{table}[hbtp]
+  \centering
+  \begin{tabular}{llll}
+   \textbf{module}      & \textbf{directory}  & \textbf{source}  & \textbf{Details} \\
+     KafNafParserPy     & \verb|m4_kafnafdir| & Github           & \\
+     Alpino             & \verb|m4_alpinodir| & \textsc{rug}     &  \\
+     Ticcutils          & \verb|m4_ticcdir|   & \textsc{ilk}     & \\
+     Timbl              & \verb|m4_timbldir|  & \textsc{ilk}     & \\
+     Treetagger         &                     &                  & \\
+  \end{tabular}
+  \caption{List of the modules to be installed. Column description:
+    \textbf{directory:} Name of the subdirectory below \texttt{mod} in
+    which it is installed; \textbf{Source:} From where the module has
+    been obtained; \textbf{script:} Script to be included in a pipeline.}
+  \label{tab:utillist}
+\end{table}
+
+
+Table~\ref{tab:modulesources} lists the source of the modules and
+utilities that can be installed from an open source.
 \begin{table}[hbtp]
   \centering
   \begin{footnotesize}
@@ -79,77 +120,82 @@ sources that have been obtained from a public repository.
   \label{tab:modulesources}
 \end{table}
 
-Table~\ref{tab:utillist}
-\begin{table}[hbtp]
-  \centering
-  \begin{tabular}{llll}
-   \textbf{module}      & \textbf{directory}  & \textbf{source}  & \textbf{Details} \\
-     KafNafParserPy     & \verb|m4_kafnafdir| & Github           & \\
-     Alpino             & \verb|m4_alpinodir| & \textsc{rug}     &  \\
-     Ticcutils          & \verb|m4_ticcdir|   & \textsc{ilk}     & \\
-     Timbl              & \verb|m4_timbldir|  & \textsc{ilk}     & \\
-     Treetagger         &                     &                  & \\
-  \end{tabular}
-  \caption{List of the modules to be installed. Column description:
-    \textbf{directory:} Name of the subdirectory below \texttt{mod} in
-    which it is installed; \textbf{Source:} From where the module has
-    been obtained; \textbf{script:} Script to be included in a pipeline.}
-  \label{tab:modulelist}
-\end{table}
 
 
 
+\subsection{File-structure of the pipeline}
+\label{sec:filestructure}
 
-\section{Installation}
-\label{sec:install}
+The files that make up the pipeline are organised in set of
+directories:
 
-The modules are placed in subdirectory mods and scripts to apply the
-modules in a pipeline are placed in subdirectory \texttt{bin}. The
-modules directory has a subdirectories \verb|python| for for python
-utilities resp java modules.
+\begin{description}
+\item[nuweb:] This directory comntains this document and everything to
+  create the pipeline from the open sources of the modules.
+\item[modules:] Contains the program code of each module in a
+  subdirectory. Fuurthermore, it contains a subdirectory
+  \verb|python| for python software-modules, subdirectory
+  \texttt{jars} for jar files and subdirectory
+  /usrlocal/ for binaries and libs that are used by modules.
+\item[bin:] Contains for each of the modules a script that reads
+  \NAF{} input, passes it to the module in the \texttt{modules}
+  directory and produces the output on standard out. Furthermore, the
+  subdirectory contains the script \texttt{m4_module_installer} that
+  performs the installation,  and 
+  a script \texttt{test} that shows that the pipeline works in a trivial
+  case.
+\item[nuweb:] Contains this document, the nuweb source that creates
+  the documents and the sources and a Makefile to perform the actions.
+\end{description}
 
 @d directories to create @{m4_amoddir @| @}
 @d directories to create @{m4_abindir @| @}
-@d directories to create @{m4_ausrlocaldir m4_ausrlocaldir<!!>/bin m4_ausrlocaldir<!!>/lib @| @}
-@d directories to create @{m4_amoddir/python @| @}
-@d directories to create @{m4_ajardir @| @}
+@d directories to create @{m4_ausrlocaldir @| @}
+@d directories to create @{m4_ausrlocaldir<!!>/bin @| @}
+@d directories to create @{m4_ausrlocaldir<!!>/lib @| @}
+@d directories to create @{m4_amoddir/python m4_ajardir @| @}
 
-Make the Python utilities findable with the following macro:
+Make Python utilities findable with the following macro:
 
 @d set pythonpath @{@%
 export PYTHONPATH=m4_amoddir/python:\$PYTHONPATH
 @| @}
 
-Similarly, make binaries of utilities findable:
+Similarly, make binaries findable:
 
 @d set local bin directory @{@%
 export PATH=m4_ausrlocaldir<!!>/bin:$PATH
 @| @}
 
 
+ 
+\section{Installation}
+\label{sec:install}
+
+This section describes how the modules are obtained from their
+open-source and installed. This is performed by script \verb|m4_module_installer|
 
 
-
-@o m4_bindir/install_modules @{@%
+@o m4_bindir/m4_module_installer @{@%
 #!/bin/bash
-@< variables of install\_modules @>
-@% @< install the tokenizer @>
-@% @< install kafnafparserpy @>
-@% @< install Alpino @>
-@% @< install the morphosyntactic parser @>
-@% @< install the NER module @>
-@% @< install the WSD module @>
-@% @< install the onto module @>
+@< variables of m4_module_installer @>
+@< install the tokenizer @>
+@< install kafnafparserpy @>
+@< install Alpino @>
+@< install the morphosyntactic parser @>
+@< install the NER module @>
+@< install the WSD module @>
+@< install the onto module @>
 @< install the heideltime module @>
-@%@< install the srl module @>
+@< install the srl module @>
 @< install the treetagger utility @>
-@% @< install the ticcutils utility @>
-@% @< install the timbl utility @>
+@< install the ticcutils utility @>
+@< install the timbl utility @>
 
 @| @}
 
 @d make scripts executable @{@%
-chmod 775  m4_abindir/install_modules
+chmod 775  m4_abindir/m4_module_installer
 @| @}
 
 
@@ -161,6 +207,8 @@ Installation goes as follows:
 \item If that is successful, remove the old version. Otherwise, move
   the old version back to its original place.
 \end{enumerate}
+
+The following macro's move or remove modules.
 
 @d move module  @{@%
 if
@@ -183,6 +231,13 @@ MESS="Replaced previous version of @1"
 
 @| @}
 
+The following macro can be used to install a module from github. It
+needs as parameters:
+\begin{enumerate}
+\item Name of the module.
+\item Name of the root directory.
+\item \URL{} to clone from.
+\end{enumerate}
 
 @d install from github @{@%
 MODNAM=@1
@@ -302,7 +357,7 @@ export ALPINO_HOME=m4_amoddir/Alpino
 
 
 \subsubsection{Module}
-\label{sec:install-tokenizermodule}
+\label{sec:install-morphosyntmodule}
 
 @d install the morphosyntactic parser @{@%
 @< install from github @(morphsynparser@,m4_morphpardir@,m4_morphpargit@) @>
@@ -346,7 +401,7 @@ Install a hack that removes output from Alpino that cannot be
 interpreted by following modules. It is just a small python script.
 
 \subsubsection{Module}
-\label{sec:alpinohack}
+\label{sec:install_alpinohack}
 
 @d directories to create @{m4_amoddir/m4_alpinohackdir @| @}
 
@@ -368,7 +423,7 @@ print output
 @| @}
 
 \subsubsection{Script}
-\label{sec:script}
+\label{sec:alpinohack-script}
 
 @o m4_bindir/m4_alpinohackscript @{@%
 #!/bin/bash
@@ -464,7 +519,7 @@ We do not yet have a source-repository of the Ontotagger module. Therefore,
 install from a snapshot on Lisa.
 
 \subsubsection{Module}
-\label{sec:wsd-module}
+\label{sec:ontotagger-module}
 
 @d install the onto module @{@%
 cp -r m4_asnapshotroot/m4_ontodir m4_amoddir/
@@ -561,7 +616,7 @@ gawk "\$AWKCOMMAND" \$tempfil >\$CONFIL
 
 
 \subsubsection{Script}
-\label{sec:script}
+\label{sec:heideltime-script}
 
 @o m4_bindir/m4_heidelscript @{@%
 #!/bin/bash
@@ -596,11 +651,12 @@ cp -r m4_asnapshotroot/m4_srldir m4_amoddir/
 #!/bin/bash
 ROOT=m4_aprojroot
 SRLDIR=m4_amoddir/m4_srldir
+TEMPDIR=`mktemp -d -t SRLTMP.XXXXXX`
 cd \$SRLDIR
 @< set local bin directory @>
 @< set pythonpath @>
-cat | \$SRLDIR/getSRLinfo.py \$SRLDIR/srlModule/ \$SRLDIR/tmp
-
+cat | \$SRLDIR/getSRLinfo.py \$SRLDIR/srlModule/ \$TEMPDIR
+rm -rf \$TEMPDIR
 @| @}
 
 @d make scripts executable @{@%
@@ -640,6 +696,7 @@ echo "De hond eet jus." | \$BIND/tok | \$BIND/mor | \
 \$BIND/m4_alpinohackscript | \$BIND/m4_nerscript  | \$BIND/m4_wsdscript | \
 \$BIND/m4_ontoscript  > \$ROOT/test.onto
 cat \$ROOT/test.onto | \$BIND/m4_heidelscript  > \$ROOT/test.heidel
+cat \$ROOT/test.heidel | \$BIND/m4_srlscript  > \$ROOT/test.out
 @% \$BIND/m4_ontoscript | \$BIND/m4_heidelscript | \$BIND/m4_srlscrip  > \$ROOT/test.out
 @| @}
 
@@ -796,7 +853,7 @@ fi
 Write log messages to standard out if variable \verb|LOGLEVEL| is
 equal to~1.
 
-@d variables of install\_modules @{@%
+@d variables of m4_module_installer @{@%
 LOGLEVEL=1
 @| @}
 

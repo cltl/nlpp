@@ -95,7 +95,7 @@ $(DIRS) :
 
 sources : dutch-nlp-modules-on-Lisa.w $(DIRS)
 	$(NUWEB) dutch-nlp-modules-on-Lisa.w
-	chmod 775  /home/phuijgen/nlp/dutch-nlp-modules-on-Lisa/bin/install_modules
+	chmod 775  /home/phuijgen/nlp/dutch-nlp-modules-on-Lisa/bin/install-modules
 	chmod 775  /home/phuijgen/nlp/dutch-nlp-modules-on-Lisa/bin/tok
 	chmod 775  /home/phuijgen/nlp/dutch-nlp-modules-on-Lisa/bin/mor
 	chmod 775  /home/phuijgen/nlp/dutch-nlp-modules-on-Lisa/bin/alpinohack

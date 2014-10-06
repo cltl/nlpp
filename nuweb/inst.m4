@@ -23,6 +23,10 @@ m4_define(m4_ausrlocaldir, m4_amoddir`/usrlocal')m4_dnl     jars
 m4_define(m4_lisanlproot, /home/phuijgen/nlp)m4_dnl
 m4_define(m4_asnapshotroot, m4_lisanlproot/snapshots)m4_dnl
 m4_dnl
+m4_dnl Module installer
+m4_dnl
+m4_define(m4_module_installer, install-modules)m4_dnl
+m4_dnl
 m4_dnl Modules
 m4_dnl
 m4_dnl Tokenizer
