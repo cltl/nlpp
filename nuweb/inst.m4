@@ -18,15 +18,22 @@ m4_define(m4_amoddir, m4_aprojroot`/modules')m4_dnl     Modules
 m4_define(m4_moddir, m4_projroot`/modules')m4_dnl     Modules
 m4_define(m4_ajardir, m4_amoddir`/jars')m4_dnl     jars
 m4_define(m4_jardir, m4_moddir`/jars')m4_dnl     jars
-m4_define(m4_usrlocaldir, m4_moddir`/usrlocal')m4_dnl     jars
-m4_define(m4_ausrlocaldir, m4_amoddir`/usrlocal')m4_dnl     jars
+m4_define(m4_usrlocaldir, m4_moddir`/usrlocal')m4_dnl     
+m4_define(m4_ausrlocaldir, m4_amoddir`/usrlocal')m4_dnl
 m4_define(m4_lisanlproot, /home/phuijgen/nlp)m4_dnl
+m4_define(m4_snapshotrootURL, kyoto.let.vu.nl~huygen/dutch_snapshots)m4_dnl
 m4_define(m4_asnapshotroot, m4_lisanlproot/snapshots)m4_dnl
+m4_define(m4_htmldir, m4_projroot/nuweb/html)m4_dnl
+m4_define(m4_ahtmldir, m4_aprojroot/nuweb/html)m4_dnl
+m4_define(m4_htmltarget, m4_htmldir/`'m4_progname.html`')m4_dnl
 m4_dnl
 m4_dnl Module installer
 m4_dnl
 m4_define(m4_module_installer, install-modules)m4_dnl
 m4_dnl
+m4_dnl Snapshot repo
+m4_define(m4_snapshot_tarball, nl_pipeline_snapshots.tgz)m4_dnl
+m4_define(m4_snapshotdir, snapshots)m4_dnl
 m4_dnl Modules
 m4_dnl
 m4_dnl Tokenizer
@@ -44,10 +51,13 @@ m4_dnl
 m4_define(m4_alpinohackdir, alpinohack)m4_dnl
 m4_define(m4_alpinohackscript, alpinohack)m4_dnl
 m4_define(m4_alpinohackpythonscript, clean_hack.py)m4_dnl
-m4_dnl NER
-m4_define(m4_nerjar, ixa-pipe-nerc-1.1.0.jar)m4_dnl
-m4_define(m4_nerdir, ner)m4_dnl  Subdir. of modules
-m4_define(m4_nerscript, ner)m4_dnl
+m4_dnl NERC
+m4_define(m4_nercjar, ixa-pipe-nerc-1.1.0.jar)m4_dnl
+m4_define(m4_nercdir, nerc)m4_dnl  Subdir. of modules
+m4_define(m4_nercscript, nerc)m4_dnl
+m4_dnl NED
+m4_define(m4_neddir, ned)m4_dnl  Subdir. of modules
+m4_define(m4_nedscript, ned)m4_dnl
 m4_dnl
 m4_dnl WSD
 m4_dnl m4_define(m4_wsdsrc, m4_lisanlproot/mods/ukb)m4_dnl  Subdir. of modules
@@ -68,9 +78,34 @@ m4_define(m4_heideldir, NAF-HeidelTime)m4_dnl  Subdir. of modules
 m4_define(m4_heidelscript, heideltime)m4_dnl
 m4_dnl
 m4_dnl SRL
+m4_define(m4_srlgit, `https://github.com/newsreader/vua-srl-nl.git' )m4_dnl  Subdir. of modules
 m4_define(m4_srlsrc, m4_asnapshotroot/srlModuleForBN)m4_dnl  Subdir. of modules
-m4_define(m4_srldir, srlModuleForBN)m4_dnl  Subdir. of modules
+m4_dnl m4_define(m4_srldir, srlModuleForBN)m4_dnl  Subdir. of modules
+m4_define(m4_srldir, vua-srl-nl)m4_dnl  Subdir. of modules
 m4_define(m4_srlscript, srl)m4_dnl
+m4_dnl
+m4_dnl Nom. coref
+m4_define(m4_ncorefsrc, /dev/null )m4_dnl  Subdir. of modules
+m4_define(m4_ncorefdir, nomcoref)m4_dnl  Subdir. of modules
+m4_define(m4_ncorefscript, nomcoref)m4_dnl
+m4_dnl
+m4_dnl Ev. coref
+m4_define(m4_evcorefsrc, /dev/null )m4_dnl  Subdir. of modules
+m4_define(m4_evcorefdir, evcoref)m4_dnl  Subdir. of modules
+m4_define(m4_evcorefscript, evcoref)m4_dnl
+m4_dnl
+m4_dnl Opinion-miner
+m4_define(m4_opinisrc, /dev/null )m4_dnl  Subdir. of modules
+m4_define(m4_opinidir, opinimin)m4_dnl  Subdir. of modules
+m4_define(m4_opiniscript, opinimin)m4_dnl
+m4_dnl
+m4_dnl Framenet Semantic Role Labeler
+m4_define(m4_fsrlsrc, /dev/null )m4_dnl  Subdir. of modules
+m4_define(m4_fsrldir, fsrl)m4_dnl  Subdir. of modules
+m4_define(m4_fsrlscript, fsrl)m4_dnl
+m4_dnl
+m4_dnl Utilities
+m4_dnl
 m4_dnl
 m4_dnl Alpino
 m4_define(m4_alpinosrc, Alpino-x86_64-linux-glibc2.5-20548-sicstus.tar.gz)
