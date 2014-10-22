@@ -4,6 +4,8 @@
 *.log
 /auto/
 
+*.tgz
+snapshots
 bin
 modules
 nuweb/auto/
@@ -13,6 +15,7 @@ nuweb/*.blg
 nuweb/*.idx
 nuweb/*.ilg
 nuweb/*.ind
+nuweb/outline.org
 
 nuweb/*.out
 nuweb/*.tex

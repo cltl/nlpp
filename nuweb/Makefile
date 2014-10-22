@@ -72,7 +72,7 @@ m4_4htfildest : m4_4htfilsource
 m4_htmlbibfil : m4_anuwebdir/dutch-nlp-modules-on-Lisa.bib
 	cp m4_anuwebdir/dutch-nlp-modules-on-Lisa.bib m4_htmlbibfil
 
-m4_htmltarget : m4_htmlsource m4_4htfildest $(HTML_PS_FIG_NAMES) $(HTML_PST_NAMES) m4_htmlbibfil
+../nuweb/html/dutch-nlp-modules-on-Lisa.html : m4_htmlsource m4_4htfildest $(HTML_PS_FIG_NAMES) $(HTML_PST_NAMES) m4_htmlbibfil
 	cp w2html /home/phuijgen/nlp/dutch-nlp-modules-on-Lisa/bin
 	cd /home/phuijgen/nlp/dutch-nlp-modules-on-Lisa/bin && chmod 775 w2html
 	cd m4_htmldocdir && /home/phuijgen/nlp/dutch-nlp-modules-on-Lisa/bin/w2html dutch-nlp-modules-on-Lisa.w
@@ -86,7 +86,7 @@ print : dutch-nlp-modules-on-Lisa.pdf
 view : dutch-nlp-modules-on-Lisa.pdf
 	evince dutch-nlp-modules-on-Lisa.pdf
 
-html : m4_htmltarget
+html : ../nuweb/html/dutch-nlp-modules-on-Lisa.html
 
 DIRS = /home/phuijgen/nlp/dutch-nlp-modules-on-Lisa/modules /home/phuijgen/nlp/dutch-nlp-modules-on-Lisa/bin /home/phuijgen/nlp/dutch-nlp-modules-on-Lisa/modules/usrlocal /home/phuijgen/nlp/dutch-nlp-modules-on-Lisa/modules/usrlocal/bin /home/phuijgen/nlp/dutch-nlp-modules-on-Lisa/modules/usrlocal/lib /home/phuijgen/nlp/dutch-nlp-modules-on-Lisa/modules/python /home/phuijgen/nlp/dutch-nlp-modules-on-Lisa/modules/jars /home/phuijgen/nlp/dutch-nlp-modules-on-Lisa/modules/alpinohack ../nuweb/bin 
 
@@ -99,7 +99,7 @@ sources : dutch-nlp-modules-on-Lisa.w $(DIRS)
 	chmod 775  /home/phuijgen/nlp/dutch-nlp-modules-on-Lisa/bin/tok
 	chmod 775  /home/phuijgen/nlp/dutch-nlp-modules-on-Lisa/bin/mor
 	chmod 775  /home/phuijgen/nlp/dutch-nlp-modules-on-Lisa/bin/alpinohack
-	chmod 775  /home/phuijgen/nlp/dutch-nlp-modules-on-Lisa/bin/ner
+	chmod 775  /home/phuijgen/nlp/dutch-nlp-modules-on-Lisa/bin/nerc
 	chmod 775  /home/phuijgen/nlp/dutch-nlp-modules-on-Lisa/bin/wsd
 	chmod 775  /home/phuijgen/nlp/dutch-nlp-modules-on-Lisa/bin/onto
 	chmod 775  /home/phuijgen/nlp/dutch-nlp-modules-on-Lisa/bin/heideltime

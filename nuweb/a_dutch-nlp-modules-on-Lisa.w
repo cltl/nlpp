@@ -11,6 +11,7 @@ m4_include(inst.m4)m4_dnl
 \newcommand{\thesubject}{m4_subject}
 \newcommand{\CLTL}{\textsc{cltl}}
 \newcommand{\NAF}{\textsc{naf}}
+\newcommand{\NLP}{\textsc{nlp}}
 \title{\thedoctitle}
 \author{\theauthor}
 \date{m4_docdate}
@@ -18,7 +19,7 @@ m4_include(texinclusions.m4)m4_dnl
 \begin{document}
 \maketitle
 \begin{abstract}
-  This is a description and documentation of the installation of the current NLP
+  This is a description and documentation of the installation of the current \NLP{}
   modules on Lisa, so that they can be used in pipelines.
 \end{abstract}
 \tableofcontents
@@ -55,11 +56,16 @@ Table~\ref{tab:modulelist}
        morphosyntactic parser     & \verb|m4_morphpardir|  & Github    & \verb|m4_morphparscript|   &   \\
        alpinohack         & \verb|clean_hack|      & This doc. &  m4_alpinohackscript  & \footnote{not a  module, but an
                                                                                           encoding hack} \\
-       \textsc{ner}       & \verb|m4_jardir|       & Lisa      & m4_nerscript        &   \\
-       \textsc{wsd}       & \verb|m4_wsddir|       & Lisa      & m4_wsdscript        &  \\
-       Onto               & \verb|m4_ontodir|      & Lisa      & m4_ontoscript       &  \\
-       Heidel             & \verb|m4_heideldir|    & Github      & m4_heidelscript     &  \\
-       SRL                & \verb|m4_srldir|       & Lisa      & m4_srlscript        &  \\
+       \textsc{nerc}       & \verb|m4_jardir|      & Snap      & m4_nercscript        & \\
+       \textsc{wsd}       & \verb|m4_wsddir|       & Snap      & m4_wsdscript        & \\
+       Onto               & \verb|m4_ontodir|      & Snap      & m4_ontoscript       & \\
+       Heidel             & \verb|m4_heideldir|    & Github    & m4_heidelscript     & \\
+       \textsc{srl}       & \verb|m4_srldir|       & Github    & m4_srlscript        & \\
+       \textsc{ned}       & \verb|m4_neddir|       & None      & m4_nedscript        & \\
+       Nom. coref         & \verb|m4_ncorefsrc|    & None      &  m4_ncorefscript    & \\  
+       Ev. coref          & \verb|m4_evcorefsrc|   & None      &  m4_evcorefscript   & \\  
+       Opinion miner      & \verb|m4_opinisrc|   & None        &  m4_opiniscript       & \\  
+       Framenet sem. role label. &  \verb|m4_fsrlsrc|   & None      &  m4_fsrlscript  & \\  
 @%       Alpino             & \verb|m4_alpinodir|    & \textsc{rug} & m4_Alpinoscript  & \\
 @%       Ticcutils          & \verb|m4_ticcdir|      & \textsc{ilk} & & \\
 @%       Timbl              & \verb|m4_timbldir|     & \textsc{ilk} & & \\
@@ -76,8 +82,7 @@ lists the modules in the pipeline. The column \emph{source} indicates
 the origin of the module. Ideally, modules are directly obtained from
 a public repository, e.g. Github, or from a website of the organisation
 where the module has been built. However, some of the modules are not yet
-available in this way and only a snapshot has been installed by hand in
-Lisa. Table~/ref{tab:modulesources} provides the \textsc{url}'s of the
+available in this way and only an informal snapshot is available. Table~/ref{tab:modulesources} provides the \textsc{url}'s of the
 sources that have been obtained from a public repository.
 
 The modules themselves use other utilities like dependency-taggers and
@@ -121,6 +126,9 @@ utilities that can be installed from an open source.
 \end{table}
 
 
+The informal snapshots are available in a tarball
+\texttt{nl_pipeline_snapshots} that can be obtained from the author of
+this document.
 
 
 \subsection{File-structure of the pipeline}
@@ -167,6 +175,31 @@ Similarly, make binaries findable:
 export PATH=m4_ausrlocaldir<!!>/bin:$PATH
 @| @}
 
+During installation, an extra directory, \verb|snapshot|, that
+contains modules that are not yet available from public sources, is
+needed. 
+
+So, let us here and now check whether the snapshots are indeed
+present. The following macro unpacks the tarball if it is present and
+aborts the installation when the snapshot directory is not present.
+
+@d unpack snapshots or die @{@%
+cd m4_aprojroot
+if
+  [ -e m4_snapshot_tarball ]
+then
+  tar -zxf m4_snapshot_tarball
+fi
+if
+  [ ! -e m4_snapshotdir ]
+then
+  echo "No module snapshots"
+  exit 1
+fi
+@| @}
+
+
+
 
  
 \section{Installation}
@@ -179,18 +212,19 @@ open-source and installed. This is performed by script \verb|m4_module_installer
 @o m4_bindir/m4_module_installer @{@%
 #!/bin/bash
 @< variables of m4_module_installer @>
-@< install the tokenizer @>
-@< install kafnafparserpy @>
-@< install Alpino @>
-@< install the morphosyntactic parser @>
-@< install the NER module @>
-@< install the WSD module @>
+@< unpack snapshots or die @>
+@% @< install the tokenizer @>
+@% @< install kafnafparserpy @>
+@% @< install Alpino @>
+@% @< install the morphosyntactic parser @>
+@% @< install the NERC module @>
+@% @< install the WSD module @>
 @< install the onto module @>
-@< install the heideltime module @>
-@< install the srl module @>
-@< install the treetagger utility @>
-@< install the ticcutils utility @>
-@< install the timbl utility @>
+@% @< install the heideltime module @>
+@% @< install the srl module @>
+@% @< install the treetagger utility @>
+@% @< install the ticcutils utility @>
+@% @< install the timbl utility @>
 
 @| @}
 
@@ -439,31 +473,32 @@ chmod 775  m4_abindir/m4_alpinohackscript
 
 
 
-\subsection{Named entity recognition}
-\label{sec:nermodule}
+\subsection{Named entity recognition (NERC)}
+\label{sec:nerc}
 
 \subsubsection{Module}
-\label{sec:module}
+\label{sec:nercmodule}
 
-We do not (yet have the source code of the NER module. A snapshot is
+We do not (yet) have the source code of the NER module. A snapshot is
 comprised in a jar library.
 
-@d install the NER module @{@%
-cp m4_asnapshotroot/jars/m4_nerjar m4_jardir/
+@d install the NERC module @{@%
+@% cp m4_asnapshotroot/jars/m4_nerjar m4_jardir/
+cp  m4_aprojroot/m4_snapshotdir/m4_nercdir/m4_nercjar m4_ajardir/
 @| @}
 
 \subsubsection{Script}
-\label{sec:nerscript}
+\label{sec:nercscript}
 
-@o m4_bindir/m4_nerscript @{@%
+@o m4_bindir/m4_nercscript @{@%
 #!/bin/bash
 ROOT=m4_aprojroot
 JARDIR=m4_ajardir
-cat | java -jar \$JARDIR/m4_nerjar tag
+cat | java -jar \$JARDIR/m4_nercjar tag
 @| @}
 
 @d make scripts executable @{@%
-chmod 775  m4_abindir/m4_nerscript
+chmod 775  m4_abindir/m4_nercscript
 @| @}
 
 
@@ -477,7 +512,8 @@ install from a snapshot on Lisa.
 \label{sec:wsd-module}
 
 @d install the WSD module @{@%
-cp -r m4_asnapshotroot/m4_wsddir m4_amoddir/
+@%cp -r m4_asnapshotroot/m4_wsddir m4_amoddir/
+cp -r m4_aprojroot/m4_snapshotdir/m4_wsddir m4_amoddir/
 @| @}
 
 
@@ -522,7 +558,8 @@ install from a snapshot on Lisa.
 \label{sec:ontotagger-module}
 
 @d install the onto module @{@%
-cp -r m4_asnapshotroot/m4_ontodir m4_amoddir/
+@%cp -r m4_asnapshotroot/m4_ontodir m4_amoddir/
+cp -r m4_aprojroot/m4_snapshotdir/m4_ontodir m4_amoddir/
 @| @}
 
 
@@ -639,13 +676,20 @@ chmod 775  m4_abindir/m4_heidelscript
 \label{sec:SRL-module}
 
 @d install the srl module @{@%
-cp -r m4_asnapshotroot/m4_srldir m4_amoddir/
-
+@< install from github @(srl@,m4_srldir@,m4_srlgit@) @>
+@%cp -r m4_asnapshotroot/m4_srldir m4_amoddir/
 @| @}
 
 
 \subsubsection{Script}
 \label{sec:SRLscript}
+
+
+First:
+\begin{enumerate}
+\item set the correct environment. The module needs python and timble.
+\item  create a tempdir and in that dir a file to store the input and a (\textsc{scv}) file with the feature-vector.
+\end{enumerate}
 
 @o m4_bindir/m4_srlscript @{@%
 #!/bin/bash
@@ -655,9 +699,36 @@ TEMPDIR=`mktemp -d -t SRLTMP.XXXXXX`
 cd \$SRLDIR
 @< set local bin directory @>
 @< set pythonpath @>
-cat | \$SRLDIR/getSRLinfo.py \$SRLDIR/srlModule/ \$TEMPDIR
+INPUTFILE=$TEMPDIR/inputfile
+FEATUREVECTOR=$TEMPDIR/csvfile
+TIMBLOUTPUTFILE=$TEMPDIR/timblpredictions
+@| @}
+
+Create a feature-vector.
+
+@o m4_bindir/m4_srlscript @{@%
+cat | tee  \$INPUTFILE | python nafAlpinoToSRLFeatures.py > \$FEATUREVECTOR
+@| @}
+
+Run the trained model on the feature-vector.
+
+@o m4_bindir/m4_srlscript @{@%
+timbl -mO:I1,2,3,4 -i e-mags_mags_press_newspapers.wgt -t \$FEATUREVECTOR -o \$TIMBLOUTPUTFILE >/dev/null 2>/dev/null
+@| @}
+
+Insert the \textsc{srl} values into the \textsc{naf} file.
+
+@o m4_bindir/m4_srlscript @{@%
+python timblToAlpinoNAF.py \$INPUTFILE \$TIMBLOUTPUTFILE
+@| @}
+
+
+Clean up.
+
+@o m4_bindir/m4_srlscript @{@%
 rm -rf \$TEMPDIR
 @| @}
+
 
 @d make scripts executable @{@%
 chmod 775  m4_abindir/m4_srlscript
@@ -693,7 +764,7 @@ the pipeline.
 ROOT=m4_aprojroot
 BIND=\$ROOT/bin
 echo "De hond eet jus." | \$BIND/tok | \$BIND/mor | \
-\$BIND/m4_alpinohackscript | \$BIND/m4_nerscript  | \$BIND/m4_wsdscript | \
+\$BIND/m4_alpinohackscript | \$BIND/m4_nercscript  | \$BIND/m4_wsdscript | \
 \$BIND/m4_ontoscript  > \$ROOT/test.onto
 cat \$ROOT/test.onto | \$BIND/m4_heidelscript  > \$ROOT/test.heidel
 cat \$ROOT/test.heidel | \$BIND/m4_srlscript  > \$ROOT/test.out
@@ -756,7 +827,7 @@ wget \$TREETAGURL/\$DUTCH_TAGSET
 wget \$TREETAGURL/\$DUTCHPARS_2_GZ  
 @| @}
 
-Rub the install-script:
+Run the install-script:
 
 @d install the treetagger utility @{@%
 chmod 775 \$TREETAG_INSTALLSCRIPT
@@ -1304,7 +1375,7 @@ Then it runs the four processors nuweb, \LaTeX{}, MakeIndex and bib\TeX{}, until
 they do not change the auxiliary file or the index. 
 
 @d compile nuweb @{@%
-NUWEB=m4_nuweb
+NUWEB=m4_nuwebbinary
 @< run the processors until the aux file remains unchanged @>
 @< remove the copy of the aux file @>
 @| @}
