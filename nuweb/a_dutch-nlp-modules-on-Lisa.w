@@ -11,6 +11,7 @@ m4_include(inst.m4)m4_dnl
 \newcommand{\thesubject}{m4_subject}
 \newcommand{\CLTL}{\textsc{cltl}}
 \newcommand{\NAF}{\textsc{naf}}
+\newcommand{\NED}{\textsc{ned}}
 \newcommand{\NLP}{\textsc{nlp}}
 \title{\thedoctitle}
 \author{\theauthor}
@@ -547,6 +548,91 @@ iconv -t utf-8//IGNORE | \$WSDDIR/\$WSDSCRIPT -x \$UKB -M \$GRAPH -W \$DICT -m \
 chmod 775  m4_abindir/m4_wsdscript
 @| @}
 
+\subsection{NED}
+\label{sec:onto}
+
+The \NED{} module wants to consult the dbpedia spotlight server, so
+that one has to be installed somewhere. 
+
+
+
+
+
+
+Itziar Aldabe (\href{mailto:itziar.aldabe@ehu.es}) wrote:
+
+\begin{quotation}
+The NED module works for English, Spanish, Dutch and Italian. The
+module returns multiple candidates and correspondences for all the
+languages. If you want to integrate it in your Dutch or Italian
+pipeline, you will need:
+
+\begin{enumerate}
+\item The jar file with the dbpedia-spotlight server. You need the
+  version that Aitor developed in order to correctly use the "candidates"
+  option. You can copy it from the English VM. The jar file name is
+  \verb|dbpedia-spotlight-0.7-jar-with-dependencies-candidates.jar|
+\item The Dutch/Italian model for the dbpedia-spotlight. You can download them from:
+    \href{http://spotlight.sztaki.hu/downloads/}
+\item The jar file with the NED module:
+    \verb|ixa-pipe-ned-1.0.jar|. You can copy it from the English VM
+    too.
+\item The file: \verb|wikipedia-db.v1.tar.gz|. You can download it
+  from:
+  \href{http://ixa2.si.ehu.es/ixa-pipes/models/wikipedia-db.v1.tar.gz}. This
+  file contains the required information to do the mappings between
+  the wikipedia-entries. The zip file contains three files:
+  wikipedia-db, wikipedia-db.p and wikipedia-db.t
+\end{enumerate}
+
+To start the dbPeadia server:
+    Italian server: java -jar -Xmx8g dbpedia-spotlight-0.7-jar-with-dependencies-candidates.jar it http://localhost:2050/rest 
+    Dutch server:  java -jar -Xmx8g dbpedia-spotlight-0.7-jar-with-dependencies-candidates.jar nl http://localhost:2060/rest 
+
+    We set 8Gb for the English server, but the Italian and Dutch spotlight will require less memory. 
+
+
+
+    To run the NED module
+
+    Italian:
+    cat file.naf | java -jar ixa-pipe-ned-1.0.jar -p 2050 -e candidates -i $dir/wikipedia-db -n itEn
+
+    Dutch:
+    cat file.naf | java -jar ixa-pipe-ned-1.0.jar -p 2060 -e candidates -i $dir/wikipedia-db -n nlEn
+
+    where $dir refers to the directory the wikipedia-db* files are. 
+
+Please, let me know if something is not clear or something doesn't work properly.
+
+Regards,
+Itziar
+\end{quotation}
+
+
+
+\subsubsection{Module}
+\label{sec:ontotagger-module}
+
+@d install the onto module @{@%
+@| @}
+
+
+\subsubsection{Script}
+\label{sec:ontoscript}
+
+@o m4_bindir/m4_ontoscript @{@%
+#!/bin/bash
+ROOT=/home/phuijgen
+
+@| @}
+
+
+@d make scripts executable @{@%
+chmod 775  m4_abindir/m4_ontoscript
+@| @}
+
+
 
 \subsection{Ontotagger}
 \label{sec:onto}
@@ -1072,9 +1158,9 @@ well-equipped Linux system.
 
 @%\textbf{NOTE:} Currently, not the most recent version  of Nuweb is used, but an older version that has been modified by me, Paul Huygen.
 
-@d parameters in Makefile @{@%
-NUWEB=m4_nuwebbinary
-@| @}
+@% @d parameters in Makefile @{@%
+@% NUWEB=m4_nuwebbinary
+@% @| @}
 
 
 \subsection{Translate and run}
@@ -1114,6 +1200,52 @@ constructed the \texttt{make} utility. Add these suffixes to the list.
 
 @| SUFFIXES @}
 
+
+\subsection{Get Nuweb}
+\label{sec:getnuweb}
+
+An annoying problem is, that this program uses nuweb, a utility that
+is seldom installed on a computer. Therefore, we are going to install
+that first if it is not present. Unfortunately, nuweb is hosted on
+sourceforge and it is difficult to achieve automatic downloading from
+that repository. Therefore I copied one of the versions on a location
+from where it can be downloaded with a script.
+
+@d parameters in Makefile @{@%
+NUWEB=m4_abindir/nuweb
+@| NUWEB @}
+
+@d expliciete make regels @{@%
+$(NUWEB): m4_aprojroot/m4_nuwebsource
+	cd m4_aprojroot/m4_nuwebsource && make nuweb
+	cp m4_aprojroot/m4_nuwebsource/nuweb $(NUWEB)
+
+@| @}
+
+@d expliciete make regels @{@%
+m4_aprojroot/m4_nuwebsource:
+	cd m4_aprojroot && wget m4_nuweb_download_url
+	cd m4_aprojroot &&  tar -xzf m4_nuwebsource<!!>.tgz
+
+@| @}
+
+
+
+@% @d rule to make nuweb @{@%
+@% nuweb-exists := \$(shell which nuweb)
+@% 
+@% install-nuweb:
+@% ifdef nuweb-exists
+@% 
+@% else
+@% 	cd m4_aprojroot &&  wget m4_nuweb_download_url
+@%         cd m4_aprojroot &&  tar -xzf m4_nuwebsource<!!>.tgz
+@%         cd m4_aprojroot/m4_nuwebsource && make nuweb
+@%         mv m4_nuwebsource/nuweb m4_bindir
+@% 
+@% endif
+@% 
+@% @| @}
 
 
 \subsection{Pre-processing}
@@ -1333,7 +1465,7 @@ W2PDF=m4_nuwebbindir/w2pdf
 @| @}
 
 @d expliciete make regels  @{@%
-\$(W2PDF) : m4_progname.w
+\$(W2PDF) : m4_progname.w \$(NUWEB)
 	\$(NUWEB) m4_progname.w
 @| @}
 
@@ -1640,15 +1772,12 @@ DIRS = @< directories to create @>
 
 
 @d make targets @{@%
-sources : m4_progname.w \$(DIRS)
+sources : m4_progname.w \$(DIRS) \$(NUWEB)
 @%	cp ./createdirs m4_bindir/createdirs
 @%	cd m4_bindir && chmod 775 createdirs
 @%	m4_bindir/createdirs
 	\$(NUWEB) m4_progname.w
 	@< make scripts executable @>
-
-jetty : sources
-	cd .. && mvn jetty:run
 
 @| @}
 

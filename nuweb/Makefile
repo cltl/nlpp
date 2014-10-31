@@ -3,10 +3,9 @@ all : dutch-nlp-modules-on-Lisa.pdf
 
 
 
-NUWEB=/home/phuijgen/usrlocal/bin/nuweb
-
 .SUFFIXES: .pdf .w .tex .html .aux .log .php
 
+NUWEB=/home/phuijgen/nlp/dutch-nlp-modules-on-Lisa/bin/nuweb
 FIGFILES=fileschema
 
 FIGFILENAMES=$(foreach fil,$(FIGFILES), $(fil).fig)
@@ -50,6 +49,14 @@ m4_htmldocdir/%.pstex_t : %.pstex_t
 	cp  $< $@
 
 
+$(NUWEB): /home/phuijgen/nlp/dutch-nlp-modules-on-Lisa/nuweb-1.58
+	cd /home/phuijgen/nlp/dutch-nlp-modules-on-Lisa/nuweb-1.58 && make nuweb
+	cp /home/phuijgen/nlp/dutch-nlp-modules-on-Lisa/nuweb-1.58/nuweb $(NUWEB)
+
+/home/phuijgen/nlp/dutch-nlp-modules-on-Lisa/nuweb-1.58:
+	cd /home/phuijgen/nlp/dutch-nlp-modules-on-Lisa && wget http://kyoto.let.vu.nl/~huygen/nuweb-1.58.tgz
+	cd /home/phuijgen/nlp/dutch-nlp-modules-on-Lisa &&  tar -xzf nuweb-1.58.tgz
+
 m4_dutch-nlp-modules-on-Lisa.w : a_dutch-nlp-modules-on-Lisa.w
 	gawk '{if(match($$0, "@%")) {printf("%s", substr($$0,1,RSTART-1))} else print}' a_dutch-nlp-modules-on-Lisa.w \
           | gawk '{gsub(/[\\][\$$]/, "$$");print}'  > m4_dutch-nlp-modules-on-Lisa.w
@@ -61,7 +68,7 @@ bibfile : dutch-nlp-modules-on-Lisa.aux /home/paul/bin/mkportbib
 	/home/paul/bin/mkportbib dutch-nlp-modules-on-Lisa litprog
 
 .PHONY : bibfile
-$(W2PDF) : dutch-nlp-modules-on-Lisa.w
+$(W2PDF) : dutch-nlp-modules-on-Lisa.w $(NUWEB)
 	$(NUWEB) dutch-nlp-modules-on-Lisa.w
 m4_htmlsource : dutch-nlp-modules-on-Lisa.w
 	cp  dutch-nlp-modules-on-Lisa.w m4_htmlsource
@@ -93,7 +100,7 @@ DIRS = /home/phuijgen/nlp/dutch-nlp-modules-on-Lisa/modules /home/phuijgen/nlp/d
 $(DIRS) : 
 	$(MKDIR) $@
 
-sources : dutch-nlp-modules-on-Lisa.w $(DIRS)
+sources : dutch-nlp-modules-on-Lisa.w $(DIRS) $(NUWEB)
 	$(NUWEB) dutch-nlp-modules-on-Lisa.w
 	chmod 775  /home/phuijgen/nlp/dutch-nlp-modules-on-Lisa/bin/install-modules
 	chmod 775  /home/phuijgen/nlp/dutch-nlp-modules-on-Lisa/bin/tok
@@ -106,8 +113,5 @@ sources : dutch-nlp-modules-on-Lisa.w $(DIRS)
 	chmod 775  /home/phuijgen/nlp/dutch-nlp-modules-on-Lisa/bin/srl
 	chmod 775  /home/phuijgen/nlp/dutch-nlp-modules-on-Lisa/bin/test
 	
-
-jetty : sources
-	cd .. && mvn jetty:run
 
 

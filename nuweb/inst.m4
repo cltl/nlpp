@@ -183,6 +183,9 @@ m4_dnl
 m4_dnl external URL's
 m4_dnl 
 m4_define(m4_nuwebURL, `nuweb.sourceforge.net')m4_dnl
+m4_dnl m4_define(m4_nuweb_download_url, `http://downloads.sourceforge.net/project/nuweb/nuweb-1.58.tar.gz?r=http%3A%2F%2Fsourceforge.net%2Fprojects%2Fnuweb%2Ffiles%2F&ts=1413975392&use_mirror=softlayer-ams')m4_dnl
+m4_define(m4_nuwebsource, nuweb-1.58)m4_dnl
+m4_define(m4_nuweb_download_url, http://kyoto.let.vu.nl/~huygen/`'m4_nuwebsource`'.tgz)m4_dnl
 m4_dnl
 m4_dnl Miscellaneous
 m4_dnl
