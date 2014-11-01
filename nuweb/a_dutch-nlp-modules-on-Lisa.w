@@ -162,7 +162,7 @@ directories:
 @d directories to create @{m4_ausrlocaldir @| @}
 @d directories to create @{m4_ausrlocaldir<!!>/bin @| @}
 @d directories to create @{m4_ausrlocaldir<!!>/lib @| @}
-@%@d directories to create @{m4_amoddir/python m4_ajardir @| @}
+@d directories to create @{m4_amoddir/python m4_ajardir @| @}
 
 Make Python utilities findable with the following macro:
 
@@ -886,11 +886,12 @@ Installation goes as follows (See
 \item Download and unpack the tagger-scripts tarball
 \end{enumerate}
 
-The locatioan where treetager comes from and the location where it is going to reside:
+The location where treetager comes from and the location where it is going to reside:
 
 @d install the treetagger utility @{@%
 TREETAGDIR=m4_treetagdir
-TTREETAG_BASIS_URL=m4_treetag_base_url
+TREETAG_BASIS_URL=m4_treetag_base_url
+TREETAGURL=m4_treetag_base_url
 @| @}
 
 The source tarball, scripts and the installation-script:
@@ -1773,10 +1774,10 @@ MKDIR = mkdir -p
 
 @d make targets @{@%
 DIRS = @< directories to create @>
-@%
-@%\$(DIRS) : 
-@%	\$(MKDIR) \$@@
-@%
+
+\$(DIRS) : 
+	\$(MKDIR) \$@@
+
 @| DIRS @}
 
 
