@@ -142,7 +142,7 @@ directories:
 \item[nuweb:] This directory comntains this document and everything to
   create the pipeline from the open sources of the modules.
 \item[modules:] Contains the program code of each module in a
-  subdirectory. Fuurthermore, it contains a subdirectory
+  subdirectory. Furthermore, it contains a subdirectory
   \verb|python| for python software-modules, subdirectory
   \texttt{jars} for jar files and subdirectory
   /usrlocal/ for binaries and libs that are used by modules.
@@ -162,7 +162,7 @@ directories:
 @d directories to create @{m4_ausrlocaldir @| @}
 @d directories to create @{m4_ausrlocaldir<!!>/bin @| @}
 @d directories to create @{m4_ausrlocaldir<!!>/lib @| @}
-@d directories to create @{m4_amoddir/python m4_ajardir @| @}
+@%@d directories to create @{m4_amoddir/python m4_ajardir @| @}
 
 Make Python utilities findable with the following macro:
 
@@ -220,6 +220,7 @@ open-source and installed. This is performed by script \verb|m4_module_installer
 @< install the morphosyntactic parser @>
 @< install the NERC module @>
 @< install the WSD module @>
+@< install the \NED{} module @>
 @< install the onto module @>
 @< install the heideltime module @>
 @< install the srl module @>
@@ -552,14 +553,17 @@ chmod 775  m4_abindir/m4_wsdscript
 \label{sec:onto}
 
 The \NED{} module wants to consult the dbpedia spotlight server, so
-that one has to be installed somewhere. 
+that one has to be installed somewhere. For this moment, let us
+suppose that it has been installed on localhost.
 
 
 
+\subsubsection{Installation of the spotlight server}
+\label{sec:spotlightinstall}
 
 
 
-Itziar Aldabe (\href{mailto:itziar.aldabe@ehu.es}) wrote:
+Itziar Aldabe (\href{mailto:itziar.aldabe@@ehu.es}) wrote:
 
 \begin{quotation}
 The NED module works for English, Spanish, Dutch and Italian. The
@@ -612,19 +616,24 @@ Itziar
 
 
 \subsubsection{Module}
-\label{sec:ontotagger-module}
+\label{sec:ned-module}
 
-@d install the onto module @{@%
+@d install the \NED{} module @{@%
+mkdir -p m4_amoddir/m4_neddir
+cd m4_amoddir/m4_neddir
+wget http://ixa2.si.ehu.es/ixa-pipes/models/wikipedia-db.v1.tar.gz
+tar -xzf wikipedia-db.v1.tar.gz
 @| @}
 
 
 \subsubsection{Script}
-\label{sec:ontoscript}
+\label{sec:nedscript}
 
-@o m4_bindir/m4_ontoscript @{@%
+@o m4_bindir/m4_nedscript @{@%
 #!/bin/bash
-ROOT=/home/phuijgen
-
+ROOT=m4_aprojroot
+JARDIR=m4_ajardir
+cat | java -jar \$JARDIR/m4_nedjar  -p 2060 -e candidates -i m4_amoddir/m4_neddir/wikipedia-db -n nlEn
 @| @}
 
 
@@ -654,7 +663,7 @@ cp -r m4_aprojroot/m4_snapshotdir/m4_ontodir m4_amoddir/
 
 @o m4_bindir/m4_ontoscript @{@%
 #!/bin/bash
-ROOT=/home/phuijgen
+ROOT=m4_aprojroot
 ONTODIR=m4_amoddir/m4_ontodir
 JARDIR=\$ONTODIR/lib
 RESOURCESDIR=\$ONTODIR/resources
@@ -1764,10 +1773,10 @@ MKDIR = mkdir -p
 
 @d make targets @{@%
 DIRS = @< directories to create @>
-
-\$(DIRS) : 
-	\$(MKDIR) \$@@
-
+@%
+@%\$(DIRS) : 
+@%	\$(MKDIR) \$@@
+@%
 @| DIRS @}
 
 

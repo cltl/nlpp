@@ -20,9 +20,9 @@ m4_define(m4_ajardir, m4_amoddir`/jars')m4_dnl     jars
 m4_define(m4_jardir, m4_moddir`/jars')m4_dnl     jars
 m4_define(m4_usrlocaldir, m4_moddir`/usrlocal')m4_dnl     
 m4_define(m4_ausrlocaldir, m4_amoddir`/usrlocal')m4_dnl
-m4_define(m4_lisanlproot, /home/phuijgen/nlp)m4_dnl
+m4_dnl m4_define(m4_lisanlproot, /home/phuijgen/nlp)m4_dnl
 m4_define(m4_snapshotrootURL, kyoto.let.vu.nl~huygen/dutch_snapshots)m4_dnl
-m4_define(m4_asnapshotroot, m4_lisanlproot/snapshots)m4_dnl
+m4_define(m4_asnapshotroot, m4_aprojroot/snapshots)m4_dnl
 m4_define(m4_htmldir, m4_projroot/nuweb/html)m4_dnl
 m4_define(m4_ahtmldir, m4_aprojroot/nuweb/html)m4_dnl
 m4_define(m4_htmltarget, m4_htmldir/`'m4_progname.html`')m4_dnl
@@ -57,7 +57,10 @@ m4_define(m4_nercdir, nerc)m4_dnl  Subdir. of modules
 m4_define(m4_nercscript, nerc)m4_dnl
 m4_dnl NED
 m4_define(m4_neddir, ned)m4_dnl  Subdir. of modules
+m4_define(m4_nedjar, ixa-pipe-ned-1.0.jar)m4_dnl
 m4_define(m4_nedscript, ned)m4_dnl
+m4_define(m4_wikipediadbmodule, wikipedia-db)m4_dnl
+m4_define(m4_wikipediadbmodule_url, http://ixa2.si.ehu.es/ixa-pipes/models/`'wikipediamodule`'.v1.tar.gz)m4_dnl
 m4_dnl
 m4_dnl WSD
 m4_dnl m4_define(m4_wsdsrc, m4_lisanlproot/mods/ukb)m4_dnl  Subdir. of modules
@@ -145,6 +148,10 @@ m4_define(m4_treetagger-main-webpage, `http://www.cis.uni-muenchen.de/~schmid/to
 m4_define(m4_treetagurl, `http://www.cis.uni-muenchen.de/%7Eschmid/tools/TreeTagger/data/m4_treetagsrc')m4_dnl
 m4_define(m4_treetag_dutchabburl, http://www.cis.uni-muenchen.de/~schmid/tools/TreeTagger/data/dutch-par-linux-3.2-utf8.bin.gz)m4_dnl
 m4_define(m4_treetagdir, treetagger)m4_dnl
+m4_dnl
+m4_dnl Spotlight
+m4_dnl
+m4_define(spotlight_nl_port, 2060)m4_dnl
 
 
 m4_dnl
