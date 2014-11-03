@@ -619,6 +619,7 @@ Itziar
 \label{sec:ned-module}
 
 @d install the \NED{} module @{@%
+cp m4_asnapshotroot/m4_neddir/m4_nedjar m4_ajardir/
 mkdir -p m4_amoddir/m4_neddir
 cd m4_amoddir/m4_neddir
 wget http://ixa2.si.ehu.es/ixa-pipes/models/wikipedia-db.v1.tar.gz
@@ -638,7 +639,7 @@ cat | java -jar \$JARDIR/m4_nedjar  -p 2060 -e candidates -i m4_amoddir/m4_neddi
 
 
 @d make scripts executable @{@%
-chmod 775  m4_abindir/m4_ontoscript
+chmod 775  m4_abindir/m4_nedscript
 @| @}
 
 
@@ -862,7 +863,8 @@ echo "De hond eet jus." | \$BIND/tok | \$BIND/mor | \
 \$BIND/m4_alpinohackscript | \$BIND/m4_nercscript  | \$BIND/m4_wsdscript | \
 \$BIND/m4_ontoscript  > \$ROOT/test.onto
 cat \$ROOT/test.onto | \$BIND/m4_heidelscript  > \$ROOT/test.heidel
-cat \$ROOT/test.heidel | \$BIND/m4_srlscript  > \$ROOT/test.out
+cat \$ROOT/test.heidel | \$BIND/m4_srlscript  > \$ROOT/test.srl
+cat \$ROOT/test.srl | \$BIND/m4_srlscript  > \$ROOT/test.srl
 @% \$BIND/m4_ontoscript | \$BIND/m4_heidelscript | \$BIND/m4_srlscrip  > \$ROOT/test.out
 @| @}
 
