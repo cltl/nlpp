@@ -128,7 +128,7 @@ utilities that can be installed from an open source.
 
 
 The informal snapshots are available in a tarball
-\texttt{nl_pipeline_snapshots} that can be obtained from the author of
+\verb|nl_pipeline_snapshots| that can be obtained from the author of
 this document.
 
 
@@ -157,12 +157,12 @@ directories:
   the documents and the sources and a Makefile to perform the actions.
 \end{description}
 
-@d directories to create @{m4_amoddir @| @}
-@d directories to create @{m4_abindir @| @}
-@d directories to create @{m4_ausrlocaldir @| @}
-@d directories to create @{m4_ausrlocaldir<!!>/bin @| @}
-@d directories to create @{m4_ausrlocaldir<!!>/lib @| @}
-@d directories to create @{m4_amoddir/python m4_ajardir @| @}
+@d directories to create @{m4_moddir @| @}
+@d directories to create @{m4_bindir @| @}
+@d directories to create @{m4_usrlocaldir @| @}
+@d directories to create @{m4_usrlocaldir<!!>/bin @| @}
+@d directories to create @{m4_usrlocaldir<!!>/lib @| @}
+@d directories to create @{m4_moddir/python m4_ajardir @| @}
 
 Make Python utilities findable with the following macro:
 
@@ -173,7 +173,7 @@ export PYTHONPATH=m4_amoddir/python:\$PYTHONPATH
 Similarly, make binaries findable:
 
 @d set local bin directory @{@%
-export PATH=m4_ausrlocaldir<!!>/bin:$PATH
+export PATH=m4_usrlocaldir<!!>/bin:$PATH
 @| @}
 
 During installation, an extra directory, \verb|snapshot|, that
@@ -231,7 +231,7 @@ open-source and installed. This is performed by script \verb|m4_module_installer
 @| @}
 
 @d make scripts executable @{@%
-chmod 775  m4_abindir/m4_module_installer
+chmod 775  m4_bindir/m4_module_installer
 @| @}
 
 
@@ -344,7 +344,7 @@ cat | perl \$TOKBINDIR/tokenizer-cli.pl -l nl t
 @| @}
 
 @d make scripts executable @{@%
-chmod 775  m4_abindir/m4_tokenizerscript
+chmod 775  m4_bindir/m4_tokenizerscript
 @| @}
 
 
@@ -427,7 +427,7 @@ cat | python \$MODDIR/core/morph_syn_parser.py
 @| @}
 
 @d make scripts executable @{@%
-chmod 775  m4_abindir/m4_morphparscript
+chmod 775  m4_bindir/m4_morphparscript
 @| @}
 
 \subsection{Alpino hack}
@@ -470,7 +470,7 @@ cat | python  \$HACKDIR/clean_hack.py
 @| @}
 
 @d make scripts executable @{@%
-chmod 775  m4_abindir/m4_alpinohackscript
+chmod 775  m4_bindir/m4_alpinohackscript
 @| @}
 
 
@@ -500,7 +500,7 @@ cat | java -jar \$JARDIR/m4_nercjar tag
 @| @}
 
 @d make scripts executable @{@%
-chmod 775  m4_abindir/m4_nercscript
+chmod 775  m4_bindir/m4_nercscript
 @| @}
 
 
@@ -546,7 +546,7 @@ iconv -t utf-8//IGNORE | \$WSDDIR/\$WSDSCRIPT -x \$UKB -M \$GRAPH -W \$DICT -m \
 @| @}
 
 @d make scripts executable @{@%
-chmod 775  m4_abindir/m4_wsdscript
+chmod 775  m4_bindir/m4_wsdscript
 @| @}
 
 \subsection{NED}
@@ -563,55 +563,55 @@ suppose that it has been installed on localhost.
 
 
 
-Itziar Aldabe (\href{mailto:itziar.aldabe@@ehu.es}) wrote:
-
-\begin{quotation}
-The NED module works for English, Spanish, Dutch and Italian. The
-module returns multiple candidates and correspondences for all the
-languages. If you want to integrate it in your Dutch or Italian
-pipeline, you will need:
-
-\begin{enumerate}
-\item The jar file with the dbpedia-spotlight server. You need the
-  version that Aitor developed in order to correctly use the "candidates"
-  option. You can copy it from the English VM. The jar file name is
-  \verb|dbpedia-spotlight-0.7-jar-with-dependencies-candidates.jar|
-\item The Dutch/Italian model for the dbpedia-spotlight. You can download them from:
-    \href{http://spotlight.sztaki.hu/downloads/}
-\item The jar file with the NED module:
-    \verb|ixa-pipe-ned-1.0.jar|. You can copy it from the English VM
-    too.
-\item The file: \verb|wikipedia-db.v1.tar.gz|. You can download it
-  from:
-  \href{http://ixa2.si.ehu.es/ixa-pipes/models/wikipedia-db.v1.tar.gz}. This
-  file contains the required information to do the mappings between
-  the wikipedia-entries. The zip file contains three files:
-  wikipedia-db, wikipedia-db.p and wikipedia-db.t
-\end{enumerate}
-
-To start the dbPeadia server:
-    Italian server: java -jar -Xmx8g dbpedia-spotlight-0.7-jar-with-dependencies-candidates.jar it http://localhost:2050/rest 
-    Dutch server:  java -jar -Xmx8g dbpedia-spotlight-0.7-jar-with-dependencies-candidates.jar nl http://localhost:2060/rest 
-
-    We set 8Gb for the English server, but the Italian and Dutch spotlight will require less memory. 
-
-
-
-    To run the NED module
-
-    Italian:
-    cat file.naf | java -jar ixa-pipe-ned-1.0.jar -p 2050 -e candidates -i $dir/wikipedia-db -n itEn
-
-    Dutch:
-    cat file.naf | java -jar ixa-pipe-ned-1.0.jar -p 2060 -e candidates -i $dir/wikipedia-db -n nlEn
-
-    where $dir refers to the directory the wikipedia-db* files are. 
-
-Please, let me know if something is not clear or something doesn't work properly.
-
-Regards,
-Itziar
-\end{quotation}
+@% Itziar Aldabe (\href{mailto:itziar.aldabe@@ehu.es}) wrote:
+@% 
+@% \begin{quotation}
+@% The NED module works for English, Spanish, Dutch and Italian. The
+@% module returns multiple candidates and correspondences for all the
+@% languages. If you want to integrate it in your Dutch or Italian
+@% pipeline, you will need:
+@% 
+@% \begin{enumerate}
+@% \item The jar file with the dbpedia-spotlight server. You need the
+@%   version that Aitor developed in order to correctly use the "candidates"
+@%   option. You can copy it from the English VM. The jar file name is
+@%   \verb|dbpedia-spotlight-0.7-jar-with-dependencies-candidates.jar|
+@% \item The Dutch/Italian model for the dbpedia-spotlight. You can download them from:
+@%     \href{http://spotlight.sztaki.hu/downloads/}
+@% \item The jar file with the NED module:
+@%     \verb|ixa-pipe-ned-1.0.jar|. You can copy it from the English VM
+@%     too.
+@% \item The file: \verb|wikipedia-db.v1.tar.gz|. You can download it
+@%   from:
+@%   \href{http://ixa2.si.ehu.es/ixa-pipes/models/wikipedia-db.v1.tar.gz}. This
+@%   file contains the required information to do the mappings between
+@%   the wikipedia-entries. The zip file contains three files:
+@%   wikipedia-db, wikipedia-db.p and wikipedia-db.t
+@% \end{enumerate}
+@% 
+@% To start the dbPeadia server:
+@%     Italian server: java -jar -Xmx8g dbpedia-spotlight-0.7-jar-with-dependencies-candidates.jar it http://localhost:2050/rest 
+@%     Dutch server:  java -jar -Xmx8g dbpedia-spotlight-0.7-jar-with-dependencies-candidates.jar nl http://localhost:2060/rest 
+@% 
+@%     We set 8Gb for the English server, but the Italian and Dutch spotlight will require less memory. 
+@% 
+@% 
+@% 
+@%     To run the NED module
+@% 
+@%     Italian:
+@%     cat file.naf | java -jar ixa-pipe-ned-1.0.jar -p 2050 -e candidates -i $dir/wikipedia-db -n itEn
+@% 
+@%     Dutch:
+@%     cat file.naf | java -jar ixa-pipe-ned-1.0.jar -p 2060 -e candidates -i $dir/wikipedia-db -n nlEn
+@% 
+@%     where $dir refers to the directory the wikipedia-db* files are. 
+@% 
+@% Please, let me know if something is not clear or something doesn't work properly.
+@% 
+@% Regards,
+@% Itziar
+@% \end{quotation}
 
 
 
@@ -639,7 +639,7 @@ cat | java -jar \$JARDIR/m4_nedjar  -p 2060 -e candidates -i m4_amoddir/m4_neddi
 
 
 @d make scripts executable @{@%
-chmod 775  m4_abindir/m4_nedscript
+chmod 775  m4_bindir/m4_nedscript
 @| @}
 
 
@@ -720,7 +720,7 @@ rm -rf \$TMPFIL
 
 
 @d make scripts executable @{@%
-chmod 775  m4_abindir/m4_ontoscript
+chmod 775  m4_bindir/m4_ontoscript
 @| @}
 
 
@@ -762,7 +762,7 @@ iconv -t utf-8//IGNORE | python \$HEIDELDIR/HeidelTime_NafKaf.py \$HEIDELDIR/hei
 @| @}
 
 @d make scripts executable @{@%
-chmod 775  m4_abindir/m4_heidelscript
+chmod 775  m4_bindir/m4_heidelscript
 @| @}
 
 \subsection{Semantic Role labelling}
@@ -827,7 +827,7 @@ rm -rf \$TEMPDIR
 
 
 @d make scripts executable @{@%
-chmod 775  m4_abindir/m4_srlscript
+chmod 775  m4_bindir/m4_srlscript
 @| @}
 
 
@@ -869,7 +869,7 @@ cat \$ROOT/test.srl | \$BIND/m4_srlscript  > \$ROOT/test.srl
 @| @}
 
 @d make scripts executable @{@%
-chmod 775  m4_abindir/test
+chmod 775  m4_bindir/test
 @| @}
 
 
@@ -999,7 +999,7 @@ if
   [ \$SUCCES -eq 0 ]
 then
   cd \$DIR
-  ./configure --prefix=m4_ausrlocaldir
+  ./configure --prefix=m4_usrlocaldir
   make
   make install
 fi
@@ -1224,20 +1224,20 @@ that repository. Therefore I copied one of the versions on a location
 from where it can be downloaded with a script.
 
 @d parameters in Makefile @{@%
-NUWEB=m4_abindir/nuweb
+NUWEB=m4_bindir/nuweb
 @| NUWEB @}
 
 @d expliciete make regels @{@%
-$(NUWEB): m4_aprojroot/m4_nuwebsource
-	cd m4_aprojroot/m4_nuwebsource && make nuweb
-	cp m4_aprojroot/m4_nuwebsource/nuweb $(NUWEB)
+$(NUWEB): m4_projroot/m4_nuwebsource
+	cd m4_projroot/m4_nuwebsource && make nuweb
+	cp m4_projroot/m4_nuwebsource/nuweb $(NUWEB)
 
 @| @}
 
 @d expliciete make regels @{@%
-m4_aprojroot/m4_nuwebsource:
-	cd m4_aprojroot && wget m4_nuweb_download_url
-	cd m4_aprojroot &&  tar -xzf m4_nuwebsource<!!>.tgz
+m4_projroot/m4_nuwebsource:
+	cd m4_projroot && wget m4_nuweb_download_url
+	cd m4_projroot &&  tar -xzf m4_nuwebsource<!!>.tgz
 
 @| @}
 
@@ -1648,8 +1648,8 @@ m4_4htfildest : m4_4htfilsource
 Copy the bibliography.
 
 @d expliciete make regels  @{@%
-m4_htmlbibfil : m4_anuwebdir/m4_progname.bib
-	cp m4_anuwebdir/m4_progname.bib m4_htmlbibfil
+m4_htmlbibfil : m4_nuwebdir/m4_progname.bib
+	cp m4_nuwebdir/m4_progname.bib m4_htmlbibfil
 
 @| @}
 
@@ -1660,9 +1660,9 @@ Make a dvi file with \texttt{w2html} and then run
 
 @d expliciete make regels @{@%
 m4_htmltarget : m4_htmlsource m4_4htfildest \$(HTML_PS_FIG_NAMES) \$(HTML_PST_NAMES) m4_htmlbibfil
-	cp w2html m4_abindir
-	cd m4_abindir && chmod 775 w2html
-	cd m4_htmldocdir && m4_abindir/w2html m4_progname.w
+	cp w2html m4_bindir
+	cd m4_bindir && chmod 775 w2html
+	cd m4_htmldocdir && m4_bindir/w2html m4_progname.w
 
 @| @}
 
