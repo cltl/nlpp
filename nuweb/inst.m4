@@ -34,11 +34,22 @@ m4_dnl
 m4_dnl Snapshot repo
 m4_define(m4_snapshot_tarball, nl_pipeline_snapshots.tgz)m4_dnl
 m4_define(m4_snapshotdir, snapshots)m4_dnl
+m4_dnl
+m4_dnl EHU repo
+m4_define(m4_ehu_rep_url, u017940.si.ehu.es)m4_dnl
+m4_define(m4_ehu_rep_port, 2223)m4_dnl
+m4_define(m4_ehu_modules_directory, components)m4_dnl
+m4_define(m4_ehu_user, newsreader)m4_dnl
+
 m4_dnl Modules
 m4_dnl
 m4_dnl Tokenizer
-m4_define(m4_tokenizergit, https://github.com/opener-project/tokenizer-base.git)m4_dnl  Subdir. of modules
-m4_define(m4_tokenizerdir, tokenizer-base)m4_dnl  Subdir. of modules
+m4_dnl m4_define(m4_tokenizergit, https://github.com/opener-project/tokenizer-base.git)m4_dnl  Subdir. of modules
+m4_dnl m4_define(m4_tokenizerdir, tokenizer-base)m4_dnl  Subdir. of modules
+m4_dnl m4_define(m4_tokenizerscript, tok)m4_dnl
+m4_define(m4_tokenizergit, https://github.com/ixa-ehu/ixa-pipe-tok.git)m4_dnl  Subdir. of modules
+m4_define(m4_tokenizerdir, ixa-pipe-tok)m4_dnl  Subdir. of modules
+m4_define(m4_tokenizerjar, ixa-pipe-tok-1.5.3.jar)m4_dnl
 m4_define(m4_tokenizerscript, tok)m4_dnl
 m4_dnl
 m4_dnl Morphosyntactic parser

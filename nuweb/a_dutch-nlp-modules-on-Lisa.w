@@ -10,6 +10,7 @@ m4_include(inst.m4)m4_dnl
 \newcommand{\theauthor}{m4_author}
 \newcommand{\thesubject}{m4_subject}
 \newcommand{\CLTL}{\textsc{cltl}}
+\newcommand{\EHU}{\textsc{ehu}}
 \newcommand{\NAF}{\textsc{naf}}
 \newcommand{\NED}{\textsc{ned}}
 \newcommand{\NLP}{\textsc{nlp}}
@@ -53,19 +54,20 @@ Table~\ref{tab:modulelist}
   \begin{footnotesize}
     \begin{tabular}{lllll}
      \textbf{module}      & \textbf{directory} & \textbf{source} & \textbf{script} & \textbf{Details} \\
-       Tokenizer          & \verb|m4_tokenizerdir| & Github    & m4_tokenizerscript  &               \\
+@%        Tokenizer          & \verb|m4_tokenizerdir| & Github    &   m4_tokenizerscript  &               \\
+       Tokenizer          & \verb|m4_tokenizerdir| & \EHU{}    & m4_tokenizerscript  &               \\
        morphosyntactic parser     & \verb|m4_morphpardir|  & Github    & \verb|m4_morphparscript|   &   \\
        alpinohack         & \verb|clean_hack|      & This doc. &  m4_alpinohackscript  & \footnote{not a  module, but an
                                                                                           encoding hack} \\
-       \textsc{nerc}       & \verb|m4_jardir|      & Snap      & m4_nercscript        & \\
-       \textsc{wsd}       & \verb|m4_wsddir|       & Snap      & m4_wsdscript        & \\
-       Onto               & \verb|m4_ontodir|      & Snap      & m4_ontoscript       & \\
-       Heidel             & \verb|m4_heideldir|    & Github    & m4_heidelscript     & \\
-       \textsc{srl}       & \verb|m4_srldir|       & Github    & m4_srlscript        & \\
-       \textsc{ned}       & \verb|m4_neddir|       & None      & m4_nedscript        & \\
-       Nom. coref         & \verb|m4_ncorefsrc|    & None      &  m4_ncorefscript    & \\  
-       Ev. coref          & \verb|m4_evcorefsrc|   & None      &  m4_evcorefscript   & \\  
-       Opinion miner      & \verb|m4_opinisrc|   & None        &  m4_opiniscript       & \\  
+       \textsc{nerc}       & \verb|m4_jardir|      & \textsc{tar} & m4_nercscript     & \\
+       \textsc{wsd}       & \verb|m4_wsddir|       & \textsc{tar} & m4_wsdscript      & \\
+       Onto               & \verb|m4_ontodir|      & \textsc{tar} & m4_ontoscript     & \\
+       Heidel             & \verb|m4_heideldir|    & Github       & m4_heidelscript   & \\
+       \textsc{srl}       & \verb|m4_srldir|       & Github       & m4_srlscript      & \\
+       \textsc{ned}       & \verb|m4_neddir|       & \EHU{}       & m4_nedscript      & \\
+       Nom. coref         & \verb|m4_ncorefsrc|    & None         &  m4_ncorefscript  & \\  
+       Ev. coref          & \verb|m4_evcorefsrc|   & None         &  m4_evcorefscript & \\  
+       Opinion miner      & \verb|m4_opinisrc|   & None           &  m4_opiniscript   & \\  
        Framenet sem. role label. &  \verb|m4_fsrlsrc|   & None      &  m4_fsrlscript  & \\  
 @%       Alpino             & \verb|m4_alpinodir|    & \textsc{rug} & m4_Alpinoscript  & \\
 @%       Ticcutils          & \verb|m4_ticcdir|      & \textsc{ilk} & & \\
@@ -80,11 +82,14 @@ Table~\ref{tab:modulelist}
   \label{tab:modulelist}
 \end{table}
 lists the modules in the pipeline. The column \emph{source} indicates
-the origin of the module. Ideally, modules are directly obtained from
-a public repository, e.g. Github, or from a website of the organisation
-where the module has been built. However, some of the modules are not yet
-available in this way and only an informal snapshot is available. Table~/ref{tab:modulesources} provides the \textsc{url}'s of the
-sources that have been obtained from a public repository.
+the origin of the module. The modules are obtained in one of the following ways:
+
+
+\begin{enumerate}
+\item If possible, the module is directly obtained from an open-source repository like Github.
+\item Some modules are available from the dedicated repository on \href{m4_ehu_rep_url}. A username and password are needed to access these modules. This is indicated as \EHU{}.
+\item Some modules have not been officially published in a repository or the repositrory is not yet known by the author. These modules have been packed in a tar-ball that can be obtained by the author. This is indicated as \textsc{tar}.
+\end{enumerate}
 
 The modules themselves use other utilities like dependency-taggers and
 POS taggers. These utilities are listed in
@@ -125,11 +130,6 @@ utilities that can be installed from an open source.
   \caption{Sources of the modules}
   \label{tab:modulesources}
 \end{table}
-
-
-The informal snapshots are available in a tarball
-\verb|nl_pipeline_snapshots| that can be obtained from the author of
-this document.
 
 
 \subsection{File-structure of the pipeline}
@@ -176,75 +176,24 @@ Similarly, make binaries findable:
 export PATH=m4_usrlocaldir<!!>/bin:$PATH
 @| @}
 
-During installation, an extra directory, \verb|snapshot|, that
-contains modules that are not yet available from public sources, is
-needed. 
 
-So, let us here and now check whether the snapshots are indeed
-present. The following macro unpacks the tarball if it is present and
-aborts the installation when the snapshot directory is not present.
-
-@d unpack snapshots or die @{@%
-cd m4_aprojroot
-if
-  [ -e m4_snapshot_tarball ]
-then
-  tar -zxf m4_snapshot_tarball
-fi
-if
-  [ ! -e m4_snapshotdir ]
-then
-  echo "No module snapshots"
-  exit 1
-fi
-@| @}
-
-
-
-
- 
 \section{Installation}
 \label{sec:install}
 
 This section describes how the modules are obtained from their
-open-source and installed. This is performed by script \verb|m4_module_installer|
+(open-)source and installed. 
 
+\subsection{Installing vs. updating}
+\label{sec:installvsupdate}
 
-@o m4_bindir/m4_module_installer @{@%
-#!/bin/bash
-@< variables of m4_module_installer @>
-@< unpack snapshots or die @>
-@< install the tokenizer @>
-@< install kafnafparserpy @>
-@< install Alpino @>
-@< install the morphosyntactic parser @>
-@< install the NERC module @>
-@< install the WSD module @>
-@< install the \NED{} module @>
-@< install the onto module @>
-@< install the heideltime module @>
-@< install the srl module @>
-@< install the treetagger utility @>
-@< install the ticcutils utility @>
-@< install the timbl utility @>
+When the install-script installs something that has already been
+installed, it moves the installed module to a temporary location and
+then tries to install the module from its source. If that is
+successfull it removes the vormer version of the module, otherwise it
+moves the old version back. 
 
-@| @}
-
-@d make scripts executable @{@%
-chmod 775  m4_bindir/m4_module_installer
-@| @}
-
-
-Installation goes as follows:
-
-\begin{enumerate}
-\item If the module exists already, move it to a temporary place.
-\item Try to install the module from the source.
-\item If that is successful, remove the old version. Otherwise, move
-  the old version back to its original place.
-\end{enumerate}
-
-The following macro's move or remove modules.
+The following macro's can be used to move or remove modules, provided
+they are called when the modules directory is the default directory. 
 
 @d move module  @{@%
 if
@@ -267,42 +216,131 @@ MESS="Replaced previous version of @1"
 
 @| @}
 
+
+\subsection{Installation from Github}
+\label{sec:installfromgithub}
+
 The following macro can be used to install a module from github. It
 needs as parameters:
 \begin{enumerate}
 \item Name of the module.
 \item Name of the root directory.
-\item \URL{} to clone from.
+\item Github \URL{} to clone from.
 \end{enumerate}
+
+
 
 @d install from github @{@%
 MODNAM=@1
 DIRN=@2
 GITU=@3
-@< find leave and tree @>
-@< logmess @("TREE: \$TREE; LEAVE: \$LEAVE"@) @>
-cd $TREE
-@< move module @(\$LEAVE@) @>
+cd m4_amoddir
+@% @< cd to the modules directory @>
+@< move module @(\$DIRN@) @>
 git clone $GITU
 if
   [ $? -gt 0 ]
 then
   @< logmess @(Cannot install current $MODNAM version@) @>
-  @< re-instate old module @(\$LEAVE@) @>
+  @< re-instate old module @(\$DIRN@) @>
 else
-  @< remove old module @(\$LEAVE@) @>
+  @< remove old module @(\$DIRN@) @>
 fi
 
 @| @}
 
+@% @d cd to the modules directory @{@%
+@% cd m4_amodd
+@% @| @}
 
-Note: Par.~1: Directory; par~2: path to directory; par~3: directory name.
 
-@d find leave and tree @{@%
-FULLDIR=m4_amoddir/$DIRN
-LEAVE=${FULLDIR##*/}
-TREE=${FULLDIR%%\$LEAVE}
+
+@% @d cd to the modules directory @{@%
+@% @< find leave and tree @>
+@% @< logmess @("TREE: \$TREE; LEAVE: \$LEAVE"@) @>
+@% cd $TREE
+@% @| @}
+@% 
+@% Note: Par.~1: Directory; par~2: path to directory; par~3: directory name.
+@% 
+@% @d find leave and tree @{@%
+@% FULLDIR=m4_amoddir/$DIRN
+@% LEAVE=${FULLDIR##*/}
+@% TREE=${FULLDIR%%\$LEAVE}
+@% @| @}
+
+
+@% \subsection{Installation from EHU}
+@% \label{sec:installfromEHU}
+@% 
+@% Get a module from the home of the pipeline-VM control center at
+@% \EHU{}. From this control center standardised virtual machines to
+@% process texts can obtain the latest versions of the modules. The
+@% \textsc{url} of the control center is \url{m4_ehu_rep_url}. The
+@% modules can be found in subdirectory \texttt{m4_ehu_modules_directory}
+@% of the home-directory of user \texttt{m4_ehu_user}.
+
+
+\subsection{Installation from the snapshot}
+\label{sec:snapshotinstall}
+
+For some modules a public repository is not available or not
+known. They must be installed from a tarball with snapshots that can
+be obtained from the author. Let us first check whether we have the
+snapshot and complain if we don't. We expect the file
+\verb|m4_aprojroot/m4_snapshot_tarball|.
+
+
+@d unpack snapshots or die @{@%
+cd m4_aprojroot
+if
+  [ -e m4_snapshot_tarball ]
+then
+  tar -zxf m4_snapshot_tarball
+fi
+if
+  [ ! -e m4_snapshotdir ]
+then
+  echo "No module snapshots"
+  exit 1
+fi
 @| @}
+
+
+
+
+
+\subsection{The installation script}
+\label{sec:installscript}
+
+The installation is performed by script \verb|m4_module_installer|
+
+
+@o m4_bindir/m4_module_installer @{@%
+#!/bin/bash
+@< variables of m4_module_installer @>
+@< unpack snapshots or die @>
+@< install the tokenizer @>
+@% @< install kafnafparserpy @>
+@% @< install Alpino @>
+@% @< install the morphosyntactic parser @>
+@% @< install the NERC module @>
+@% @< install the WSD module @>
+@% @< install the \NED{} module @>
+@% @< install the onto module @>
+@% @< install the heideltime module @>
+@% @< install the srl module @>
+@% @< install the treetagger utility @>
+@% @< install the ticcutils utility @>
+@% @< install the timbl utility @>
+
+@| @}
+
+@d make scripts executable @{@%
+chmod 775  m4_bindir/m4_module_installer
+@| @}
+
+
 
 
 \subsection{Install tokenizer}
@@ -311,9 +349,36 @@ TREE=${FULLDIR%%\$LEAVE}
 \subsubsection{Module}
 \label{sec:install-tokenizermodule}
 
+The tokenizer is just a jar that has to be run in Java. Although  the
+jar is directly available from \url{http://ixa2.si.ehu.es/ixa-pipes/download.html}, we
+prefer to compile the package in order to make this thing ready for
+reproducible set-ups. 
+
+Not yet included in this script is the set-up of an environment to use
+the specified version of Java (Oracle 1.7) and Maven (3). For now, we
+assume that it is there. This is a todo item.
+
+To install the tokenizer, we proceed as follows:
+
+\begin{enumerate}
+\item Clone the source from github into a temporary directory.
+\item Compile to produce the jar file with the tokenizer.
+\item move the jar file into the jar directory.
+\item remove the tempdir with the sourcecode.
+\end{enumerate}
+
 @d install the tokenizer @{@%
-@< install from github @(tokenizer@,m4_tokenizerdir@,m4_tokenizergit@) @>
+@% @< install from github @(tokenizer@,m4_tokenizerdir@,m4_tokenizergit@) @>
+tempdir=`mktemp -d -t tok.XXXXXX`
+cd \$tempdir
+git clone m4_tokenizergit
+cd m4_tokenizerdir
+mvn clean package
+mv target/m4_tokenizerjar m4_ajardir
+cd m4_aprojroot
+@% rm -rf \$tempdir
 @| @}
+
 
 
 @% @d install the tokenizer @{@%
@@ -333,14 +398,18 @@ TREE=${FULLDIR%%\$LEAVE}
 \subsubsection{Script}
 \label{sec:tokenizerscript}
 
-The script just runs the tokenizerscript in Perl.
+The script runs the tokenizerscript.
 
 @o m4_bindir/m4_tokenizerscript @{@%
 #!/bin/bash
 ROOT=m4_aprojroot
-TOKBINDIR=m4_amoddir/<!!>m4_tokenizerdir<!!>/core
-cat | perl \$TOKBINDIR/tokenizer-cli.pl -l nl t  
-
+JARFILE=m4_ajardir/m4_tokenizerjar
+java -jar \$JARFILE tok -l nl --inputkaf
+@% TOKBINDIR=m4_amoddir/<!!>m4_tokenizerdir<!!>/core
+@% cat | perl \$TOKBINDIR/tokenizer-cli.pl -l nl t  
+@% #!/bin/bash
+@% rootDir=/home/newsreader/components/EHU-tok
+@% java -jar ${rootDir}/ixa-pipe-tok-1.5.0.jar tok -l en --inputkaf
 @| @}
 
 @d make scripts executable @{@%
