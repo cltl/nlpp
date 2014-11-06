@@ -321,18 +321,18 @@ The installation is performed by script \verb|m4_module_installer|
 @< variables of m4_module_installer @>
 @< unpack snapshots or die @>
 @< install the tokenizer @>
-@% @< install kafnafparserpy @>
-@% @< install Alpino @>
-@% @< install the morphosyntactic parser @>
-@% @< install the NERC module @>
-@% @< install the WSD module @>
-@% @< install the \NED{} module @>
-@% @< install the onto module @>
-@% @< install the heideltime module @>
-@% @< install the srl module @>
-@% @< install the treetagger utility @>
-@% @< install the ticcutils utility @>
-@% @< install the timbl utility @>
+@< install kafnafparserpy @>
+@< install Alpino @>
+@< install the morphosyntactic parser @>
+@< install the NERC module @>
+@< install the WSD module @>
+@< install the \NED{} module @>
+@< install the onto module @>
+@< install the heideltime module @>
+@< install the srl module @>
+@< install the treetagger utility @>
+@< install the ticcutils utility @>
+@< install the timbl utility @>
 
 @| @}
 
@@ -576,47 +576,89 @@ chmod 775  m4_bindir/m4_nercscript
 \subsection{Wordsense-disambiguation}
 \label{sec:wsd}
 
-We do not yet have a source-repository of the wsd module. Therefore,
-install from a snapshot on Lisa.
+Install WSD from its Github source.
+
 
 \subsubsection{Module}
 \label{sec:wsd-module}
 
 @d install the WSD module @{@%
-@%cp -r m4_asnapshotroot/m4_wsddir m4_amoddir/
 cp -r m4_aprojroot/m4_snapshotdir/m4_wsddir m4_amoddir/
 @| @}
+@% 
+@% 
+@% \subsubsection{Script}
+@% \label{sec:wsdscript}
+@% 
+@% @o m4_bindir/m4_wsdscript @{@%
+@% #!/bin/bash
+@% # WSD -- wrapper for word-sense disambiguation
+@% # 8 Jan 2014 Ruben Izquierdo
+@% # 16 sep 2014 Paul Huygen
+@% ROOT=m4_aprojroot
+@% WSDDIR=m4_amoddir/m4_wsddir
+@% WSDSCRIPT=kaf_annotate_senses.pl
+@% UKB=\$WSDDIR/ukb_wsd_2.0
+@% POSMAP=$WSDDIR/posmap.NGV.txt
+@% 
+@% if [ "$1" = "nl" ]
+@% then
+@%   GRAPH=\$WSDDIR/cdb2.0-nld-all.infv.0.0.no-allwords.bin
+@%   DICT=\$WSDDIR/dictionary
+@% else
+@%   GRAPH=\$WSDDIR/wn30g_eng.v20.bin
+@%   DICT=\$WSDDIR/wn30_eng_dict.txt
+@% fi
+@% 
+@% iconv -t utf-8//IGNORE | \$WSDDIR/\$WSDSCRIPT -x \$UKB -M \$GRAPH -W \$DICT -m \$POSMAP
+@% @| @}
+@% 
+@% @d make scripts executable @{@%
+@% chmod 775  m4_bindir/m4_wsdscript
+@% @| @}
 
 
-\subsubsection{Script}
-\label{sec:wsdscript}
-
-@o m4_bindir/m4_wsdscript @{@%
-#!/bin/bash
-# WSD -- wrapper for word-sense disambiguation
-# 8 Jan 2014 Ruben Izquierdo
-# 16 sep 2014 Paul Huygen
-ROOT=m4_aprojroot
-WSDDIR=m4_amoddir/m4_wsddir
-WSDSCRIPT=kaf_annotate_senses.pl
-UKB=\$WSDDIR/ukb_wsd_2.0
-POSMAP=$WSDDIR/posmap.NGV.txt
-
-if [ "$1" = "nl" ]
-then
-  GRAPH=\$WSDDIR/cdb2.0-nld-all.infv.0.0.no-allwords.bin
-  DICT=\$WSDDIR/dictionary
-else
-  GRAPH=\$WSDDIR/wn30g_eng.v20.bin
-  DICT=\$WSDDIR/wn30_eng_dict.txt
-fi
-
-iconv -t utf-8//IGNORE | \$WSDDIR/\$WSDSCRIPT -x \$UKB -M \$GRAPH -W \$DICT -m \$POSMAP
-@| @}
-
-@d make scripts executable @{@%
-chmod 775  m4_bindir/m4_wsdscript
-@| @}
+@% We do not yet have a source-repository of the wsd module. Therefore,
+@% install from a snapshot on Lisa.
+@% 
+@% \subsubsection{Module}
+@% \label{sec:wsd-module}
+@% 
+@% @d install the WSD module @{@%
+@% @%cp -r m4_asnapshotroot/m4_wsddir m4_amoddir/
+@% cp -r m4_aprojroot/m4_snapshotdir/m4_wsddir m4_amoddir/
+@% @| @}
+@% 
+@% 
+@% \subsubsection{Script}
+@% \label{sec:wsdscript}
+@% 
+@% @o m4_bindir/m4_wsdscript @{@%
+@% #!/bin/bash
+@% # WSD -- wrapper for word-sense disambiguation
+@% # 8 Jan 2014 Ruben Izquierdo
+@% # 16 sep 2014 Paul Huygen
+@% ROOT=m4_aprojroot
+@% WSDDIR=m4_amoddir/m4_wsddir
+@% WSDSCRIPT=kaf_annotate_senses.pl
+@% UKB=\$WSDDIR/ukb_wsd_2.0
+@% POSMAP=$WSDDIR/posmap.NGV.txt
+@% 
+@% if [ "$1" = "nl" ]
+@% then
+@%   GRAPH=\$WSDDIR/cdb2.0-nld-all.infv.0.0.no-allwords.bin
+@%   DICT=\$WSDDIR/dictionary
+@% else
+@%   GRAPH=\$WSDDIR/wn30g_eng.v20.bin
+@%   DICT=\$WSDDIR/wn30_eng_dict.txt
+@% fi
+@% 
+@% iconv -t utf-8//IGNORE | \$WSDDIR/\$WSDSCRIPT -x \$UKB -M \$GRAPH -W \$DICT -m \$POSMAP
+@% @| @}
+@% 
+@% @d make scripts executable @{@%
+@% chmod 775  m4_bindir/m4_wsdscript
+@% @| @}
 
 \subsection{NED}
 \label{sec:onto}
