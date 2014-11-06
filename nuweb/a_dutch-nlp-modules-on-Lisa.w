@@ -508,7 +508,7 @@ interpreted by following modules. It is just a small python script.
 \subsubsection{Module}
 \label{sec:install_alpinohack}
 
-@d directories to create @{m4_amoddir/m4_alpinohackdir @| @}
+@d directories to create @{m4_moddir/m4_alpinohackdir @| @}
 
 @o m4_moddir/m4_alpinohackdir/m4_alpinohackpythonscript @{@%
 #!/usr/bin/python
