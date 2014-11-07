@@ -112,6 +112,6 @@ sources : dutch-nlp-modules-on-Lisa.w $(DIRS) $(NUWEB)
 	chmod 775  ../bin/heideltime
 	chmod 775  ../bin/srl
 	chmod 775  ../bin/test
-
+	
 
 

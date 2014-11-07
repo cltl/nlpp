@@ -162,7 +162,7 @@ directories:
 @d directories to create @{m4_usrlocaldir @| @}
 @d directories to create @{m4_usrlocaldir<!!>/bin @| @}
 @d directories to create @{m4_usrlocaldir<!!>/lib @| @}
-@d directories to create @{m4_moddir/python m4_ajardir @| @}
+@d directories to create @{m4_moddir/python m4_jardir @| @}
 
 Make Python utilities findable with the following macro:
 
@@ -1110,7 +1110,7 @@ if
   [ \$SUCCES -eq 0 ]
 then
   cd \$DIR
-  ./configure --prefix=m4_usrlocaldir
+  ./configure --prefix=m4_ausrlocaldir
   make
   make install
 fi
