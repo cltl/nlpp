@@ -75,7 +75,8 @@ m4_define(m4_wikipediadbmodule_url, http://ixa2.si.ehu.es/ixa-pipes/models/`'wik
 m4_dnl
 m4_dnl WSD
 m4_dnl m4_define(m4_wsdsrc, m4_lisanlproot/mods/ukb)m4_dnl  Subdir. of modules
-m4_define(m4_wsddir, wsd)m4_dnl
+m4_define(m4_wsdgit, https://github.com/cltl/svm_wsd.git)m4_dnl
+m4_define(m4_wsddir, svm_wsd)m4_dnl
 m4_define(m4_wsdscript, wsd)m4_dnl
 m4_dnl
 m4_dnl ONTO

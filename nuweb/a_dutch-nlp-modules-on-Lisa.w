@@ -318,21 +318,21 @@ The installation is performed by script \verb|m4_module_installer|
 
 @o m4_bindir/m4_module_installer @{@%
 #!/bin/bash
-@< variables of m4_module_installer @>
-@< unpack snapshots or die @>
-@< install the tokenizer @>
-@< install kafnafparserpy @>
-@< install Alpino @>
-@< install the morphosyntactic parser @>
-@< install the NERC module @>
+@% @< variables of m4_module_installer @>
+@% @< unpack snapshots or die @>
+@% @< install the tokenizer @>
+@% @< install kafnafparserpy @>
+@% @< install Alpino @>
+@% @< install the morphosyntactic parser @>
+@% @< install the NERC module @>
 @< install the WSD module @>
-@< install the \NED{} module @>
-@< install the onto module @>
-@< install the heideltime module @>
-@< install the srl module @>
-@< install the treetagger utility @>
-@< install the ticcutils utility @>
-@< install the timbl utility @>
+@% @< install the \NED{} module @>
+@% @< install the onto module @>
+@% @< install the heideltime module @>
+@% @< install the srl module @>
+@% @< install the treetagger utility @>
+@% @< install the ticcutils utility @>
+@% @< install the timbl utility @>
 
 @| @}
 
@@ -561,11 +561,19 @@ cp  m4_aprojroot/m4_snapshotdir/m4_nercdir/m4_nercjar m4_ajardir/
 \subsubsection{Script}
 \label{sec:nercscript}
 
+Unfortunately, this module does not accept
+the \NAF{} version that the previous module supplies. 
+
+@d gawk script to patch NAF for nerc module @{@%
+patchscript='{gsub("wf id=", "wf wid="); gsub("term id=", "term tid="); print}'
+@| @}
+
+
 @o m4_bindir/m4_nercscript @{@%
 #!/bin/bash
 ROOT=m4_aprojroot
 JARDIR=m4_ajardir
-cat | java -jar \$JARDIR/m4_nercjar tag
+cat | gawk "$patchscript" | java -jar \$JARDIR/m4_nercjar tag
 @| @}
 
 @d make scripts executable @{@%
@@ -582,11 +590,41 @@ Install WSD from its Github source.
 \subsubsection{Module}
 \label{sec:wsd-module}
 
+
+@%  4209  2014-11-08 16:55:05 cat input.naf | python dsc_wsd_tagger.py |less
+@%  4210  2014-11-08 16:55:57 less install_naf.sh 
+@%  4211  2014-11-08 17:18:48 ./install_naf.sh 
+@%  4212  2014-11-09 09:34:25 cat naf_example.xml | python dsc_wsd_tagger.py --naf > ../output.naf
+@%  4213  2014-11-09 09:34:32 less ../output.naf 
+@%  4214  2014-11-09 09:46:53 ls /mnt/kyoto/projecten/pipelines/dutch-nlp-modules-on-Lisa/test
+@%  4215  2014-11-09 09:47:56 cat /mnt/kyoto/projecten/pipelines/dutch-nlp-modules-on-Lisa/test/test.nerc.naf | python dsc_wsd_tagger.py --naf > ../output.naf
+@%  4216  2014-11-09 09:48:03 less ../output.naf 
+
 @d install the WSD module @{@%
-cp -r m4_aprojroot/m4_snapshotdir/m4_wsddir m4_amoddir/
+@< install from github @(wsd@,m4_wsddir@,m4_wsdgit@) @>
+cd m4_amoddir/m4_wsddir
+./install_naf.sh
 @| @}
-@% 
-@% 
+
+
+\subsubsection{Script}
+\label{sec:wsdscript}
+
+@o m4_bindir/m4_wsdscript @{@%
+#!/bin/bash
+# WSD -- wrapper for word-sense disambiguation
+# 8 Jan 2014 Ruben Izquierdo
+# 16 sep 2014 Paul Huygen
+ROOT=m4_aprojroot
+WSDDIR=m4_amoddir/m4_wsddir
+WSDSCRIPT=dsc_wsd_tagger.py
+cat | python $WSDDIR/$WSDSCRIPT --naf 
+@| @}
+
+@d make scripts executable @{@%
+chmod 775  m4_bindir/m4_wsdscript
+@| @}
+
 @% \subsubsection{Script}
 @% \label{sec:wsdscript}
 @% 
@@ -611,7 +649,7 @@ cp -r m4_aprojroot/m4_snapshotdir/m4_wsddir m4_amoddir/
 @% fi
 @% 
 @% iconv -t utf-8//IGNORE | \$WSDDIR/\$WSDSCRIPT -x \$UKB -M \$GRAPH -W \$DICT -m \$POSMAP
-@% @| @}
+2@% @| @}
 @% 
 @% @d make scripts executable @{@%
 @% chmod 775  m4_bindir/m4_wsdscript
