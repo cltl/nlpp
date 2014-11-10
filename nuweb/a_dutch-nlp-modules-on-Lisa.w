@@ -173,7 +173,7 @@ export PYTHONPATH=m4_amoddir/python:\$PYTHONPATH
 Similarly, make binaries findable:
 
 @d set local bin directory @{@%
-export PATH=m4_usrlocaldir<!!>/bin:$PATH
+export PATH=m4_ausrlocaldir<!!>/bin:$PATH
 @| @}
 
 
@@ -325,8 +325,10 @@ The installation is performed by script \verb|m4_module_installer|
 @% @< install Alpino @>
 @% @< install the morphosyntactic parser @>
 @% @< install the NERC module @>
-@< install the WSD module @>
-@% @< install the \NED{} module @>
+@% @< install the WSD module @>
+@< install the spotlight server @>
+
+@< install the \NED{} module @>
 @% @< install the onto module @>
 @% @< install the heideltime module @>
 @% @< install the srl module @>
@@ -573,6 +575,7 @@ patchscript='{gsub("wf id=", "wf wid="); gsub("term id=", "term tid="); print}'
 #!/bin/bash
 ROOT=m4_aprojroot
 JARDIR=m4_ajardir
+@< gawk script to patch NAF for nerc module @>
 cat | gawk "$patchscript" | java -jar \$JARDIR/m4_nercjar tag
 @| @}
 
@@ -698,6 +701,33 @@ chmod 775  m4_bindir/m4_wsdscript
 @% chmod 775  m4_bindir/m4_wsdscript
 @% @| @}
 
+\subsection{Spotlight}
+\label{sec:spotlight}
+
+Spotlight is not itself a pipeline-module, but it is needed in the
+\NED{} module. Now I make a shortcut from the snapshot.
+
+@d install the spotlight server @{@%
+cp -r m4_asnapshotroot/m4_spotlight_snapdir  m4_amoddir/
+@| @}
+
+@d start the spotlight server @{@%
+cd m4_amoddir/m4_spotlight_dir
+java -jar -Xmx8g dbpedia-spotlight-0.7-jar-with-dependencies-candidates.jar nl http://localhost:2060/rest  &
+@| @}
+
+
+
+@d check/start the spotlight server @{@%
+spottasks=`netstat -an | grep :m4_spotlight_nl_port | wc -l`
+if
+  [ $spottasks -eq 0 ]
+then
+  @< start the spotlight server @>
+  sleep 180
+fi
+@| @}
+
 \subsection{NED}
 \label{sec:onto}
 
@@ -707,10 +737,9 @@ suppose that it has been installed on localhost.
 
 
 
-\subsubsection{Installation of the spotlight server}
-\label{sec:spotlightinstall}
 
-
+@% \subsubsection{Installation of the spotlight server}
+@% \label{sec:spotlightinstall}
 
 @% Itziar Aldabe (\href{mailto:itziar.aldabe@@ehu.es}) wrote:
 @% 
@@ -783,6 +812,7 @@ tar -xzf wikipedia-db.v1.tar.gz
 #!/bin/bash
 ROOT=m4_aprojroot
 JARDIR=m4_ajardir
+@< check/start the spotlight server @>
 cat | java -jar \$JARDIR/m4_nedjar  -p 2060 -e candidates -i m4_amoddir/m4_neddir/wikipedia-db -n nlEn
 @| @}
 

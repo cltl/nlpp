@@ -23,6 +23,7 @@ m4_define(m4_ausrlocaldir, m4_amoddir`/usrlocal')m4_dnl
 m4_dnl m4_define(m4_lisanlproot, /home/phuijgen/nlp)m4_dnl
 m4_define(m4_snapshotrootURL, kyoto.let.vu.nl~huygen/dutch_snapshots)m4_dnl
 m4_define(m4_asnapshotroot, m4_aprojroot/snapshots)m4_dnl
+m4_define(m4_snapshotroot, m4_projroot/snapshots)m4_dnl
 m4_define(m4_htmldir, m4_projroot/nuweb/html)m4_dnl
 m4_define(m4_ahtmldir, m4_aprojroot/nuweb/html)m4_dnl
 m4_define(m4_htmltarget, m4_htmldir/`'m4_progname.html`')m4_dnl
@@ -163,8 +164,9 @@ m4_define(m4_treetagdir, treetagger)m4_dnl
 m4_dnl
 m4_dnl Spotlight
 m4_dnl
-m4_define(spotlight_nl_port, 2060)m4_dnl
-
+m4_define(m4_spotlight_nl_port, 2060)m4_dnl
+m4_define(m4_spotlight_snapdir, spotlight)m4_dnl
+m4_define(m4_spotlight_dir, spotlight)m4_dnl
 
 m4_dnl
 m4_dnl Locations of programs and system-dependent definitions
