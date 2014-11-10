@@ -1036,15 +1036,31 @@ the pipeline.
 
 @o m4_bindir/test @{@%
 #!/bin/bash
-ROOT=m4_aprojroot
-BIND=\$ROOT/bin
-echo "De hond eet jus." | \$BIND/tok | \$BIND/mor | \
-\$BIND/m4_alpinohackscript | \$BIND/m4_nercscript  | \$BIND/m4_wsdscript | \
-\$BIND/m4_ontoscript  > \$ROOT/test.onto
-cat \$ROOT/test.onto | \$BIND/m4_heidelscript  > \$ROOT/test.heidel
-cat \$ROOT/test.heidel | \$BIND/m4_srlscript  > \$ROOT/test.srl
-cat \$ROOT/test.srl | \$BIND/m4_srlscript  > \$ROOT/test.srl
-@% \$BIND/m4_ontoscript | \$BIND/m4_heidelscript | \$BIND/m4_srlscrip  > \$ROOT/test.out
+ROOT=/home/huygen/projecten/pipelines/dutch-nlp-modules-on-Lisa
+TESTDIR=$ROOT/test
+BIND=$ROOT/bin
+mkdir $TESTDIR
+cd $TESTDIR
+cat $ROOT/nuweb/testin.naf | $BIND/tok > $TESTDIR/test.tok.naf
+cat test.tok.naf | $BIND/mor > $TESTDIR/test.mor.naf
+cat test.mor.naf | $BIND/alpinohack > $TESTDIR/test.alh.naf
+cat test.alh.naf | $BIND/nerc > $TESTDIR/test.nerc.naf
+cat $TESTDIR/test.nerc.naf | $BIND/wsd > $TESTDIR/test.wsd.naf
+cat $TESTDIR/test.wsd.naf | $BIND/onto > $TESTDIR/test.onto.naf
+cat $TESTDIR/test.onto.naf | $BIND/ned > $TESTDIR/test.ned.naf
+cat $TESTDIR/test.ned.naf | $BIND/heideltime > $TESTDIR/test.times.naf
+cat $TESTDIR/test.times.naf | $BIND/srl  > $TESTDIR/test.srl.naf
+
+@% #!/bin/bash
+@% ROOT=m4_aprojroot
+@% BIND=\$ROOT/bin
+@% echo "De hond eet jus." | \$BIND/tok | \$BIND/mor | \
+@% \$BIND/m4_alpinohackscript | \$BIND/m4_nercscript  | \$BIND/m4_wsdscript | \
+@% \$BIND/m4_ontoscript  > \$ROOT/test.onto
+@% cat \$ROOT/test.onto | \$BIND/m4_heidelscript  > \$ROOT/test.heidel
+@% cat \$ROOT/test.heidel | \$BIND/m4_srlscript  > \$ROOT/test.srl
+@% cat \$ROOT/test.srl | \$BIND/m4_srlscript  > \$ROOT/test.srl
+@% @% \$BIND/m4_ontoscript | \$BIND/m4_heidelscript | \$BIND/m4_srlscrip  > \$ROOT/test.out
 @| @}
 
 @d make scripts executable @{@%
@@ -1249,6 +1265,9 @@ else
   @< re-instate old module @(\$DIR@) @>
 fi
 @| @}
+
+\section{Testing}
+\label{sec:testing}
 
 
 
