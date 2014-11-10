@@ -318,23 +318,23 @@ The installation is performed by script \verb|m4_module_installer|
 
 @o m4_bindir/m4_module_installer @{@%
 #!/bin/bash
-@% @< variables of m4_module_installer @>
-@% @< unpack snapshots or die @>
-@% @< install the tokenizer @>
-@% @< install kafnafparserpy @>
-@% @< install Alpino @>
-@% @< install the morphosyntactic parser @>
-@% @< install the NERC module @>
-@% @< install the WSD module @>
+@< variables of m4_module_installer @>
+@< unpack snapshots or die @>
+@< install the tokenizer @>
+@< install kafnafparserpy @>
+@< install Alpino @>
+@< install the morphosyntactic parser @>
+@< install the NERC module @>
+@< install the WSD module @>
 @< install the spotlight server @>
 
 @< install the \NED{} module @>
-@% @< install the onto module @>
-@% @< install the heideltime module @>
-@% @< install the srl module @>
-@% @< install the treetagger utility @>
-@% @< install the ticcutils utility @>
-@% @< install the timbl utility @>
+@< install the onto module @>
+@< install the heideltime module @>
+@< install the srl module @>
+@< install the treetagger utility @>
+@< install the ticcutils utility @>
+@< install the timbl utility @>
 
 @| @}
 
