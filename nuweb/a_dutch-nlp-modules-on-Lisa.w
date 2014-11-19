@@ -558,6 +558,7 @@ comprised in a jar library.
 @d install the NERC module @{@%
 @% cp m4_asnapshotroot/jars/m4_nerjar m4_jardir/
 cp  m4_aprojroot/m4_snapshotdir/m4_nercdir/m4_nercjar m4_ajardir/
+chmod 644 m4_ajardir/m4_nercjar
 @| @}
 
 \subsubsection{Script}
@@ -835,6 +836,7 @@ install from a snapshot on Lisa.
 @d install the onto module @{@%
 @%cp -r m4_asnapshotroot/m4_ontodir m4_amoddir/
 cp -r m4_aprojroot/m4_snapshotdir/m4_ontodir m4_amoddir/
+chmod -R o+r m4_amoddir
 @| @}
 
 
@@ -1126,6 +1128,18 @@ Run the install-script:
 chmod 775 \$TREETAG_INSTALLSCRIPT
 ./\$TREETAG_INSTALLSCRIPT
 @| @}
+
+Make the treetagger utilities available for everbody.
+
+@d install the treetagger utility @{@%
+chmod o+x m4_amoddir/\$TREETAGDIR/bin
+chmod o+x m4_amoddir/\$TREETAGDIR/cmd
+chmod o+x m4_amoddir/\$TREETAGDIR/doc
+chmod o+x m4_amoddir/\$TREETAGDIR/lib
+./\$TREETAG_INSTALLSCRIPT
+@| @}
+
+
 
 Remove the tarballs:
 
