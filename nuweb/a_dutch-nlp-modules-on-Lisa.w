@@ -164,16 +164,46 @@ directories:
 @d directories to create @{m4_usrlocaldir<!!>/lib @| @}
 @d directories to create @{m4_moddir/python m4_jardir @| @}
 
-Make Python utilities findable with the following macro:
-
-@d set pythonpath @{@%
-export PYTHONPATH=m4_amoddir/python:\$PYTHONPATH
-@| @}
-
-Similarly, make binaries findable:
+Make binaries findable:
 
 @d set local bin directory @{@%
 export PATH=m4_ausrlocaldir<!!>/bin:$PATH
+@| @}
+
+
+\subsection{Python data-structure and KafNafParserPy}
+\label{sec:pythonstructure}
+
+Currently the pipeline uses Python as it has been installed on the
+host. This has to be changed and a virtual environment has to be
+used. Let us reserve directory \verb|modules/python| for Python
+utility modules. 
+
+Make Python utilities findable with the following macro:
+
+@d set pythonpath @{@%
+export PYTHONPATH=m4_pythonmoddir:\$PYTHONPATH
+@| @}
+
+A cornerstone Pythonmodule for the pipeline is
+\href{https://github.com/cltl/KafNafParserPy}{KafNafParserPy}. It is a
+feature of this module that it cannot be installed with \textsc{pip}, but that
+you can put it somewhere and then put the somewhere in your \textsc{pythonpath}.
+
+
+@d install kafnafparserpy @{@%
+cd m4_pythonmoddir
+DIRN=KafNafParserPy
+@< move module @($DIRN@) @>
+git clone m4_kafnafgit
+if
+  [ $? -gt 0 ]
+then
+  @< logmess @(Cannot install current $DIRN version@) @>
+  @< re-instate old module @(\$DIRN@) @>
+else
+  @< remove old module @(\$DIRN@) @>
+fi
 @| @}
 
 
@@ -327,7 +357,7 @@ The installation is performed by script \verb|m4_module_installer|
 @< install the NERC module @>
 @< install the WSD module @>
 @< install the spotlight server @>
-
+@< install the lu2synset concerter @>
 @< install the \NED{} module @>
 @< install the onto module @>
 @< install the heideltime module @>
@@ -702,6 +732,33 @@ chmod 775  m4_bindir/m4_wsdscript
 @% chmod 775  m4_bindir/m4_wsdscript
 @% @| @}
 
+\subsection{Lexical-unit coverter}
+\label{sec:lu2synset}
+
+\subsubsection{Module}
+\label{sec:lu2synsetinstaller}
+
+There is not an official repository for this module yet, so copy the
+module from the tarball.
+
+@d install the lu2synset converter @{@%
+cp -r m4_asnapshotroot/m4_lu2syndir m4_amoddir/
+@| @}
+
+\subsubsection{Script}
+\label{sec:lu2synsetscript}
+
+@o m4_bindir/m4_lu2synsetscript  @{@%
+#!/bin/bash
+ROOT=m4_aprojroot
+JAVALIBDIR=m4_amoddir/m4_lu2syndir/lib
+RESOURCESDIR=m4_amoddir/m4_lu2syndir/resources
+JARFILE=WordnetTools-1.0-jar-with-dependencies.jar
+java -Xmx812m -cp  $JAVALIBDIR/$JARFILE vu.wntools.util.NafLexicalUnitToSynsetReferences \
+   --wn-lmf "\$RESOURCESDIR/cornetto2.1.lmf.xml" --format naf 
+@| @}
+
+
 \subsection{Spotlight}
 \label{sec:spotlight}
 
@@ -1013,20 +1070,6 @@ chmod 775  m4_bindir/m4_srlscript
 
 
 
-\subsection{KafNafParserPy}
-\label{sec:KafNafParserPy}
-
-Several modules use KafNafParserpy to read and write \textsc{naf}
-files.
-
-\subsubsection{Module}
-\label{sec:install-kafnafparserpy}
-
-@d install kafnafparserpy @{@%
-@< install from github @(kafnafparserpy@,m4_kafnafdir@,m4_kafnafgit@) @>
-@| @}
-
-
 \section{Utilities}
 \label{sec:utilities}
 
@@ -1049,7 +1092,8 @@ cat test.mor.naf | $BIND/alpinohack > $TESTDIR/test.alh.naf
 cat test.alh.naf | $BIND/nerc > $TESTDIR/test.nerc.naf
 cat $TESTDIR/test.nerc.naf | $BIND/wsd > $TESTDIR/test.wsd.naf
 cat $TESTDIR/test.wsd.naf | $BIND/onto > $TESTDIR/test.onto.naf
-cat $TESTDIR/test.onto.naf | $BIND/ned > $TESTDIR/test.ned.naf
+cat $TESTDIR/test.wsd.naf | $BIND/lu2synset > $TESTDIR/test.l2s.naf
+cat $TESTDIR/test.l2s.naf | $BIND/ned > $TESTDIR/test.ned.naf
 cat $TESTDIR/test.ned.naf | $BIND/heideltime > $TESTDIR/test.times.naf
 cat $TESTDIR/test.times.naf | $BIND/srl  > $TESTDIR/test.srl.naf
 

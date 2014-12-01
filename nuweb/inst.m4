@@ -27,6 +27,7 @@ m4_define(m4_snapshotroot, m4_projroot/snapshots)m4_dnl
 m4_define(m4_htmldir, m4_projroot/nuweb/html)m4_dnl
 m4_define(m4_ahtmldir, m4_aprojroot/nuweb/html)m4_dnl
 m4_define(m4_htmltarget, m4_htmldir/`'m4_progname.html`')m4_dnl
+m4_define(m4_pythonmoddir, m4_amoddir/python)m4_dnl
 m4_dnl
 m4_dnl Module installer
 m4_dnl
@@ -67,6 +68,11 @@ m4_dnl NERC
 m4_define(m4_nercjar, ixa-pipe-nerc-1.1.0.jar)m4_dnl
 m4_define(m4_nercdir, nerc)m4_dnl  Subdir. of modules
 m4_define(m4_nercscript, nerc)m4_dnl
+m4_dnl
+m4_dnl LU2SYN
+m4_dnl
+m4_define(m4_lu2syndir, lexicalunitconvertor)m4_dnl
+m4_define(m4_lu2synsetscript, lu2synset)m4_dnl
 m4_dnl NED
 m4_define(m4_neddir, ned)m4_dnl  Subdir. of modules
 m4_define(m4_nedjar, ixa-pipe-ned-1.0.jar)m4_dnl
