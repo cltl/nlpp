@@ -139,7 +139,7 @@ The files that make up the pipeline are organised in set of
 directories:
 
 \begin{description}
-\item[nuweb:] This directory comntains this document and everything to
+\item[nuweb:] This directory contains this document and everything to
   create the pipeline from the open sources of the modules.
 \item[modules:] Contains the program code of each module in a
   subdirectory. Furthermore, it contains a subdirectory
@@ -171,19 +171,122 @@ export PATH=m4_ausrlocaldir<!!>/bin:$PATH
 @| @}
 
 
+\section{Java and Python environment}
+\label{sec:environment}
+
+To be independent from the software environment of the host computer
+and to perform reproducible processing, the pipeline features its own
+Java and Python environment. The costs of this feature are that the
+pipeline takes more disk-space by reproducing infra-structure that is
+already present in the system and that installation takes more time.
+
+The following file sets up the programming environment in scripts.
+
+@o m4_bindir/progenv @{@%
+PIPEROOT=m4_aprojroot
+PIPEBIN=$PIPEROOT/bin
+PIPEMODD=$PIPEROOT/modules
+@< set up java environment in scripts@>
+@< activate the python environment @>
+@| @}
+
+
+\subsection{Java}
+\label{sec:java}
+
+To install Java, download \texttt{m4_javatarball} from
+\href{m4_javatarballurl}. Find it in the root directory and unpack it
+in a subdirectory of \texttt{m4_aenvdir}. Let us use a jar subdirectory to store jarfiles.
+
+@d directories to create @{m4_jardir@| @}
+
+
+@d check this first @{@%
+if
+  [ ! -e m4_aprojroot/m4_javatarball ]
+then
+  echo "Cannot find  m4_aprojroot/m4_javatarball"
+  exit 4
+fi
+@| @}
+
+
+
+@d set up java @{@%
+@< unpack the java tarball @>
+@| @}
+
+@d unpack the java tarball @{@%
+cd m4_aenvdir/java
+tar -xzf m4_aprojroot/m4_javatarball
+@| @}
+
+@d set up java environment in scripts @{@%
+export JAVA_HOME=m4_ajavadir/m4_javajdk
+export PATH=$JAVA_HOME/bin:$PATH
+@| JAVA_HOME @}
+
+Put jars in the jar subdirectory of the java directory:
+
+@d directories to create @{m4_jardir@| @}
+
+
+\subsection{Virtual environment for Python}
+\label{sec:pythonvirtenv}
+
+Create a virtual environment.
+
+@d create a virtual environment for Python @{@%
+@< test whether virtualenv is present on the host @>
+cd m4_aenvdir
+virtualenv venv
+@| @}
+
+@d test whether virtualenv is present on the host @{@%
+which virtualenv
+if
+  [ $? -ne 0 ]
+then
+  echo Please install virtualenv
+  exit 1
+fi
+@|virtualenv @}
+
+
+@d activate the python environment @{@%
+source m4_aenvdir/venv/bin/activate
+@|activate @}
+
+@% @d de-activate the python environment @{@%
+@% deactivate
+@% @| @}
+
+Subdirectory \texttt{m4_aenvdir/python} will contain general Python
+packages like KafnafParserPy.
+
+@d directories to create @{m4_aenvdir/python@| @}
+
+Activation of Python include pointing to the place where Python
+packages are:
+
+@d activate the python environment @{@%
+  export PYTHONPATH=m4_aenvdir/python:\$PYTHONPATH
+@|PYTHONPATH @}
+
+
 \subsection{Python data-structure and KafNafParserPy}
 \label{sec:pythonstructure}
 
-Currently the pipeline uses Python as it has been installed on the
-host. This has to be changed and a virtual environment has to be
-used. Let us reserve directory \verb|modules/python| for Python
-utility modules. 
-
-Make Python utilities findable with the following macro:
-
-@d set pythonpath @{@%
-export PYTHONPATH=m4_pythonmoddir:\$PYTHONPATH
-@| @}
+@% Currently the pipeline uses Python as it has been installed on the
+@% host. This has to be changed and a virtual environment has to be
+@% used. Let us reserve directory \verb|modules/python| for Python
+@% utility modules. 
+@% 
+@% Make Python utilities findable with the following macro:
+@% 
+@% @d set pythonpath @{@%
+@% export PYTHONPATH=m4_pythonmoddir:\$PYTHONPATH
+@% @| @}
 
 A cornerstone Pythonmodule for the pipeline is
 \href{https://github.com/cltl/KafNafParserPy}{KafNafParserPy}. It is a
@@ -192,7 +295,8 @@ you can put it somewhere and then put the somewhere in your \textsc{pythonpath}.
 
 
 @d install kafnafparserpy @{@%
-cd m4_pythonmoddir
+@% cd m4_pythonmoddir
+cd m4_aenvdir/python
 DIRN=KafNafParserPy
 @< move module @($DIRN@) @>
 git clone m4_kafnafgit
@@ -348,23 +452,34 @@ The installation is performed by script \verb|m4_module_installer|
 
 @o m4_bindir/m4_module_installer @{@%
 #!/bin/bash
+echo Set up environment
 @< variables of m4_module_installer @>
+@< check this first @>
 @< unpack snapshots or die @>
-@< install the tokenizer @>
+echo ... Java
+@< set up java @>
+@< set up java environment in scripts @>
+echo ... Python
+@< create a virtual environment for Python @>
+echo ... KafNafParserPy
 @< install kafnafparserpy @>
-@< install Alpino @>
-@< install the morphosyntactic parser @>
-@< install the NERC module @>
-@< install the WSD module @>
-@< install the spotlight server @>
-@< install the lu2synset concerter @>
-@< install the \NED{} module @>
-@< install the onto module @>
-@< install the heideltime module @>
-@< install the srl module @>
-@< install the treetagger utility @>
-@< install the ticcutils utility @>
-@< install the timbl utility @>
+@% echo ... Alpino
+@% @< install Alpino @>
+echo Tokenizer
+@< install the tokenizer @>
+@% echo Morphosyntactic parser
+@% @< install the morphosyntactic parser @>
+@% @< install the NERC module @>
+@% @< install the WSD module @>
+@% @< install the spotlight server @>
+@% @< install the lu2synset converter @>
+@% @< install the \NED{} module @>
+@% @< install the onto module @>
+@% @< install the heideltime module @>
+@% @< install the srl module @>
+@% @< install the treetagger utility @>
+@% @< install the ticcutils utility @>
+@% @< install the timbl utility @>
 
 @| @}
 
@@ -373,13 +488,60 @@ chmod 775  m4_bindir/m4_module_installer
 @| @}
 
 
+\subsection{Install utilities and resources}
+\label{sec:utilitiesandresources}
+
+\subsubsection{Alpino}
+\label{sec:install-alpino}
+
+Install Alpino from the website of Gertjan van Noort.
+
+\paragraph{Module}
+\label{sec:installalpinomodule}
+
+@d install Alpino @{@%
+SUCCES=0
+cd m4_amoddir
+@< move module @(Alpino@) @>
+wget m4_alpinourl
+SUCCES=\$?
+if
+  [ \$SUCCES -eq 0 ]
+then
+  tar -xzf m4_alpinosrc
+  SUCCES=\$?
+  rm -rf m4_alpinosrc
+fi
+if
+  [ $SUCCES -eq 0 ]
+then
+  @< logmess @(Installed Alpino@) @>
+  @< remove old module @(Alpino@) @>
+else
+  @< re-instate old module @(Alpino@) @>
+fi
+@|SUCCES @}
+
+Currently, alpino is not used as a pipeline-module on its own, but it
+is included in other pipeline-modules. Modules that use Alpino should
+set the following variables:
+
+@d set alpinohome @{@%
+export ALPINO_HOME=m4_amoddir/Alpino
+@| ALPINO_HOME @}
 
 
-\subsection{Install tokenizer}
+
+\subsection{Install modules}
+\label{sec:installmodules}
+
+
+
+\subsubsection{Install tokenizer}
 \label{sec:installtokenizer}
 
-\subsubsection{Module}
-\label{sec:install-tokenizermodule}
+\paragraph{Module}
+\label{par:install-tokenizermodule}
 
 The tokenizer is just a jar that has to be run in Java. Although  the
 jar is directly available from \url{http://ixa2.si.ehu.es/ixa-pipes/download.html}, we
@@ -427,21 +589,17 @@ cd m4_aprojroot
 @% fi
 @% @| @} 
 
-\subsubsection{Script}
-\label{sec:tokenizerscript}
+\paragraph{Script}
+\label{par:tokenizerscript}
 
 The script runs the tokenizerscript.
 
 @o m4_bindir/m4_tokenizerscript @{@%
 #!/bin/bash
+@< set up java environment in scripts @>
 ROOT=m4_aprojroot
 JARFILE=m4_ajardir/m4_tokenizerjar
 java -jar \$JARFILE tok -l nl --inputkaf
-@% TOKBINDIR=m4_amoddir/<!!>m4_tokenizerdir<!!>/core
-@% cat | perl \$TOKBINDIR/tokenizer-cli.pl -l nl t  
-@% #!/bin/bash
-@% rootDir=/home/newsreader/components/EHU-tok
-@% java -jar ${rootDir}/ixa-pipe-tok-1.5.0.jar tok -l en --inputkaf
 @| @}
 
 @d make scripts executable @{@%
@@ -449,51 +607,12 @@ chmod 775  m4_bindir/m4_tokenizerscript
 @| @}
 
 
-\subsection{Install Alpino}
-\label{sec:install-alpino}
 
-Install Alpino from the website of Gertjan van Noort.
-
-\subsubsection{Module}
-\label{sec:installalpinomodule}
-
-@d install Alpino @{@%
-SUCCES=0
-cd m4_amoddir
-@< move module @(Alpino@) @>
-wget m4_alpinourl
-SUCCES=\$?
-if
-  [ \$SUCCES -eq 0 ]
-then
-  tar -xzf m4_alpinosrc
-  SUCCES=\$?
-  rm -rf m4_alpinosrc
-fi
-if
-  [ $SUCCES -eq 0 ]
-then
-  @< logmess @(Installed Alpino@) @>
-  @< remove old module @(Alpino@) @>
-else
-  @< re-instate old module @(Alpino@) @>
-fi
-@|SUCCES @}
-
-Currently, alpino is not used as a pipeline-module on its own, but it
-is included in other pipeline-modules. Modules that use Alpino should
-set the following variables:
-
-@d set alpinohome @{@%
-export ALPINO_HOME=m4_amoddir/Alpino
-@| ALPINO_HOME @}
-
-
-\subsection{Morphosyntactic parser}
+\subsubsection{Morphosyntactic parser}
 \label{sec:install-morphsynt-parser}
 
 
-\subsubsection{Module}
+\paragraph{Module}
 \label{sec:install-morphosyntmodule}
 
 @d install the morphosyntactic parser @{@%
@@ -515,7 +634,7 @@ export ALPINO_HOME=m4_amoddir/Alpino
 @% fi
 @% @| @} 
 
-\subsubsection{Script}
+\paragraph{Script}
 \label{sec:morphparserscript}
 
 @o m4_bindir/m4_morphparscript @{@%
@@ -523,7 +642,7 @@ export ALPINO_HOME=m4_amoddir/Alpino
 ROOT=m4_aprojroot
 MODDIR=m4_amoddir/<!!>m4_morphpardir<!!>
 @< set alpinohome @>
-@< set pythonpath @>
+@< activate the python environment @>
 cat | python \$MODDIR/core/morph_syn_parser.py
 @| @}
 
@@ -531,14 +650,15 @@ cat | python \$MODDIR/core/morph_syn_parser.py
 chmod 775  m4_bindir/m4_morphparscript
 @| @}
 
-\subsection{Alpino hack}
+\subsubsection{Alpino hack}
 \label{sec:alpinohack}
 
 Install a hack that removes output from Alpino that cannot be
-interpreted by following modules. It is just a small python script.
+interpreted by following modules. It is just a small python
+script. Actually, it may no longer be necessary.
 
-\subsubsection{Module}
-\label{sec:install_alpinohack}
+\paragraph{Module}
+\label{par:install_alpinohack}
 
 @d directories to create @{m4_moddir/m4_alpinohackdir @| @}
 
@@ -559,8 +679,8 @@ print output
 
 @| @}
 
-\subsubsection{Script}
-\label{sec:alpinohack-script}
+\paragrqph{Script}
+\label{par:alpinohack-script}
 
 @o m4_bindir/m4_alpinohackscript @{@%
 #!/bin/bash
@@ -575,11 +695,31 @@ chmod 775  m4_bindir/m4_alpinohackscript
 @| @}
 
 
+\subsubsection{Nominal corefgraph}
+\label{sec:nomcorefgraph}
 
-\subsection{Named entity recognition (NERC)}
+Get this thing from Github
+(\url{https://github.com/opener-project/coreference-base/}) and use
+the instruction of
+\url{https://github.com/opener-project/coreference-base/blob/master/core/README.md}.
+
+
+\paragraph{Module}
+
+@d install coreference-base @{@%
+@< install from github @(coreference-base@,m4_corefbasedir@,m4_corefbasegit@) @>
+@| @}
+
+
+\paragraph{Script}
+
+
+
+
+\subsubsection{Named entity recognition (NERC)}
 \label{sec:nerc}
 
-\subsubsection{Module}
+\paragraph{Module}
 \label{sec:nercmodule}
 
 We do not (yet) have the source code of the NER module. A snapshot is
@@ -591,7 +731,7 @@ cp  m4_aprojroot/m4_snapshotdir/m4_nercdir/m4_nercjar m4_ajardir/
 chmod 644 m4_ajardir/m4_nercjar
 @| @}
 
-\subsubsection{Script}
+\paragraph{Script}
 \label{sec:nercscript}
 
 Unfortunately, this module does not accept
@@ -995,7 +1135,7 @@ ROOT=m4_aprojroot
 HEIDELDIR=m4_amoddir/m4_heideldir
 TEMPDIR=`mktemp -t -d heideltmp.XXXXXX`
 cd $HEIDELDIR
-@< set pythonpath @>
+@< activate the python environment @>
 iconv -t utf-8//IGNORE | python \$HEIDELDIR/HeidelTime_NafKaf.py \$HEIDELDIR/heideltime-standalone/ \$TEMPDIR
 @| @}
 
@@ -1032,7 +1172,7 @@ SRLDIR=m4_amoddir/m4_srldir
 TEMPDIR=`mktemp -d -t SRLTMP.XXXXXX`
 cd \$SRLDIR
 @< set local bin directory @>
-@< set pythonpath @>
+@< activate the python environment @>
 INPUTFILE=$TEMPDIR/inputfile
 FEATUREVECTOR=$TEMPDIR/csvfile
 TIMBLOUTPUTFILE=$TEMPDIR/timblpredictions
@@ -1081,21 +1221,22 @@ the pipeline.
 
 @o m4_bindir/test @{@%
 #!/bin/bash
-ROOT=/home/huygen/projecten/pipelines/dutch-nlp-modules-on-Lisa
+ROOT=m4_aprojroot
 TESTDIR=$ROOT/test
 BIND=$ROOT/bin
 mkdir $TESTDIR
 cd $TESTDIR
 cat $ROOT/nuweb/testin.naf | $BIND/tok > $TESTDIR/test.tok.naf
-cat test.tok.naf | $BIND/mor > $TESTDIR/test.mor.naf
-cat test.mor.naf | $BIND/alpinohack > $TESTDIR/test.alh.naf
-cat test.alh.naf | $BIND/nerc > $TESTDIR/test.nerc.naf
-cat $TESTDIR/test.nerc.naf | $BIND/wsd > $TESTDIR/test.wsd.naf
-cat $TESTDIR/test.wsd.naf | $BIND/onto > $TESTDIR/test.onto.naf
-cat $TESTDIR/test.wsd.naf | $BIND/lu2synset > $TESTDIR/test.l2s.naf
-cat $TESTDIR/test.l2s.naf | $BIND/ned > $TESTDIR/test.ned.naf
-cat $TESTDIR/test.ned.naf | $BIND/heideltime > $TESTDIR/test.times.naf
-cat $TESTDIR/test.times.naf | $BIND/srl  > $TESTDIR/test.srl.naf
+@% cat test.tok.naf | $BIND/mor > $TESTDIR/test.mor.naf
+@% cat test.mor.naf | $BIND/alpinohack > $TESTDIR/test.alh.naf
+@% cat test.alh.naf | $BIND/nerc > $TESTDIR/test.nerc.naf
+@% cat test.mor.naf | $BIND/nerc > $TESTDIR/test.nerc.naf
+@% cat $TESTDIR/test.nerc.naf | $BIND/wsd > $TESTDIR/test.wsd.naf
+@% cat $TESTDIR/test.wsd.naf | $BIND/onto > $TESTDIR/test.onto.naf
+@% cat $TESTDIR/test.wsd.naf | $BIND/lu2synset > $TESTDIR/test.l2s.naf
+@% cat $TESTDIR/test.l2s.naf | $BIND/ned > $TESTDIR/test.ned.naf
+@% cat $TESTDIR/test.ned.naf | $BIND/heideltime > $TESTDIR/test.times.naf
+@% cat $TESTDIR/test.times.naf | $BIND/srl  > $TESTDIR/test.srl.naf
 
 @% #!/bin/bash
 @% ROOT=m4_aprojroot

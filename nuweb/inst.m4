@@ -16,8 +16,6 @@ m4_define(m4_abindir, m4_aprojroot`/bin')m4_dnl     Binaries
 m4_define(m4_bindir, m4_projroot`/bin')m4_dnl     Binaries
 m4_define(m4_amoddir, m4_aprojroot`/modules')m4_dnl     Modules
 m4_define(m4_moddir, m4_projroot`/modules')m4_dnl     Modules
-m4_define(m4_ajardir, m4_amoddir`/jars')m4_dnl     jars
-m4_define(m4_jardir, m4_moddir`/jars')m4_dnl     jars
 m4_define(m4_usrlocaldir, m4_moddir`/usrlocal')m4_dnl     
 m4_define(m4_ausrlocaldir, m4_amoddir`/usrlocal')m4_dnl
 m4_dnl m4_define(m4_lisanlproot, /home/phuijgen/nlp)m4_dnl
@@ -27,6 +25,22 @@ m4_define(m4_snapshotroot, m4_projroot/snapshots)m4_dnl
 m4_define(m4_htmldir, m4_projroot/nuweb/html)m4_dnl
 m4_define(m4_ahtmldir, m4_aprojroot/nuweb/html)m4_dnl
 m4_define(m4_htmltarget, m4_htmldir/`'m4_progname.html`')m4_dnl
+m4_dnl
+m4_dnl Programming environment
+m4_dnl
+m4_define(m4_aenvdir, m4_aprojroot`/env')m4_dnl     Program environment
+m4_define(m4_envdir, m4_projroot`/env')m4_dnl 
+m4_define(m4_ajavadir, m4_aenvdir`/java')m4_dnl     jars
+m4_define(m4_javadir, m4_envdir`/java')m4_dnl     jars
+m4_define(m4_ajardir, m4_ajavadir`/jars')m4_dnl     jars
+m4_define(m4_jardir, m4_javadir`/jars')m4_dnl     jars
+m4_define(m4_javatarball, server-jre-7u72-linux-x64.tar.gz)m4_dnl
+m4_define(m4_javatarballurl, http://www.oracle.com/technetwork/java/javase/downloads/server-jre7-downloads-1931105.html)m4_dnl
+m4_define(m4_javajdk, jdk1.7.0_72)m4_dnl
+m4_dnl boost libs
+m4_define(m4_boostname, boost_1_54_0)m4_dnl
+m4_define(m4_boosttarball, m4_boostname.tar.bz2)m4_dnl
+m4_define(m4_boost_src_url, http://downloads.sourceforge.net/project/boost/boost/1.54.0/`'m4_boosttarball)m4_dnl
 m4_define(m4_pythonmoddir, m4_amoddir/python)m4_dnl
 m4_dnl
 m4_dnl Module installer
@@ -51,7 +65,7 @@ m4_dnl m4_define(m4_tokenizerdir, tokenizer-base)m4_dnl  Subdir. of modules
 m4_dnl m4_define(m4_tokenizerscript, tok)m4_dnl
 m4_define(m4_tokenizergit, https://github.com/ixa-ehu/ixa-pipe-tok.git)m4_dnl  Subdir. of modules
 m4_define(m4_tokenizerdir, ixa-pipe-tok)m4_dnl  Subdir. of modules
-m4_define(m4_tokenizerjar, ixa-pipe-tok-1.5.3.jar)m4_dnl
+m4_define(m4_tokenizerjar, ixa-pipe-tok-1.6.6.jar)m4_dnl
 m4_define(m4_tokenizerscript, tok)m4_dnl
 m4_dnl
 m4_dnl Morphosyntactic parser
@@ -68,6 +82,15 @@ m4_dnl NERC
 m4_define(m4_nercjar, ixa-pipe-nerc-1.1.0.jar)m4_dnl
 m4_define(m4_nercdir, nerc)m4_dnl  Subdir. of modules
 m4_define(m4_nercscript, nerc)m4_dnl
+m4_dnl
+m4_dnl Coreference-base
+m4_dnl
+m4_define(m4_nercjar, ixa-pipe-nerc-1.1.0.jar)m4_dnl
+m4_define(m4_corefbasedir, coreference-base)m4_dnl  Subdir. of modules
+m4_define(m4_corefbasescript, coreference-base)m4_dnl
+m4_define(m4_corefbasegit, https://github.com/opener-project/coreference-base.git)m4_dnl
+
+
 m4_dnl
 m4_dnl LU2SYN
 m4_dnl

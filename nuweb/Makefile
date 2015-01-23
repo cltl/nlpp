@@ -95,7 +95,7 @@ view : dutch-nlp-modules-on-Lisa.pdf
 
 html : ../nuweb/html/dutch-nlp-modules-on-Lisa.html
 
-DIRS = ../modules ../bin ../modules/usrlocal ../modules/usrlocal/bin ../modules/usrlocal/lib ../modules/python ../modules/jars ../modules/alpinohack ../nuweb/bin 
+DIRS = ../modules ../bin ../modules/usrlocal ../modules/usrlocal/bin ../modules/usrlocal/lib ../modules/python ../env/java/jars ../env/java/jars../env/java/jars/home/paul/projecten/cltl/pipelines/dutch-nlp-modules-on-Lisa/env/python../modules/alpinohack ../nuweb/bin 
 
 $(DIRS) : 
 	$(MKDIR) $@
