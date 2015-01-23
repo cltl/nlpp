@@ -190,15 +190,19 @@ PIPEMODD=$PIPEROOT/modules
 @< activate the python environment @>
 @| @}
 
+@d set up programming environment @{@%
+source m4_bindir/progenv
+@| @}
+
 
 \subsection{Java}
 \label{sec:java}
 
 To install Java, download \texttt{m4_javatarball} from
 \href{m4_javatarballurl}. Find it in the root directory and unpack it
-in a subdirectory of \texttt{m4_aenvdir}. Let us use a jar subdirectory to store jarfiles.
+in a subdirectory of \texttt{m4_aenvdir}.
 
-@d directories to create @{m4_jardir@| @}
+@d directories to create @{m4_javadir @| @}
 
 
 @d check this first @{@%
@@ -228,10 +232,23 @@ export PATH=$JAVA_HOME/bin:$PATH
 
 Put jars in the jar subdirectory of the java directory:
 
-@d directories to create @{m4_jardir@| @}
+@d directories to create @{m4_jardir @| @}
 
 
-\subsection{Virtual environment for Python}
+
+\subsection{Python}
+\label{sec:python}
+
+@d set up python @{@%
+@< create a virtual environment for Python @>
+@< activate the python environment @>
+@< install kafnafparserpy @>
+@< install python packages @>
+@| @}
+
+
+
+\subsubsection{Virtual environment}
 \label{sec:pythonvirtenv}
 
 Create a virtual environment.
@@ -264,18 +281,18 @@ source m4_aenvdir/venv/bin/activate
 Subdirectory \texttt{m4_aenvdir/python} will contain general Python
 packages like KafnafParserPy.
 
-@d directories to create @{m4_aenvdir/python@| @}
+@d directories to create @{m4_aenvdir/python @| @}
 
 Activation of Python include pointing to the place where Python
 packages are:
 
 @d activate the python environment @{@%
-  export PYTHONPATH=m4_aenvdir/python:\$PYTHONPATH
+export PYTHONPATH=m4_aenvdir/python:\$PYTHONPATH
 @|PYTHONPATH @}
 
 
-\subsection{Python data-structure and KafNafParserPy}
-\label{sec:pythonstructure}
+\subsubsection{KafNafParserPy}
+\label{sec:KafNafParserPy}
 
 @% Currently the pipeline uses Python as it has been installed on the
 @% host. This has to be changed and a virtual environment has to be
@@ -309,6 +326,16 @@ else
   @< remove old module @(\$DIRN@) @>
 fi
 @| @}
+
+\subsubsection{Python packages}
+\label{sec:pypacks}
+
+Install python packages.
+
+@d install python packages @{@%
+pip install lxml
+@| @}
+
 
 
 \section{Installation}
@@ -460,15 +487,13 @@ echo ... Java
 @< set up java @>
 @< set up java environment in scripts @>
 echo ... Python
-@< create a virtual environment for Python @>
-echo ... KafNafParserPy
-@< install kafnafparserpy @>
+@< set up python @>
 @% echo ... Alpino
 @% @< install Alpino @>
 echo Tokenizer
 @< install the tokenizer @>
-@% echo Morphosyntactic parser
-@% @< install the morphosyntactic parser @>
+echo Morphosyntactic parser
+@< install the morphosyntactic parser @>
 @% @< install the NERC module @>
 @% @< install the WSD module @>
 @% @< install the spotlight server @>
@@ -596,8 +621,7 @@ The script runs the tokenizerscript.
 
 @o m4_bindir/m4_tokenizerscript @{@%
 #!/bin/bash
-@< set up java environment in scripts @>
-ROOT=m4_aprojroot
+@< set up programming environment @>
 JARFILE=m4_ajardir/m4_tokenizerjar
 java -jar \$JARFILE tok -l nl --inputkaf
 @| @}
@@ -639,10 +663,10 @@ chmod 775  m4_bindir/m4_tokenizerscript
 
 @o m4_bindir/m4_morphparscript @{@%
 #!/bin/bash
+@< set up programming environment @>
 ROOT=m4_aprojroot
 MODDIR=m4_amoddir/<!!>m4_morphpardir<!!>
 @< set alpinohome @>
-@< activate the python environment @>
 cat | python \$MODDIR/core/morph_syn_parser.py
 @| @}
 
@@ -1227,7 +1251,7 @@ BIND=$ROOT/bin
 mkdir $TESTDIR
 cd $TESTDIR
 cat $ROOT/nuweb/testin.naf | $BIND/tok > $TESTDIR/test.tok.naf
-@% cat test.tok.naf | $BIND/mor > $TESTDIR/test.mor.naf
+cat test.tok.naf | $BIND/mor > $TESTDIR/test.mor.naf
 @% cat test.mor.naf | $BIND/alpinohack > $TESTDIR/test.alh.naf
 @% cat test.alh.naf | $BIND/nerc > $TESTDIR/test.nerc.naf
 @% cat test.mor.naf | $BIND/nerc > $TESTDIR/test.nerc.naf
