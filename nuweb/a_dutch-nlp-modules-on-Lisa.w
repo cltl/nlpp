@@ -234,6 +234,35 @@ Put jars in the jar subdirectory of the java directory:
 
 @d directories to create @{m4_jardir @| @}
 
+@d set up java environment in scripts @{@%
+export JARDIR=m4_jardir
+@| @}
+
+
+
+\subsection{Maven}
+\label{sec:Maven}
+
+@d directories to create @{m4_mavendir @| @}
+
+
+@d install maven @{@%
+cd m4_aenvdir
+wget m4_maventarballurl
+tar -xzf m4_maventarball
+rm m4_maventarball
+@| @}
+
+@d install maven @{@%
+export MAVEN_HOME=m4_mavendir
+export PATH=${MAVEN_HOME}/bin:${PATH}
+@| @}
+
+
+@d remove maven @{@%
+rm -rf m4_mavendir
+@| @}
+
 
 
 \subsection{Python}
@@ -442,6 +471,17 @@ fi
 @% of the home-directory of user \texttt{m4_ehu_user}.
 
 
+\subsection{Installation from EHU}
+\label{sec:installfromehu}
+
+Some of the modules cannot be easily obtained available on Github, but
+there is a complete package on EHU. 
+
+
+@% \begin{verbatim}
+@% scp -r -P 2223 "newsreader@u017940.si.ehu.es:components/EHU-tok
+@% \end{verbatim}
+
 \subsection{Installation from the snapshot}
 \label{sec:snapshotinstall}
 
@@ -486,15 +526,16 @@ echo Set up environment
 echo ... Java
 @< set up java @>
 @< set up java environment in scripts @>
+@< install maven @>
 echo ... Python
 @< set up python @>
-@% echo ... Alpino
-@% @< install Alpino @>
+echo ... Alpino
+@< install Alpino @>
 echo Tokenizer
 @< install the tokenizer @>
 echo Morphosyntactic parser
 @< install the morphosyntactic parser @>
-@% @< install the NERC module @>
+@< install the NERC module @>
 @% @< install the WSD module @>
 @% @< install the spotlight server @>
 @% @< install the lu2synset converter @>
@@ -505,6 +546,7 @@ echo Morphosyntactic parser
 @% @< install the treetagger utility @>
 @% @< install the ticcutils utility @>
 @% @< install the timbl utility @>
+@% @< remove maven @>
 
 @| @}
 
@@ -746,33 +788,68 @@ the instruction of
 \paragraph{Module}
 \label{sec:nercmodule}
 
-We do not (yet) have the source code of the NER module. A snapshot is
-comprised in a jar library.
+The  Nerc program can be installed from Github
+(\url{m5_nercgit}). However, the model that is needed is not publicly
+available. Therefore, the Nerc module of the standard English
+pipeline, that is not yet public available, has been put in the snapshot-tarball.
+
+
+@% @d install the NERC module @{@%
+@% cd m4_amoddir
+@% git clone m4_nercgit
+@% cd m4_nercdir
+@% mvn clean
+@% @| @}
+
 
 @d install the NERC module @{@%
-@% cp m4_asnapshotroot/jars/m4_nerjar m4_jardir/
-cp  m4_aprojroot/m4_snapshotdir/m4_nercdir/m4_nercjar m4_ajardir/
-chmod 644 m4_ajardir/m4_nercjar
+@< compile the nerc jar @>
+@< get the nerc models @>
+
+cp -r m4_asnapshotroot/m4_nercdir  m4_amoddir/
 @| @}
+
+@d compile the nerc jar  @{@%
+TEMPDIR==`mktemp -d -t nerc.XXXXXX`
+cd $TEMPDIR
+git clone m4_nercgit
+cd ixa-pipe-nerc/
+mvn clean package
+mv target/m4_nercjar m4_ajardir/
+cd m4_aprojroot/nuweb
+rm -rf $TEMPDIR
+@| @}
+
+@d get the nerc models @{@%
+mkdir -p m4_moddir/m4_nercdir
+cp -r m4_asnapshotroot/m4_nercdir/m4_nercmodeldir m4_moddir/m4_nercdir
+@| @}
+
+
 
 \paragraph{Script}
 \label{sec:nercscript}
 
-Unfortunately, this module does not accept
-the \NAF{} version that the previous module supplies. 
-
-@d gawk script to patch NAF for nerc module @{@%
-patchscript='{gsub("wf id=", "wf wid="); gsub("term id=", "term tid="); print}'
-@| @}
+@% Unfortunately, this module does not accept
+@% the \NAF{} version that the previous module supplies. 
+@% 
+@% @d gawk script to patch NAF for nerc module @{@%
+@% patchscript='{gsub("wf id=", "wf wid="); gsub("term id=", "term tid="); print}'
+@% @| @}
 
 
 @o m4_bindir/m4_nercscript @{@%
 #!/bin/bash
-ROOT=m4_aprojroot
-JARDIR=m4_ajardir
-@< gawk script to patch NAF for nerc module @>
-cat | gawk "$patchscript" | java -jar \$JARDIR/m4_nercjar tag
+@< set up programming environment @>
+MODDIR=$PIPEMODD/m4_nercdir
+JAR=$JARDIR/m4_nercjar
+MODEL=m4_nercmodel
+@% @< gawk script to patch NAF for nerc module @>
+@% cat | gawk "$patchscript" | java -jar \$JARDIR/m4_nercjar tag
+cat | java -jar \$JAR tag -m $MODDIR/m4_nercmodeldir/nl/$MODEL
 @| @}
+
+
 
 @d make scripts executable @{@%
 chmod 775  m4_bindir/m4_nercscript
@@ -1253,6 +1330,7 @@ cd $TESTDIR
 cat $ROOT/nuweb/testin.naf | $BIND/tok > $TESTDIR/test.tok.naf
 cat test.tok.naf | $BIND/mor > $TESTDIR/test.mor.naf
 @% cat test.mor.naf | $BIND/alpinohack > $TESTDIR/test.alh.naf
+cat test.mor.naf | $BIND/nerc > $TESTDIR/test.nerc.naf
 @% cat test.alh.naf | $BIND/nerc > $TESTDIR/test.nerc.naf
 @% cat test.mor.naf | $BIND/nerc > $TESTDIR/test.nerc.naf
 @% cat $TESTDIR/test.nerc.naf | $BIND/wsd > $TESTDIR/test.wsd.naf

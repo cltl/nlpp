@@ -30,13 +30,21 @@ m4_dnl Programming environment
 m4_dnl
 m4_define(m4_aenvdir, m4_aprojroot`/env')m4_dnl     Program environment
 m4_define(m4_envdir, m4_projroot`/env')m4_dnl 
-m4_define(m4_ajavadir, m4_aenvdir`/java')m4_dnl     jars
-m4_define(m4_javadir, m4_envdir`/java')m4_dnl     jars
+m4_define(m4_ajavadir, m4_aenvdir`/java')m4_dnl   
+m4_define(m4_javadir, m4_envdir`/java')m4_dnl     
 m4_define(m4_ajardir, m4_ajavadir`/jars')m4_dnl     jars
 m4_define(m4_jardir, m4_javadir`/jars')m4_dnl     jars
 m4_define(m4_javatarball, server-jre-7u72-linux-x64.tar.gz)m4_dnl
 m4_define(m4_javatarballurl, http://www.oracle.com/technetwork/java/javase/downloads/server-jre7-downloads-1931105.html)m4_dnl
 m4_define(m4_javajdk, jdk1.7.0_72)m4_dnl
+m4_dnl
+m4_dnl Maven
+m4_dnl
+m4_define(m4_mavenversion, `3.0.5')m4_dnl
+m4_define(m4_mavendir, m4_aenvdir/apache-maven-`'m4_mavenversion)m4_dnl
+m4_define(m4_maventarball, apache-maven-`'m4_mavenversion`'-bin.tar.gz)m4_dnl
+m4_define(m4_maventarballurl, http://apache.rediris.es/maven/maven-3/`'m4_mavenversion`'/binaries/`'m4_maventarball)m4_dnl
+
 m4_dnl boost libs
 m4_define(m4_boostname, boost_1_54_0)m4_dnl
 m4_define(m4_boosttarball, m4_boostname.tar.bz2)m4_dnl
@@ -48,7 +56,7 @@ m4_dnl
 m4_define(m4_module_installer, install-modules)m4_dnl
 m4_dnl
 m4_dnl Snapshot repo
-m4_define(m4_snapshot_tarball, nl_pipeline_snapshots.tgz)m4_dnl
+m4_define(m4_snapshot_tarball, nl_pipeline_snapshots_20150124.tgz)m4_dnl
 m4_define(m4_snapshotdir, snapshots)m4_dnl
 m4_dnl
 m4_dnl EHU repo
@@ -79,13 +87,16 @@ m4_define(m4_alpinohackdir, alpinohack)m4_dnl
 m4_define(m4_alpinohackscript, alpinohack)m4_dnl
 m4_define(m4_alpinohackpythonscript, clean_hack.py)m4_dnl
 m4_dnl NERC
-m4_define(m4_nercjar, ixa-pipe-nerc-1.1.0.jar)m4_dnl
-m4_define(m4_nercdir, nerc)m4_dnl  Subdir. of modules
+m4_define(m4_nercgit, https://github.com/ixa-ehu/ixa-pipe-nerc)m4_dnl
+m4_define(m4_nercdir, EHU-nerc)m4_dnl  Subdir. of modules
+m4_define(m4_nercversion, 1.3.3)m4_dnl
+m4_define(m4_nercjar, ixa-pipe-nerc-`'m4_nercversion`'.jar)m4_dnl
+m4_define(m4_nercmodeldir, nerc-resources)m4_dnl
+m4_define(m4_nercmodel, nl-local-conll02-testa.bin)m4_dnl
 m4_define(m4_nercscript, nerc)m4_dnl
 m4_dnl
 m4_dnl Coreference-base
 m4_dnl
-m4_define(m4_nercjar, ixa-pipe-nerc-1.1.0.jar)m4_dnl
 m4_define(m4_corefbasedir, coreference-base)m4_dnl  Subdir. of modules
 m4_define(m4_corefbasescript, coreference-base)m4_dnl
 m4_define(m4_corefbasegit, https://github.com/opener-project/coreference-base.git)m4_dnl
