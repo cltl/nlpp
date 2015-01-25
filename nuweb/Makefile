@@ -106,6 +106,7 @@ sources : dutch-nlp-modules-on-Lisa.w $(DIRS) $(NUWEB)
 	chmod 775  ../bin/tok
 	chmod 775  ../bin/mor
 	chmod 775  ../bin/alpinohack
+	chmod 775  ../bin/coreference-base
 	chmod 775  ../bin/nerc
 	chmod 775  ../bin/wsd
 	chmod 775  ../bin/ned

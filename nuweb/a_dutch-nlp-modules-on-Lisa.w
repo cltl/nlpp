@@ -191,7 +191,7 @@ PIPEMODD=$PIPEROOT/modules
 @| @}
 
 @d set up programming environment @{@%
-source m4_bindir/progenv
+source m4_abindir/progenv
 @| @}
 
 
@@ -235,7 +235,7 @@ Put jars in the jar subdirectory of the java directory:
 @d directories to create @{m4_jardir @| @}
 
 @d set up java environment in scripts @{@%
-export JARDIR=m4_jardir
+export JARDIR=m4_ajardir
 @| @}
 
 
@@ -359,11 +359,18 @@ fi
 \subsubsection{Python packages}
 \label{sec:pypacks}
 
-Install python packages.
+Install python packages:
+
+\begin{description}
+\item[lxml:]
+\item[pyyaml:] for coreference-graph
+\end{description}
+
 
 @d install python packages @{@%
 pip install lxml
-@| @}
+pip install pyyaml
+@| lxml pyyaml @}
 
 
 
@@ -536,7 +543,8 @@ echo Tokenizer
 echo Morphosyntactic parser
 @< install the morphosyntactic parser @>
 @< install the NERC module @>
-@% @< install the WSD module @>
+@% @< install coreference-base @>
+@< install the WSD module @>
 @% @< install the spotlight server @>
 @% @< install the lu2synset converter @>
 @% @< install the \NED{} module @>
@@ -761,7 +769,7 @@ chmod 775  m4_bindir/m4_alpinohackscript
 @| @}
 
 
-\subsubsection{Nominal corefgraph}
+\subsubsection{Nominal coreference-base}
 \label{sec:nomcorefgraph}
 
 Get this thing from Github
@@ -774,12 +782,25 @@ the instruction of
 
 @d install coreference-base @{@%
 @< install from github @(coreference-base@,m4_corefbasedir@,m4_corefbasegit@) @>
+@% pip install --upgrade --user hg+https://bitbucket.org/Josu/pykaf#egg=pykaf
+@% pip install --upgrade --user networkx
+pip install --upgrade  hg+https://bitbucket.org/Josu/pykaf#egg=pykaf
+pip install --upgrade  networkx
 @| @}
 
 
 \paragraph{Script}
 
+@o m4_bindir/m4_corefbasescript @{@%
+#!/bin/bash
+@< set up programming environment @>
+cd $PIPEMODD/m4_corefbasedir/core
+cat | python -m corefgraph.process.file --language nl --singleton --sieves NO
+@| @}
 
+@d make scripts executable @{@%
+chmod 775  m4_bindir/m4_corefbasescript
+@| @}
 
 
 \subsubsection{Named entity recognition (NERC)}
@@ -859,7 +880,12 @@ chmod 775  m4_bindir/m4_nercscript
 \subsection{Wordsense-disambiguation}
 \label{sec:wsd}
 
-Install WSD from its Github source.
+Install WSD from its Github source (\href{m4_wsdgit}). According to
+the \texttt{readme} of that module, the next thing to do is, to
+execute install-script \texttt{install.sh} or
+\texttt{install_naf.sh}. The latter script installs a
+``Support-Vector-Machine'' (\textsc{svm}) module, ``Dutch-SemCor''
+(\textsc{dsc}) models and KafNafParserPy.  
 
 
 \subsubsection{Module}
@@ -878,8 +904,43 @@ Install WSD from its Github source.
 @d install the WSD module @{@%
 @< install from github @(wsd@,m4_wsddir@,m4_wsdgit@) @>
 cd m4_amoddir/m4_wsddir
-./install_naf.sh
+@< install svm lib @>
+@< download svm models @>
+
+
 @| @}
+
+
+This part has been copied from [[install_naf.sh]] in the \textsc{wsd} module.
+
+@d install svm lib @{@%
+mkdir lib
+cd lib
+wget --no-check-certificate  https://github.com/cjlin1/libsvm/archive/master.zip 2>/dev/null
+zip_name=`ls -1 | head -1`
+unzip $zip_name > /dev/null
+rm $zip_name
+folder_name=`ls -1 | head -1`
+mv $folder_name libsvm
+cd libsvm/python
+make > /dev/null 2> /dev/null
+echo LIBSVM installed correctly lib/libsvm
+@| @}
+
+This part has also been copied from [[install_naf.sh]] in the \textsc{wsd} module.
+
+@d download svm models @{@%
+cd m4_amoddir/m4_wsddir
+echo 'Downloading models...(could take a while)'
+wget --user=cltl --password='.cltl.' kyoto.let.vu.nl/~izquierdo/models_wsd_svm_dsc.tgz 2> /dev/null
+echo 'Unzipping models...'
+tar xzf models_wsd_svm_dsc.tgz
+rm models_wsd_svm_dsc.tgz
+echo 'Models installed in folder models'
+
+@| @}
+
+
 
 
 \subsubsection{Script}
@@ -890,8 +951,8 @@ cd m4_amoddir/m4_wsddir
 # WSD -- wrapper for word-sense disambiguation
 # 8 Jan 2014 Ruben Izquierdo
 # 16 sep 2014 Paul Huygen
-ROOT=m4_aprojroot
-WSDDIR=m4_amoddir/m4_wsddir
+@< set up programming environment @>
+WSDDIR=$PIPEMODD/m4_wsddir
 WSDSCRIPT=dsc_wsd_tagger.py
 cat | python $WSDDIR/$WSDSCRIPT --naf 
 @| @}
@@ -1329,11 +1390,10 @@ mkdir $TESTDIR
 cd $TESTDIR
 cat $ROOT/nuweb/testin.naf | $BIND/tok > $TESTDIR/test.tok.naf
 cat test.tok.naf | $BIND/mor > $TESTDIR/test.mor.naf
-@% cat test.mor.naf | $BIND/alpinohack > $TESTDIR/test.alh.naf
+cat test.mor.naf | $BIND/alpinohack > $TESTDIR/test.alh.naf
 cat test.mor.naf | $BIND/nerc > $TESTDIR/test.nerc.naf
-@% cat test.alh.naf | $BIND/nerc > $TESTDIR/test.nerc.naf
-@% cat test.mor.naf | $BIND/nerc > $TESTDIR/test.nerc.naf
-@% cat $TESTDIR/test.nerc.naf | $BIND/wsd > $TESTDIR/test.wsd.naf
+@% cat $TESTDIR/test.nerc.naf | $BIND/corefgraph > $TESTDIR/test.crg.naf
+cat $TESTDIR/test.nerc.naf | $BIND/wsd > $TESTDIR/test.wsd.naf
 @% cat $TESTDIR/test.wsd.naf | $BIND/onto > $TESTDIR/test.onto.naf
 @% cat $TESTDIR/test.wsd.naf | $BIND/lu2synset > $TESTDIR/test.l2s.naf
 @% cat $TESTDIR/test.l2s.naf | $BIND/ned > $TESTDIR/test.ned.naf

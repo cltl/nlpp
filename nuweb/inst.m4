@@ -56,7 +56,7 @@ m4_dnl
 m4_define(m4_module_installer, install-modules)m4_dnl
 m4_dnl
 m4_dnl Snapshot repo
-m4_define(m4_snapshot_tarball, nl_pipeline_snapshots_20150124.tgz)m4_dnl
+m4_define(m4_snapshot_tarball, nl-pipeline_snapshots_20150124.tgz)m4_dnl
 m4_define(m4_snapshotdir, snapshots)m4_dnl
 m4_dnl
 m4_dnl EHU repo
