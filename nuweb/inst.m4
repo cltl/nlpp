@@ -56,7 +56,7 @@ m4_dnl
 m4_define(m4_module_installer, install-modules)m4_dnl
 m4_dnl
 m4_dnl Snapshot repo
-m4_define(m4_snapshot_tarball, nl-pipeline_snapshots_20150124.tgz)m4_dnl
+m4_define(m4_snapshot_tarball, nl-pipeline_snapshots_20150125.tgz)m4_dnl
 m4_define(m4_snapshotdir, snapshots)m4_dnl
 m4_dnl
 m4_dnl EHU repo
@@ -121,8 +121,10 @@ m4_define(m4_wsddir, svm_wsd)m4_dnl
 m4_define(m4_wsdscript, wsd)m4_dnl
 m4_dnl
 m4_dnl ONTO
-m4_define(m4_ontodir, ontotagger)m4_dnl  Subdir. of modules
+m4_define(m4_ontodir, vua-ontotagger-v1.0)m4_dnl  Subdir. of modules
 m4_define(m4_ontoscript, onto)m4_dnl
+m4_define(m4_ontotarball, vua-ontotagger-v1.0.tar.gz)m4_dnl  Subdir. of modules
+
 m4_dnl
 m4_dnl Heideltime
 m4_dnl m4_define(m4_heidelsrc, m4_lisanlproot/mods/HeidelTimeModule)m4_dnl  Subdir. of modules

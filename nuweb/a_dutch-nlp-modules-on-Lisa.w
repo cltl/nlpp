@@ -545,10 +545,10 @@ echo Morphosyntactic parser
 @< install the NERC module @>
 @% @< install coreference-base @>
 @< install the WSD module @>
+@< install the onto module @>
 @% @< install the spotlight server @>
 @% @< install the lu2synset converter @>
 @% @< install the \NED{} module @>
-@% @< install the onto module @>
 @% @< install the heideltime module @>
 @% @< install the srl module @>
 @% @< install the treetagger utility @>
@@ -1187,13 +1187,15 @@ chmod 775  m4_bindir/m4_nedscript
 \label{sec:onto}
 
 We do not yet have a source-repository of the Ontotagger module. Therefore,
-install from a snapshot on Lisa.
+install from a snapshot (\texttt{m4_ontotarball}).
 
 \subsubsection{Module}
 \label{sec:ontotagger-module}
 
 @d install the onto module @{@%
 @%cp -r m4_asnapshotroot/m4_ontodir m4_amoddir/
+cd m4_amoddir
+tar -xzf m4_aprojroot/m4_snapshotdir/m4_ontotarball
 cp -r m4_aprojroot/m4_snapshotdir/m4_ontodir m4_amoddir/
 chmod -R o+r m4_amoddir
 @| @}
@@ -1204,11 +1206,13 @@ chmod -R o+r m4_amoddir
 
 @o m4_bindir/m4_ontoscript @{@%
 #!/bin/bash
+@< set up programming environment @>
 ROOT=m4_aprojroot
-ONTODIR=m4_amoddir/m4_ontodir
+ONTODIR=$PIPEMODD/m4_ontodir
 JARDIR=\$ONTODIR/lib
 RESOURCESDIR=\$ONTODIR/resources
-PREDICATEMATRIX="\$RESOURCESDIR/PredicateMatrix.v1.1/PredicateMatrix.v1.1.role.nl-1.merged"
+@% PREDICATEMATRIX="\$RESOURCESDIR/PredicateMatrix.v1.1/PredicateMatrix.v1.1.role.nl-1.merged"
+PREDICATEMATRIX="\$RESOURCESDIR/PredicateMatrix_nl_lu_withESO.v0.2.role.txt"
 GRAMMATICALWORDS="\$RESOURCESDIR/grammaticals/Grammatical-words.nl"
 TMPFIL=`mktemp -t stap6.XXXXXX`
 cat >$TMPFIL
@@ -1216,17 +1220,21 @@ cat >$TMPFIL
 CLASSPATH=\$JARDIR/ontotagger-1.0-jar-with-dependencies.jar
 JAVASCRIPT=eu.kyotoproject.main.KafPredicateMatrixTagger
 
-
 @% JAVA_ARGS="-Xmx1812m"
 @% JAVA_ARGS=\$JAVA_ARGS " -cp \$JARDIR/ontotagger-1.0-jar-with-dependencies.jar"
 @% JAVA_ARGS=\$JAVA_ARGS " eu.kyotoproject.main.KafPredicateMatrixTagger"
-JAVA_ARGS="--mappings \"fn;pb;nb\" "
+@% JAVA_ARGS="--mappings \"fn;pb;nb\" "
+JAVA_ARGS="--mappings \"fn;mcr;ili;eso\" "
 JAVA_ARGS="\$JAVA_ARGS  --key odwn-eq"
 JAVA_ARGS="\$JAVA_ARGS  --version 1.1"
 JAVA_ARGS="\$JAVA_ARGS  --predicate-matrix \$PREDICATEMATRIX"
 JAVA_ARGS="\$JAVA_ARGS  --grammatical-words \$GRAMMATICALWORDS"
-JAVA_ARGS="\$JAVA_ARGS  --naf-file \$TMPFIL"
+JAVA_ARGS="\$JAVA_ARGS  --naf-file \$TMPFIL''
 java -Xmx1812m -cp \$CLASSPATH \$JAVASCRIPT \$JAVA_ARGS
+
+
+@% java -Xmx812m -cp ../lib/ontotagger-1.0-jar-with-dependencies.jar eu.kyotoproject.main.KafPredicateMatrixTagger --mappings "fn;mcr;ili;eso" --key odwn-eq --version 1.1 --predicate-matrix "../resources/PredicateMatrix_nl_lu_withESO.v0.2.role.txt" --grammatical-words "../resources/grammaticals/Grammatical-words.nl" --naf-file "../example/test.srl.lexicalunits.naf" > "../example/test.srl.lexicalunits.pm.naf"
+
 
 @% @< onto javacommand @>
 @% java \$JAVA_ARGS
@@ -1394,7 +1402,7 @@ cat test.mor.naf | $BIND/alpinohack > $TESTDIR/test.alh.naf
 cat test.mor.naf | $BIND/nerc > $TESTDIR/test.nerc.naf
 @% cat $TESTDIR/test.nerc.naf | $BIND/corefgraph > $TESTDIR/test.crg.naf
 cat $TESTDIR/test.nerc.naf | $BIND/wsd > $TESTDIR/test.wsd.naf
-@% cat $TESTDIR/test.wsd.naf | $BIND/onto > $TESTDIR/test.onto.naf
+cat $TESTDIR/test.wsd.naf | $BIND/onto > $TESTDIR/test.onto.naf
 @% cat $TESTDIR/test.wsd.naf | $BIND/lu2synset > $TESTDIR/test.l2s.naf
 @% cat $TESTDIR/test.l2s.naf | $BIND/ned > $TESTDIR/test.ned.naf
 @% cat $TESTDIR/test.ned.naf | $BIND/heideltime > $TESTDIR/test.times.naf
