@@ -529,31 +529,31 @@ The installation is performed by script \verb|m4_module_installer|
 echo Set up environment
 @< variables of m4_module_installer @>
 @< check this first @>
-@< unpack snapshots or die @>
-echo ... Java
-@< set up java @>
+@% @< unpack snapshots or die @>
+@% echo ... Java
+@% @< set up java @>
 @< set up java environment in scripts @>
-@< install maven @>
-echo ... Python
-@< set up python @>
-echo ... Alpino
-@< install Alpino @>
-echo Tokenizer
-@< install the tokenizer @>
-echo Morphosyntactic parser
-@< install the morphosyntactic parser @>
-@< install the NERC module @>
-@% @< install coreference-base @>
-@< install the WSD module @>
-@< install the onto module @>
+@% @< install maven @>
+@% echo ... Python
+@% @< set up python @>
+@% echo ... Alpino
+@% @< install Alpino @>
+@% echo Tokenizer
+@% @< install the tokenizer @>
+@% echo Morphosyntactic parser
+@% @< install the morphosyntactic parser @>
+@% @< install the NERC module @>
+@% @% @< install coreference-base @>
+@% @< install the WSD module @>
+@% @< install the onto module @>
+@% @< install the heideltime module @>
+@< install the srl module @>
 @% @< install the spotlight server @>
 @% @< install the lu2synset converter @>
 @% @< install the \NED{} module @>
-@% @< install the heideltime module @>
-@% @< install the srl module @>
 @% @< install the treetagger utility @>
-@% @< install the ticcutils utility @>
-@% @< install the timbl utility @>
+@< install the ticcutils utility @>
+@< install the timbl utility @>
 @% @< remove maven @>
 
 @| @}
@@ -1034,7 +1034,7 @@ chmod 775  m4_bindir/m4_wsdscript
 @% chmod 775  m4_bindir/m4_wsdscript
 @% @| @}
 
-\subsection{Lexical-unit coverter}
+\subsection{Lexical-unit converter}
 \label{sec:lu2synset}
 
 \subsubsection{Module}
