@@ -44,6 +44,7 @@ m4_define(m4_mavenversion, `3.0.5')m4_dnl
 m4_define(m4_mavendir, m4_aenvdir/apache-maven-`'m4_mavenversion)m4_dnl
 m4_define(m4_maventarball, apache-maven-`'m4_mavenversion`'-bin.tar.gz)m4_dnl
 m4_define(m4_maventarballurl, http://apache.rediris.es/maven/maven-3/`'m4_mavenversion`'/binaries/`'m4_maventarball)m4_dnl
+m4_define(m4_maven_javaversion, 1.7)m4_dnl
 
 m4_dnl boost libs
 m4_define(m4_boostname, boost_1_54_0)m4_dnl
@@ -56,7 +57,7 @@ m4_dnl
 m4_define(m4_module_installer, install-modules)m4_dnl
 m4_dnl
 m4_dnl Snapshot repo
-m4_define(m4_snapshot_tarball, nl-pipeline_snapshots_20150125.tgz)m4_dnl
+m4_define(m4_snapshot_tarball, nl-pipeline_snapshots_20150126.tgz)m4_dnl
 m4_define(m4_snapshotdir, snapshots)m4_dnl
 m4_dnl
 m4_dnl EHU repo
@@ -108,8 +109,14 @@ m4_dnl
 m4_define(m4_lu2syndir, lexicalunitconvertor)m4_dnl
 m4_define(m4_lu2synsetscript, lu2synset)m4_dnl
 m4_dnl NED
-m4_define(m4_neddir, ned)m4_dnl  Subdir. of modules
+m4_define(m4_ned_version, 1.1.1)m4_dnl
+m4_define(m4_nedgit, https://github.com/ixa-ehu/ixa-pipe-ned.git)m4_dnl  
+m4_define(m4_neddir, ixa-pipe-ned)m4_dnl  Subdir. of modules
+m4_dnl m4_define(m4_nedjar, ixa-pipe-ned-1.0.jar)m4_dnl
 m4_define(m4_nedjar, ixa-pipe-ned-1.0.jar)m4_dnl
+m4_define(m4_nedspotmodel_nl_tarball, nl.tar.gz)m4_dnl
+m4_define(m4_nedspotmodel_nl_url, http://spotlight.sztaki.hu/downloads/`'m4_nedspotmodel_nl_tarball)m4_dnl
+ 
 m4_define(m4_nedscript, ned)m4_dnl
 m4_define(m4_wikipediadbmodule, wikipedia-db)m4_dnl
 m4_define(m4_wikipediadbmodule_url, http://ixa2.si.ehu.es/ixa-pipes/models/`'wikipediamodule`'.v1.tar.gz)m4_dnl
@@ -207,6 +214,17 @@ m4_dnl
 m4_dnl Spotlight
 m4_dnl
 m4_define(m4_spotlight_nl_port, 2060)m4_dnl
+m4_define(m4_aspotlightdir, m4_aenvdir/spotlight)m4_dnl
+m4_define(m4_spotlighturl, http://spotlight.sztaki.hu)m4_dnl
+m4_define(m4_spotlight_download_url, m4_spotlighturl/downloads)m4_dnl
+m4_define(m4_spotlightjarversion, 0.7)m4_dnl
+m4_define(m4_spotlightjar, dbpedia-spotlight-`'m4_spotlightjarversion`'.jar)m4_dnl
+m4_define(m4_spotlight_nl_model, nl.tar.gz)m4_dnl
+m4_define(m4_spotlight_nl_port, 2060)m4_dnl
+m4_define(m4_spotlight_en_model, en_2+2.tar.gz)m4_dnl
+m4_define(m4_spotlight_en_port, 2020)m4_dnl
+
+
 m4_define(m4_spotlight_snapdir, spotlight)m4_dnl
 m4_define(m4_spotlight_dir, spotlight)m4_dnl
 

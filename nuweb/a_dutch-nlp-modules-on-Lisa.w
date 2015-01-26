@@ -426,7 +426,6 @@ needs as parameters:
 \end{enumerate}
 
 
-
 @d install from github @{@%
 MODNAM=@1
 DIRN=@2
@@ -538,6 +537,7 @@ echo Set up environment
 @% @< set up python @>
 @% echo ... Alpino
 @% @< install Alpino @>
+@< install the spotlight server @>
 @% echo Tokenizer
 @% @< install the tokenizer @>
 @% echo Morphosyntactic parser
@@ -548,9 +548,8 @@ echo Set up environment
 @% @< install the onto module @>
 @% @< install the heideltime module @>
 @< install the srl module @>
-@% @< install the spotlight server @>
+@< install the \NED{} module @>
 @% @< install the lu2synset converter @>
-@% @< install the \NED{} module @>
 @% @< install the treetagger utility @>
 @< install the ticcutils utility @>
 @< install the timbl utility @>
@@ -810,7 +809,7 @@ chmod 775  m4_bindir/m4_corefbasescript
 \label{sec:nercmodule}
 
 The  Nerc program can be installed from Github
-(\url{m5_nercgit}). However, the model that is needed is not publicly
+(\url{m4_nercgit}). However, the model that is needed is not publicly
 available. Therefore, the Nerc module of the standard English
 pipeline, that is not yet public available, has been put in the snapshot-tarball.
 
@@ -1064,16 +1063,42 @@ java -Xmx812m -cp  $JAVALIBDIR/$JARFILE vu.wntools.util.NafLexicalUnitToSynsetRe
 \subsection{Spotlight}
 \label{sec:spotlight}
 
-Spotlight is not itself a pipeline-module, but it is needed in the
-\NED{} module. Now I make a shortcut from the snapshot.
+Install Spotlight as described on the readme of \texttt{ixa-pipe-ned}.
 
 @d install the spotlight server @{@%
-cp -r m4_asnapshotroot/m4_spotlight_snapdir  m4_amoddir/
+mkdir -p m4_spotlightdir
+cd m4_aspotlightdir
+wget m4_spotlight_download_url/m4_spotlightjar
+wget m4_spotlight_download_url/m4_spotlight_nl_model
+tar -xzf m4_spotlight_nl_model
+wget m4_spotlight_download_url/m4_spotlight_en_model
+tar -xzf m4_spotlight_en_model
+MVN_SPOTLIGHT_OPTIONS="-Dfile=m4_spotlightjar"
+MVN_SPOTLIGHT_OPTIONS="$MVN_SPOTLIGHT_OPTIONS -DgroupId=ixa"
+MVN_SPOTLIGHT_OPTIONS="$MVN_SPOTLIGHT_OPTIONS -DartifactId=dbpedia-spotlight"
+MVN_SPOTLIGHT_OPTIONS="$MVN_SPOTLIGHT_OPTIONS -Dversion=m4_spotlightjarversion"
+MVN_SPOTLIGHT_OPTIONS="$MVN_SPOTLIGHT_OPTIONS -Dpackaging=jar"
+MVN_SPOTLIGHT_OPTIONS="$MVN_SPOTLIGHT_OPTIONS -DgeneratePom=true"
+
+
+#mvn install:install-file -Dfile=dbpedia-spotlight-0.7.jar -DgroupId=ixa -DartifactId=dbpedia-spotlight -Dversion=0.7 -Dpackaging=jar -DgeneratePom=true 
+mvn install:install-file $MVN_SPOTLIGHT_OPTIONS
+
+
 @| @}
 
+@% Spotlight is not itself a pipeline-module, but it is needed in the
+@% \NED{} module. Now I make a shortcut from the snapshot.
+
+@% @d install the spotlight server @{@%
+@% cp -r m4_asnapshotroot/m4_spotlight_snapdir  m4_amoddir/
+@% @| @}
+
 @d start the spotlight server @{@%
-cd m4_amoddir/m4_spotlight_dir
+cd m4_aspotlightdir
+java  -Xmx8g -jar m4_spotlightjar nl http://localhost:m4_spotlight_nl_port/rest
 java -jar -Xmx8g dbpedia-spotlight-0.7-jar-with-dependencies-candidates.jar nl http://localhost:2060/rest  &
+@% java -jar -Xmx8g dbpedia-spotlight-0.7-jar-with-dependencies-candidates.jar nl http://localhost:2060/rest  &
 @| @}
 
 
@@ -1156,12 +1181,23 @@ suppose that it has been installed on localhost.
 \subsubsection{Module}
 \label{sec:ned-module}
 
+@% @d install the \NED{} module @{@%
+@% cp m4_asnapshotroot/m4_neddir/m4_nedjar m4_ajardir/
+@% mkdir -p m4_amoddir/m4_neddir
+@% cd m4_amoddir/m4_neddir
+@% wget http://ixa2.si.ehu.es/ixa-pipes/models/wikipedia-db.v1.tar.gz
+@% tar -xzf wikipedia-db.v1.tar.gz
+@% @| @}
+
 @d install the \NED{} module @{@%
-cp m4_asnapshotroot/m4_neddir/m4_nedjar m4_ajardir/
-mkdir -p m4_amoddir/m4_neddir
+@< install from github @(ned@,m4_neddir@,m4_nedgit@) @>
 cd m4_amoddir/m4_neddir
-wget http://ixa2.si.ehu.es/ixa-pipes/models/wikipedia-db.v1.tar.gz
-tar -xzf wikipedia-db.v1.tar.gz
+mvn -Dmaven.compiler.target=m4_maven_javaversion -Dmaven.compiler.source=m4_maven_javaversion clean package
+mv target/ixa-pipe-ned-`'m4_ned_version.jar m4_ajardir/ 
+@% cp m4_asnapshotroot/m4_neddir/m4_nedjar m4_ajardir/
+@% @% mkdir -p m4_amoddir/m4_neddir
+@% wget http://ixa2.si.ehu.es/ixa-pipes/models/wikipedia-db.v1.tar.gz
+@% tar -xzf wikipedia-db.v1.tar.gz
 @| @}
 
 
