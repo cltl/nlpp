@@ -1368,6 +1368,53 @@ chmod 775  m4_bindir/m4_ontoscript
 @| @}
 
 
+\subsection{Framenet SRL}
+\label{sec:framesrl}
+
+The framenet \SRL{} is part of the package that contains the ontotagger. We only need a different script.
+
+
+\subsubsection{Script}
+\label{sec:framesrlscript}
+
+@o m4_bindir/m4_framesrlscript @{@%
+#!/bin/bash
+@< set up programming environment @>
+ROOT=m4_aprojroot
+ONTODIR=$PIPEMODD/m4_ontodir
+JARDIR=\$ONTODIR/lib
+RESOURCESDIR=\$ONTODIR/resources
+@% PREDICATEMATRIX="\$RESOURCESDIR/PredicateMatrix.v1.1/PredicateMatrix.v1.1.role.nl-1.merged"
+PREDICATEMATRIX="\$RESOURCESDIR/PredicateMatrix_nl_lu_withESO.v0.2.role.txt"
+GRAMMATICALWORDS="\$RESOURCESDIR/grammaticals/Grammatical-words.nl"
+TMPFIL=`mktemp -t framesrl.XXXXXX`
+cat >$TMPFIL
+
+CLASSPATH=\$JARDIR/ontotagger-1.0-jar-with-dependencies.jar
+JAVASCRIPT=eu.kyotoproject.main.SrlFrameNetTagger
+
+JAVA_ARGS="--naf-file \$TMPFIL"
+JAVA_ARGS="\$JAVA_ARGS  --format naf"
+JAVA_ARGS="\$JAVA_ARGS  --frame-ns fn:"
+JAVA_ARGS="\$JAVA_ARGS   --role-ns fn-role:;pb-role:;fn-pb-role:;eso-role:"
+JAVA_ARGS="\$JAVA_ARGS   --ili-ns mcr:ili"
+JAVA_ARGS="\$JAVA_ARGS   --sense-conf 0.25"
+JAVA_ARGS="\$JAVA_ARGS   --frame-conf 70"
+
+java -Xmx1812m -cp \$CLASSPATH \$JAVASCRIPT \$JAVA_ARGS
+
+
+@% java -Xmx1812m -cp ../lib/ontotagger-1.0-jar-with-dependencies.jar eu.kyotoproject.main.SrlFrameNetTagger --naf-file "../example/test.srl.lexicalunits.pm.naf" --format naf --frame-ns "fn:" --role-ns "fn-role:;pb-role:;fn-pb-role:;eso-role:" --ili-ns "mcr:ili" --sense-conf 0.25 --frame-conf 70 > "../example/test.srl.lexicalunits.pm.fn.naf"
+
+rm -rf \$TMPFIL
+
+@| @}
+
+
+@d make scripts executable @{@%
+chmod 775  m4_bindir/m4_framesrlscript
+@| @}
+
 
 \subsection{Heideltime}
 \label{sec:heideltime}
@@ -1503,7 +1550,7 @@ JARFILE=m4_ajardir/m4_evcorefjar
 
 JAVAMODULE=eu.newsreader.eventcoreference.naf.EventCorefWordnetSim
 JAVAOPTIONS="--method leacock-chodorow"
-JAVAOPTIONS="$JAVAOPTIONS  --wn-lmf \"$RESOURCESDIR/cornetto2.1.lmf.xml"
+JAVAOPTIONS="$JAVAOPTIONS  --wn-lmf $RESOURCESDIR/cornetto2.1.lmf.xml"
 JAVAOPTIONS="$JAVAOPTIONS  --sim 2.0"
 JAVAOPTIONS="$JAVAOPTIONS  —relations XPOS_NEAR_SYNONYM#HAS_HYPERONYM#HAS_XPOS_HYPERONYM"
 
@@ -1519,7 +1566,6 @@ java -Xmx812m -cp \$JARFILE \$JAVAMODULE  $JAVAOPTIONS
 @d make scripts executable @{@%
 chmod 775  m4_bindir/m4_evcorefscript
 @| @}
-
 
 
 \section{Utilities}
@@ -1547,6 +1593,7 @@ cat $TESTDIR/test.ned.naf | $BIND/onto > $TESTDIR/test.onto.naf
 cat $TESTDIR/test.onto.naf | $BIND/heideltime > $TESTDIR/test.times.naf
 cat $TESTDIR/test.times.naf | $BIND/srl  > $TESTDIR/test.srl.naf
 cat $TESTDIR/test.srl.naf | $BIND/m4_evcorefscript  > $TESTDIR/test.ecrf.naf
+cat $TESTDIR/test.ecrf.naf | $BIND/m4_framesrlscript  > $TESTDIR/test.fsrl.naf
 @% cat $TESTDIR/test.wsd.naf | $BIND/lu2synset > $TESTDIR/test.l2s.naf
 
 @% #!/bin/bash

@@ -111,6 +111,7 @@ sources : dutch-nlp-modules-on-Lisa.w $(DIRS) $(NUWEB)
 	chmod 775  ../bin/wsd
 	chmod 775  ../bin/ned
 	chmod 775  ../bin/onto
+	chmod 775  ../bin/framesrl
 	chmod 775  ../bin/heideltime
 	chmod 775  ../bin/srl
 	chmod 775  ../bin/evcoref
