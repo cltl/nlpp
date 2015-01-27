@@ -13,6 +13,7 @@ m4_include(inst.m4)m4_dnl
 \newcommand{\EHU}{\textsc{ehu}}
 \newcommand{\NAF}{\textsc{naf}}
 \newcommand{\NED}{\textsc{ned}}
+\newcommand{\NER}{\textsc{ner}}
 \newcommand{\NLP}{\textsc{nlp}}
 \title{\thedoctitle}
 \author{\theauthor}
@@ -87,7 +88,7 @@ the origin of the module. The modules are obtained in one of the following ways:
 
 \begin{enumerate}
 \item If possible, the module is directly obtained from an open-source repository like Github.
-\item Some modules are available from the dedicated repository on \href{m4_ehu_rep_url}. A username and password are needed to access these modules. This is indicated as \EHU{}.
+\item Some modules are available from the dedicated repository on \url{m4_ehu_rep_url}. A username and password are needed to access these modules. This is indicated as \EHU{}.
 \item Some modules have not been officially published in a repository or the repositrory is not yet known by the author. These modules have been packed in a tar-ball that can be obtained by the author. This is indicated as \textsc{tar}.
 \end{enumerate}
 
@@ -199,7 +200,7 @@ source m4_abindir/progenv
 \label{sec:java}
 
 To install Java, download \texttt{m4_javatarball} from
-\href{m4_javatarballurl}. Find it in the root directory and unpack it
+\url{m4_javatarballurl}. Find it in the root directory and unpack it
 in a subdirectory of \texttt{m4_aenvdir}.
 
 @d directories to create @{m4_javadir @| @}
@@ -552,6 +553,7 @@ echo Morphosyntactic parser
 @< install the heideltime module @>
 @< install the srl module @>
 @< install the \NED{} module @>
+@< install the event-coreference module @>
 @% @< install the lu2synset converter @>
 @% @< remove maven @>
 
@@ -752,7 +754,7 @@ print output
 
 @| @}
 
-\paragrqph{Script}
+\paragraph{Script}
 \label{par:alpinohack-script}
 
 @o m4_bindir/m4_alpinohackscript @{@%
@@ -879,10 +881,10 @@ chmod 775  m4_bindir/m4_nercscript
 \subsection{Wordsense-disambiguation}
 \label{sec:wsd}
 
-Install WSD from its Github source (\href{m4_wsdgit}). According to
+Install WSD from its Github source (\url{m4_wsdgit}). According to
 the \texttt{readme} of that module, the next thing to do is, to
 execute install-script \texttt{install.sh} or
-\texttt{install_naf.sh}. The latter script installs a
+\texttt{install\_naf.sh}. The latter script installs a
 ``Support-Vector-Machine'' (\textsc{svm}) module, ``Dutch-SemCor''
 (\textsc{dsc}) models and KafNafParserPy.  
 
@@ -910,7 +912,7 @@ cd m4_amoddir/m4_wsddir
 @| @}
 
 
-This part has been copied from [[install_naf.sh]] in the \textsc{wsd} module.
+This part has been copied from \verb|install_naf.sh| in the \textsc{wsd} module.
 
 @d install svm lib @{@%
 mkdir lib
@@ -926,7 +928,7 @@ make > /dev/null 2> /dev/null
 echo LIBSVM installed correctly lib/libsvm
 @| @}
 
-This part has also been copied from [[install_naf.sh]] in the \textsc{wsd} module.
+This part has also been copied from \verb|install_naf.sh| in the \textsc{wsd} module.
 
 @d download svm models @{@%
 cd m4_amoddir/m4_wsddir
@@ -1065,7 +1067,7 @@ java -Xmx812m -cp  $JAVALIBDIR/$JARFILE vu.wntools.util.NafLexicalUnitToSynsetRe
 
 @% Install Spotlight as described on the readme of \texttt{ixa-pipe-ned}.
 
-Install spotlight in the way that  Itziar Aldabe (\href{mailto:itziar.aldabe@@ehu.es}) described:
+Install spotlight in the way that  Itziar Aldabe (\url{mailto:itziar.aldabe@@ehu.es}) described:
 
 \begin{quotation}
 The NED module works for English, Spanish, Dutch and Italian. The
@@ -1079,13 +1081,13 @@ pipeline, you will need:
   option. You can copy it from the English VM. The jar file name is
   \verb|dbpedia-spotlight-0.7-jar-with-dependencies-candidates.jar|
 \item The Dutch/Italian model for the dbpedia-spotlight. You can download them from:
-    \href{http://spotlight.sztaki.hu/downloads/}
+    \url{http://spotlight.sztaki.hu/downloads/}
 \item The jar file with the NED module:
     \verb|ixa-pipe-ned-1.0.jar|. You can copy it from the English VM
     too.
 \item The file: \verb|wikipedia-db.v1.tar.gz|. You can download it
   from:
-  \href{http://ixa2.si.ehu.es/ixa-pipes/models/wikipedia-db.v1.tar.gz}. This
+  \url{http://ixa2.si.ehu.es/ixa-pipes/models/wikipedia-db.v1.tar.gz}. This
   file contains the required information to do the mappings between
   the wikipedia-entries. The zip file contains three files:
   wikipedia-db, wikipedia-db.p and wikipedia-db.t
@@ -1107,7 +1109,7 @@ java -jar -Xmx8g dbpedia-spotlight-0.7-jar-with-dependencies-candidates.jar nl h
 \end{verbatim}
 
 We set 8Gb for the English server, but the Italian and Dutch spotlight will require less memory. 
-
+\end{quotation}
 
 
 @d install the spotlight server @{@%
@@ -1168,7 +1170,10 @@ fi
 @| @}
 
 \subsection{NED}
-\label{sec:onto}
+\label{sec:ned}
+
+The NED module is rather picky about the structure of the \NAF{} file. In any case, it does not accept a file that has been produced by the ontotagger. Hence, in a pipeline \NER{} shuld be executed before the ontotagger.
+
 
 The \NED{} module wants to consult the dbpedia spotlight server, so
 that one has to be installed somewhere. For this moment, let us
@@ -1180,7 +1185,7 @@ suppose that it has been installed on localhost.
 @% \subsubsection{Installation of the spotlight server}
 @% \label{sec:spotlightinstall}
 
-@% Itziar Aldabe (\href{mailto:itziar.aldabe@@ehu.es}) wrote:
+@% Itziar Aldabe (\url{mailto:itziar.aldabe@@ehu.es}) wrote:
 @% 
 @% \begin{quotation}
 @% The NED module works for English, Spanish, Dutch and Italian. The
@@ -1194,13 +1199,13 @@ suppose that it has been installed on localhost.
 @%   option. You can copy it from the English VM. The jar file name is
 @%   \verb|dbpedia-spotlight-0.7-jar-with-dependencies-candidates.jar|
 @% \item The Dutch/Italian model for the dbpedia-spotlight. You can download them from:
-@%     \href{http://spotlight.sztaki.hu/downloads/}
+@%     \url{http://spotlight.sztaki.hu/downloads/}
 @% \item The jar file with the NED module:
 @%     \verb|ixa-pipe-ned-1.0.jar|. You can copy it from the English VM
 @%     too.
 @% \item The file: \verb|wikipedia-db.v1.tar.gz|. You can download it
 @%   from:
-@%   \href{http://ixa2.si.ehu.es/ixa-pipes/models/wikipedia-db.v1.tar.gz}. This
+@%   \url{http://ixa2.si.ehu.es/ixa-pipes/models/wikipedia-db.v1.tar.gz}. This
 @%   file contains the required information to do the mappings between
 @%   the wikipedia-entries. The zip file contains three files:
 @%   wikipedia-db, wikipedia-db.p and wikipedia-db.t
@@ -1469,6 +1474,52 @@ rm -rf \$TEMPDIR
 chmod 775  m4_bindir/m4_srlscript
 @| @}
 
+\subsection{Event coreference}
+\label{sec:eventcoref}
+
+\subsubsection{Module}
+\label{sec:event-coref-module}
+
+Install the module from the snapshot.
+
+@d install the event-coreference module @{@%
+cd m4_amoddir
+tar -xzf m4_asnapshotroot/m4_evcoreftarball
+cd m4_evcorefdir
+cp lib/m4_evcorefjar m4_ajardir
+@| @}
+
+
+
+\subsubsection{Script}
+\label{sec:evcorefscript}
+
+@o m4_bindir/m4_evcorefscript @{@%
+#!/bin/bash
+@< set up programming environment @>
+MODROOT=$PIPEMODD/m4_evcorefdir
+RESOURCESDIR=$MODROOT/resources
+JARFILE=m4_ajardir/m4_evcorefjar
+
+JAVAMODULE=eu.newsreader.eventcoreference.naf.EventCorefWordnetSim
+JAVAOPTIONS="--method leacock-chodorow"
+JAVAOPTIONS="$JAVAOPTIONS  --wn-lmf \"$RESOURCESDIR/cornetto2.1.lmf.xml"
+JAVAOPTIONS="$JAVAOPTIONS  --sim 2.0"
+JAVAOPTIONS="$JAVAOPTIONS  —relations XPOS_NEAR_SYNONYM#HAS_HYPERONYM#HAS_XPOS_HYPERONYM"
+
+@% #### Within document event coreference wordnet sim
+@% #rootDir=/home/newsreader/components/VUA-eventcoref.v21/
+@% rootDir=/Tools/nwr-dutch-pipeline/vua-eventcoreference_v2/
+
+java -Xmx812m -cp \$JARFILE \$JAVAMODULE  $JAVAOPTIONS
+
+@% java -Xmx812m -cp "$rootDir/lib/m4_evcorefjar" \$JAVAMODULE  --method leacock-chodorow --wn-lmf "$rootDir/resources/cornetto2.1.lmf.xml" --sim 2.0 —relations XPOS_NEAR_SYNONYM#HAS_HYPERONYM#HAS_XPOS_HYPERONYM
+@| @}
+
+@d make scripts executable @{@%
+chmod 775  m4_bindir/m4_evcorefscript
+@| @}
+
 
 
 \section{Utilities}
@@ -1495,6 +1546,7 @@ cat $TESTDIR/test.wsd.naf | $BIND/ned  > $TESTDIR/test.ned.naf
 cat $TESTDIR/test.ned.naf | $BIND/onto > $TESTDIR/test.onto.naf
 cat $TESTDIR/test.onto.naf | $BIND/heideltime > $TESTDIR/test.times.naf
 cat $TESTDIR/test.times.naf | $BIND/srl  > $TESTDIR/test.srl.naf
+cat $TESTDIR/test.srl.naf | $BIND/m4_evcorefscript  > $TESTDIR/test.ecrf.naf
 @% cat $TESTDIR/test.wsd.naf | $BIND/lu2synset > $TESTDIR/test.l2s.naf
 
 @% #!/bin/bash
@@ -1724,8 +1776,6 @@ else
 fi
 @| @}
 
-\section{Testing}
-\label{sec:testing}
 
 
 

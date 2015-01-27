@@ -155,9 +155,11 @@ m4_define(m4_ncorefdir, nomcoref)m4_dnl  Subdir. of modules
 m4_define(m4_ncorefscript, nomcoref)m4_dnl
 m4_dnl
 m4_dnl Ev. coref
-m4_define(m4_evcorefsrc, /dev/null )m4_dnl  Subdir. of modules
-m4_define(m4_evcorefdir, evcoref)m4_dnl  Subdir. of modules
+m4_define(m4_evcorefdir, vua-eventcoreference_v2)m4_dnl  Subdir. of modules
+m4_define(m4_evcoreftarball, m4_evcorefdir.tar.gz)m4_dnl
 m4_define(m4_evcorefscript, evcoref)m4_dnl
+m4_define(m4_evcorefjar, EventCoreference-1.0-SNAPSHOT-jar-with-dependencies.jar)m4_dnl
+
 m4_dnl
 m4_dnl Opinion-miner
 m4_define(m4_opinisrc, /dev/null )m4_dnl  Subdir. of modules
