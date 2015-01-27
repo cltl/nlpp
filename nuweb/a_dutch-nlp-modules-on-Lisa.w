@@ -1263,7 +1263,7 @@ mv target/ixa-pipe-ned-<!!>m4_ned_version.jar m4_ajardir/
 ROOT=m4_aprojroot
 JARDIR=m4_ajardir
 @< check/start the spotlight server @>
-cat | java -jar \$JARDIR/m4_nedjar  -p 2060 -e candidates -i m4_amoddir/m4_neddir/wikipedia-db -n nlEn
+cat | java -jar \$JARDIR/m4_nedjar  -p 2060 -e candidates -i m4_aspotlightdir/wikipedia-db -n nlEn
 @% cat | java -jar \$JARDIR/m4_nedjar  -p 2060  -n nl
 @| @}
 
