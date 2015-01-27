@@ -528,31 +528,31 @@ The installation is performed by script \verb|m4_module_installer|
 echo Set up environment
 @< variables of m4_module_installer @>
 @< check this first @>
-@% @< unpack snapshots or die @>
-@% echo ... Java
-@% @< set up java @>
+@< unpack snapshots or die @>
+echo ... Java
+@< set up java @>
 @< set up java environment in scripts @>
-@% @< install maven @>
-@% echo ... Python
-@% @< set up python @>
-@% echo ... Alpino
-@% @< install Alpino @>
+@< install maven @>
+echo ... Python
+@< set up python @>
+echo ... Alpino
+@< install Alpino @>
 @< install the spotlight server @>
-@% echo Tokenizer
-@% @< install the tokenizer @>
-@% echo Morphosyntactic parser
-@% @< install the morphosyntactic parser @>
-@% @< install the NERC module @>
-@% @% @< install coreference-base @>
-@% @< install the WSD module @>
-@% @< install the onto module @>
-@% @< install the heideltime module @>
+@< install the treetagger utility @>
+@< install the ticcutils utility @>
+@< install the timbl utility @>
+echo Tokenizer
+@< install the tokenizer @>
+echo Morphosyntactic parser
+@< install the morphosyntactic parser @>
+@< install the NERC module @>
+@< install coreference-base @>
+@< install the WSD module @>
+@< install the onto module @>
+@< install the heideltime module @>
 @< install the srl module @>
 @< install the \NED{} module @>
 @% @< install the lu2synset converter @>
-@% @< install the treetagger utility @>
-@< install the ticcutils utility @>
-@< install the timbl utility @>
 @% @< remove maven @>
 
 @| @}
@@ -1063,29 +1063,83 @@ java -Xmx812m -cp  $JAVALIBDIR/$JARFILE vu.wntools.util.NafLexicalUnitToSynsetRe
 \subsection{Spotlight}
 \label{sec:spotlight}
 
-Install Spotlight as described on the readme of \texttt{ixa-pipe-ned}.
+@% Install Spotlight as described on the readme of \texttt{ixa-pipe-ned}.
+
+Install spotlight in the way that  Itziar Aldabe (\href{mailto:itziar.aldabe@@ehu.es}) described:
+
+\begin{quotation}
+The NED module works for English, Spanish, Dutch and Italian. The
+module returns multiple candidates and correspondences for all the
+languages. If you want to integrate it in your Dutch or Italian
+pipeline, you will need:
+
+\begin{enumerate}
+\item The jar file with the dbpedia-spotlight server. You need the
+  version that Aitor developed in order to correctly use the "candidates"
+  option. You can copy it from the English VM. The jar file name is
+  \verb|dbpedia-spotlight-0.7-jar-with-dependencies-candidates.jar|
+\item The Dutch/Italian model for the dbpedia-spotlight. You can download them from:
+    \href{http://spotlight.sztaki.hu/downloads/}
+\item The jar file with the NED module:
+    \verb|ixa-pipe-ned-1.0.jar|. You can copy it from the English VM
+    too.
+\item The file: \verb|wikipedia-db.v1.tar.gz|. You can download it
+  from:
+  \href{http://ixa2.si.ehu.es/ixa-pipes/models/wikipedia-db.v1.tar.gz}. This
+  file contains the required information to do the mappings between
+  the wikipedia-entries. The zip file contains three files:
+  wikipedia-db, wikipedia-db.p and wikipedia-db.t
+\end{enumerate}
+
+To start the dbPeadia server:
+Italian server: 
+
+\begin{verbatim}
+java -jar -Xmx8g dbpedia-spotlight-0.7-jar-with-dependencies-candidates.jar it http://localhost:2050/rest 
+
+\end{verbatim}
+
+Dutch server:  
+
+\begin{verbatim}
+java -jar -Xmx8g dbpedia-spotlight-0.7-jar-with-dependencies-candidates.jar nl http://localhost:2060/rest 
+
+\end{verbatim}
+
+We set 8Gb for the English server, but the Italian and Dutch spotlight will require less memory. 
+
+
 
 @d install the spotlight server @{@%
-mkdir -p m4_spotlightdir
+mkdir -p m4_aspotlightdir
 cd m4_aspotlightdir
-wget m4_spotlight_download_url/m4_spotlightjar
-wget m4_spotlight_download_url/m4_spotlight_nl_model
-tar -xzf m4_spotlight_nl_model
-wget m4_spotlight_download_url/m4_spotlight_en_model
-tar -xzf m4_spotlight_en_model
-MVN_SPOTLIGHT_OPTIONS="-Dfile=m4_spotlightjar"
-MVN_SPOTLIGHT_OPTIONS="$MVN_SPOTLIGHT_OPTIONS -DgroupId=ixa"
-MVN_SPOTLIGHT_OPTIONS="$MVN_SPOTLIGHT_OPTIONS -DartifactId=dbpedia-spotlight"
-MVN_SPOTLIGHT_OPTIONS="$MVN_SPOTLIGHT_OPTIONS -Dversion=m4_spotlightjarversion"
-MVN_SPOTLIGHT_OPTIONS="$MVN_SPOTLIGHT_OPTIONS -Dpackaging=jar"
-MVN_SPOTLIGHT_OPTIONS="$MVN_SPOTLIGHT_OPTIONS -DgeneratePom=true"
-
-
-#mvn install:install-file -Dfile=dbpedia-spotlight-0.7.jar -DgroupId=ixa -DartifactId=dbpedia-spotlight -Dversion=0.7 -Dpackaging=jar -DgeneratePom=true 
-mvn install:install-file $MVN_SPOTLIGHT_OPTIONS
-
-
+cp m4_snapshotroot/spotlight/m4_spotlightjar .
+@% @% wget m4_spotlight_download_url/m4_spotlightjar
+@% wget m4_spotlight_download_url/m4_spotlight_nl_model
+@% tar -xzf m4_spotlight_nl_model
+@% wget m4_spotlight_download_url/m4_spotlight_en_model
+@% tar -xzf m4_spotlight_en_model
+@% MVN_SPOTLIGHT_OPTIONS="-Dfile=m4_spotlightjar"
+@% MVN_SPOTLIGHT_OPTIONS="$MVN_SPOTLIGHT_OPTIONS -DgroupId=ixa"
+@% MVN_SPOTLIGHT_OPTIONS="$MVN_SPOTLIGHT_OPTIONS -DartifactId=dbpedia-spotlight"
+@% MVN_SPOTLIGHT_OPTIONS="$MVN_SPOTLIGHT_OPTIONS -Dversion=m4_spotlightjarversion"
+@% MVN_SPOTLIGHT_OPTIONS="$MVN_SPOTLIGHT_OPTIONS -Dpackaging=jar"
+@% MVN_SPOTLIGHT_OPTIONS="$MVN_SPOTLIGHT_OPTIONS -DgeneratePom=true"
+@% mvn install:install-file -Dfile=dbpedia-spotlight-0.7.jar -DgroupId=ixa -DartifactId=dbpedia-spotlight -Dversion=0.7 -Dpackaging=jar -DgeneratePom=true 
+@% mvn install:install-file $MVN_SPOTLIGHT_OPTIONS
 @| @}
+
+We choose to put the Wikipedia database in the spotlight directory.
+
+@d install the spotlight server @{@%
+cd m4_aspotlightdir
+wget m4_wikipediadb_url
+tar -xzf m4_wikipediadb_tarball
+rm  m4_wikipediadb_tarball
+@| @}
+
+
+
 
 @% Spotlight is not itself a pipeline-module, but it is needed in the
 @% \NED{} module. Now I make a shortcut from the snapshot.
@@ -1096,7 +1150,7 @@ mvn install:install-file $MVN_SPOTLIGHT_OPTIONS
 
 @d start the spotlight server @{@%
 cd m4_aspotlightdir
-java  -Xmx8g -jar m4_spotlightjar nl http://localhost:m4_spotlight_nl_port/rest
+@% java  -Xmx8g -jar m4_spotlightjar nl http://localhost:m4_spotlight_nl_port/rest
 java -jar -Xmx8g dbpedia-spotlight-0.7-jar-with-dependencies-candidates.jar nl http://localhost:2060/rest  &
 @% java -jar -Xmx8g dbpedia-spotlight-0.7-jar-with-dependencies-candidates.jar nl http://localhost:2060/rest  &
 @| @}
@@ -1109,7 +1163,7 @@ if
   [ $spottasks -eq 0 ]
 then
   @< start the spotlight server @>
-  sleep 180
+  sleep 60
 fi
 @| @}
 
@@ -1193,7 +1247,7 @@ suppose that it has been installed on localhost.
 @< install from github @(ned@,m4_neddir@,m4_nedgit@) @>
 cd m4_amoddir/m4_neddir
 mvn -Dmaven.compiler.target=m4_maven_javaversion -Dmaven.compiler.source=m4_maven_javaversion clean package
-mv target/ixa-pipe-ned-`'m4_ned_version.jar m4_ajardir/ 
+mv target/ixa-pipe-ned-<!!>m4_ned_version.jar m4_ajardir/ 
 @% cp m4_asnapshotroot/m4_neddir/m4_nedjar m4_ajardir/
 @% @% mkdir -p m4_amoddir/m4_neddir
 @% wget http://ixa2.si.ehu.es/ixa-pipes/models/wikipedia-db.v1.tar.gz
@@ -1210,6 +1264,7 @@ ROOT=m4_aprojroot
 JARDIR=m4_ajardir
 @< check/start the spotlight server @>
 cat | java -jar \$JARDIR/m4_nedjar  -p 2060 -e candidates -i m4_amoddir/m4_neddir/wikipedia-db -n nlEn
+@% cat | java -jar \$JARDIR/m4_nedjar  -p 2060  -n nl
 @| @}
 
 
@@ -1265,7 +1320,7 @@ JAVA_ARGS="\$JAVA_ARGS  --key odwn-eq"
 JAVA_ARGS="\$JAVA_ARGS  --version 1.1"
 JAVA_ARGS="\$JAVA_ARGS  --predicate-matrix \$PREDICATEMATRIX"
 JAVA_ARGS="\$JAVA_ARGS  --grammatical-words \$GRAMMATICALWORDS"
-JAVA_ARGS="\$JAVA_ARGS  --naf-file \$TMPFIL''
+JAVA_ARGS="\$JAVA_ARGS  --naf-file \$TMPFIL"
 java -Xmx1812m -cp \$CLASSPATH \$JAVASCRIPT \$JAVA_ARGS
 
 
@@ -1430,19 +1485,17 @@ the pipeline.
 ROOT=m4_aprojroot
 TESTDIR=$ROOT/test
 BIND=$ROOT/bin
-mkdir $TESTDIR
+mkdir -p $TESTDIR
 cd $TESTDIR
 cat $ROOT/nuweb/testin.naf | $BIND/tok > $TESTDIR/test.tok.naf
 cat test.tok.naf | $BIND/mor > $TESTDIR/test.mor.naf
-cat test.mor.naf | $BIND/alpinohack > $TESTDIR/test.alh.naf
 cat test.mor.naf | $BIND/nerc > $TESTDIR/test.nerc.naf
-@% cat $TESTDIR/test.nerc.naf | $BIND/corefgraph > $TESTDIR/test.crg.naf
 cat $TESTDIR/test.nerc.naf | $BIND/wsd > $TESTDIR/test.wsd.naf
-cat $TESTDIR/test.wsd.naf | $BIND/onto > $TESTDIR/test.onto.naf
+cat $TESTDIR/test.wsd.naf | $BIND/ned  > $TESTDIR/test.ned.naf
+cat $TESTDIR/test.ned.naf | $BIND/onto > $TESTDIR/test.onto.naf
+cat $TESTDIR/test.onto.naf | $BIND/heideltime > $TESTDIR/test.times.naf
+cat $TESTDIR/test.times.naf | $BIND/srl  > $TESTDIR/test.srl.naf
 @% cat $TESTDIR/test.wsd.naf | $BIND/lu2synset > $TESTDIR/test.l2s.naf
-@% cat $TESTDIR/test.l2s.naf | $BIND/ned > $TESTDIR/test.ned.naf
-@% cat $TESTDIR/test.ned.naf | $BIND/heideltime > $TESTDIR/test.times.naf
-@% cat $TESTDIR/test.times.naf | $BIND/srl  > $TESTDIR/test.srl.naf
 
 @% #!/bin/bash
 @% ROOT=m4_aprojroot

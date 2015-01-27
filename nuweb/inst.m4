@@ -113,7 +113,7 @@ m4_define(m4_ned_version, 1.1.1)m4_dnl
 m4_define(m4_nedgit, https://github.com/ixa-ehu/ixa-pipe-ned.git)m4_dnl  
 m4_define(m4_neddir, ixa-pipe-ned)m4_dnl  Subdir. of modules
 m4_dnl m4_define(m4_nedjar, ixa-pipe-ned-1.0.jar)m4_dnl
-m4_define(m4_nedjar, ixa-pipe-ned-1.0.jar)m4_dnl
+m4_define(m4_nedjar, ixa-pipe-ned-`'m4_ned_version`'.jar)m4_dnl
 m4_define(m4_nedspotmodel_nl_tarball, nl.tar.gz)m4_dnl
 m4_define(m4_nedspotmodel_nl_url, http://spotlight.sztaki.hu/downloads/`'m4_nedspotmodel_nl_tarball)m4_dnl
  
@@ -218,11 +218,17 @@ m4_define(m4_aspotlightdir, m4_aenvdir/spotlight)m4_dnl
 m4_define(m4_spotlighturl, http://spotlight.sztaki.hu)m4_dnl
 m4_define(m4_spotlight_download_url, m4_spotlighturl/downloads)m4_dnl
 m4_define(m4_spotlightjarversion, 0.7)m4_dnl
-m4_define(m4_spotlightjar, dbpedia-spotlight-`'m4_spotlightjarversion`'.jar)m4_dnl
+m4_define(m4_spotlightjar, dbpedia-spotlight-`'m4_spotlightjarversion`'-jar-with-dependencies-candidates.jar)m4_dnl
 m4_define(m4_spotlight_nl_model, nl.tar.gz)m4_dnl
 m4_define(m4_spotlight_nl_port, 2060)m4_dnl
 m4_define(m4_spotlight_en_model, en_2+2.tar.gz)m4_dnl
 m4_define(m4_spotlight_en_port, 2020)m4_dnl
+m4_dnl
+m4_dnl Wikipedia db
+m4_dnl
+m4_define(m4_wikipediadb_tarball, wikipedia-db.v1.tar.gz)m4_dnl
+m4_define(m4_wikipediadb_url, http://ixa2.si.ehu.es/ixa-pipes/models/m4_wikipediadb_tarball)m4_dnl
+m4_define(m4_wikipediadb_tarball, wikipedia-db.v1.tar.gz)m4_dnl
 
 
 m4_define(m4_spotlight_snapdir, spotlight)m4_dnl
