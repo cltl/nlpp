@@ -142,8 +142,8 @@ m4_dnl Heideltime
 m4_dnl m4_define(m4_heidelsrc, m4_lisanlproot/mods/HeidelTimeModule)m4_dnl  Subdir. of modules
 m4_dnl m4_define(m4_heideldir, HeidelTimeModule)m4_dnl  Subdir. of modules
 m4_dnl m4_define(m4_heidelscript, heideltime)m4_dnl
-m4_dnl m4_define(m4_heidelgit, git@@github.com:cltl/NAF-HeidelTime.git)m4_dnl  Subdir. of modules
-m4_define(m4_heidelgit, `git@@github.com:PaulHuygen/NAF-HeidelTime.git' )m4_dnl  Subdir. of modules
+m4_define(m4_heidelgit, git@@github.com:cltl/NAF-HeidelTime.git)m4_dnl  Subdir. of modules
+m4_dnl m4_define(m4_heidelgit, `git@@github.com:PaulHuygen/NAF-HeidelTime.git' )m4_dnl  Subdir. of modules
 m4_define(m4_heideldir, NAF-HeidelTime)m4_dnl  Subdir. of modules
 m4_define(m4_heidelscript, heideltime)m4_dnl
 m4_dnl

@@ -529,31 +529,31 @@ The installation is performed by script \verb|m4_module_installer|
 echo Set up environment
 @< variables of m4_module_installer @>
 @< check this first @>
-@< unpack snapshots or die @>
+@% @< unpack snapshots or die @>
 echo ... Java
-@< set up java @>
+@% @< set up java @>
 @< set up java environment in scripts @>
-@< install maven @>
+@% @< install maven @>
 echo ... Python
 @< set up python @>
 echo ... Alpino
-@< install Alpino @>
-@< install the spotlight server @>
-@< install the treetagger utility @>
-@< install the ticcutils utility @>
-@< install the timbl utility @>
+@% @< install Alpino @>
+@% @< install the spotlight server @>
+@% @< install the treetagger utility @>
+@% @< install the ticcutils utility @>
+@% @< install the timbl utility @>
 echo Tokenizer
-@< install the tokenizer @>
+@% @< install the tokenizer @>
 echo Morphosyntactic parser
-@< install the morphosyntactic parser @>
-@< install the NERC module @>
-@< install coreference-base @>
-@< install the WSD module @>
-@< install the onto module @>
+@% @< install the morphosyntactic parser @>
+@% @< install the NERC module @>
+@% @< install coreference-base @>
+@% @< install the WSD module @>
+@% @< install the onto module @>
 @< install the heideltime module @>
-@< install the srl module @>
-@< install the \NED{} module @>
-@< install the event-coreference module @>
+@% @< install the srl module @>
+@% @< install the \NED{} module @>
+@% @< install the event-coreference module @>
 @% @< install the lu2synset converter @>
 @% @< remove maven @>
 
@@ -1320,7 +1320,8 @@ JAVASCRIPT=eu.kyotoproject.main.KafPredicateMatrixTagger
 @% JAVA_ARGS=\$JAVA_ARGS " -cp \$JARDIR/ontotagger-1.0-jar-with-dependencies.jar"
 @% JAVA_ARGS=\$JAVA_ARGS " eu.kyotoproject.main.KafPredicateMatrixTagger"
 @% JAVA_ARGS="--mappings \"fn;pb;nb\" "
-JAVA_ARGS="--mappings \"fn;mcr;ili;eso\" "
+MAPPINGS="fn;mcr;ili;eso"
+JAVA_ARGS="--mappings $MAPPINGS"
 JAVA_ARGS="\$JAVA_ARGS  --key odwn-eq"
 JAVA_ARGS="\$JAVA_ARGS  --version 1.1"
 JAVA_ARGS="\$JAVA_ARGS  --predicate-matrix \$PREDICATEMATRIX"
