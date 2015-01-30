@@ -580,6 +580,27 @@ echo Final
 chmod 775  m4_bindir/m4_module_installer
 @| @}
 
+\subsection{Check availability of resources}
+\label{sec:check-availability}
+
+Text for some resources that we need and that may not be available on this host.
+
+@d check this first @{@%
+@< check whether mercurial is present @>
+@| @}
+
+@d check whether mercurial is present @{@%
+which hg
+if
+  [ $? -ne 0 ]
+then
+  echo Please install mercurial.
+  exit 1
+fi
+@|hg @}
+
+
+
 
 \subsection{Install utilities and resources}
 \label{sec:utilitiesandresources}
@@ -1478,7 +1499,6 @@ install from a snapshot (\texttt{m4_ontotarball}).
 @%cp -r m4_asnapshotroot/m4_ontodir m4_amoddir/
 cd m4_amoddir
 tar -xzf m4_aprojroot/m4_snapshotdir/m4_ontotarball
-cp -r m4_aprojroot/m4_snapshotdir/m4_ontodir m4_amoddir/
 chmod -R o+r m4_amoddir
 @| @}
 
