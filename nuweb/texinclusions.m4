@@ -2,9 +2,10 @@
 \usepackage{a4wide}
 \usepackage{alltt}
 \usepackage{color}
-\usepackage{lmodern}
-\usepackage[latin1]{inputenc}
+%\usepackage{lmodern}
+%\usepackage[latin1]{inputenc}
 \usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
 \usepackage[british]{babel}
 %
 % Commands for frequently used constructions

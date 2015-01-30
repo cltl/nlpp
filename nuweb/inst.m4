@@ -37,6 +37,7 @@ m4_define(m4_jardir, m4_javadir`/jars')m4_dnl     jars
 m4_define(m4_javatarball, server-jre-7u72-linux-x64.tar.gz)m4_dnl
 m4_define(m4_javatarballurl, http://www.oracle.com/technetwork/java/javase/downloads/server-jre7-downloads-1931105.html)m4_dnl
 m4_define(m4_javajdk, jdk1.7.0_72)m4_dnl
+m4_define(m4_ahackdir, m4_aenvdir`/hacks')m4_dnl
 m4_dnl
 m4_dnl Maven
 m4_dnl
@@ -182,6 +183,7 @@ m4_dnl
 m4_dnl Alpino
 m4_define(m4_alpinosrc, Alpino-x86_64-linux-glibc2.5-20548-sicstus.tar.gz)
 m4_define(m4_alpinourl, http://www.let.rug.nl/vannoord/alp/Alpino/binary/versions/m4_alpinosrc)m4_dnl  
+m4_define(m4_alpino_desc_url, http://www.let.rug.nl/~vannoord/alp/Alpino/)m4_dnl
 m4_define(m4_alpinodir, Alpino)m4_dnl  Subdir. of modules
 m4_define(m4_Alpinoscript, alpino)m4_dnl
 m4_dnl
@@ -191,6 +193,7 @@ m4_define(m4_timblversion, 6.4.6)m4_dnl
 m4_define(m4_timblsrc,  timbl-`'m4_timblversion`'.tar.gz)m4_dnl
 m4_define(m4_timblurl,  http://software.ticc.uvt.nl/m4_timblsrc`')m4_dnl
 m4_define(m4_timbldir, timbl-m4_timblversion)m4_dnl  Subdir. of modules
+m4_define(m4_timbl_description_url, http://ilk.uvt.nl/timbl)m4_dnl
 m4_dnl m4_define(m4_timblscript, )m4_dnl
 m4_dnl
 m4_dnl Ticcutils
@@ -198,6 +201,7 @@ m4_define(m4_ticcutilsversion, 0.7)m4_dnl
 m4_define(m4_ticcsrc, ticcutils-`'m4_ticcutilsversion`'.tar.gz)m4_dnl
 m4_define(m4_ticcurl, http://software.ticc.uvt.nl/`'m4_ticcsrc`')m4_dnl
 m4_define(m4_ticcdir, ticcutils-`'m4_ticcutilsversion`')m4_dnl
+m4_define(m4_ticc_desc_url, http://ilk.uvt.nl/ticcutils)m4_dnl
 m4_dnl
 m4_dnl KafNafParserPy
 m4_define(m4_kafnafgit, https://github.com/cltl/KafNafParserPy.git)m4_dnl
@@ -225,6 +229,7 @@ m4_define(m4_aspotlightdir, m4_aenvdir/spotlight)m4_dnl
 m4_define(m4_spotlighturl, http://spotlight.sztaki.hu)m4_dnl
 m4_define(m4_spotlight_download_url, m4_spotlighturl/downloads)m4_dnl
 m4_define(m4_spotlightjarversion, 0.7)m4_dnl
+m4_define(m4_simple_spotlightjar, dbpedia-spotlight-`'m4_spotlightjarversion`'.jar)m4_dnl
 m4_define(m4_spotlightjar, dbpedia-spotlight-`'m4_spotlightjarversion`'-jar-with-dependencies-candidates.jar)m4_dnl
 m4_define(m4_spotlight_nl_model, nl.tar.gz)m4_dnl
 m4_define(m4_spotlight_nl_port, 2060)m4_dnl

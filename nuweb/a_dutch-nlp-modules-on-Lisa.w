@@ -1,5 +1,5 @@
 m4_include(inst.m4)m4_dnl
-\documentclass[twoside]{artikel3}
+\documentclass[twoside,oldtoc]{artikel3}
 \pagestyle{headings}
 \usepackage{pdfswitch}
 \usepackage{figlatex}
@@ -15,6 +15,8 @@ m4_include(inst.m4)m4_dnl
 \newcommand{\NED}{\textsc{ned}}
 \newcommand{\NER}{\textsc{ner}}
 \newcommand{\NLP}{\textsc{nlp}}
+\newcommand{\SRL}{\textsc{srl}}
+\def\CaptionTextFont{\small\slshape}
 \title{\thedoctitle}
 \author{\theauthor}
 \date{m4_docdate}
@@ -48,32 +50,47 @@ from variables in file \texttt{inst.m4} in the nuweb directory.
 
 
 \subsection{List of the modules to be installed}
+\label{sec:moduleslist}
+
+\newcommand{\dref}[1]{\hyperref[#1]{\ref{#1}}}
 
 Table~\ref{tab:modulelist}
 \begin{table}[hbtp]
   \centering
   \begin{footnotesize}
     \begin{tabular}{lllll}
-     \textbf{module}      & \textbf{directory} & \textbf{source} & \textbf{script} & \textbf{Details} \\
-@%        Tokenizer          & \verb|m4_tokenizerdir| & Github    &   m4_tokenizerscript  &               \\
-       Tokenizer          & \verb|m4_tokenizerdir| & \EHU{}    & m4_tokenizerscript  &               \\
-       morphosyntactic parser     & \verb|m4_morphpardir|  & Github    & \verb|m4_morphparscript|   &   \\
-       alpinohack         & \verb|clean_hack|      & This doc. &  m4_alpinohackscript  & \footnote{not a  module, but an
-                                                                                          encoding hack} \\
-       \textsc{nerc}       & \verb|m4_jardir|      & \textsc{tar} & m4_nercscript     & \\
-       \textsc{wsd}       & \verb|m4_wsddir|       & \textsc{tar} & m4_wsdscript      & \\
-       Onto               & \verb|m4_ontodir|      & \textsc{tar} & m4_ontoscript     & \\
-       Heidel             & \verb|m4_heideldir|    & Github       & m4_heidelscript   & \\
-       \textsc{srl}       & \verb|m4_srldir|       & Github       & m4_srlscript      & \\
-       \textsc{ned}       & \verb|m4_neddir|       & \EHU{}       & m4_nedscript      & \\
-       Nom. coref         & \verb|m4_ncorefsrc|    & None         &  m4_ncorefscript  & \\  
-       Ev. coref          & \verb|m4_evcorefsrc|   & None         &  m4_evcorefscript & \\  
-       Opinion miner      & \verb|m4_opinisrc|   & None           &  m4_opiniscript   & \\  
-       Framenet sem. role label. &  \verb|m4_fsrlsrc|   & None      &  m4_fsrlscript  & \\  
-@%       Alpino             & \verb|m4_alpinodir|    & \textsc{rug} & m4_Alpinoscript  & \\
-@%       Ticcutils          & \verb|m4_ticcdir|      & \textsc{ilk} & & \\
-@%       Timbl              & \verb|m4_timbldir|     & \textsc{ilk} & & \\
-@%       Treetagger         &                        &              & & \\
+     \textbf{Module}   & \textbf{Section}     & \textbf{Source} & \textbf{Script} & \textbf{Details} \\
+       \href{m4_tokenizergit}{Tokenizer}          
+                       & \dref{sec:installtokenizer} & \href{m4_tokenizergit}{Github} & \texttt{m4_tokenizerscript}  &               \\
+       \href{m4_morphpargit}{morphosyntactic parser} 
+                       & \dref{sec:install-morphsynt-parser}  & \href{m4_morphpargit}{Github}    & \verb|m4_morphparscript|   &   \\
+@%     \hyperref[sec:alpinohack]{alpinohack}
+@%                       & \verb|clean_hack|      & This doc. &  m4_alpinohackscript  & \footnote{not a  module, but an  encoding hack} \\
+@%                                                                                         
+       \href{m4_nercgit}{\textsc{nerc}} 
+                       & \dref{sec:nerc}       & \href{m4_nercgit}{Github} & m4_nercscript     & \\
+       \href{m4_wsdgit}{\textsc{wsd}}
+                       & \dref{sec:wsd} & \href{m4_wsdgit}{Github} & m4_wsdscript      & \\
+       \hyperref[sec:onto]{Onto-tagger}
+                       & \dref{sec:onto} & snapshot & m4_ontoscript     & \\
+       \href{m4_heidelgit}{Heideltime}
+                       & \dref{sec:heideltime} & \href{m4_heidelgit}{Github}       & m4_heidelscript   & \\
+       \href{m4_srlgit}{\textsc{srl}}
+                       & \dref{sec:SRL} & \href{m4_srlgit}{Github}       & m4_srlscript      & \\
+       \href{m4_nedgit}{\textsc{ned}}
+                       & \dref{sec:ned} & \href{m4_nedgit}{Github}       & m4_nedscript      & \\
+       \href{m4_corefbasegit}{Nom. coref}
+                       & \dref{sec:nomcorefgraph} & \href{m4_corefbasegit}{Github}         &  m4_ncorefscript  & \\  
+       \href{m4_evcorefscript}{Ev. coref}
+                       & \dref{sec:eventcoref} & snapshot         &  m4_evcorefscript & \\  
+@%       \hyperref[]{Opinion miner}
+@%                       & \verb|m4_opinisrc|   & None           &  m4_opiniscript   & \\  
+       \hyperref[sec:framesrl]{Framenet sem. role label.} 
+                       & \dref{sec:framesrl}   & snapshot      &  m4_fsrlscript  & \\  
+@%     \hyperref[sec:install-alpino]{Alpino             & \verb|m4_alpinodir|    & \textsc{rug} & m4_Alpinoscript  & \\
+@%     \hyperref[]{Ticcutils          & \verb|m4_ticcdir|      & \textsc{ilk} & & \\
+@%     \hyperref[]{Timbl              & \verb|m4_timbldir|     & \textsc{ilk} & & \\
+@%     \hyperref[]{Treetagger         &                        &              & & \\
     \end{tabular}
   \end{footnotesize}
   \caption{List of the modules to be installed. Column description:
@@ -88,8 +105,7 @@ the origin of the module. The modules are obtained in one of the following ways:
 
 \begin{enumerate}
 \item If possible, the module is directly obtained from an open-source repository like Github.
-\item Some modules are available from the dedicated repository on \url{m4_ehu_rep_url}. A username and password are needed to access these modules. This is indicated as \EHU{}.
-\item Some modules have not been officially published in a repository or the repositrory is not yet known by the author. These modules have been packed in a tar-ball that can be obtained by the author. This is indicated as \textsc{tar}.
+\item Some modules have not been officially published in a repository. These modules have been packed in a tar-ball that can be obtained by the author. This is indicated as \textsc{tar}.
 \end{enumerate}
 
 The modules themselves use other utilities like dependency-taggers and
@@ -97,13 +113,18 @@ POS taggers. These utilities are listed in
 table~\ref{tab:utillist}.
 \begin{table}[hbtp]
   \centering
-  \begin{tabular}{llll}
-   \textbf{module}      & \textbf{directory}  & \textbf{source}  & \textbf{Details} \\
-     KafNafParserPy     & \verb|m4_kafnafdir| & Github           & \\
-     Alpino             & \verb|m4_alpinodir| & \textsc{rug}     &  \\
-     Ticcutils          & \verb|m4_ticcdir|   & \textsc{ilk}     & \\
-     Timbl              & \verb|m4_timbldir|  & \textsc{ilk}     & \\
-     Treetagger         &                     &                  & \\
+  \begin{tabular}{lll}
+   \textbf{Module}      & \textbf{Section}   & \textbf{Source}                           \\
+     \href{m4_kafnafgit}{KafNafParserPy}     
+                        & \dref{sec:KafNafParserPy}  & \href{m4_kafnafgit}{Github}       \\
+     \href{m4_alpino_desc_url}{Alpino}
+                        & \dref{sec:install-alpino}  & \href{m4_alpinourl}{\textsc{rug}} \\
+     \href{m4_ticc_desc_url}{Ticcutils}
+                        & \dref{sec:timbl}    & \href{m4_ticcurl}{\textsc{ilk}}          \\
+     \href{m4_ticc_desc_url}{Timbl}
+                        & \dref{sec:timbl}   & \href{m4_timblurl}{\textsc{ilk}}          \\
+     \href{http://www.cis.uni-muenchen.de/~schmid/tools/TreeTagger/}{Treetagger}
+                        & \dref{sec:installtreetagger} & \href{m4_treetag_base_url}{Uni. München}   \\
   \end{tabular}
   \caption{List of the modules to be installed. Column description:
     \textbf{directory:} Name of the subdirectory below \texttt{mod} in
@@ -113,24 +134,24 @@ table~\ref{tab:utillist}.
 \end{table}
 
 
-Table~\ref{tab:modulesources} lists the source of the modules and
-utilities that can be installed from an open source.
-\begin{table}[hbtp]
-  \centering
-  \begin{footnotesize}
-  \begin{tabular}{lll}
-   \textbf{module} & \textbf{source} & {\small\textbf{URL}}  \\
-   Tokenizer          & Github & m4_tokenizergit \\
-   Morphosynt. p. & Github & \verb|m4_morphpargit| \\
-   heideltime. & Github & \verb|m4_morphpargit| \\
-   Alpino             & \textsc{rug}  & \verb|m4_alpinosrc| \\
-   Ticcutils          & \textsc{ilk}  & m4_ticcsrc \\
-   Timble            & \textsc{ilk} & m4_timblsrc \\
-  \end{tabular}
-  \end{footnotesize}
-  \caption{Sources of the modules}
-  \label{tab:modulesources}
-\end{table}
+@%Table~\ref{tab:modulesources} lists the source of the modules and
+@%utilities that can be installed from an open source.
+@%\begin{table}[hbtp]
+@%  \centering
+@%  \begin{footnotesize}
+@%  \begin{tabular}{lll}
+@%   \textbf{module} & \textbf{source} & {\small\textbf{URL}}  \\
+@%   Tokenizer          & Github & m4_tokenizergit \\
+@%   Morphosynt. p. & Github & \verb|m4_morphpargit| \\
+@%   heideltime. & Github & \verb|m4_morphpargit| \\
+@%   Alpino             & \textsc{rug}  & \verb|m4_alpinosrc| \\
+@%   Ticcutils          & \textsc{ilk}  & m4_ticcsrc \\
+@%   Timble            & \textsc{ilk} & m4_timblsrc \\
+@%  \end{tabular}
+@%  \end{footnotesize}
+@%  \caption{Sources of the modules}
+@%  \label{tab:modulesources}
+@%\end{table}
 
 
 \subsection{File-structure of the pipeline}
@@ -466,29 +487,6 @@ fi
 @% TREE=${FULLDIR%%\$LEAVE}
 @% @| @}
 
-
-@% \subsection{Installation from EHU}
-@% \label{sec:installfromEHU}
-@% 
-@% Get a module from the home of the pipeline-VM control center at
-@% \EHU{}. From this control center standardised virtual machines to
-@% process texts can obtain the latest versions of the modules. The
-@% \textsc{url} of the control center is \url{m4_ehu_rep_url}. The
-@% modules can be found in subdirectory \texttt{m4_ehu_modules_directory}
-@% of the home-directory of user \texttt{m4_ehu_user}.
-
-
-\subsection{Installation from EHU}
-\label{sec:installfromehu}
-
-Some of the modules cannot be easily obtained available on Github, but
-there is a complete package on EHU. 
-
-
-@% \begin{verbatim}
-@% scp -r -P 2223 "newsreader@u017940.si.ehu.es:components/EHU-tok
-@% \end{verbatim}
-
 \subsection{Installation from the snapshot}
 \label{sec:snapshotinstall}
 
@@ -529,34 +527,53 @@ The installation is performed by script \verb|m4_module_installer|
 echo Set up environment
 @< variables of m4_module_installer @>
 @< check this first @>
-@% @< unpack snapshots or die @>
+@< unpack snapshots or die @>
 echo ... Java
-@% @< set up java @>
+@< set up java @>
 @< set up java environment in scripts @>
-@% @< install maven @>
+@< install maven @>
 echo ... Python
 @< set up python @>
 echo ... Alpino
-@% @< install Alpino @>
-@% @< install the spotlight server @>
-@% @< install the treetagger utility @>
-@% @< install the ticcutils utility @>
-@% @< install the timbl utility @>
-echo Tokenizer
-@% @< install the tokenizer @>
-echo Morphosyntactic parser
-@% @< install the morphosyntactic parser @>
-@% @< install the NERC module @>
-@% @< install coreference-base @>
-@% @< install the WSD module @>
-@% @< install the onto module @>
-@< install the heideltime module @>
-@% @< install the srl module @>
-@% @< install the \NED{} module @>
-@% @< install the event-coreference module @>
-@% @< install the lu2synset converter @>
-@% @< remove maven @>
+@< install Alpino @>
+echo ... Spotlight
+@< install the spotlight server @>
+echo ... Treetagger
+@< install the treetagger utility @>
+echo ... Ticcutils and Timbl
+@< install the ticcutils utility @>
+@< install the timbl utility @>
+@| @}
 
+@o m4_bindir/m4_module_installer @{@%
+echo Install modules
+echo ... Tokenizer
+@< install the tokenizer @>
+echo ... Morphosyntactic parser
+@< install the morphosyntactic parser @>
+echo ... NERC
+@< install the NERC module @>
+echo ... Coreference base
+@< install coreference-base @>
+echo ... WSD
+@< install the WSD module @>
+echo ... Ontotagger
+@< install the onto module @>
+echo ... Heideltime
+@< install the heideltime module @>
+echo ... SRL
+@< install the srl module @>
+echo ... NED
+@< install the \NED{} module @>
+echo ... Event-coreference
+@< install the event-coreference module @>
+@% echo ... lu2synset
+@% @< install the lu2synset converter @>
+echo Final
+@| @}
+
+@o m4_bindir/m4_module_installer @{@%
+@< remove maven @>
 @| @}
 
 @d make scripts executable @{@%
@@ -606,6 +623,257 @@ set the following variables:
 export ALPINO_HOME=m4_amoddir/Alpino
 @| ALPINO_HOME @}
 
+\subsubsection{Treetagger}
+\label{sec:installtreetagger}
+
+Installation of Treetagger goes as follows (See
+\href{http://www.cis.uni-muenchen.de/~schmid/tools/TreeTagger/}{Treetagger's homepage}:
+
+\begin{enumerate}
+\item Download and unpack the treetagger tarball. This generates the
+  subdirectories \verb|bin|, \verb|cmd| and \verb|doc|
+\item Download and unpack the tagger-scripts tarball
+\end{enumerate}
+
+The location where treetager comes from and the location where it is going to reside:
+
+@d install the treetagger utility @{@%
+TREETAGDIR=m4_treetagdir
+TREETAG_BASIS_URL=m4_treetag_base_url
+TREETAGURL=m4_treetag_base_url
+@| @}
+
+The source tarball, scripts and the installation-script:
+
+@d install the treetagger utility @{@%
+TREETAGSRC=m4_treetagsrc
+TREETAGSCRIPTS=m4_treetagger_scripts
+TREETAG_INSTALLSCRIPT=m4_treetagger_installscript
+@| @}
+
+Parametersets:
+
+@d install the treetagger utility @{@%
+DUTCHPARS_UTF_GZ=m4_treetag_dutchparms       
+DUTCH_TAGSET=m4_treetag_dutch_tagset 
+DUTCHPARS_2_GZ=m4_treetag_dutchparms2
+@| @}
+
+Download everything in the target directory:
+
+@d install the treetagger utility @{@%
+mkdir -p m4_amoddir/\$TREETAGDIR
+cd m4_amoddir/\$TREETAGDIR
+wget \$TREETAGURL/\$TREETAGSRC
+wget \$TREETAGURL/\$TREETAGSCRIPTS
+wget \$TREETAGURL/\$TREETAG_INSTALLSCRIPT
+wget \$TREETAGURL/\$DUTCHPARS_UTF_GZ
+wget \$TREETAGURL/\$DUTCH_TAGSET    
+wget \$TREETAGURL/\$DUTCHPARS_2_GZ  
+@| @}
+
+Run the install-script:
+
+@d install the treetagger utility @{@%
+chmod 775 \$TREETAG_INSTALLSCRIPT
+./\$TREETAG_INSTALLSCRIPT
+@| @}
+
+Make the treetagger utilities available for everbody.
+
+@d install the treetagger utility @{@%
+chmod o+x m4_amoddir/\$TREETAGDIR/bin
+chmod o+x m4_amoddir/\$TREETAGDIR/cmd
+chmod o+x m4_amoddir/\$TREETAGDIR/doc
+chmod o+x m4_amoddir/\$TREETAGDIR/lib
+./\$TREETAG_INSTALLSCRIPT
+@| @}
+
+
+
+Remove the tarballs:
+
+@d install the treetagger utility @{@%
+rm \$TREETAGSRC
+rm \$TREETAGSCRIPTS
+rm \$TREETAG_INSTALLSCRIPT
+rm \$DUTCHPARS_UTF_GZ
+rm \$DUTCH_TAGSET    
+rm \$DUTCHPARS_2_GZ
+@| @}
+
+\subsubsection{Timbl and ticcutils}
+\label{sec:timbl}
+
+Timbl and ticcutils are installed from their source-tarballs. The
+installation is not (yet?) completely reproducibe because it uses the
+c-compiler that happens to be available on the host. Installation involves:
+
+\begin{enumerate}
+\item Download the tarball in a temporary directory.
+\item Unpack the tarball.
+\item cd to the unpacked directory and perform \verb|./configure|,
+  \verb|make| and \verb|make install|. Note the argument that causes
+  the files to be installed in the \verb|usrlocal| subdirectory of the
+  modules directory.
+\end{enumerate}
+
+@d install the ticcutils utility @{@%
+URL=m4_ticcurl
+TARB=m4_ticcsrc
+DIR=m4_ticcdir
+@< unpack ticcutils or timbl @>
+@| @}
+
+@d install the timbl utility @{@%
+URL=m4_timblurl
+TARB=m4_timblsrc
+DIR=m4_timbldir
+@< unpack ticcutils or timbl @>
+@| @}
+
+
+@d unpack ticcutils or timbl @{@%
+SUCCES=0
+ticbeldir=`mktemp -t -d tickbel.XXXXXX`
+cd \$ticbeldir
+wget \$URL
+SUCCES=\$?
+if
+  [ \$SUCCES -eq 0 ]
+then
+  tar -xzf \$TARB
+  SUCCES=\$?
+  rm -rf \$TARB
+fi
+if
+  [ \$SUCCES -eq 0 ]
+then
+  cd \$DIR
+  ./configure --prefix=m4_ausrlocaldir
+  make
+  make install
+fi
+cd m4_aprojroot
+rm -rf \$ticbeldir
+if
+  [ \$SUCCES -eq 0 ]
+then
+  @< logmess @(Installed \$DIR@) @>
+else
+  @< logmess @(NOT installed \$DIR@) @>
+fi
+@| @}
+
+
+\subsubsection{Spotlight}
+\label{sec:spotlight}
+
+@% Install Spotlight as described on the readme of \texttt{ixa-pipe-ned}.
+
+Install spotlight in the way that  Itziar Aldabe (\url{mailto:itziar.aldabe@@ehu.es}) described:
+
+\begin{quotation}
+The NED module works for English, Spanish, Dutch and Italian. The
+module returns multiple candidates and correspondences for all the
+languages. If you want to integrate it in your Dutch or Italian
+pipeline, you will need:
+
+\begin{enumerate}
+\item The jar file with the dbpedia-spotlight server. You need the
+  version that Aitor developed in order to correctly use the "candidates"
+  option. You can copy it from the English VM. The jar file name is
+  \verb|dbpedia-spotlight-0.7-jar-with-dependencies-candidates.jar|
+\item The Dutch/Italian model for the dbpedia-spotlight. You can download them from:
+    \url{http://spotlight.sztaki.hu/downloads/}
+\item The jar file with the NED module:
+    \verb|ixa-pipe-ned-1.0.jar|. You can copy it from the English VM
+    too.
+\item The file: \verb|wikipedia-db.v1.tar.gz|. You can download it
+  from:
+  \url{http://ixa2.si.ehu.es/ixa-pipes/models/wikipedia-db.v1.tar.gz}. This
+  file contains the required information to do the mappings between
+  the wikipedia-entries. The zip file contains three files:
+  wikipedia-db, wikipedia-db.p and wikipedia-db.t
+\end{enumerate}
+
+To start the dbPeadia server:
+Italian server: 
+
+\begin{verbatim}
+java -jar -Xmx8g dbpedia-spotlight-0.7-jar-with-dependencies-candidates.jar it http://localhost:2050/rest 
+
+\end{verbatim}
+
+Dutch server:  
+
+\begin{verbatim}
+java -jar -Xmx8g dbpedia-spotlight-0.7-jar-with-dependencies-candidates.jar nl http://localhost:2060/rest 
+
+\end{verbatim}
+
+We set 8Gb for the English server, but the Italian and Dutch spotlight will require less memory. 
+\end{quotation}
+
+
+@d install the spotlight server @{@%
+mkdir -p m4_aspotlightdir
+cd m4_aspotlightdir
+cp m4_asnapshotroot/spotlight/m4_spotlightjar .
+@% @% wget m4_spotlight_download_url/m4_spotlightjar
+@% wget m4_spotlight_download_url/m4_spotlight_nl_model
+@% tar -xzf m4_spotlight_nl_model
+@% wget m4_spotlight_download_url/m4_spotlight_en_model
+@% tar -xzf m4_spotlight_en_model
+@% MVN_SPOTLIGHT_OPTIONS="-Dfile=m4_spotlightjar"
+@% MVN_SPOTLIGHT_OPTIONS="$MVN_SPOTLIGHT_OPTIONS -DgroupId=ixa"
+@% MVN_SPOTLIGHT_OPTIONS="$MVN_SPOTLIGHT_OPTIONS -DartifactId=dbpedia-spotlight"
+@% MVN_SPOTLIGHT_OPTIONS="$MVN_SPOTLIGHT_OPTIONS -Dversion=m4_spotlightjarversion"
+@% MVN_SPOTLIGHT_OPTIONS="$MVN_SPOTLIGHT_OPTIONS -Dpackaging=jar"
+@% MVN_SPOTLIGHT_OPTIONS="$MVN_SPOTLIGHT_OPTIONS -DgeneratePom=true"
+@% mvn install:install-file -Dfile=dbpedia-spotlight-0.7.jar -DgroupId=ixa -DartifactId=dbpedia-spotlight -Dversion=0.7 -Dpackaging=jar -DgeneratePom=true 
+@% mvn install:install-file $MVN_SPOTLIGHT_OPTIONS
+@| @}
+
+We choose to put the Wikipedia database in the spotlight directory.
+
+@d install the spotlight server @{@%
+cd m4_aspotlightdir
+wget m4_wikipediadb_url
+tar -xzf m4_wikipediadb_tarball
+rm  m4_wikipediadb_tarball
+@| @}
+
+
+
+
+@% Spotlight is not itself a pipeline-module, but it is needed in the
+@% \NED{} module. Now I make a shortcut from the snapshot.
+
+@% @d install the spotlight server @{@%
+@% cp -r m4_asnapshotroot/m4_spotlight_snapdir  m4_amoddir/
+@% @| @}
+
+@d start the spotlight server @{@%
+cd m4_aspotlightdir
+@% java  -Xmx8g -jar m4_spotlightjar nl http://localhost:m4_spotlight_nl_port/rest
+java -jar -Xmx8g dbpedia-spotlight-0.7-jar-with-dependencies-candidates.jar nl http://localhost:2060/rest  &
+@% java -jar -Xmx8g dbpedia-spotlight-0.7-jar-with-dependencies-candidates.jar nl http://localhost:2060/rest  &
+@| @}
+
+
+
+@d check/start the spotlight server @{@%
+spottasks=`netstat -an | grep :m4_spotlight_nl_port | wc -l`
+if
+  [ $spottasks -eq 0 ]
+then
+  @< start the spotlight server @>
+  sleep 60
+fi
+@| @}
+
+
 
 
 \subsection{Install modules}
@@ -623,10 +891,6 @@ The tokenizer is just a jar that has to be run in Java. Although  the
 jar is directly available from \url{http://ixa2.si.ehu.es/ixa-pipes/download.html}, we
 prefer to compile the package in order to make this thing ready for
 reproducible set-ups. 
-
-Not yet included in this script is the set-up of an environment to use
-the specified version of Java (Oracle 1.7) and Maven (3). For now, we
-assume that it is there. This is a todo item.
 
 To install the tokenizer, we proceed as follows:
 
@@ -878,7 +1142,7 @@ chmod 775  m4_bindir/m4_nercscript
 @| @}
 
 
-\subsection{Wordsense-disambiguation}
+\subsubsection{Wordsense-disambiguation}
 \label{sec:wsd}
 
 Install WSD from its Github source (\url{m4_wsdgit}). According to
@@ -889,7 +1153,7 @@ execute install-script \texttt{install.sh} or
 (\textsc{dsc}) models and KafNafParserPy.  
 
 
-\subsubsection{Module}
+\paragraph{Module}
 \label{sec:wsd-module}
 
 
@@ -944,7 +1208,7 @@ echo 'Models installed in folder models'
 
 
 
-\subsubsection{Script}
+\paragraph{Script}
 \label{sec:wsdscript}
 
 @o m4_bindir/m4_wsdscript @{@%
@@ -1035,10 +1299,10 @@ chmod 775  m4_bindir/m4_wsdscript
 @% chmod 775  m4_bindir/m4_wsdscript
 @% @| @}
 
-\subsection{Lexical-unit converter}
+\subsubsection{Lexical-unit converter}
 \label{sec:lu2synset}
 
-\subsubsection{Module}
+\paragraph{Module}
 \label{sec:lu2synsetinstaller}
 
 There is not an official repository for this module yet, so copy the
@@ -1048,7 +1312,7 @@ module from the tarball.
 cp -r m4_asnapshotroot/m4_lu2syndir m4_amoddir/
 @| @}
 
-\subsubsection{Script}
+\paragraph{Script}
 \label{sec:lu2synsetscript}
 
 @o m4_bindir/m4_lu2synsetscript  @{@%
@@ -1062,114 +1326,8 @@ java -Xmx812m -cp  $JAVALIBDIR/$JARFILE vu.wntools.util.NafLexicalUnitToSynsetRe
 @| @}
 
 
-\subsection{Spotlight}
-\label{sec:spotlight}
 
-@% Install Spotlight as described on the readme of \texttt{ixa-pipe-ned}.
-
-Install spotlight in the way that  Itziar Aldabe (\url{mailto:itziar.aldabe@@ehu.es}) described:
-
-\begin{quotation}
-The NED module works for English, Spanish, Dutch and Italian. The
-module returns multiple candidates and correspondences for all the
-languages. If you want to integrate it in your Dutch or Italian
-pipeline, you will need:
-
-\begin{enumerate}
-\item The jar file with the dbpedia-spotlight server. You need the
-  version that Aitor developed in order to correctly use the "candidates"
-  option. You can copy it from the English VM. The jar file name is
-  \verb|dbpedia-spotlight-0.7-jar-with-dependencies-candidates.jar|
-\item The Dutch/Italian model for the dbpedia-spotlight. You can download them from:
-    \url{http://spotlight.sztaki.hu/downloads/}
-\item The jar file with the NED module:
-    \verb|ixa-pipe-ned-1.0.jar|. You can copy it from the English VM
-    too.
-\item The file: \verb|wikipedia-db.v1.tar.gz|. You can download it
-  from:
-  \url{http://ixa2.si.ehu.es/ixa-pipes/models/wikipedia-db.v1.tar.gz}. This
-  file contains the required information to do the mappings between
-  the wikipedia-entries. The zip file contains three files:
-  wikipedia-db, wikipedia-db.p and wikipedia-db.t
-\end{enumerate}
-
-To start the dbPeadia server:
-Italian server: 
-
-\begin{verbatim}
-java -jar -Xmx8g dbpedia-spotlight-0.7-jar-with-dependencies-candidates.jar it http://localhost:2050/rest 
-
-\end{verbatim}
-
-Dutch server:  
-
-\begin{verbatim}
-java -jar -Xmx8g dbpedia-spotlight-0.7-jar-with-dependencies-candidates.jar nl http://localhost:2060/rest 
-
-\end{verbatim}
-
-We set 8Gb for the English server, but the Italian and Dutch spotlight will require less memory. 
-\end{quotation}
-
-
-@d install the spotlight server @{@%
-mkdir -p m4_aspotlightdir
-cd m4_aspotlightdir
-cp m4_snapshotroot/spotlight/m4_spotlightjar .
-@% @% wget m4_spotlight_download_url/m4_spotlightjar
-@% wget m4_spotlight_download_url/m4_spotlight_nl_model
-@% tar -xzf m4_spotlight_nl_model
-@% wget m4_spotlight_download_url/m4_spotlight_en_model
-@% tar -xzf m4_spotlight_en_model
-@% MVN_SPOTLIGHT_OPTIONS="-Dfile=m4_spotlightjar"
-@% MVN_SPOTLIGHT_OPTIONS="$MVN_SPOTLIGHT_OPTIONS -DgroupId=ixa"
-@% MVN_SPOTLIGHT_OPTIONS="$MVN_SPOTLIGHT_OPTIONS -DartifactId=dbpedia-spotlight"
-@% MVN_SPOTLIGHT_OPTIONS="$MVN_SPOTLIGHT_OPTIONS -Dversion=m4_spotlightjarversion"
-@% MVN_SPOTLIGHT_OPTIONS="$MVN_SPOTLIGHT_OPTIONS -Dpackaging=jar"
-@% MVN_SPOTLIGHT_OPTIONS="$MVN_SPOTLIGHT_OPTIONS -DgeneratePom=true"
-@% mvn install:install-file -Dfile=dbpedia-spotlight-0.7.jar -DgroupId=ixa -DartifactId=dbpedia-spotlight -Dversion=0.7 -Dpackaging=jar -DgeneratePom=true 
-@% mvn install:install-file $MVN_SPOTLIGHT_OPTIONS
-@| @}
-
-We choose to put the Wikipedia database in the spotlight directory.
-
-@d install the spotlight server @{@%
-cd m4_aspotlightdir
-wget m4_wikipediadb_url
-tar -xzf m4_wikipediadb_tarball
-rm  m4_wikipediadb_tarball
-@| @}
-
-
-
-
-@% Spotlight is not itself a pipeline-module, but it is needed in the
-@% \NED{} module. Now I make a shortcut from the snapshot.
-
-@% @d install the spotlight server @{@%
-@% cp -r m4_asnapshotroot/m4_spotlight_snapdir  m4_amoddir/
-@% @| @}
-
-@d start the spotlight server @{@%
-cd m4_aspotlightdir
-@% java  -Xmx8g -jar m4_spotlightjar nl http://localhost:m4_spotlight_nl_port/rest
-java -jar -Xmx8g dbpedia-spotlight-0.7-jar-with-dependencies-candidates.jar nl http://localhost:2060/rest  &
-@% java -jar -Xmx8g dbpedia-spotlight-0.7-jar-with-dependencies-candidates.jar nl http://localhost:2060/rest  &
-@| @}
-
-
-
-@d check/start the spotlight server @{@%
-spottasks=`netstat -an | grep :m4_spotlight_nl_port | wc -l`
-if
-  [ $spottasks -eq 0 ]
-then
-  @< start the spotlight server @>
-  sleep 60
-fi
-@| @}
-
-\subsection{NED}
+\subsubsection{NED}
 \label{sec:ned}
 
 The NED module is rather picky about the structure of the \NAF{} file. In any case, it does not accept a file that has been produced by the ontotagger. Hence, in a pipeline \NER{} shuld be executed before the ontotagger.
@@ -1237,7 +1395,7 @@ suppose that it has been installed on localhost.
 
 
 
-\subsubsection{Module}
+\paragraph{Module}
 \label{sec:ned-module}
 
 @% @d install the \NED{} module @{@%
@@ -1249,6 +1407,8 @@ suppose that it has been installed on localhost.
 @% @| @}
 
 @d install the \NED{} module @{@%
+@< put spotlight jar in the Maven repository @>
+
 @< install from github @(ned@,m4_neddir@,m4_nedgit@) @>
 cd m4_amoddir/m4_neddir
 mvn -Dmaven.compiler.target=m4_maven_javaversion -Dmaven.compiler.source=m4_maven_javaversion clean package
@@ -1259,8 +1419,34 @@ mv target/ixa-pipe-ned-<!!>m4_ned_version.jar m4_ajardir/
 @% tar -xzf wikipedia-db.v1.tar.gz
 @| @}
 
+\NED{} needs to have m4_simple_spotlightjar in the local Maven
+repository. That is a different jar than the jar that we use to start Spotlight.
 
-\subsubsection{Script}
+@d put spotlight jar in the Maven repository @{@%
+tempdir=`mktemp -d -t simplespot.XXXXXX`
+cd $tempdir
+wget m4_spotlight_download_url/m4_simple_spotlightjar
+@% wget m4_spotlight_download_url/m4_spotlight_nl_model
+@% tar -xzf m4_spotlight_nl_model
+@% wget m4_spotlight_download_url/m4_spotlight_en_model
+@% tar -xzf m4_spotlight_en_model
+@% MVN_SPOTLIGHT_OPTIONS="-Dfile=m4_spotlightjar"
+@% MVN_SPOTLIGHT_OPTIONS="$MVN_SPOTLIGHT_OPTIONS -DgroupId=ixa"
+@% MVN_SPOTLIGHT_OPTIONS="$MVN_SPOTLIGHT_OPTIONS -DartifactId=dbpedia-spotlight"
+@% MVN_SPOTLIGHT_OPTIONS="$MVN_SPOTLIGHT_OPTIONS -Dversion=m4_spotlightjarversion"
+@% MVN_SPOTLIGHT_OPTIONS="$MVN_SPOTLIGHT_OPTIONS -Dpackaging=jar"
+@% MVN_SPOTLIGHT_OPTIONS="$MVN_SPOTLIGHT_OPTIONS -DgeneratePom=true"
+@% mvn install:install-file -Dfile=dbpedia-spotlight-0.7.jar -DgroupId=ixa -DartifactId=dbpedia-spotlight -Dversion=0.7 -Dpackaging=jar -DgeneratePom=true 
+@% mvn install:install-file $MVN_SPOTLIGHT_OPTIONS
+
+
+cd $PROJROOT
+rm -rf $tempdir
+@| @}
+
+
+
+\paragraph{Script}
 \label{sec:nedscript}
 
 @o m4_bindir/m4_nedscript @{@%
@@ -1279,13 +1465,13 @@ chmod 775  m4_bindir/m4_nedscript
 
 
 
-\subsection{Ontotagger}
+\subsubsection{Ontotagger}
 \label{sec:onto}
 
 We do not yet have a source-repository of the Ontotagger module. Therefore,
 install from a snapshot (\texttt{m4_ontotarball}).
 
-\subsubsection{Module}
+\paragraph{Module}
 \label{sec:ontotagger-module}
 
 @d install the onto module @{@%
@@ -1297,7 +1483,7 @@ chmod -R o+r m4_amoddir
 @| @}
 
 
-\subsubsection{Script}
+\paragraph{Script}
 \label{sec:ontoscript}
 
 @o m4_bindir/m4_ontoscript @{@%
@@ -1369,14 +1555,18 @@ chmod 775  m4_bindir/m4_ontoscript
 @| @}
 
 
-\subsection{Framenet SRL}
+\subsubsection{Framenet SRL}
 \label{sec:framesrl}
 
 The framenet \SRL{} is part of the package that contains the ontotagger. We only need a different script.
 
 
-\subsubsection{Script}
+\paragraph{Script}
 \label{sec:framesrlscript}
+
+The script contains a hack, because the framesrl script produces
+spiruous lines containint ``frameMap.size()=...''. A \textsc{gawk}
+script removes these lines.
 
 @o m4_bindir/m4_framesrlscript @{@%
 #!/bin/bash
@@ -1402,7 +1592,7 @@ JAVA_ARGS="\$JAVA_ARGS   --ili-ns mcr:ili"
 JAVA_ARGS="\$JAVA_ARGS   --sense-conf 0.25"
 JAVA_ARGS="\$JAVA_ARGS   --frame-conf 70"
 
-java -Xmx1812m -cp \$CLASSPATH \$JAVASCRIPT \$JAVA_ARGS
+java -Xmx1812m -cp \$CLASSPATH \$JAVASCRIPT \$JAVA_ARGS  | gawk '/^frameMap.size()/ {next}; {print}'
 
 
 @% java -Xmx1812m -cp ../lib/ontotagger-1.0-jar-with-dependencies.jar eu.kyotoproject.main.SrlFrameNetTagger --naf-file "../example/test.srl.lexicalunits.pm.naf" --format naf --frame-ns "fn:" --role-ns "fn-role:;pb-role:;fn-pb-role:;eso-role:" --ili-ns "mcr:ili" --sense-conf 0.25 --frame-conf 70 > "../example/test.srl.lexicalunits.pm.fn.naf"
@@ -1417,10 +1607,10 @@ chmod 775  m4_bindir/m4_framesrlscript
 @| @}
 
 
-\subsection{Heideltime}
+\subsubsection{Heideltime}
 \label{sec:heideltime}
 
-\subsubsection{Module}
+\paragraph{Module}
 \label{sec:heideltimmodule}
 
 @d install the heideltime module @{@%
@@ -1440,7 +1630,7 @@ gawk "\$AWKCOMMAND" \$tempfil >\$CONFIL
 @| @}
 
 
-\subsubsection{Script}
+\paragraph{Script}
 \label{sec:heideltime-script}
 
 @o m4_bindir/m4_heidelscript @{@%
@@ -1457,10 +1647,10 @@ iconv -t utf-8//IGNORE | python \$HEIDELDIR/HeidelTime_NafKaf.py \$HEIDELDIR/hei
 chmod 775  m4_bindir/m4_heidelscript
 @| @}
 
-\subsection{Semantic Role labelling}
+\subsubsection{Semantic Role labelling}
 \label{sec:SRL}
 
-\subsubsection{Module}
+\paragraph{Module}
 \label{sec:SRL-module}
 
 @d install the srl module @{@%
@@ -1469,7 +1659,7 @@ chmod 775  m4_bindir/m4_heidelscript
 @| @}
 
 
-\subsubsection{Script}
+\paragraph{Script}
 \label{sec:SRLscript}
 
 
@@ -1522,10 +1712,10 @@ rm -rf \$TEMPDIR
 chmod 775  m4_bindir/m4_srlscript
 @| @}
 
-\subsection{Event coreference}
+\subsubsection{Event coreference}
 \label{sec:eventcoref}
 
-\subsubsection{Module}
+\paragraph{Module}
 \label{sec:event-coref-module}
 
 Install the module from the snapshot.
@@ -1539,7 +1729,7 @@ cp lib/m4_evcorefjar m4_ajardir
 
 
 
-\subsubsection{Script}
+\paragraph{Script}
 \label{sec:evcorefscript}
 
 @o m4_bindir/m4_evcorefscript @{@%
@@ -1553,7 +1743,7 @@ JAVAMODULE=eu.newsreader.eventcoreference.naf.EventCorefWordnetSim
 JAVAOPTIONS="--method leacock-chodorow"
 JAVAOPTIONS="$JAVAOPTIONS  --wn-lmf $RESOURCESDIR/cornetto2.1.lmf.xml"
 JAVAOPTIONS="$JAVAOPTIONS  --sim 2.0"
-JAVAOPTIONS="$JAVAOPTIONS  —relations XPOS_NEAR_SYNONYM#HAS_HYPERONYM#HAS_XPOS_HYPERONYM"
+JAVAOPTIONS="$JAVAOPTIONS  --relations XPOS_NEAR_SYNONYM#HAS_HYPERONYM#HAS_XPOS_HYPERONYM"
 
 @% #### Within document event coreference wordnet sim
 @% #rootDir=/home/newsreader/components/VUA-eventcoref.v21/
@@ -1614,158 +1804,8 @@ chmod 775  m4_bindir/test
 @| @}
 
 
-\subsection{Treetagger}
-\label{sec:installtreetagger}
-
-\subsubsection{Module}
-\label{sec:mdule}
-
-Installation goes as follows (See
-\href{http://www.cis.uni-muenchen.de/~schmid/tools/TreeTagger/}{Treetagger's homepage}:
-
-\begin{enumerate}
-\item Download and unpack the treetagger tarball. This generates the
-  subdirectories \verb|bin|, \verb|cmd| and \verb|doc|
-\item Download and unpack the tagger-scripts tarball
-\end{enumerate}
-
-The location where treetager comes from and the location where it is going to reside:
-
-@d install the treetagger utility @{@%
-TREETAGDIR=m4_treetagdir
-TREETAG_BASIS_URL=m4_treetag_base_url
-TREETAGURL=m4_treetag_base_url
-@| @}
-
-The source tarball, scripts and the installation-script:
-
-@d install the treetagger utility @{@%
-TREETAGSRC=m4_treetagsrc
-TREETAGSCRIPTS=m4_treetagger_scripts
-TREETAG_INSTALLSCRIPT=m4_treetagger_installscript
-@| @}
-
-Parametersets:
-
-@d install the treetagger utility @{@%
-DUTCHPARS_UTF_GZ=m4_treetag_dutchparms       
-DUTCH_TAGSET=m4_treetag_dutch_tagset 
-DUTCHPARS_2_GZ=m4_treetag_dutchparms2
-@| @}
-
-Download everything in the target directory:
-
-@d install the treetagger utility @{@%
-mkdir -p m4_amoddir/\$TREETAGDIR
-cd m4_amoddir/\$TREETAGDIR
-wget \$TREETAGURL/\$TREETAGSRC
-wget \$TREETAGURL/\$TREETAGSCRIPTS
-wget \$TREETAGURL/\$TREETAG_INSTALLSCRIPT
-wget \$TREETAGURL/\$DUTCHPARS_UTF_GZ
-wget \$TREETAGURL/\$DUTCH_TAGSET    
-wget \$TREETAGURL/\$DUTCHPARS_2_GZ  
-@| @}
-
-Run the install-script:
-
-@d install the treetagger utility @{@%
-chmod 775 \$TREETAG_INSTALLSCRIPT
-./\$TREETAG_INSTALLSCRIPT
-@| @}
-
-Make the treetagger utilities available for everbody.
-
-@d install the treetagger utility @{@%
-chmod o+x m4_amoddir/\$TREETAGDIR/bin
-chmod o+x m4_amoddir/\$TREETAGDIR/cmd
-chmod o+x m4_amoddir/\$TREETAGDIR/doc
-chmod o+x m4_amoddir/\$TREETAGDIR/lib
-./\$TREETAG_INSTALLSCRIPT
-@| @}
 
 
-
-Remove the tarballs:
-
-@d install the treetagger utility @{@%
-rm \$TREETAGSRC
-rm \$TREETAGSCRIPTS
-rm \$TREETAG_INSTALLSCRIPT
-rm \$DUTCHPARS_UTF_GZ
-rm \$DUTCH_TAGSET    
-rm \$DUTCHPARS_2_GZ
-@| @}
-
-
-
-
-\subsection{Timbl and ticcutils}
-\label{sec:timbl}
-
-
-
-\subsubsection{Module}
-\label{sec:timblmodule}
-
-Timbl and ticcutils are installed from their source-tarballs. The
-installation is not (yet?) completely reproducibe because it uses the currently
-available c-compiler. Installation involves:
-
-\begin{enumerate}
-\item Download the tarball in a temporary directory.
-\item Unpack the tarball.
-\item cd to the unpacked directory and perform \verb|./configure|,
-  \verb|make| and \verb|make install|. Note the argument that causes
-  the files to be installed in the \verb|usrlocal| subdirectory of the
-  modules directory.
-\end{enumerate}
-
-@d install the ticcutils utility @{@%
-URL=m4_ticcurl
-TARB=m4_ticcsrc
-DIR=m4_ticcdir
-@< unpack ticcutils or timbl @>
-@| @}
-
-@d install the timbl utility @{@%
-URL=m4_timblurl
-TARB=m4_timblsrc
-DIR=m4_timbldir
-@< unpack ticcutils or timbl @>
-@| @}
-
-
-@d unpack ticcutils or timbl @{@%
-SUCCES=0
-ticbeldir=`mktemp -t -d tickbel.XXXXXX`
-cd \$ticbeldir
-wget \$URL
-SUCCES=\$?
-if
-  [ \$SUCCES -eq 0 ]
-then
-  tar -xzf \$TARB
-  SUCCES=\$?
-  rm -rf \$TARB
-fi
-if
-  [ \$SUCCES -eq 0 ]
-then
-  cd \$DIR
-  ./configure --prefix=m4_ausrlocaldir
-  make
-  make install
-fi
-cd m4_aprojroot
-rm -rf \$ticbeldir
-if
-  [ \$SUCCES -eq 0 ]
-then
-  @< logmess @(Installed \$DIR@) @>
-else
-  @< logmess @(NOT installed \$DIR@) @>
-fi
-@| @}
 
 
 
@@ -1874,7 +1914,7 @@ constructions that look like:
 {\footnotesize\textrm Macro referenced in 4a}
 \end{alltt}
 
-Macro's can be defined on different places. They can contain other macro´s.
+Macro's can be defined on different places. They can contain other macro's.
 
 \begin{alltt}
 \textrm{\(<\) a scrap 87e \(>\) \(\equiv\)}
