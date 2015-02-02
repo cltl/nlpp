@@ -184,7 +184,7 @@ directories:
 @d directories to create @{m4_usrlocaldir @| @}
 @d directories to create @{m4_usrlocaldir<!!>/bin @| @}
 @d directories to create @{m4_usrlocaldir<!!>/lib @| @}
-@d directories to create @{m4_moddir/python m4_jardir @| @}
+@d directories to create @{m4_moddir/python m4_javadir @| @}
 
 Make binaries findable:
 

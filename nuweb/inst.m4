@@ -73,7 +73,7 @@ m4_dnl Tokenizer
 m4_dnl m4_define(m4_tokenizergit, https://github.com/opener-project/tokenizer-base.git)m4_dnl  Subdir. of modules
 m4_dnl m4_define(m4_tokenizerdir, tokenizer-base)m4_dnl  Subdir. of modules
 m4_dnl m4_define(m4_tokenizerscript, tok)m4_dnl
-m4_define(m4_tokenizerversion, `1.7.0'
+m4_define(m4_tokenizerversion, `1.7.0')m4_dnl
 m4_define(m4_tokenizergit, https://github.com/ixa-ehu/ixa-pipe-tok.git)m4_dnl  Subdir. of modules
 m4_define(m4_tokenizerdir, ixa-pipe-tok)m4_dnl  Subdir. of modules
 m4_define(m4_tokenizerjar, ixa-pipe-tok-`'m4_tokenizerversion.jar)m4_dnl
