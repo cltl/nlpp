@@ -1,4 +1,4 @@
-all : dutch-nlp-modules-on-Lisa.pdf
+all : nlpp.pdf
 .PHONY : all
 
 
@@ -57,65 +57,52 @@ $(NUWEB): ../nuweb-1.58
 	cd .. && wget http://kyoto.let.vu.nl/~huygen/nuweb-1.58.tgz
 	cd .. &&  tar -xzf nuweb-1.58.tgz
 
-m4_dutch-nlp-modules-on-Lisa.w : a_dutch-nlp-modules-on-Lisa.w
-	gawk '{if(match($$0, "@%")) {printf("%s", substr($$0,1,RSTART-1))} else print}' a_dutch-nlp-modules-on-Lisa.w \
-          | gawk '{gsub(/[\\][\$$]/, "$$");print}'  > m4_dutch-nlp-modules-on-Lisa.w
+m4_nlpp.w : a_nlpp.w
+	gawk '{if(match($$0, "@%")) {printf("%s", substr($$0,1,RSTART-1))} else print}' a_nlpp.w \
+          | gawk '{gsub(/[\\][\$$]/, "$$");print}'  > m4_nlpp.w
 
-dutch-nlp-modules-on-Lisa.w : m4_dutch-nlp-modules-on-Lisa.w inst.m4
-	m4 -P m4_dutch-nlp-modules-on-Lisa.w > dutch-nlp-modules-on-Lisa.w
+nlpp.w : m4_nlpp.w inst.m4
+	m4 -P m4_nlpp.w > nlpp.w
 
-bibfile : dutch-nlp-modules-on-Lisa.aux /home/paul/bin/mkportbib
-	/home/paul/bin/mkportbib dutch-nlp-modules-on-Lisa litprog
+bibfile : nlpp.aux /home/paul/bin/mkportbib
+	/home/paul/bin/mkportbib nlpp litprog
 
 .PHONY : bibfile
-$(W2PDF) : dutch-nlp-modules-on-Lisa.w $(NUWEB)
-	$(NUWEB) dutch-nlp-modules-on-Lisa.w
-m4_htmlsource : dutch-nlp-modules-on-Lisa.w
-	cp  dutch-nlp-modules-on-Lisa.w m4_htmlsource
+$(W2PDF) : nlpp.w $(NUWEB)
+	$(NUWEB) nlpp.w
+m4_htmlsource : nlpp.w
+	cp  nlpp.w m4_htmlsource
 
 m4_4htfildest : m4_4htfilsource
 	cp m4_4htfilsource m4_4htfildest
 
-m4_htmlbibfil : m4_nuwebdir/dutch-nlp-modules-on-Lisa.bib
-	cp m4_nuwebdir/dutch-nlp-modules-on-Lisa.bib m4_htmlbibfil
+m4_htmlbibfil : m4_nuwebdir/nlpp.bib
+	cp m4_nuwebdir/nlpp.bib m4_htmlbibfil
 
-../nuweb/html/dutch-nlp-modules-on-Lisa.html : m4_htmlsource m4_4htfildest $(HTML_PS_FIG_NAMES) $(HTML_PST_NAMES) m4_htmlbibfil
+../nuweb/html/nlpp.html : m4_htmlsource m4_4htfildest $(HTML_PS_FIG_NAMES) $(HTML_PST_NAMES) m4_htmlbibfil
 	cp w2html ../bin
 	cd ../bin && chmod 775 w2html
-	cd m4_htmldocdir && ../bin/w2html dutch-nlp-modules-on-Lisa.w
+	cd m4_htmldocdir && ../bin/w2html nlpp.w
 
 
-pdf : dutch-nlp-modules-on-Lisa.pdf
+pdf : nlpp.pdf
 
-print : dutch-nlp-modules-on-Lisa.pdf
-	lpr dutch-nlp-modules-on-Lisa.pdf
+print : nlpp.pdf
+	lpr nlpp.pdf
 
-view : dutch-nlp-modules-on-Lisa.pdf
-	evince dutch-nlp-modules-on-Lisa.pdf
+view : nlpp.pdf
+	evince nlpp.pdf
 
-html : ../nuweb/html/dutch-nlp-modules-on-Lisa.html
+html : ../nuweb/html/nlpp.html
 
-DIRS = ../modules ../bin ../modules/usrlocal ../modules/usrlocal/bin ../modules/usrlocal/lib ../modules/python ../env/java/jars ../env/java ../env/java/jars /home/paul/projecten/cltl/pipelines/dutch-nlp-modules-on-Lisa/env/apache-maven-3.0.5 /home/paul/projecten/cltl/pipelines/dutch-nlp-modules-on-Lisa/env/python ../modules/alpinohack ../nuweb/bin 
+DIRS = ../modules ../bin ../modules/usrlocal ../modules/usrlocal/bin ../modules/usrlocal/lib ../modules/python ../env/java/jars ../env/java ../env/java/jars /home/paul/projecten/cltl/pipelines/nlpp/env/apache-maven-3.0.5 /home/paul/projecten/cltl/pipelines/nlpp/env/python ../modules/alpinohack ../nuweb/bin 
 
 $(DIRS) : 
 	$(MKDIR) $@
 
-sources : dutch-nlp-modules-on-Lisa.w $(DIRS) $(NUWEB)
-	$(NUWEB) dutch-nlp-modules-on-Lisa.w
-	chmod 775  ../bin/install-modules
-	chmod 775  ../bin/tok
-	chmod 775  ../bin/mor
-	chmod 775  ../bin/alpinohack
-	chmod 775  ../bin/coreference-base
-	chmod 775  ../bin/nerc
-	chmod 775  ../bin/wsd
-	chmod 775  ../bin/ned
-	chmod 775  ../bin/onto
-	chmod 775  ../bin/framesrl
-	chmod 775  ../bin/heideltime
-	chmod 775  ../bin/srl
-	chmod 775  ../bin/evcoref
-	chmod 775  ../bin/test
+sources : nlpp.w $(DIRS) $(NUWEB)
+	$(NUWEB) nlpp.w
+	chmod -R 775  ../bin/*
 	
 
 

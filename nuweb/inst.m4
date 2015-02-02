@@ -1,11 +1,11 @@
 m4_dnl
 m4_dnl Titles
 m4_dnl
-m4_define(m4_progname, `dutch-nlp-modules-on-Lisa')m4_dnl
-m4_define(m4_doctitle, `Install Dutch nlp modules on Lisa')m4_dnl
+m4_define(m4_progname, `nlpp')m4_dnl
+m4_define(m4_doctitle, `Standardised Dutch NLP pipeline')m4_dnl
 m4_define(m4_docdate, `\today \\ m4_time_of_day~h.')m4_dnl
 m4_define(m4_author, `Paul Huygen <paul.huygen@@huygen.nl>')m4_dnl
-m4_define(m4_subject, `Dutch NLP  modules on Lisa')m4_dnl
+m4_define(m4_subject, `Standardised Dutch pipeline')m4_dnl
 m4_dnl
 m4_dnl Paths and URL's
 m4_dnl
@@ -73,9 +73,10 @@ m4_dnl Tokenizer
 m4_dnl m4_define(m4_tokenizergit, https://github.com/opener-project/tokenizer-base.git)m4_dnl  Subdir. of modules
 m4_dnl m4_define(m4_tokenizerdir, tokenizer-base)m4_dnl  Subdir. of modules
 m4_dnl m4_define(m4_tokenizerscript, tok)m4_dnl
+m4_define(m4_tokenizerversion, `1.7.0'
 m4_define(m4_tokenizergit, https://github.com/ixa-ehu/ixa-pipe-tok.git)m4_dnl  Subdir. of modules
 m4_define(m4_tokenizerdir, ixa-pipe-tok)m4_dnl  Subdir. of modules
-m4_define(m4_tokenizerjar, ixa-pipe-tok-1.6.6.jar)m4_dnl
+m4_define(m4_tokenizerjar, ixa-pipe-tok-`'m4_tokenizerversion.jar)m4_dnl
 m4_define(m4_tokenizerscript, tok)m4_dnl
 m4_dnl
 m4_dnl Morphosyntactic parser

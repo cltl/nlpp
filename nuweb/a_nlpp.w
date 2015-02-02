@@ -576,9 +576,9 @@ echo Final
 @< remove maven @>
 @| @}
 
-@d make scripts executable @{@%
-chmod 775  m4_bindir/m4_module_installer
-@| @}
+@%@d make scripts executable @{@%
+@%chmod 775  m4_bindir/m4_module_installer
+@%@| @}
 
 \subsection{Check availability of resources}
 \label{sec:check-availability}
@@ -962,9 +962,9 @@ JARFILE=m4_ajardir/m4_tokenizerjar
 java -jar \$JARFILE tok -l nl --inputkaf
 @| @}
 
-@d make scripts executable @{@%
-chmod 775  m4_bindir/m4_tokenizerscript
-@| @}
+@%@d make scripts executable @{@%
+@%chmod 775  m4_bindir/m4_tokenizerscript
+@%@| @}
 
 
 
@@ -1006,9 +1006,9 @@ MODDIR=m4_amoddir/<!!>m4_morphpardir<!!>
 cat | python \$MODDIR/core/morph_syn_parser.py
 @| @}
 
-@d make scripts executable @{@%
-chmod 775  m4_bindir/m4_morphparscript
-@| @}
+@%@d make scripts executable @{@%
+@%chmod 775  m4_bindir/m4_morphparscript
+@%@| @}
 
 \subsubsection{Alpino hack}
 \label{sec:alpinohack}
@@ -1050,9 +1050,9 @@ cat | python  \$HACKDIR/clean_hack.py
 
 @| @}
 
-@d make scripts executable @{@%
-chmod 775  m4_bindir/m4_alpinohackscript
-@| @}
+@%@d make scripts executable @{@%
+@%chmod 775  m4_bindir/m4_alpinohackscript
+@%@| @}
 
 
 \subsubsection{Nominal coreference-base}
@@ -1084,9 +1084,9 @@ cd $PIPEMODD/m4_corefbasedir/core
 cat | python -m corefgraph.process.file --language nl --singleton --sieves NO
 @| @}
 
-@d make scripts executable @{@%
-chmod 775  m4_bindir/m4_corefbasescript
-@| @}
+@%@d make scripts executable @{@%
+@%chmod 775  m4_bindir/m4_corefbasescript
+@%@| @}
 
 
 \subsubsection{Named entity recognition (NERC)}
@@ -1158,9 +1158,9 @@ cat | java -jar \$JAR tag -m $MODDIR/m4_nercmodeldir/nl/$MODEL
 
 
 
-@d make scripts executable @{@%
-chmod 775  m4_bindir/m4_nercscript
-@| @}
+@%@d make scripts executable @{@%
+@%chmod 775  m4_bindir/m4_nercscript
+@%@| @}
 
 
 \subsubsection{Wordsense-disambiguation}
@@ -1243,9 +1243,9 @@ WSDSCRIPT=dsc_wsd_tagger.py
 cat | python $WSDDIR/$WSDSCRIPT --naf 
 @| @}
 
-@d make scripts executable @{@%
-chmod 775  m4_bindir/m4_wsdscript
-@| @}
+@%@d make scripts executable @{@%
+@%chmod 775  m4_bindir/m4_wsdscript
+@%@| @}
 
 @% \subsubsection{Script}
 @% \label{sec:wsdscript}
@@ -1480,9 +1480,9 @@ cat | java -jar \$JARDIR/m4_nedjar  -p 2060 -e candidates -i m4_aspotlightdir/wi
 @| @}
 
 
-@d make scripts executable @{@%
-chmod 775  m4_bindir/m4_nedscript
-@| @}
+@%@d make scripts executable @{@%
+@%chmod 775  m4_bindir/m4_nedscript
+@%@| @}
 
 
 
@@ -1570,9 +1570,9 @@ rm -rf \$TMPFIL
 
 
 
-@d make scripts executable @{@%
-chmod 775  m4_bindir/m4_ontoscript
-@| @}
+@%@d make scripts executable @{@%
+@%chmod 775  m4_bindir/m4_ontoscript
+@%@| @}
 
 
 \subsubsection{Framenet SRL}
@@ -1622,9 +1622,9 @@ rm -rf \$TMPFIL
 @| @}
 
 
-@d make scripts executable @{@%
-chmod 775  m4_bindir/m4_framesrlscript
-@| @}
+@%@d make scripts executable @{@%
+@%chmod 775  m4_bindir/m4_framesrlscript
+@%@| @}
 
 
 \subsubsection{Heideltime}
@@ -1663,9 +1663,9 @@ cd $HEIDELDIR
 iconv -t utf-8//IGNORE | python \$HEIDELDIR/HeidelTime_NafKaf.py \$HEIDELDIR/heideltime-standalone/ \$TEMPDIR
 @| @}
 
-@d make scripts executable @{@%
-chmod 775  m4_bindir/m4_heidelscript
-@| @}
+@%@d make scripts executable @{@%
+@%chmod 775  m4_bindir/m4_heidelscript
+@%@| @}
 
 \subsubsection{Semantic Role labelling}
 \label{sec:SRL}
@@ -1728,9 +1728,9 @@ rm -rf \$TEMPDIR
 @| @}
 
 
-@d make scripts executable @{@%
-chmod 775  m4_bindir/m4_srlscript
-@| @}
+@%@d make scripts executable @{@%
+@%chmod 775  m4_bindir/m4_srlscript
+@%@| @}
 
 \subsubsection{Event coreference}
 \label{sec:eventcoref}
@@ -1774,9 +1774,9 @@ java -Xmx812m -cp \$JARFILE \$JAVAMODULE  $JAVAOPTIONS
 @% java -Xmx812m -cp "$rootDir/lib/m4_evcorefjar" \$JAVAMODULE  --method leacock-chodorow --wn-lmf "$rootDir/resources/cornetto2.1.lmf.xml" --sim 2.0 —relations XPOS_NEAR_SYNONYM#HAS_HYPERONYM#HAS_XPOS_HYPERONYM
 @| @}
 
-@d make scripts executable @{@%
-chmod 775  m4_bindir/m4_evcorefscript
-@| @}
+@%@d make scripts executable @{@%
+@%chmod 775  m4_bindir/m4_evcorefscript
+@%@| @}
 
 
 \section{Utilities}
@@ -1819,9 +1819,9 @@ cat $TESTDIR/test.ecrf.naf | $BIND/m4_framesrlscript  > $TESTDIR/test.fsrl.naf
 @% @% \$BIND/m4_ontoscript | \$BIND/m4_heidelscript | \$BIND/m4_srlscrip  > \$ROOT/test.out
 @| @}
 
-@d make scripts executable @{@%
-chmod 775  m4_bindir/test
-@| @}
+@%@d make scripts executable @{@%
+@%chmod 775  m4_bindir/test
+@%@| @}
 
 
 
@@ -2595,6 +2595,11 @@ DIRS = @< directories to create @>
 	\$(MKDIR) \$@@
 
 @| DIRS @}
+
+@d make scripts executable @{@%
+chmod -R 775  m4_bindir/*
+@| @}
+
 
 
 @d make targets @{@%

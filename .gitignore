@@ -8,6 +8,7 @@
 snapshots
 bin
 modules
+env
 nuweb/auto/
 nuweb/*.aux
 nuweb/*.bbl
@@ -20,8 +21,8 @@ nuweb/outline.org
 nuweb/*.out
 nuweb/*.tex
 nuweb/*.toc
-nuweb/dutch-nlp-modules-on-Lisa.w
-nuweb/m4_dutch-nlp-modules-on-Lisa.w
+nuweb/nlpp.w
+nuweb/m4_nlpp.w
 nuweb/w2html
 nuweb/.fuse*
 test.*
