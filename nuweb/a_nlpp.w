@@ -818,7 +818,7 @@ pipeline, you will need:
   wikipedia-db, wikipedia-db.p and wikipedia-db.t
 \end{enumerate}
 
-To start the dbPeadia server:
+To start the dbpedia server:
 Italian server: 
 
 \begin{verbatim}
@@ -837,15 +837,17 @@ We set 8Gb for the English server, but the Italian and Dutch spotlight will requ
 \end{quotation}
 
 
+So, let's do that. 
+
 @d install the spotlight server @{@%
 mkdir -p m4_aspotlightdir
 cd m4_aspotlightdir
 cp m4_asnapshotroot/spotlight/m4_spotlightjar .
-@% @% wget m4_spotlight_download_url/m4_spotlightjar
-@% wget m4_spotlight_download_url/m4_spotlight_nl_model
-@% tar -xzf m4_spotlight_nl_model
-@% wget m4_spotlight_download_url/m4_spotlight_en_model
-@% tar -xzf m4_spotlight_en_model
+@% wget m4_spotlight_download_url/m4_spotlightjar
+wget m4_spotlight_download_url/m4_spotlight_nl_model
+tar -xzf m4_spotlight_nl_model
+wget m4_spotlight_download_url/m4_spotlight_en_model
+tar -xzf m4_spotlight_en_model
 @% MVN_SPOTLIGHT_OPTIONS="-Dfile=m4_spotlightjar"
 @% MVN_SPOTLIGHT_OPTIONS="$MVN_SPOTLIGHT_OPTIONS -DgroupId=ixa"
 @% MVN_SPOTLIGHT_OPTIONS="$MVN_SPOTLIGHT_OPTIONS -DartifactId=dbpedia-spotlight"
@@ -1444,22 +1446,22 @@ mv target/ixa-pipe-ned-<!!>m4_ned_version.jar m4_ajardir/
 repository. That is a different jar than the jar that we use to start Spotlight.
 
 @d put spotlight jar in the Maven repository @{@%
+echo Put Spotlight jar in the Maven repository.
 tempdir=`mktemp -d -t simplespot.XXXXXX`
 cd $tempdir
 wget m4_spotlight_download_url/m4_simple_spotlightjar
-@% wget m4_spotlight_download_url/m4_spotlight_nl_model
-@% tar -xzf m4_spotlight_nl_model
+wget m4_spotlight_download_url/m4_spotlight_nl_model
+tar -xzf m4_spotlight_nl_model
 @% wget m4_spotlight_download_url/m4_spotlight_en_model
 @% tar -xzf m4_spotlight_en_model
-@% MVN_SPOTLIGHT_OPTIONS="-Dfile=m4_spotlightjar"
-@% MVN_SPOTLIGHT_OPTIONS="$MVN_SPOTLIGHT_OPTIONS -DgroupId=ixa"
-@% MVN_SPOTLIGHT_OPTIONS="$MVN_SPOTLIGHT_OPTIONS -DartifactId=dbpedia-spotlight"
-@% MVN_SPOTLIGHT_OPTIONS="$MVN_SPOTLIGHT_OPTIONS -Dversion=m4_spotlightjarversion"
-@% MVN_SPOTLIGHT_OPTIONS="$MVN_SPOTLIGHT_OPTIONS -Dpackaging=jar"
-@% MVN_SPOTLIGHT_OPTIONS="$MVN_SPOTLIGHT_OPTIONS -DgeneratePom=true"
+MVN_SPOTLIGHT_OPTIONS="-Dfile=m4_simple_spotlightjar"
+MVN_SPOTLIGHT_OPTIONS="$MVN_SPOTLIGHT_OPTIONS -DgroupId=ixa"
+MVN_SPOTLIGHT_OPTIONS="$MVN_SPOTLIGHT_OPTIONS -DartifactId=dbpedia-spotlight"
+MVN_SPOTLIGHT_OPTIONS="$MVN_SPOTLIGHT_OPTIONS -Dversion=m4_spotlightjarversion"
+MVN_SPOTLIGHT_OPTIONS="$MVN_SPOTLIGHT_OPTIONS -Dpackaging=jar"
+MVN_SPOTLIGHT_OPTIONS="$MVN_SPOTLIGHT_OPTIONS -DgeneratePom=true"
 @% mvn install:install-file -Dfile=dbpedia-spotlight-0.7.jar -DgroupId=ixa -DartifactId=dbpedia-spotlight -Dversion=0.7 -Dpackaging=jar -DgeneratePom=true 
-@% mvn install:install-file $MVN_SPOTLIGHT_OPTIONS
-
+mvn install:install-file $MVN_SPOTLIGHT_OPTIONS
 
 cd $PROJROOT
 rm -rf $tempdir
@@ -1647,6 +1649,7 @@ MODDIR=m4_amoddir
 TREETAGDIR=m4_treetagdir
 AWKCOMMAND='/^treeTaggerHome/ {\$0="treeTaggerHome = m4_amoddir/m4_treetagdir"}; {print}'
 gawk "\$AWKCOMMAND" \$tempfil >\$CONFIL
+rm -rf $tempfil
 @| @}
 
 
@@ -1661,6 +1664,7 @@ TEMPDIR=`mktemp -t -d heideltmp.XXXXXX`
 cd $HEIDELDIR
 @< activate the python environment @>
 iconv -t utf-8//IGNORE | python \$HEIDELDIR/HeidelTime_NafKaf.py \$HEIDELDIR/heideltime-standalone/ \$TEMPDIR
+rm -rf $TEMPDIR
 @| @}
 
 @%@d make scripts executable @{@%
