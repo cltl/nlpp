@@ -703,11 +703,11 @@ chmod 775 \$TREETAG_INSTALLSCRIPT
 Make the treetagger utilities available for everbody.
 
 @d install the treetagger utility @{@%
-chmod o+x m4_amoddir/\$TREETAGDIR/bin
-chmod o+x m4_amoddir/\$TREETAGDIR/cmd
-chmod o+x m4_amoddir/\$TREETAGDIR/doc
-chmod o+x m4_amoddir/\$TREETAGDIR/lib
-./\$TREETAG_INSTALLSCRIPT
+chmod -R o+rx m4_amoddir/\$TREETAGDIR/bin
+chmod -R o+rx m4_amoddir/\$TREETAGDIR/cmd
+chmod -R o+r m4_amoddir/\$TREETAGDIR/doc
+chmod -R o+rx m4_amoddir/\$TREETAGDIR/lib
+@% ./\$TREETAG_INSTALLSCRIPT
 @| @}
 
 
