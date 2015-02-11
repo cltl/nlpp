@@ -1431,7 +1431,6 @@ suppose that it has been installed on localhost.
 
 @d install the \NED{} module @{@%
 @< put spotlight jar in the Maven repository @>
-
 @< install from github @(ned@,m4_neddir@,m4_nedgit@) @>
 cd m4_amoddir/m4_neddir
 mvn -Dmaven.compiler.target=m4_maven_javaversion -Dmaven.compiler.source=m4_maven_javaversion clean package
@@ -1474,6 +1473,7 @@ rm -rf $tempdir
 
 @o m4_bindir/m4_nedscript @{@%
 #!/bin/bash
+@< set up programming environment @>
 ROOT=m4_aprojroot
 JARDIR=m4_ajardir
 @< check/start the spotlight server @>
