@@ -961,7 +961,7 @@ The script runs the tokenizerscript.
 #!/bin/bash
 @< set up programming environment @>
 JARFILE=m4_ajardir/m4_tokenizerjar
-java -jar \$JARFILE tok -l nl --inputkaf
+java -Xmx1000m  -jar \$JARFILE tok -l nl --inputkaf
 @| @}
 
 @%@d make scripts executable @{@%
@@ -1155,7 +1155,7 @@ JAR=$JARDIR/m4_nercjar
 MODEL=m4_nercmodel
 @% @< gawk script to patch NAF for nerc module @>
 @% cat | gawk "$patchscript" | java -jar \$JARDIR/m4_nercjar tag
-cat | java -jar \$JAR tag -m $MODDIR/m4_nercmodeldir/nl/$MODEL
+cat | java -Xmx1000m -jar \$JAR tag -m $MODDIR/m4_nercmodeldir/nl/$MODEL
 @| @}
 
 
@@ -1477,7 +1477,7 @@ rm -rf $tempdir
 ROOT=m4_aprojroot
 JARDIR=m4_ajardir
 @< check/start the spotlight server @>
-cat | java -jar \$JARDIR/m4_nedjar  -p 2060 -e candidates -i m4_aspotlightdir/wikipedia-db -n nlEn
+cat | java -Xmx1000m -jar \$JARDIR/m4_nedjar  -p 2060 -e candidates -i m4_aspotlightdir/wikipedia-db -n nlEn
 @% cat | java -jar \$JARDIR/m4_nedjar  -p 2060  -n nl
 @| @}
 
