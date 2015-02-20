@@ -58,35 +58,35 @@ Table~\ref{tab:modulelist}
 \begin{table}[hbtp]
   \centering
   \begin{footnotesize}
-    \begin{tabular}{lllll}
-     \textbf{Module}   & \textbf{Section}     & \textbf{Source} & \textbf{Script} & \textbf{Details} \\
+    \begin{tabular}{llllll}
+     \textbf{Module}   & \textbf{Section}     & \textbf{Source} &  \textbf{Commit} & \textbf{Script} \\
        \href{m4_tokenizergit}{Tokenizer}          
-                       & \dref{sec:installtokenizer} & \href{m4_tokenizergit}{Github} & \texttt{m4_tokenizerscript}  &               \\
+                       & \dref{sec:installtokenizer}         & \href{m4_tokenizergit}{Github} & m4_tokenizer_commitname & \texttt{m4_tokenizerscript}  \\
        \href{m4_morphpargit}{morphosyntactic parser} 
-                       & \dref{sec:install-morphsynt-parser}  & \href{m4_morphpargit}{Github}    & \verb|m4_morphparscript|   &   \\
+                       & \dref{sec:install-morphsynt-parser} & \href{m4_morphpargit}{Github}  & m4_morphpar_commitname  & \verb|m4_morphparscript|     \\
 @%     \hyperref[sec:alpinohack]{alpinohack}
 @%                       & \verb|clean_hack|      & This doc. &  m4_alpinohackscript  & \footnote{not a  module, but an  encoding hack} \\
 @%                                                                                         
        \href{m4_nercgit}{\textsc{nerc}} 
-                       & \dref{sec:nerc}       & \href{m4_nercgit}{Github} & m4_nercscript     & \\
+                       & \dref{sec:nerc}                     & \href{m4_nercgit}{Github}      & m4_nerc_commitname   & m4_nercscript      \\
        \href{m4_wsdgit}{\textsc{wsd}}
-                       & \dref{sec:wsd} & \href{m4_wsdgit}{Github} & m4_wsdscript      & \\
+                       & \dref{sec:wsd}                       & \href{m4_wsdgit}{Github}      & m4_wsd_commitname   & m4_wsdscript       \\
        \hyperref[sec:onto]{Onto-tagger}
-                       & \dref{sec:onto} & snapshot & m4_ontoscript     & \\
+                       & \dref{sec:onto}                                     & snapshot       &                      & m4_ontoscript      \\
        \href{m4_heidelgit}{Heideltime}
-                       & \dref{sec:heideltime} & \href{m4_heidelgit}{Github}       & m4_heidelscript   & \\
+                       & \dref{sec:heideltime}              & \href{m4_heidelgit}{Github}     & m4_heidel_commitname  & m4_heidelscript   \\
        \href{m4_srlgit}{\textsc{srl}}
-                       & \dref{sec:SRL} & \href{m4_srlgit}{Github}       & m4_srlscript      & \\
+                       & \dref{sec:SRL}                        & \href{m4_srlgit}{Github}     & m4_srl_commitname   & m4_srlscript       \\
        \href{m4_nedgit}{\textsc{ned}}
-                       & \dref{sec:ned} & \href{m4_nedgit}{Github}       & m4_nedscript      & \\
+                       & \dref{sec:ned}                        & \href{m4_nedgit}{Github}     & m4_ned_commitname   & m4_nedscript       \\
        \href{m4_corefbasegit}{Nom. coref}
-                       & \dref{sec:nomcorefgraph} & \href{m4_corefbasegit}{Github}         &  m4_ncorefscript  & \\  
+                       & \dref{sec:nomcorefgraph}       & \href{m4_corefbasegit}{Github}      & m4_corefbase_commitname   & m4_ncorefscript   \\  
        \href{m4_evcorefscript}{Ev. coref}
-                       & \dref{sec:eventcoref} & snapshot         &  m4_evcorefscript & \\  
+                       & \dref{sec:eventcoref}                                & snapshot      &                           &  m4_evcorefscript  \\  
 @%       \hyperref[]{Opinion miner}
 @%                       & \verb|m4_opinisrc|   & None           &  m4_opiniscript   & \\  
-       \hyperref[sec:framesrl]{Framenet sem. role label.} 
-                       & \dref{sec:framesrl}   & snapshot      &  m4_fsrlscript  & \\  
+       \hyperref[sec:framesrl]{Framenet SRL} 
+                       & \dref{sec:framesrl}                                  & snapshot      &                            &  m4_fsrlscript   \\  
 @%     \hyperref[sec:install-alpino]{Alpino             & \verb|m4_alpinodir|    & \textsc{rug} & m4_Alpinoscript  & \\
 @%     \hyperref[]{Ticcutils          & \verb|m4_ticcdir|      & \textsc{ilk} & & \\
 @%     \hyperref[]{Timbl              & \verb|m4_timbldir|     & \textsc{ilk} & & \\
@@ -95,8 +95,8 @@ Table~\ref{tab:modulelist}
   \end{footnotesize}
   \caption{List of the modules to be installed. Column description:
     \textbf{directory:} Name of the subdirectory below subdirectory \texttt{modules} in
-    which it is installed; \textbf{Source:} From where the module has
-    been obtained; \textbf{script:} Script to be included in a pipeline.}
+    which it is installed; \textbf{source:} From where the module has
+    been obtained; \textbf{commit:} Commit-name or version-tag \textbf{script:} Script to be included in a pipeline.}
   \label{tab:modulelist}
 \end{table}
 lists the modules in the pipeline. The column \emph{source} indicates
@@ -105,7 +105,9 @@ the origin of the module. The modules are obtained in one of the following ways:
 
 \begin{enumerate}
 \item If possible, the module is directly obtained from an open-source repository like Github.
-\item Some modules have not been officially published in a repository. These modules have been packed in a tar-ball that can be obtained by the author. This is indicated as \textsc{tar}.
+\item Some modules have not been officially published in a
+  repository. These modules have been packed in a tar-ball that can be
+  obtained by the author. In table~\ref{tab:modulelist} this has been indicated as \textsc{snapshot}.
 \end{enumerate}
 
 The modules themselves use other utilities like dependency-taggers and
@@ -113,18 +115,18 @@ POS taggers. These utilities are listed in
 table~\ref{tab:utillist}.
 \begin{table}[hbtp]
   \centering
-  \begin{tabular}{lll}
-   \textbf{Module}      & \textbf{Section}   & \textbf{Source}                           \\
+  \begin{tabular}{llll}
+   \textbf{Module}  & \textbf{Version}    & \textbf{Section}   & \textbf{Source}                           \\
      \href{m4_kafnafgit}{KafNafParserPy}     
-                        & \dref{sec:KafNafParserPy}  & \href{m4_kafnafgit}{Github}       \\
+                    & Feb 1, 2015   & \dref{sec:KafNafParserPy}  & \href{m4_kafnafgit}{Github}       \\
      \href{m4_alpino_desc_url}{Alpino}
-                        & \dref{sec:install-alpino}  & \href{m4_alpinourl}{\textsc{rug}} \\
+                    &  m4_alpino_version  & \dref{sec:install-alpino}  & \href{m4_alpinourl}{\textsc{rug}} \\
      \href{m4_ticc_desc_url}{Ticcutils}
-                        & \dref{sec:timbl}    & \href{m4_ticcurl}{\textsc{ilk}}          \\
+                    & m4_ticcutilsversion   & \dref{sec:timbl}    & \href{m4_ticcurl}{\textsc{ilk}}          \\
      \href{m4_ticc_desc_url}{Timbl}
-                        & \dref{sec:timbl}   & \href{m4_timblurl}{\textsc{ilk}}          \\
+                    & m4_timblversion   & \dref{sec:timbl}   & \href{m4_timblurl}{\textsc{ilk}}          \\
      \href{http://www.cis.uni-muenchen.de/~schmid/tools/TreeTagger/}{Treetagger}
-                        & \dref{sec:installtreetagger} & \href{m4_treetag_base_url}{Uni. München}   \\
+                    & m4_treetagversion   & \dref{sec:installtreetagger} & \href{m4_treetag_base_url}{Uni. München}   \\
   \end{tabular}
   \caption{List of the modules to be installed. Column description:
     \textbf{directory:} Name of the subdirectory below \texttt{mod} in
@@ -163,11 +165,11 @@ directories:
 \begin{description}
 \item[nuweb:] This directory contains this document and everything to
   create the pipeline from the open sources of the modules.
+\item[env:] For the programming environment. Contains the Python local
+  environment, the Java development kit/runtime, a directory
+  \texttt{jars} for jars and and a directory \texttt{bin} for binaries.
 \item[modules:] Contains the program code of each module in a
-  subdirectory. Furthermore, it contains a subdirectory
-  \verb|python| for python software-modules, subdirectory
-  \texttt{jars} for jar files and subdirectory
-  /usrlocal/ for binaries and libs that are used by modules.
+  subdirectory.
 \item[bin:] Contains for each of the modules a script that reads
   \NAF{} input, passes it to the module in the \texttt{modules}
   directory and produces the output on standard out. Furthermore, the
@@ -180,10 +182,8 @@ directories:
 \end{description}
 
 @d directories to create @{m4_moddir @| @}
-@d directories to create @{m4_bindir @| @}
-@d directories to create @{m4_usrlocaldir @| @}
-@d directories to create @{m4_usrlocaldir<!!>/bin @| @}
-@d directories to create @{m4_usrlocaldir<!!>/lib @| @}
+@d directories to create @{m4_bindir m4_usrlocaldir@| @}
+@d directories to create @{m4_usrlocaldir<!!>/bin m4_usrlocaldir<!!>/lib @| @}
 @d directories to create @{m4_moddir/python m4_javadir @| @}
 
 Make binaries findable:
@@ -236,8 +236,6 @@ then
 fi
 @| @}
 
-
-
 @d set up java @{@%
 @< unpack the java tarball @>
 @| @}
@@ -245,6 +243,7 @@ fi
 @d unpack the java tarball @{@%
 cd m4_aenvdir/java
 tar -xzf m4_aprojroot/m4_javatarball
+rm m4_aprojroot/m4_javatarball
 @| @}
 
 @d set up java environment in scripts @{@%
@@ -280,6 +279,7 @@ export MAVEN_HOME=m4_mavendir
 export PATH=${MAVEN_HOME}/bin:${PATH}
 @| @}
 
+When the installation has been done, remove maven, because it is no longer needed.
 
 @d remove maven @{@%
 rm -rf m4_mavendir
@@ -289,6 +289,16 @@ rm -rf m4_mavendir
 
 \subsection{Python}
 \label{sec:python}
+
+Set up the environment for Python. I could not find an easy way to set
+up Python from scratch, so we have to rely on Python 2.7 being
+available on the host. However, we can make a virtual environment, so
+that we are not dependent on the existence of libraries in the right
+version on the host.
+
+In the virtual environment we will install KafNafParserPy and other
+Python packages that are needed.
+
 
 @d set up python @{@%
 @< create a virtual environment for Python @>
@@ -302,7 +312,8 @@ rm -rf m4_mavendir
 \subsubsection{Virtual environment}
 \label{sec:pythonvirtenv}
 
-Create a virtual environment.
+Create a virtual environment. To begin this, we need the python module
+virtualenv on the host.
 
 @d create a virtual environment for Python @{@%
 @< test whether virtualenv is present on the host @>
@@ -358,8 +369,8 @@ export PYTHONPATH=m4_aenvdir/python:\$PYTHONPATH
 
 A cornerstone Pythonmodule for the pipeline is
 \href{https://github.com/cltl/KafNafParserPy}{KafNafParserPy}. It is a
-feature of this module that it cannot be installed with \textsc{pip}, but that
-you can put it somewhere and then put the somewhere in your \textsc{pythonpath}.
+feature of this module that you cannot install it with \textsc{pip}, but that
+you can add it to your \textsc{pythonpath}.
 
 
 @d install kafnafparserpy @{@%
@@ -439,19 +450,20 @@ MESS="Replaced previous version of @1"
 \subsection{Installation from Github}
 \label{sec:installfromgithub}
 
-The following macro can be used to install a module from github. It
-needs as parameters:
-\begin{enumerate}
-\item Name of the module.
-\item Name of the root directory.
-\item Github \URL{} to clone from.
-\end{enumerate}
+The following macro can be used to install a module from github. Before issuing this macto, the following four variables must be set:
+\begin{description}
+\item[MODNAM:] Name of the module.
+\item[DIRN:] Name of the root directory of the module.
+\item[GITU:] Github \URL{} to clone from.
+\item[GITC:] Github commit-name or version tag.
+\end{description}
 
 
 @d install from github @{@%
-MODNAM=@1
-DIRN=@2
-GITU=@3
+@% MODNAM=@1
+@% DIRN=@2
+@% GITU=@3
+@% GITC=@4
 cd m4_amoddir
 @% @< cd to the modules directory @>
 @< move module @(\$DIRN@) @>
@@ -463,9 +475,30 @@ then
   @< re-instate old module @(\$DIRN@) @>
 else
   @< remove old module @(\$DIRN@) @>
+  cd m4_amoddir/$DIRN
+  git checkout $GITC
 fi
 
 @| @}
+
+@% @d install from github t @{@%
+@% MODNAM=@1
+@% DIRN=@2
+@% GITU=@3
+@% cd m4_amoddir
+@% @% @< cd to the modules directory @>
+@% @< move module @(\$DIRN@) @>
+@% git clone $GITU
+@% if
+@%   [ $? -gt 0 ]
+@% then
+@%   @< logmess @(Cannot install current $MODNAM version@) @>
+@%   @< re-instate old module @(\$DIRN@) @>
+@% else
+@%   @< remove old module @(\$DIRN@) @>
+@% fi
+@% 
+@% @| @}
 
 @% @d cd to the modules directory @{@%
 @% cd m4_amodd
@@ -512,10 +545,6 @@ then
 fi
 @| @}
 
-
-
-
-
 \subsection{The installation script}
 \label{sec:installscript}
 
@@ -537,7 +566,7 @@ echo ... Python
 echo ... Alpino
 @< install Alpino @>
 echo ... Spotlight
-@< install the spotlight server @>
+@< install the Spotlight server @>
 echo ... Treetagger
 @< install the treetagger utility @>
 echo ... Ticcutils and Timbl
@@ -567,8 +596,8 @@ echo ... NED
 @< install the \NED{} module @>
 echo ... Event-coreference
 @< install the event-coreference module @>
-@% echo ... lu2synset
-@% @< install the lu2synset converter @>
+echo ... lu2synset
+@< install the lu2synset converter @>
 echo Final
 @| @}
 
@@ -583,7 +612,7 @@ echo Final
 \subsection{Check availability of resources}
 \label{sec:check-availability}
 
-Text for some resources that we need and that may not be available on this host.
+Test for some resources that we need and that may not be available on this host.
 
 @d check this first @{@%
 @< check whether mercurial is present @>
@@ -594,7 +623,7 @@ which hg
 if
   [ $? -ne 0 ]
 then
-  echo Please install mercurial.
+  echo Please install Mercurial.
   exit 1
 fi
 @|hg @}
@@ -651,12 +680,12 @@ Installation of Treetagger goes as follows (See
 \href{http://www.cis.uni-muenchen.de/~schmid/tools/TreeTagger/}{Treetagger's homepage}:
 
 \begin{enumerate}
-\item Download and unpack the treetagger tarball. This generates the
+\item Download and unpack the Treetagger tarball. This generates the
   subdirectories \verb|bin|, \verb|cmd| and \verb|doc|
 \item Download and unpack the tagger-scripts tarball
 \end{enumerate}
 
-The location where treetager comes from and the location where it is going to reside:
+The location where Treetagger comes from and the location where it is going to reside:
 
 @d install the treetagger utility @{@%
 TREETAGDIR=m4_treetagdir
@@ -723,12 +752,12 @@ rm \$DUTCH_TAGSET
 rm \$DUTCHPARS_2_GZ
 @| @}
 
-\subsubsection{Timbl and ticcutils}
+\subsubsection{Timbl and Ticcutils}
 \label{sec:timbl}
 
-Timbl and ticcutils are installed from their source-tarballs. The
+Timbl and Ticcutils are installed from their source-tarballs. The
 installation is not (yet?) completely reproducibe because it uses the
-c-compiler that happens to be available on the host. Installation involves:
+C-compiler that happens to be available on the host. Installation involves:
 
 \begin{enumerate}
 \item Download the tarball in a temporary directory.
@@ -792,7 +821,7 @@ fi
 
 @% Install Spotlight as described on the readme of \texttt{ixa-pipe-ned}.
 
-Install spotlight in the way that  Itziar Aldabe (\url{mailto:itziar.aldabe@@ehu.es}) described:
+Install Spotlight in the way that  Itziar Aldabe (\url{mailto:itziar.aldabe@@ehu.es}) described:
 
 \begin{quotation}
 The NED module works for English, Spanish, Dutch and Italian. The
@@ -833,13 +862,13 @@ java -jar -Xmx8g dbpedia-spotlight-0.7-jar-with-dependencies-candidates.jar nl h
 
 \end{verbatim}
 
-We set 8Gb for the English server, but the Italian and Dutch spotlight will require less memory. 
+We set 8Gb for the English server, but the Italian and Dutch Spotlight will require less memory. 
 \end{quotation}
 
 
 So, let's do that. 
 
-@d install the spotlight server @{@%
+@d install the Spotlight server @{@%
 mkdir -p m4_aspotlightdir
 cd m4_aspotlightdir
 cp m4_asnapshotroot/spotlight/m4_spotlightjar .
@@ -860,7 +889,7 @@ tar -xzf m4_spotlight_en_model
 
 We choose to put the Wikipedia database in the spotlight directory.
 
-@d install the spotlight server @{@%
+@d install the Spotlight server @{@%
 cd m4_aspotlightdir
 wget m4_wikipediadb_url
 tar -xzf m4_wikipediadb_tarball
@@ -868,16 +897,7 @@ rm  m4_wikipediadb_tarball
 @| @}
 
 
-
-
-@% Spotlight is not itself a pipeline-module, but it is needed in the
-@% \NED{} module. Now I make a shortcut from the snapshot.
-
-@% @d install the spotlight server @{@%
-@% cp -r m4_asnapshotroot/m4_spotlight_snapdir  m4_amoddir/
-@% @| @}
-
-@d start the spotlight server @{@%
+@d start the Spotlight server @{@%
 cd m4_aspotlightdir
 @% java  -Xmx8g -jar m4_spotlightjar nl http://localhost:m4_spotlight_nl_port/rest
 java -jar -Xmx8g dbpedia-spotlight-0.7-jar-with-dependencies-candidates.jar nl http://localhost:2060/rest  &
@@ -886,12 +906,12 @@ java -jar -Xmx8g dbpedia-spotlight-0.7-jar-with-dependencies-candidates.jar nl h
 
 
 
-@d check/start the spotlight server @{@%
+@d check/start the Spotlight server @{@%
 spottasks=`netstat -an | grep :m4_spotlight_nl_port | wc -l`
 if
   [ $spottasks -eq 0 ]
 then
-  @< start the spotlight server @>
+  @< start the Spotlight server @>
   sleep 60
 fi
 @| @}
@@ -925,15 +945,16 @@ To install the tokenizer, we proceed as follows:
 \end{enumerate}
 
 @d install the tokenizer @{@%
-@% @< install from github @(tokenizer@,m4_tokenizerdir@,m4_tokenizergit@) @>
+@% @< install from github t @(tokenizer@,m4_tokenizerdir@,m4_tokenizergit@) @>
 tempdir=`mktemp -d -t tok.XXXXXX`
 cd \$tempdir
 git clone m4_tokenizergit
+git checkout m4_tokenizer_commitname
 cd m4_tokenizerdir
 mvn clean package
 mv target/m4_tokenizerjar m4_ajardir
 cd m4_aprojroot
-@% rm -rf \$tempdir
+rm -rf \$tempdir
 @| @}
 
 
@@ -978,7 +999,13 @@ java -Xmx1000m  -jar \$JARFILE tok -l nl --inputkaf
 \label{sec:install-morphosyntmodule}
 
 @d install the morphosyntactic parser @{@%
-@< install from github @(morphsynparser@,m4_morphpardir@,m4_morphpargit@) @>
+MODNAM=morphsynparser
+DIRN=m4_morphpardir
+GITU=m4_morphpargit
+GITC=m4_morphpar_commitname
+@< install from github @>
+cd m4_amoddir/m4_morphpardir
+git checkout m4_morphpar_commitname
 @| @}
 
 
@@ -1012,45 +1039,45 @@ cat | python \$MODDIR/core/morph_syn_parser.py
 @%chmod 775  m4_bindir/m4_morphparscript
 @%@| @}
 
-\subsubsection{Alpino hack}
-\label{sec:alpinohack}
-
-Install a hack that removes output from Alpino that cannot be
-interpreted by following modules. It is just a small python
-script. Actually, it may no longer be necessary.
-
-\paragraph{Module}
-\label{par:install_alpinohack}
-
-@d directories to create @{m4_moddir/m4_alpinohackdir @| @}
-
-@o m4_moddir/m4_alpinohackdir/m4_alpinohackpythonscript @{@%
-#!/usr/bin/python
-import sys
-
-input = sys.stdin
-
-output = ''
-
-for line in input:
-    line = line.replace('"--','"#')
-    line = line.replace('--"','#"')
-    output += line
-
-print output
-
-@| @}
-
-\paragraph{Script}
-\label{par:alpinohack-script}
-
-@o m4_bindir/m4_alpinohackscript @{@%
-#!/bin/bash
-ROOT=m4_aprojroot
-HACKDIR=m4_amoddir/m4_alpinohackdir
-cat | python  \$HACKDIR/clean_hack.py 
-
-@| @}
+@% \subsubsection{Alpino hack}
+@% \label{sec:alpinohack}
+@% 
+@% Install a hack that removes output from Alpino that cannot be
+@% interpreted by following modules. It is just a small python
+@% script. Actually, it may no longer be necessary.
+@% 
+@% \paragraph{Module}
+@% \label{par:install_alpinohack}
+@% 
+@% @d directories to create @{m4_moddir/m4_alpinohackdir @| @}
+@% 
+@% @o m4_moddir/m4_alpinohackdir/m4_alpinohackpythonscript @{@%
+@% #!/usr/bin/python
+@% import sys
+@% 
+@% input = sys.stdin
+@% 
+@% output = ''
+@% 
+@% for line in input:
+@%     line = line.replace('"--','"#')
+@%     line = line.replace('--"','#"')
+@%     output += line
+@% 
+@% print output
+@% 
+@% @| @}
+@% 
+@% \paragraph{Script}
+@% \label{par:alpinohack-script}
+@% 
+@% @o m4_bindir/m4_alpinohackscript @{@%
+@% #!/bin/bash
+@% ROOT=m4_aprojroot
+@% HACKDIR=m4_amoddir/m4_alpinohackdir
+@% cat | python  \$HACKDIR/clean_hack.py 
+@% 
+@% @| @}
 
 @%@d make scripts executable @{@%
 @%chmod 775  m4_bindir/m4_alpinohackscript
@@ -1061,7 +1088,7 @@ cat | python  \$HACKDIR/clean_hack.py
 \label{sec:nomcorefgraph}
 
 Get this thing from Github
-(\url{https://github.com/opener-project/coreference-base/}) and use
+(\url{https://github.com/opener-project/coreference-base/}) and apply
 the instruction of
 \url{https://github.com/opener-project/coreference-base/blob/master/core/README.md}.
 
@@ -1069,7 +1096,11 @@ the instruction of
 \paragraph{Module}
 
 @d install coreference-base @{@%
-@< install from github @(coreference-base@,m4_corefbasedir@,m4_corefbasegit@) @>
+MODNAM=coreference-base
+DIRN=m4_corefbasedir
+GITU=m4_corefbasegit
+GITC=m4_corefbase_commitname
+@< install from github @>
 @% pip install --upgrade --user hg+https://bitbucket.org/Josu/pykaf#egg=pykaf
 @% pip install --upgrade --user networkx
 pip install --upgrade  hg+https://bitbucket.org/Josu/pykaf#egg=pykaf
@@ -1123,6 +1154,7 @@ TEMPDIR==`mktemp -d -t nerc.XXXXXX`
 cd $TEMPDIR
 git clone m4_nercgit
 cd ixa-pipe-nerc/
+git checkout m4_nerc_commitname
 mvn clean package
 mv target/m4_nercjar m4_ajardir/
 cd m4_aprojroot/nuweb
@@ -1190,7 +1222,11 @@ execute install-script \texttt{install.sh} or
 @%  4216  2014-11-09 09:48:03 less ../output.naf 
 
 @d install the WSD module @{@%
-@< install from github @(wsd@,m4_wsddir@,m4_wsdgit@) @>
+MODNAM=wsd
+DIRN=m4_wsddir
+GITU=m4_wsdgit
+GITC=m4_wsd_commitname
+@< install from github @>
 cd m4_amoddir/m4_wsddir
 @< install svm lib @>
 @< download svm models @>
@@ -1219,12 +1255,13 @@ This part has also been copied from \verb|install_naf.sh| in the \textsc{wsd} mo
 
 @d download svm models @{@%
 cd m4_amoddir/m4_wsddir
-echo 'Downloading models...(could take a while)'
-wget --user=cltl --password='.cltl.' kyoto.let.vu.nl/~izquierdo/models_wsd_svm_dsc.tgz 2> /dev/null
-echo 'Unzipping models...'
-tar xzf models_wsd_svm_dsc.tgz
-rm models_wsd_svm_dsc.tgz
-echo 'Models installed in folder models'
+cp -r m4_aprojroot/m4_snapshotdir/svm_wsd/models .
+@% echo 'Downloading models...(could take a while)'
+@% wget --user=cltl --password='.cltl.' kyoto.let.vu.nl/~izquierdo/models_wsd_svm_dsc.tgz 2> /dev/null
+@% echo 'Unzipping models...'
+@% tar xzf models_wsd_svm_dsc.tgz
+@% rm models_wsd_svm_dsc.tgz
+@% echo 'Models installed in folder models'
 
 @| @}
 
@@ -1273,7 +1310,7 @@ cat | python $WSDDIR/$WSDSCRIPT --naf
 @% fi
 @% 
 @% iconv -t utf-8//IGNORE | \$WSDDIR/\$WSDSCRIPT -x \$UKB -M \$GRAPH -W \$DICT -m \$POSMAP
-2@% @| @}
+@% @| @}
 @% 
 @% @d make scripts executable @{@%
 @% chmod 775  m4_bindir/m4_wsdscript
@@ -1353,7 +1390,7 @@ java -Xmx812m -cp  $JAVALIBDIR/$JARFILE vu.wntools.util.NafLexicalUnitToSynsetRe
 \subsubsection{NED}
 \label{sec:ned}
 
-The NED module is rather picky about the structure of the \NAF{} file. In any case, it does not accept a file that has been produced by the ontotagger. Hence, in a pipeline \NER{} shuld be executed before the ontotagger.
+The \NED{} module is rather picky about the structure of the \NAF{} file. In any case, it does not accept a file that has been produced by the ontotagger. Hence, in a pipeline \NER{} shuld be executed before the ontotagger.
 
 
 The \NED{} module wants to consult the dbpedia spotlight server, so
@@ -1431,7 +1468,11 @@ suppose that it has been installed on localhost.
 
 @d install the \NED{} module @{@%
 @< put spotlight jar in the Maven repository @>
-@< install from github @(ned@,m4_neddir@,m4_nedgit@) @>
+MODNAM=ned
+DIRN=m4_neddir
+GITU=m4_nedgit
+GITC=m4_ned_commitname
+@< install from github @>
 cd m4_amoddir/m4_neddir
 mvn -Dmaven.compiler.target=m4_maven_javaversion -Dmaven.compiler.source=m4_maven_javaversion clean package
 mv target/ixa-pipe-ned-<!!>m4_ned_version.jar m4_ajardir/ 
@@ -1476,7 +1517,7 @@ rm -rf $tempdir
 @< set up programming environment @>
 ROOT=m4_aprojroot
 JARDIR=m4_ajardir
-@< check/start the spotlight server @>
+@< check/start the Spotlight server @>
 cat | java -Xmx1000m -jar \$JARDIR/m4_nedjar  -p 2060 -e candidates -i m4_aspotlightdir/wikipedia-db -n nlEn
 @% cat | java -jar \$JARDIR/m4_nedjar  -p 2060  -n nl
 @| @}
@@ -1536,11 +1577,7 @@ JAVA_ARGS="\$JAVA_ARGS  --predicate-matrix \$PREDICATEMATRIX"
 JAVA_ARGS="\$JAVA_ARGS  --grammatical-words \$GRAMMATICALWORDS"
 JAVA_ARGS="\$JAVA_ARGS  --naf-file \$TMPFIL"
 java -Xmx1812m -cp \$CLASSPATH \$JAVASCRIPT \$JAVA_ARGS
-
-
 @% java -Xmx812m -cp ../lib/ontotagger-1.0-jar-with-dependencies.jar eu.kyotoproject.main.KafPredicateMatrixTagger --mappings "fn;mcr;ili;eso" --key odwn-eq --version 1.1 --predicate-matrix "../resources/PredicateMatrix_nl_lu_withESO.v0.2.role.txt" --grammatical-words "../resources/grammaticals/Grammatical-words.nl" --naf-file "../example/test.srl.lexicalunits.naf" > "../example/test.srl.lexicalunits.pm.naf"
-
-
 @% @< onto javacommand @>
 @% java \$JAVA_ARGS
 @% java -Xmx1812m -cp $JARDIR/ontotagger-1.0-jar-with-dependencies.jar \
@@ -1593,7 +1630,6 @@ script removes these lines.
 @o m4_bindir/m4_framesrlscript @{@%
 #!/bin/bash
 @< set up programming environment @>
-ROOT=m4_aprojroot
 ONTODIR=$PIPEMODD/m4_ontodir
 JARDIR=\$ONTODIR/lib
 RESOURCESDIR=\$ONTODIR/resources
@@ -1615,10 +1651,7 @@ JAVA_ARGS="\$JAVA_ARGS   --sense-conf 0.25"
 JAVA_ARGS="\$JAVA_ARGS   --frame-conf 70"
 
 java -Xmx1812m -cp \$CLASSPATH \$JAVASCRIPT \$JAVA_ARGS  | gawk '/^frameMap.size()/ {next}; {print}'
-
-
 @% java -Xmx1812m -cp ../lib/ontotagger-1.0-jar-with-dependencies.jar eu.kyotoproject.main.SrlFrameNetTagger --naf-file "../example/test.srl.lexicalunits.pm.naf" --format naf --frame-ns "fn:" --role-ns "fn-role:;pb-role:;fn-pb-role:;eso-role:" --ili-ns "mcr:ili" --sense-conf 0.25 --frame-conf 70 > "../example/test.srl.lexicalunits.pm.fn.naf"
-
 rm -rf \$TMPFIL
 
 @| @}
@@ -1636,13 +1669,17 @@ rm -rf \$TMPFIL
 \label{sec:heideltimmodule}
 
 @d install the heideltime module @{@%
-@< install from github @(heideltime@,m4_heideldir@,m4_heidelgit@) @>
+MODNAM=heideltime
+DIRN=m4_heideldir
+GITU=m4_heidelgit
+GITC=m4_heidel_commitname
+@< install from github @>
 @< adapt heideltime's config.props @>
 
 @| @}
 
 @d adapt heideltime's config.props @{@%
-CONFIL=m4_heideldir/config.props
+CONFIL=m4_amoddir/m4_heideldir/config.props
 tempfil=`mktemp -t heideltmp.XXXXXX`
 mv $CONFIL \$tempfil
 MODDIR=m4_amoddir
@@ -1658,11 +1695,12 @@ rm -rf $tempfil
 
 @o m4_bindir/m4_heidelscript @{@%
 #!/bin/bash
-ROOT=m4_aprojroot
+@< set up programming environment @>
+@% ROOT=m4_aprojroot
 HEIDELDIR=m4_amoddir/m4_heideldir
 TEMPDIR=`mktemp -t -d heideltmp.XXXXXX`
 cd $HEIDELDIR
-@< activate the python environment @>
+@% @< activate the python environment @>
 iconv -t utf-8//IGNORE | python \$HEIDELDIR/HeidelTime_NafKaf.py \$HEIDELDIR/heideltime-standalone/ \$TEMPDIR
 rm -rf $TEMPDIR
 @| @}
@@ -1678,7 +1716,11 @@ rm -rf $TEMPDIR
 \label{sec:SRL-module}
 
 @d install the srl module @{@%
-@< install from github @(srl@,m4_srldir@,m4_srlgit@) @>
+MODNAM=srl
+DIRN=m4_srldir
+GITU=m4_srlgit
+GITC=m4_srl_commitname
+@< install from github @>
 @%cp -r m4_asnapshotroot/m4_srldir m4_amoddir/
 @| @}
 

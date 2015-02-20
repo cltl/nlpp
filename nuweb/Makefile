@@ -95,7 +95,7 @@ view : nlpp.pdf
 
 html : ../nuweb/html/nlpp.html
 
-DIRS = ../modules ../bin ../modules/usrlocal ../modules/usrlocal/bin ../modules/usrlocal/lib ../modules/python ../env/java ../env/java ../env/java/jars /usr/local/share/pipelines/nlpp/env/apache-maven-3.0.5 /usr/local/share/pipelines/nlpp/env/python ../modules/alpinohack ../nuweb/bin 
+DIRS = ../modules ../bin ../env/usrlocal../env/usrlocal/bin ../env/usrlocal/lib ../modules/python ../env/java ../env/java ../env/java/jars /home/paul/projecten/cltl/pipelines/nlpp/env/apache-maven-3.0.5 /home/paul/projecten/cltl/pipelines/nlpp/env/python ../nuweb/bin 
 
 $(DIRS) : 
 	$(MKDIR) $@

@@ -16,8 +16,6 @@ m4_define(m4_abindir, m4_aprojroot`/bin')m4_dnl     Binaries
 m4_define(m4_bindir, m4_projroot`/bin')m4_dnl     Binaries
 m4_define(m4_amoddir, m4_aprojroot`/modules')m4_dnl     Modules
 m4_define(m4_moddir, m4_projroot`/modules')m4_dnl     Modules
-m4_define(m4_usrlocaldir, m4_moddir`/usrlocal')m4_dnl     
-m4_define(m4_ausrlocaldir, m4_amoddir`/usrlocal')m4_dnl
 m4_dnl m4_define(m4_lisanlproot, /home/phuijgen/nlp)m4_dnl
 m4_define(m4_snapshotrootURL, kyoto.let.vu.nl~huygen/dutch_snapshots)m4_dnl
 m4_define(m4_asnapshotroot, m4_aprojroot/snapshots)m4_dnl
@@ -30,6 +28,8 @@ m4_dnl Programming environment
 m4_dnl
 m4_define(m4_aenvdir, m4_aprojroot`/env')m4_dnl     Program environment
 m4_define(m4_envdir, m4_projroot`/env')m4_dnl 
+m4_define(m4_usrlocaldir, m4_envdir`/usrlocal')m4_dnl     
+m4_define(m4_ausrlocaldir, m4_aenvdir`/usrlocal')m4_dnl
 m4_define(m4_ajavadir, m4_aenvdir`/java')m4_dnl   
 m4_define(m4_javadir, m4_envdir`/java')m4_dnl     
 m4_define(m4_ajardir, m4_ajavadir`/jars')m4_dnl     jars
@@ -58,7 +58,8 @@ m4_dnl
 m4_define(m4_module_installer, install-modules)m4_dnl
 m4_dnl
 m4_dnl Snapshot repo
-m4_define(m4_snapshot_tarball, nl-pipeline_snapshots_20150127.tgz)m4_dnl
+m4_dnl m4_define(m4_snapshot_tarball, nl-pipeline_snapshots_20150127.tgz)m4_dnl
+m4_define(m4_snapshot_tarball, nl-pipeline_snapshots_20150220.tgz)m4_dnl
 m4_define(m4_snapshotdir, snapshots)m4_dnl
 m4_dnl
 m4_dnl EHU repo
@@ -74,6 +75,7 @@ m4_dnl m4_define(m4_tokenizergit, https://github.com/opener-project/tokenizer-ba
 m4_dnl m4_define(m4_tokenizerdir, tokenizer-base)m4_dnl  Subdir. of modules
 m4_dnl m4_define(m4_tokenizerscript, tok)m4_dnl
 m4_define(m4_tokenizerversion, `1.7.0')m4_dnl
+m4_define(m4_tokenizer_commitname, c4d307eece4ef19aca365e3a08abd7f3324e3707)m4_dnl
 m4_define(m4_tokenizergit, https://github.com/ixa-ehu/ixa-pipe-tok.git)m4_dnl  Subdir. of modules
 m4_define(m4_tokenizerdir, ixa-pipe-tok)m4_dnl  Subdir. of modules
 m4_define(m4_tokenizerjar, ixa-pipe-tok-`'m4_tokenizerversion.jar)m4_dnl
@@ -81,6 +83,7 @@ m4_define(m4_tokenizerscript, tok)m4_dnl
 m4_dnl
 m4_dnl Morphosyntactic parser
 m4_define(m4_morphpargit, https://github.com/cltl/morphosyntactic_parser_nl.git)m4_dnl  Subdir. of modules
+m4_define(m4_morphpar_commitname, `c6cabea2cc37ac3098c5927f5ec5b180ac31246f')m4_dnl
 m4_define(m4_morphpardir, morphosyntactic_parser_nl)m4_dnl  Subdir. of modules
 m4_define(m4_morphparscript, mor)m4_dnl
 m4_dnl
@@ -91,6 +94,7 @@ m4_define(m4_alpinohackscript, alpinohack)m4_dnl
 m4_define(m4_alpinohackpythonscript, clean_hack.py)m4_dnl
 m4_dnl NERC
 m4_define(m4_nercgit, https://github.com/ixa-ehu/ixa-pipe-nerc)m4_dnl
+m4_define(m4_nerc_commitname, 8b518284eface454a4f954dfb88bea4d98b2073a)m4_dnl
 m4_define(m4_nercdir, EHU-nerc)m4_dnl  Subdir. of modules
 m4_define(m4_nercversion, 1.3.3)m4_dnl
 m4_define(m4_nercjar, ixa-pipe-nerc-`'m4_nercversion`'.jar)m4_dnl
@@ -103,6 +107,7 @@ m4_dnl
 m4_define(m4_corefbasedir, coreference-base)m4_dnl  Subdir. of modules
 m4_define(m4_corefbasescript, coreference-base)m4_dnl
 m4_define(m4_corefbasegit, https://github.com/opener-project/coreference-base.git)m4_dnl
+m4_define(m4_corefbase_commitname, `bfa5aec0fa498e57fe14dd4d2c51365dd09a0757')m4_dnl
 
 
 m4_dnl
@@ -112,7 +117,8 @@ m4_define(m4_lu2syndir, lexicalunitconvertor)m4_dnl
 m4_define(m4_lu2synsetscript, lu2synset)m4_dnl
 m4_dnl NED
 m4_define(m4_ned_version, 1.1.1)m4_dnl
-m4_define(m4_nedgit, https://github.com/ixa-ehu/ixa-pipe-ned.git)m4_dnl  
+m4_define(m4_nedgit, https://github.com/ixa-ehu/ixa-pipe-ned.git)m4_dnl
+m4_define(m4_ned_commitname, d35d4df5cb71940bf642bb1a83e2b5b7584010df)m4_dnl  
 m4_define(m4_neddir, ixa-pipe-ned)m4_dnl  Subdir. of modules
 m4_dnl m4_define(m4_nedjar, ixa-pipe-ned-1.0.jar)m4_dnl
 m4_define(m4_nedjar, ixa-pipe-ned-`'m4_ned_version`'.jar)m4_dnl
@@ -126,6 +132,7 @@ m4_dnl
 m4_dnl WSD
 m4_dnl m4_define(m4_wsdsrc, m4_lisanlproot/mods/ukb)m4_dnl  Subdir. of modules
 m4_define(m4_wsdgit, https://github.com/cltl/svm_wsd.git)m4_dnl
+m4_define(m4_wsd_commitname, `2babeb40a81b3720274a0521ccc2a27c5eff28c9')m4_dnl
 m4_define(m4_wsddir, svm_wsd)m4_dnl
 m4_define(m4_wsdscript, wsd)m4_dnl
 m4_dnl
@@ -145,12 +152,14 @@ m4_dnl m4_define(m4_heidelsrc, m4_lisanlproot/mods/HeidelTimeModule)m4_dnl  Subd
 m4_dnl m4_define(m4_heideldir, HeidelTimeModule)m4_dnl  Subdir. of modules
 m4_dnl m4_define(m4_heidelscript, heideltime)m4_dnl
 m4_define(m4_heidelgit, git@@github.com:cltl/NAF-HeidelTime.git)m4_dnl  Subdir. of modules
+m4_define(m4_heidel_commitname, 057c93ccc857a427145b9e2ff72fd645172d34df)m4_dnl
 m4_dnl m4_define(m4_heidelgit, `git@@github.com:PaulHuygen/NAF-HeidelTime.git' )m4_dnl  Subdir. of modules
 m4_define(m4_heideldir, NAF-HeidelTime)m4_dnl  Subdir. of modules
 m4_define(m4_heidelscript, heideltime)m4_dnl
 m4_dnl
 m4_dnl SRL
 m4_define(m4_srlgit, `https://github.com/newsreader/vua-srl-nl.git' )m4_dnl  Subdir. of modules
+m4_define(m4_srl_commitname, a5e63ba512cc326274b1285cf2af81ff8a2e04b5)m4_dnl
 m4_define(m4_srlsrc, m4_asnapshotroot/srlModuleForBN)m4_dnl  Subdir. of modules
 m4_dnl m4_define(m4_srldir, srlModuleForBN)m4_dnl  Subdir. of modules
 m4_define(m4_srldir, vua-srl-nl)m4_dnl  Subdir. of modules
@@ -182,6 +191,7 @@ m4_dnl Utilities
 m4_dnl
 m4_dnl
 m4_dnl Alpino
+m4_define(m4_alpino_version, 20548)m4_dnl
 m4_define(m4_alpinosrc, Alpino-x86_64-linux-glibc2.5-20548-sicstus.tar.gz)
 m4_define(m4_alpinourl, http://www.let.rug.nl/vannoord/alp/Alpino/binary/versions/m4_alpinosrc)m4_dnl  
 m4_define(m4_alpino_desc_url, http://www.let.rug.nl/~vannoord/alp/Alpino/)m4_dnl
@@ -205,11 +215,13 @@ m4_define(m4_ticcdir, ticcutils-`'m4_ticcutilsversion`')m4_dnl
 m4_define(m4_ticc_desc_url, http://ilk.uvt.nl/ticcutils)m4_dnl
 m4_dnl
 m4_dnl KafNafParserPy
+m4_define(m4_kafnafversion, `feb 1, 2015')m4_dnl
 m4_define(m4_kafnafgit, https://github.com/cltl/KafNafParserPy.git)m4_dnl
 m4_define(m4_kafnafdir, python/KafNafParserPy)m4_dnl
 m4_dnl
 m4_dnl Treetagger
-m4_define(m4_treetag_base_url, `http://www.cis.uni-muenchen.de/%7Eschmid/tools/TreeTagger/data/')m4_dnl<
+m4_define(m4_treetag_base_url, `http://www.cis.uni-muenchen.de/%7Eschmid/tools/TreeTagger/data/')m4_dnl
+m4_define(m4_treetag_version, 3.2)m4_dnl
 m4_define(m4_treetagsrc, tree-tagger-linux-3.2.tar.gz)m4_dnl
 m4_define(m4_treetag_dutchparms, dutch-par-linux-3.2-utf8.bin.gz)m4_dnl
 m4_define(m4_treetag_dutchparms2, dutch2-par-linux-3.2-utf8.bin.gz)m4_dnl
