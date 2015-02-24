@@ -20,9 +20,16 @@ m4_dnl m4_define(m4_lisanlproot, /home/phuijgen/nlp)m4_dnl
 m4_define(m4_snapshotrootURL, kyoto.let.vu.nl~huygen/dutch_snapshots)m4_dnl
 m4_define(m4_asnapshotroot, m4_aprojroot/snapshots)m4_dnl
 m4_define(m4_snapshotroot, m4_projroot/snapshots)m4_dnl
-m4_define(m4_htmldir, m4_projroot/nuweb/html)m4_dnl
-m4_define(m4_ahtmldir, m4_aprojroot/nuweb/html)m4_dnl
-m4_define(m4_htmltarget, m4_htmldir/`'m4_progname.html`')m4_dnl
+m4_dnl
+m4_dnl HTML doc generation
+m4_define(m4_htmldocdir, m4_projroot/nuweb/html)m4_dnl . You can change this in a local m4 file.
+m4_define(m4_ahtmldocdir, m4_aprojroot/nuweb/html)m4_dnl
+m4_define(m4_bibfil, m4_progname`'.bib)m4_dnl
+m4_define(m4_htmltarget, m4_htmldocdir/`'m4_progname.html`')m4_dnl
+m4_define(m4_htmlsource, m4_htmldocdir/`'m4_progname.w`')m4_dnl
+m4_define(m4_4ht_template, artikel3.4ht)m4_dnl
+m4_define(m4_html_style, html.sty)m4_dnl
+m4_define(m4_4htsource, m4_htmldocdir/`'m4_progname.w`')m4_dnl
 m4_dnl
 m4_dnl Programming environment
 m4_dnl

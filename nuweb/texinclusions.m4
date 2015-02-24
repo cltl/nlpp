@@ -38,6 +38,18 @@
  \renewcommand{\NWlink}[2]{\hyperlink{#1}{#2}}
  \renewcommand{\NWtarget}[2]{\hypertarget{#1}{#2}}
  \renewcommand{\NWsep}{$\diamond$\rule[-1\baselineskip]{0pt}{1\baselineskip}}
+\makeatletter
+\if@@oldtoc
+  \renewcommand\toc@@font[1]{\relax}
+\else
+  \renewcommand*\toc@@font[1]{%
+    \ifcase#1\relax
+    \chaptocfont
+    \or\slshape
+    \or\rmfamily
+    \fi}
+\fi
+\makeatother
 \else
 %\usepackage[dvips]{graphicx}        %%% graphics for dvips
 %\usepackage[latex2html,             %%% hyper-references for ps2pdf
@@ -55,18 +67,6 @@
 % Settings
 %
 \raggedbottom
-\makeatletter
-\if@@oldtoc
-  \renewcommand\toc@@font[1]{\relax}
-\else
-  \renewcommand*\toc@@font[1]{%
-    \ifcase#1\relax
-    \chaptocfont
-    \or\slshape
-    \or\rmfamily
-    \fi}
-\fi
-\makeatother
 \newcommand{\chaptocfont}{\large\bfseries}
 
 \newcommand{\pdfpsinc}[2]{%

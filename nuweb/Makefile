@@ -15,8 +15,10 @@ PST_NAMES=$(foreach fil,$(FIGFILES), $(fil).pstex_t)
 PS_FIG_NAMES=$(foreach fil,$(FIGFILES), $(fil).pstex)
 
 W2PDF=../nuweb/bin/w2pdf
-HTML_PS_FIG_NAMES=$(foreach fil,$(FIGFILES), m4_htmldocdir/$(fil).pstex)
-HTML_PST_NAMES=$(foreach fil,$(FIGFILES), m4_htmldocdir/$(fil).pstex_t)
+htmldir=../nuweb/html
+htmlsource=nlpp.w nlpp.bib html.sty artikel3.4ht w2html
+htmlmaterial=$(foreach fil, $(htmlsource), $(htmldir)/$(fil))
+htmltarget=$(htmldir)/nlpp.html
 MKDIR = mkdir -p
 
  
@@ -42,11 +44,8 @@ MKDIR = mkdir -p
 	chmod 775 $(W2PDF)
 	$(W2PDF) $*
 
-m4_htmldocdir/%.pstex : %.pstex
-	cp  $< $@
-
-m4_htmldocdir/%.pstex_t : %.pstex_t
-	cp  $< $@
+$(htmldir)/% : % $(htmldir)
+	cp $< $(htmldir)/
 
 
 $(NUWEB): ../nuweb-1.58
@@ -70,19 +69,12 @@ bibfile : nlpp.aux /home/paul/bin/mkportbib
 .PHONY : bibfile
 $(W2PDF) : nlpp.w $(NUWEB)
 	$(NUWEB) nlpp.w
-m4_htmlsource : nlpp.w
-	cp  nlpp.w m4_htmlsource
+$(htmldir) : 
+	mkdir -p $(htmldir)
 
-m4_4htfildest : m4_4htfilsource
-	cp m4_4htfilsource m4_4htfildest
-
-m4_htmlbibfil : m4_nuwebdir/nlpp.bib
-	cp m4_nuwebdir/nlpp.bib m4_htmlbibfil
-
-../nuweb/html/nlpp.html : m4_htmlsource m4_4htfildest $(HTML_PS_FIG_NAMES) $(HTML_PST_NAMES) m4_htmlbibfil
-	cp w2html ../bin
-	cd ../bin && chmod 775 w2html
-	cd m4_htmldocdir && ../bin/w2html nlpp.w
+$(htmltarget) : $(htmlmaterial) $(htmldir) 
+	cd $(htmldir) && chmod 775 w2html
+	cd $(htmldir) && ./w2html nlpp.w
 
 
 pdf : nlpp.pdf
@@ -93,7 +85,7 @@ print : nlpp.pdf
 view : nlpp.pdf
 	evince nlpp.pdf
 
-html : ../nuweb/html/nlpp.html
+htm : $(htmldir) $(htmltarget)
 
 DIRS = ../modules ../bin ../env/usrlocal../env/usrlocal/bin ../env/usrlocal/lib ../modules/python ../env/java ../env/java ../env/java/jars /home/paul/projecten/cltl/pipelines/nlpp/env/apache-maven-3.0.5 /home/paul/projecten/cltl/pipelines/nlpp/env/python ../nuweb/bin 
 

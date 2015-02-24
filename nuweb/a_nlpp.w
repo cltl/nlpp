@@ -1,5 +1,7 @@
 m4_include(inst.m4)m4_dnl
+m4_sinclude(local.m4)m4_dnl
 \documentclass[twoside,oldtoc]{artikel3}
+@% \documentclass[twoside]{article}
 \pagestyle{headings}
 \usepackage{pdfswitch}
 \usepackage{figlatex}
@@ -126,7 +128,7 @@ table~\ref{tab:utillist}.
      \href{m4_ticc_desc_url}{Timbl}
                     & m4_timblversion   & \dref{sec:timbl}   & \href{m4_timblurl}{\textsc{ilk}}          \\
      \href{http://www.cis.uni-muenchen.de/~schmid/tools/TreeTagger/}{Treetagger}
-                    & m4_treetagversion   & \dref{sec:installtreetagger} & \href{m4_treetag_base_url}{Uni. München}   \\
+                    & m4_treetag_version   & \dref{sec:installtreetagger} & \href{m4_treetag_base_url}{Uni. München}   \\
   \end{tabular}
   \caption{List of the modules to be installed. Column description:
     \textbf{directory:} Name of the subdirectory below \texttt{mod} in
@@ -2457,75 +2459,139 @@ was made for printing. We use \verb|tex4ht| to generate \HTML{}
 code. An advantage of this system is, that we can include figures
 in the same way as we do for \verb|pdflatex|.
 
-Nuweb creates a \LaTeX{} file that is suitable
-for \verb|latex2html| if the source file has \verb|.hw| as suffix instead of
-\verb|.w|. However, this feature is not compatible with tex4ht.
+To create a \textsc{html} doc, we do the following:
 
-Make html file:
+\begin{enumerate}
+\item Create a directory \texttt{m4_htmldocdir} for the \textsc{html} document.
+\item Put the nuweb source in it, together with style-files that are needed (see variable \texttt{HTMLSOURCE}).
+\item Put the script \texttt{w2html} in it and make it executable.
+\item Execute the script \texttt{w2html}.
+\end{enumerate}
 
-@d make targets @{@%
-html : m4_htmltarget
-
-@| @}
-
-The \HTML{} file depends on its source file and the graphics files.
-
-Make lists of the graphics files and copy them.
+Make a list of the entities that we mentioned above:
 
 @d parameters in Makefile @{@%
-HTML_PS_FIG_NAMES=\$(foreach fil,\$(FIGFILES), m4_htmldocdir/\$(fil).pstex)
-HTML_PST_NAMES=\$(foreach fil,\$(FIGFILES), m4_htmldocdir/\$(fil).pstex_t)
+htmldir=m4_htmldocdir
+htmlsource=m4_progname<!!>.w m4_progname<!!>.bib m4_html_style m4_4ht_template w2html
+htmlmaterial=\$(foreach fil, \$(htmlsource), \$(htmldir)/\$(fil))
+htmltarget=$(htmldir)/m4_progname<!!>.html
 @| @}
 
-
-@d impliciete make regels @{@%
-m4_htmldocdir/%.pstex : %.pstex
-	cp  \$< \$@@
-
-m4_htmldocdir/%.pstex_t : %.pstex_t
-	cp  \$< \$@@
-
-@| @}
-
-Copy the nuweb file into the html directory.
+Make the directory:
 
 @d expliciete make regels @{@%
-m4_htmlsource : m4_progname.w
-	cp  m4_progname.w m4_htmlsource
+$(htmldir) : 
+	mkdir -p $(htmldir)
 
 @| @}
 
-We also need a file with the same name as the documentstyle and suffix
-\verb|.4ht|. Just copy the file \verb|report.4ht| from the tex4ht
-distribution. Currently this seems to work.
+The rule to copy files in it:
+
+@d impliciete make regels  @{@%
+$(htmldir)/% : % $(htmldir)
+	cp $< $(htmldir)/
+
+@| @}
+
+Do the work:
 
 @d expliciete make regels @{@%
-m4_4htfildest : m4_4htfilsource
-	cp m4_4htfilsource m4_4htfildest
+$(htmltarget) : $(htmlmaterial) $(htmldir) 
+	cd $(htmldir) && chmod 775 w2html
+	cd $(htmldir) && ./w2html nlpp.w
 
 @| @}
 
-Copy the bibliography.
+Invoke:
 
-@d expliciete make regels  @{@%
-m4_htmlbibfil : m4_nuwebdir/m4_progname.bib
-	cp m4_nuwebdir/m4_progname.bib m4_htmlbibfil
-
-@| @}
-
-
-
-Make a dvi file with \texttt{w2html} and then run
-\texttt{htlatex}. 
-
-@d expliciete make regels @{@%
-m4_htmltarget : m4_htmlsource m4_4htfildest \$(HTML_PS_FIG_NAMES) \$(HTML_PST_NAMES) m4_htmlbibfil
-	cp w2html m4_bindir
-	cd m4_bindir && chmod 775 w2html
-	cd m4_htmldocdir && m4_bindir/w2html m4_progname.w
+@d  make targets @{@%
+htm : $(htmldir) $(htmltarget)
 
 @| @}
 
+
+
+@% Nuweb creates a \LaTeX{} file that is suitable
+@% for \verb|latex2html| if the source file has \verb|.hw| as suffix instead of
+@% |.w|. However, this feature is not compatible with tex4ht.
+@% 
+@% To generate \texttt{html} we need a directory with the following:
+@% \begin{itemize}
+@% \item Source file \texttt{m4_progname<!!>.w} and bib file \texttt{m4_progname<!!>.bib} 
+@% \item Style files \texttt{m4_html_style} and \texttt{m4_4ht_template}.
+@% \item Script \texttt{w2html} that generates the \textsc{html} document.
+@% @% \item Files with the images (\texttt{.pstex}) and \texttt{pstex_t})
+@% \end{itemize}
+@% 
+
+
+@% @d parameters in Makefile @{@%
+@% _PS_FIG_NAMES=\$(foreach fil,\$(FIGFILES), m4_htmldocdir/\$(fil).pstex)
+@% HTML_PST_NAMES=\$(foreach fil,\$(FIGFILES), m4_htmldocdir/\$(fil).pstex_t)
+@% @| @}
+
+
+
+@% @d impliciete make regels @{@%
+@% m4_htmldocdir/%.pstex : %.pstex
+@% 	cp  \$< \$@@
+@% 
+@% m4_htmldocdir/%.pstex_t : %.pstex_t
+@% 	cp  \$< \$@@
+@% 
+@% @| @}
+@% 
+
+@% The author prefers a non-standard \LaTeX{} document-class
+@% (i.e. \texttt{artikel3}) above the standard. However, \texttt{htlatex}
+@% needs a kind of class file with the same name as tje documentclass,
+@% but with extension \texttt{.4ht}. So, let us provide such a thing.
+@% 
+@% @d expliciete make regels @{@%
+@% html/m4_4ht_template : m4_4ht_template
+@% 	cp m4_4htfilsource m4_4htfildest
+@% 
+@% @| @}
+
+
+
+@% \texttt{htlatex} cannot handle this documentstyle
+@% correctly. Therefore, copy the nuweb file into the \texttt{html}
+@% subdirectory, but change the documentstyle with the following
+@% \textsc{awk} script.
+@% 
+@% @d parameters in Makefile @{@%
+@% HTMLKLUDGE='/\\documentclass/ {$0 = "\\documentclass{article}"}; {print}'
+@% @| @}
+
+
+@% @d expliciete make regels @{@%
+@% m4_htmlsource : m4_progname.w
+@% 	cp m4_progname m4_htmlsource
+@% 
+@% @| @}
+@% 
+@% Copy the bibliography.
+@% 
+@% @d expliciete make regels  @{@%
+@% m4_htmlbibfil : m4_nuwebdir/m4_progname.bib
+@% 	cp m4_nuwebdir/m4_progname.bib m4_htmlbibfil
+@% 
+@% @| @}
+
+
+
+@% Make a dvi file with \texttt{w2html} and then run
+@% \texttt{htlatex}. 
+@% 
+@% @d expliciete make regels @{@%
+@% m4_htmltarget : m4_htmlsource m4_4htfildest \$(HTML_PS_FIG_NAMES) \$(HTML_PST_NAMES) m4_htmlbibfil
+@% 	cp w2html m4_bindir
+@% 	cd m4_bindir && chmod 775 w2html
+@% 	cd m4_htmldocdir && m4_bindir/w2html m4_progname.w
+@% 
+@% @| @}
+@% 
 Create a script that performs the translation.
 
 @%m4_<!!>opencompilfil(m4_htmldocdir/,`w2dvi',`latex')m4_dnl
@@ -2536,7 +2602,7 @@ Create a script that performs the translation.
 # w2html -- make a html file from a nuweb file
 # usage: w2html [filename]
 #  [filename]: Name of the nuweb source file.
-`#' m4_header
+<!#!> m4_header
 echo "translate " \$1 >w2html.log
 NUWEB=m4_nuwebbinary
 @< filenames in w2html @>
