@@ -166,7 +166,8 @@ m4_define(m4_heidelscript, heideltime)m4_dnl
 m4_dnl
 m4_dnl SRL
 m4_define(m4_srlgit, `https://github.com/newsreader/vua-srl-nl.git' )m4_dnl  Subdir. of modules
-m4_define(m4_srl_commitname, a5e63ba512cc326274b1285cf2af81ff8a2e04b5)m4_dnl
+m4_dnl m4_define(m4_srl_commitname, a5e63ba512cc326274b1285cf2af81ff8a2e04b5)m4_dnl
+m4_define(m4_srl_commitname, 675d22d361289ede23df11dcdb17195f008c54bf)m4_dnl
 m4_define(m4_srlsrc, m4_asnapshotroot/srlModuleForBN)m4_dnl  Subdir. of modules
 m4_dnl m4_define(m4_srldir, srlModuleForBN)m4_dnl  Subdir. of modules
 m4_define(m4_srldir, vua-srl-nl)m4_dnl  Subdir. of modules

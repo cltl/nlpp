@@ -1759,7 +1759,7 @@ cat | tee  \$INPUTFILE | python nafAlpinoToSRLFeatures.py > \$FEATUREVECTOR
 Run the trained model on the feature-vector.
 
 @o m4_bindir/m4_srlscript @{@%
-timbl -mO:I1,2,3,4 -i e-mags_mags_press_newspapers.wgt -t \$FEATUREVECTOR -o \$TIMBLOUTPUTFILE >/dev/null 2>/dev/null
+timbl -mO:I1,2,3,4 -i 25Feb2015_e-mags_mags_press_newspapers.wgt -t \$FEATUREVECTOR -o \$TIMBLOUTPUTFILE >/dev/null 2>/dev/null
 @| @}
 
 Insert the \textsc{srl} values into the \textsc{naf} file.
