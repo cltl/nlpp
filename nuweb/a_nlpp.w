@@ -1132,24 +1132,20 @@ cat | python -m corefgraph.process.file --language nl --singleton --sieves NO
 
 The  Nerc program can be installed from Github
 (\url{m4_nercgit}). However, the model that is needed is not publicly
-available. Therefore, the Nerc module of the standard English
-pipeline, that is not yet public available, has been put in the snapshot-tarball.
-
-
-@% @d install the NERC module @{@%
-@% cd m4_amoddir
-@% git clone m4_nercgit
-@% cd m4_nercdir
-@% mvn clean
-@% @| @}
+available. Therefore, models have been put in the snapshot-tarball.
 
 
 @d install the NERC module @{@%
 @< compile the nerc jar @>
 @< get the nerc models @>
 
-cp -r m4_asnapshotroot/m4_nercdir  m4_amoddir/
+@% cp -r m4_asnapshotroot/m4_nercdir  m4_amoddir/
 @| @}
+
+
+The nerc module is a Java program that is contained in a jar. Pul the
+source from Github in a temporary directory, compile the jar with java
+and move the jar to the jars directory.
 
 @d compile the nerc jar  @{@%
 TEMPDIR==`mktemp -d -t nerc.XXXXXX`
@@ -1163,15 +1159,75 @@ cd m4_aprojroot/nuweb
 rm -rf $TEMPDIR
 @| @}
 
+
+
+
+The current version of the pipeline uses the following models, that
+have been made avaiable by Rodrigo Agerri on march 2, 2015. Rodrigo
+wrote:
+
+\begin{alltt}
+  I have recently trained new models for Dutch using both the CoNLL 2002
+and the Sonar corpora. These models are better than the one currently
+being used in the Dutch Newsreader pipeline. They are not yet in the
+resources of the ixa pipes (no public yet) but in the meantime they
+might be useful if you plan to do some processing in Dutch.
+
+\end{alltt}
+
+\begin{alltt}
+For CoNLL 2002, the new model obtains 83.46 F1, being the previously
+best published result 77.05 on that dataset.
+The Sonar model is trained on the full corpus, and evaluated using
+random 10 fold cross validation. The only previous result I know of
+obtains 80.71 F1 wrt to our model which obtains 87.84. However,
+because it is not evaluated on a separate test partition I do not take
+these results too seriously.
+
+\end{alltt}
+
+\begin{alltt}
+You will need to update the ixa-pipe-nerc module. The CoNLL 2002 model
+runs as before but to use the Sonar model you need to add the extra
+parameter --clearFeatures yes, like this:
+
+\end{alltt}
+
+\begin{alltt}
+Sonar model: cat file.pos.naf | java -jar ixa-pipe-nerc-1.3.6.jar tag
+-m $nermodel --clearFeatures yes
+CoNLL model: cat file.pos.naf | java -jar ixa-pipe-nerc-1.3.6.jar tag
+-m $nermodel
+
+http://www.lt3.ugent.be/en/publications/fine-grained-dutch-named-entity-recognition/
+
+\end{alltt}
+
+\begin{alltt}
+[..]
+In any case, here are the models.
+
+http://ixa2.si.ehu.es/ragerri/dutch-nerc-models.tar.gz
+
+\end{alltt}
+
+The tarball \verb|dutch-nerc-models.tar.gz| contains the models
+\verb|m4_nercmodelconll02| and \verb|m4_nercmodelsonar| Both models
+have been placed in subdirectory \verb|/m4_nercdir/m4_nercmodeldir/nl| of
+the snapshot.
+
 @d get the nerc models @{@%
-mkdir -p m4_moddir/m4_nercdir
-cp -r m4_asnapshotroot/m4_nercdir/m4_nercmodeldir m4_moddir/m4_nercdir
+mkdir -p m4_amoddir/m4_nercdir
+cp -r m4_asnapshotroot/m4_nercdir/m4_nercmodeldir m4_amoddir/m4_nercdir/
 @| @}
 
 
 
 \paragraph{Script}
 \label{sec:nercscript}
+
+Make a script that uses the conll02 model and a script that uses the
+Sonar model
 
 @% Unfortunately, this module does not accept
 @% the \NAF{} version that the previous module supplies. 
@@ -1181,15 +1237,24 @@ cp -r m4_asnapshotroot/m4_nercdir/m4_nercmodeldir m4_moddir/m4_nercdir
 @% @| @}
 
 
-@o m4_bindir/m4_nercscript @{@%
+@o m4_bindir/m4_nerc_conll02_script @{@%
 #!/bin/bash
 @< set up programming environment @>
 MODDIR=$PIPEMODD/m4_nercdir
 JAR=$JARDIR/m4_nercjar
-MODEL=m4_nercmodel
-@% @< gawk script to patch NAF for nerc module @>
-@% cat | gawk "$patchscript" | java -jar \$JARDIR/m4_nercjar tag
+MODEL=m4_nercmodelconll02
 cat | java -Xmx1000m -jar \$JAR tag -m $MODDIR/m4_nercmodeldir/nl/$MODEL
+#cat| java           -jar ixa-pipe-nerc-1.3.6.jar tag -m $nermodel
+@| @}
+
+@o m4_bindir/m4_nerc_sonar_script @{@%
+#!/bin/bash
+@< set up programming environment @>
+MODDIR=$PIPEMODD/m4_nercdir
+JAR=$JARDIR/m4_nercjar
+MODEL=m4_nercmodelsonar
+cat | java -Xmx1000m -jar \$JAR tag -m $MODDIR/m4_nercmodeldir/nl/$MODEL --clearFeatures yes
+#cat| java           -jar ixa-pipe-nerc-1.3.6.jar tag -m $nermodel --clearFeatures yes
 @| @}
 
 
@@ -1845,7 +1910,8 @@ mkdir -p $TESTDIR
 cd $TESTDIR
 cat $ROOT/nuweb/testin.naf | $BIND/tok > $TESTDIR/test.tok.naf
 cat test.tok.naf | $BIND/mor > $TESTDIR/test.mor.naf
-cat test.mor.naf | $BIND/nerc > $TESTDIR/test.nerc.naf
+@% cat test.mor.naf | $BIND/nerc > $TESTDIR/test.nerc.naf
+cat test.mor.naf | $BIND/m4_nerc_conll02_script > $TESTDIR/test.nerc.naf
 cat $TESTDIR/test.nerc.naf | $BIND/wsd > $TESTDIR/test.wsd.naf
 cat $TESTDIR/test.wsd.naf | $BIND/ned  > $TESTDIR/test.ned.naf
 cat $TESTDIR/test.ned.naf | $BIND/onto > $TESTDIR/test.onto.naf

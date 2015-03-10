@@ -66,7 +66,8 @@ m4_define(m4_module_installer, install-modules)m4_dnl
 m4_dnl
 m4_dnl Snapshot repo
 m4_dnl m4_define(m4_snapshot_tarball, nl-pipeline_snapshots_20150127.tgz)m4_dnl
-m4_define(m4_snapshot_tarball, nl-pipeline_snapshots_20150220.tgz)m4_dnl
+m4_dnl m4_define(m4_snapshot_tarball, nl-pipeline_snapshots_20150220.tgz)m4_dnl
+m4_define(m4_snapshot_tarball, nl-pipeline_snapshots_20150309.tgz)m4_dnl
 m4_define(m4_snapshotdir, snapshots)m4_dnl
 m4_dnl
 m4_dnl EHU repo
@@ -99,15 +100,23 @@ m4_dnl
 m4_define(m4_alpinohackdir, alpinohack)m4_dnl
 m4_define(m4_alpinohackscript, alpinohack)m4_dnl
 m4_define(m4_alpinohackpythonscript, clean_hack.py)m4_dnl
+m4_dnl
 m4_dnl NERC
+m4_dnl
 m4_define(m4_nercgit, https://github.com/ixa-ehu/ixa-pipe-nerc)m4_dnl
-m4_define(m4_nerc_commitname, 8b518284eface454a4f954dfb88bea4d98b2073a)m4_dnl
+m4_dnl m4_define(m4_nerc_commitname, 8b518284eface454a4f954dfb88bea4d98b2073a)m4_dnl
+m4_define(m4_nerc_commitname, 9927fdb32d943f0aa9748a656958af99eeb1f5b7)m4_dnl
 m4_define(m4_nercdir, EHU-nerc)m4_dnl  Subdir. of modules
-m4_define(m4_nercversion, 1.3.3)m4_dnl
+m4_dnl m4_define(m4_nercversion, 1.3.3)m4_dnl
+m4_define(m4_nercversion, 1.3.6)m4_dnl
 m4_define(m4_nercjar, ixa-pipe-nerc-`'m4_nercversion`'.jar)m4_dnl
 m4_define(m4_nercmodeldir, nerc-resources)m4_dnl
-m4_define(m4_nercmodel, nl-local-conll02-testa.bin)m4_dnl
+m4_dnl m4_define(m4_nercmodel, nl-local-conll02-testa.bin)m4_dnl
+m4_define(m4_nercmodelconll02, nl-clusters-conll02.bin)m4_dnl
+m4_define(m4_nercmodelsonar, nl-clusters-sonar.bin)m4_dnl
 m4_define(m4_nercscript, nerc)m4_dnl
+m4_define(m4_nerc_conll02_script, nerc_conll02)m4_dnl
+m4_define(m4_nerc_sonar_script, nerc_sonar)m4_dnl
 m4_dnl
 m4_dnl Coreference-base
 m4_dnl
