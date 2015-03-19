@@ -184,9 +184,10 @@ directories:
 \end{description}
 
 @d directories to create @{m4_moddir @| @}
-@d directories to create @{m4_bindir m4_usrlocaldir@| @}
+@d directories to create @{m4_bindir m4_usrlocaldir/bin@| @}
 @d directories to create @{m4_usrlocaldir<!!>/bin m4_usrlocaldir<!!>/lib @| @}
 @d directories to create @{m4_moddir/python m4_javadir @| @}
+
 
 Make binaries findable:
 
@@ -303,11 +304,69 @@ Python packages that are needed.
 
 
 @d set up python @{@%
+@< check/install the correct version of python @>
 @< create a virtual environment for Python @>
 @< activate the python environment @>
 @< install kafnafparserpy @>
 @< install python packages @>
 @| @}
+
+
+\subsubsection{Python version}
+\label{sec:pythonversion}
+
+The pipeline relies on Python version 2.7 being available. If
+possible, the user should provide this version and make sure that the
+``python'' command invokes version 2.7.something of python. However,
+ikn some cases (notably in the case of a Centos 6.3 server) this is
+difficult to achieve. In that case we can use a binary python supplied
+by ActivePython
+(\url{http://www.activestate.com/activepython}). Download in that case the tarball
+\verb|ActivePython-2.7.8.10-linux-x86_64.tar.gz| from the ActivePython
+site and put it in the \texttt{nlpp} directory. The following macro
+checks whether the \texttt{python} command invokes a correct version
+of python and, if this is not the case and the ActivePython tarball is
+present, install ActivePython.
+
+@d check/install the correct version of python @{@%
+pythonok=`python --version 2>&1 | gawk '{if(match($2, "2.7")) print "yes" ; else print "no" }'`
+if
+  [ "$pythonok" == "no" ]
+then
+  @< install ActivePython @>
+fi
+@| pythonok @}
+
+
+Check whether we have the ActivePython tarball and quit if tis is not
+the case.
+
+@d install ActivePython @{@%
+actpyt=`ls -1 m4_projroot/ActivePython*gz`
+if
+  [ $? -gt 0 ]
+then
+  echo "Cannot install Python 2.7."
+  echo "Please put ActivePython tarball in nlpp directory."
+  exit 1
+fi
+@| @}
+
+Unpack the tarball in a temporary directory and install active python
+in the \texttt{env} subdirectory of nlpp.
+
+@d install ActivePython  @{@%
+pytinsdir=`mktemp -d -t activepyt.XXXXXX`
+cd pytinsdir
+tar -xzf $actpyt
+acdir=`ls -1`
+cd $acdir
+./install.sh -I m4_ausrlocaldir
+cd m4_aprojroot
+rm -rf $pytinsdir
+@| @}
+
+
 
 
 
@@ -1219,6 +1278,7 @@ the snapshot.
 @d get the nerc models @{@%
 mkdir -p m4_amoddir/m4_nercdir
 cp -r m4_asnapshotroot/m4_nercdir/m4_nercmodeldir m4_amoddir/m4_nercdir/
+chmod -R 775 m4_amoddir/m4_nercdir
 @| @}
 
 

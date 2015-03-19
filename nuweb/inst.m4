@@ -45,6 +45,8 @@ m4_define(m4_javatarball, server-jre-7u72-linux-x64.tar.gz)m4_dnl
 m4_define(m4_javatarballurl, http://www.oracle.com/technetwork/java/javase/downloads/server-jre7-downloads-1931105.html)m4_dnl
 m4_define(m4_javajdk, jdk1.7.0_72)m4_dnl
 m4_define(m4_ahackdir, m4_aenvdir`/hacks')m4_dnl
+m4_define(m4_apythonenvdir, m4_aenvdir/python)m4_dnl
+m4_define(m4_pythonenvdir, m4_envdir/python)m4_dnl
 m4_dnl
 m4_dnl Maven
 m4_dnl
