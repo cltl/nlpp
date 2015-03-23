@@ -5,7 +5,7 @@ all : nlpp.pdf
 
 .SUFFIXES: .pdf .w .tex .html .aux .log .php
 
-NUWEB=../bin/nuweb
+NUWEB=./nuweb
 FIGFILES=fileschema
 
 FIGFILENAMES=$(foreach fil,$(FIGFILES), $(fil).fig)
@@ -87,7 +87,7 @@ view : nlpp.pdf
 
 htm : $(htmldir) $(htmltarget)
 
-DIRS = ../modules ../bin ../env/usrlocal../env/usrlocal/bin ../env/usrlocal/lib ../modules/python ../env/java ../env/java ../env/java/jars /home/paul/projecten/cltl/pipelines/nlpp/env/apache-maven-3.0.5 /home/paul/projecten/cltl/pipelines/nlpp/env/python ../nuweb/bin 
+DIRS = ../modules ../bin ../env/usrlocal/bin../env/usrlocal/bin ../env/usrlocal/lib ../modules/python ../env/java ../env/java ../env/java/jars /Users/paul/projecten/cltl/pipelines/nlpp/env/apache-maven-3.0.5 /Users/paul/projecten/cltl/pipelines/nlpp/env/python ../nuweb/bin 
 
 $(DIRS) : 
 	$(MKDIR) $@

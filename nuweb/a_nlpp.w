@@ -188,6 +188,16 @@ directories:
 @d directories to create @{m4_usrlocaldir<!!>/bin m4_usrlocaldir<!!>/lib @| @}
 @d directories to create @{m4_moddir/python m4_javadir @| @}
 
+Communicate the file-structure to scripts with a ``source'' script
+that sets variables.
+
+@o m4_bindir/progenv @{@%
+PIPEROOT=m4_aprojroot
+PIPEBIN=$PIPEROOT/bin
+PIPEMODD=$PIPEROOT/modules
+export PATH=m4_ausrlocaldir<!!>/bin:$PATH
+@| @}
+
 
 Make binaries findable:
 
@@ -208,9 +218,6 @@ already present in the system and that installation takes more time.
 The following file sets up the programming environment in scripts.
 
 @o m4_bindir/progenv @{@%
-PIPEROOT=m4_aprojroot
-PIPEBIN=$PIPEROOT/bin
-PIPEMODD=$PIPEROOT/modules
 @< set up java environment in scripts@>
 @< activate the python environment @>
 @| @}
@@ -342,7 +349,7 @@ Check whether we have the ActivePython tarball and quit if tis is not
 the case.
 
 @d install ActivePython @{@%
-actpyt=`ls -1 m4_projroot/ActivePython*gz`
+actpyt=`ls -1 m4_aprojroot/ActivePython*gz`
 if
   [ $? -gt 0 ]
 then
@@ -353,18 +360,23 @@ fi
 @| @}
 
 Unpack the tarball in a temporary directory and install active python
-in the \texttt{env} subdirectory of nlpp.
+in the \texttt{env} subdirectory of nlpp. It turns out that you must
+upgrade pip, virtualenv and setuptools after the installation (see
+\url{https://github.com/ActiveState/activepython-docker/commit/10fff72069e51dbd36330cb8a7c2f0845bcd7b38}
+and \url{https://github.com/ActiveState/activepython-docker/issues/1}).
+
 
 @d install ActivePython  @{@%
 pytinsdir=`mktemp -d -t activepyt.XXXXXX`
-cd pytinsdir
+cd $pytinsdir
 tar -xzf $actpyt
 acdir=`ls -1`
 cd $acdir
 ./install.sh -I m4_ausrlocaldir
 cd m4_aprojroot
 rm -rf $pytinsdir
-@| @}
+pip install -U pip virtualenv setuptools
+\@| @}
 
 
 
@@ -615,6 +627,7 @@ The installation is performed by script \verb|m4_module_installer|
 @o m4_bindir/m4_module_installer @{@%
 #!/bin/bash
 echo Set up environment
+@< set local bin directory @>
 @< variables of m4_module_installer @>
 @< check this first @>
 @< unpack snapshots or die @>
@@ -1864,12 +1877,13 @@ First:
 
 @o m4_bindir/m4_srlscript @{@%
 #!/bin/bash
-ROOT=m4_aprojroot
+source m4_abindir/progenv
+ROOT=$PIPEROOT
 SRLDIR=m4_amoddir/m4_srldir
 TEMPDIR=`mktemp -d -t SRLTMP.XXXXXX`
 cd \$SRLDIR
-@< set local bin directory @>
-@< activate the python environment @>
+@% @< set local bin directory @>
+@% @< activate the python environment @>
 INPUTFILE=$TEMPDIR/inputfile
 FEATUREVECTOR=$TEMPDIR/csvfile
 TIMBLOUTPUTFILE=$TEMPDIR/timblpredictions
@@ -2211,8 +2225,10 @@ sourceforge and it is difficult to achieve automatic downloading from
 that repository. Therefore I copied one of the versions on a location
 from where it can be downloaded with a script.
 
+Put the nuweb binary in the nuweb subdirectory, so that it can be used before the directory-structure has been generated.
+
 @d parameters in Makefile @{@%
-NUWEB=m4_bindir/nuweb
+NUWEB=./nuweb
 @| NUWEB @}
 
 @d expliciete make regels @{@%
