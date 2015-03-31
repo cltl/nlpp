@@ -210,8 +210,8 @@ m4_dnl Utilities
 m4_dnl
 m4_dnl
 m4_dnl Alpino
-m4_define(m4_alpino_version, 20548)m4_dnl
-m4_define(m4_alpinosrc, Alpino-x86_64-linux-glibc2.5-20548-sicstus.tar.gz)
+m4_define(m4_alpino_version, 20706)m4_dnl
+m4_define(m4_alpinosrc, Alpino-x86_64-linux-glibc2.5-`'m4_alpino_version`'-sicstus.tar.gz)
 m4_define(m4_alpinourl, http://www.let.rug.nl/vannoord/alp/Alpino/binary/versions/m4_alpinosrc)m4_dnl  
 m4_define(m4_alpino_desc_url, http://www.let.rug.nl/~vannoord/alp/Alpino/)m4_dnl
 m4_define(m4_alpinodir, Alpino)m4_dnl  Subdir. of modules

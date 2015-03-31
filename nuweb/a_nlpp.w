@@ -349,7 +349,7 @@ Check whether we have the ActivePython tarball and quit if tis is not
 the case.
 
 @d install ActivePython @{@%
-actpyt=`ls -1 m4_projroot/ActivePython*gz`
+actpyt=`ls -1 m4_aprojroot/ActivePython*gz`
 if
   [ $? -gt 0 ]
 then
@@ -627,6 +627,7 @@ The installation is performed by script \verb|m4_module_installer|
 @o m4_bindir/m4_module_installer @{@%
 #!/bin/bash
 echo Set up environment
+@< set local bin directory @>
 @< variables of m4_module_installer @>
 @< check this first @>
 @< unpack snapshots or die @>
