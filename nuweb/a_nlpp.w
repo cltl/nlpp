@@ -1023,8 +1023,8 @@ To install the tokenizer, we proceed as follows:
 tempdir=`mktemp -d -t tok.XXXXXX`
 cd \$tempdir
 git clone m4_tokenizergit
-git checkout m4_tokenizer_commitname
 cd m4_tokenizerdir
+git checkout m4_tokenizer_commitname
 mvn clean package
 mv target/m4_tokenizerjar m4_ajardir
 cd m4_aprojroot
