@@ -62,8 +62,10 @@ Table~\ref{tab:modulelist}
   \begin{footnotesize}
     \begin{tabular}{llllll}
      \textbf{Module}   & \textbf{Section}     & \textbf{Source} &  \textbf{Commit} & \textbf{Script} \\
+@%       \href{m4_tokenizergit}{Tokenizer}          
+@%                       & \dref{sec:installtokenizer}         & \href{m4_tokenizergit}{Github} & m4_tokenizer_commitname & \texttt{m4_tokenizerscript}  \\
        \href{m4_tokenizergit}{Tokenizer}          
-                       & \dref{sec:installtokenizer}         & \href{m4_tokenizergit}{Github} & m4_tokenizer_commitname & \texttt{m4_tokenizerscript}  \\
+                       & \dref{sec:installtokenizer}           &  snapshot          & m4_tokenizer_commitname & \texttt{m4_tokenizerscript}  \\
        \href{m4_morphpargit}{morphosyntactic parser} 
                        & \dref{sec:install-morphsynt-parser} & \href{m4_morphpargit}{Github}  & m4_morphpar_commitname  & \verb|m4_morphparscript|     \\
 @%     \hyperref[sec:alpinohack]{alpinohack}
@@ -98,7 +100,7 @@ Table~\ref{tab:modulelist}
   \caption{List of the modules to be installed. Column description:
     \textbf{directory:} Name of the subdirectory below subdirectory \texttt{modules} in
     which it is installed; \textbf{source:} From where the module has
-    been obtained; \textbf{commit:} Commit-name or version-tag \textbf{script:} Script to be included in a pipeline.}
+    been obtained; \textbf{commit:} Commit-name or version-tag \textbf{script:} Script to be included in a pipeline. \textbf{Note:} The tokenizer module has been temporarily obtained from the snapshot, because the commit that we used has disappeared from the Github repository.}
   \label{tab:modulelist}
 \end{table}
 lists the modules in the pipeline. The column \emph{source} indicates
@@ -1018,7 +1020,7 @@ To install the tokenizer, we proceed as follows:
 \item remove the tempdir with the sourcecode.
 \end{enumerate}
 
-@d install the tokenizer @{@%
+@d *not* install the tokenizer @{@%
 @% @< install from github t @(tokenizer@,m4_tokenizerdir@,m4_tokenizergit@) @>
 tempdir=`mktemp -d -t tok.XXXXXX`
 cd \$tempdir
@@ -1031,7 +1033,14 @@ cd m4_aprojroot
 rm -rf \$tempdir
 @| @}
 
+Unfortunately the above macro does no longer work because the commit
+that we used seems to have been disappeared from the Github
+repository. Therefore, we will use a jar that we have generated
+before and that has been stored in the snapshot tarball.
 
+@d install the tokenizer @{@%
+cp m4_asnapshotroot/ixa-pipe-tok/m4_tokenizerjar m4_ajardir
+@| @}
 
 @% @d install the tokenizer @{@%
 @% cd m4_amoddir
