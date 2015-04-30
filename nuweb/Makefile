@@ -87,7 +87,7 @@ view : nlpp.pdf
 
 htm : $(htmldir) $(htmltarget)
 
-DIRS = ../modules ../bin ../env/usrlocal/bin../env/usrlocal/bin ../env/usrlocal/lib ../modules/python ../env/java ../env/java ../env/java/jars /home/paul/projecten/cltl/pipelines/nlpp/env/apache-maven-3.0.5 /home/paul/projecten/cltl/pipelines/nlpp/env/python ../nuweb/bin 
+DIRS = ../modules ../bin ../env/usrlocal/bin../env/usrlocal/bin ../env/usrlocal/lib ../modules/python ../env/java ../env/java/jars /home/paul/projecten/cltl/pipelines/nlpp/env/apache-maven-3.0.5 /home/paul/projecten/cltl/pipelines/nlpp/env/python ../nuweb/bin 
 
 $(DIRS) : 
 	$(MKDIR) $@
@@ -95,6 +95,6 @@ $(DIRS) :
 sources : nlpp.w $(DIRS) $(NUWEB)
 	$(NUWEB) nlpp.w
 	chmod -R 775  ../bin/*
-
+	
 
 

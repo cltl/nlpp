@@ -86,11 +86,12 @@ m4_dnl Tokenizer
 m4_dnl m4_define(m4_tokenizergit, https://github.com/opener-project/tokenizer-base.git)m4_dnl  Subdir. of modules
 m4_dnl m4_define(m4_tokenizerdir, tokenizer-base)m4_dnl  Subdir. of modules
 m4_dnl m4_define(m4_tokenizerscript, tok)m4_dnl
-m4_dnl m4_define(m4_tokenizerversion, `1.7.4')m4_dnl
-m4_define(m4_tokenizerversion, `1.7.0')m4_dnl
-m4_define(m4_tokenizer_commitname, 410a97ba4a847d4dfea6a45b9ae09f4bfbbfdc5a)m4_dnl
 m4_dnl m4_define(m4_tokenizerversion, `1.7.0')m4_dnl
+m4_dnl m4_define(m4_tokenizerversion, `1.7.4')m4_dnl
+m4_define(m4_tokenizerversion, `1.8.0')m4_dnl
 m4_dnl m4_define(m4_tokenizer_commitname, c4d307eece4ef19aca365e3a08abd7f3324e3707)m4_dnl
+m4_dnl m4_define(m4_tokenizer_commitname, 410a97ba4a847d4dfea6a45b9ae09f4bfbbfdc5a)m4_dnl
+m4_define(m4_tokenizer_commitname, 56f83ce4b61680346f15e5d4e6de6293764f7383)m4_dnl
 m4_define(m4_tokenizergit, https://github.com/ixa-ehu/ixa-pipe-tok.git)m4_dnl  Subdir. of modules
 m4_define(m4_tokenizerdir, ixa-pipe-tok)m4_dnl  Subdir. of modules
 m4_define(m4_tokenizerjar, ixa-pipe-tok-`'m4_tokenizerversion.jar)m4_dnl
