@@ -188,7 +188,7 @@ directories:
 @d directories to create @{m4_moddir @| @}
 @d directories to create @{m4_bindir m4_usrlocaldir/bin@| @}
 @d directories to create @{m4_usrlocaldir<!!>/bin m4_usrlocaldir<!!>/lib @| @}
-@d directories to create @{m4_moddir/python m4_javadir @| @}
+@d directories to create @{m4_moddir/python @| @}
 
 Communicate the file-structure to scripts with a ``source'' script
 that sets variables.
@@ -1020,7 +1020,7 @@ To install the tokenizer, we proceed as follows:
 \item remove the tempdir with the sourcecode.
 \end{enumerate}
 
-@d *not* install the tokenizer @{@%
+@d install the tokenizer @{@%
 @% @< install from github t @(tokenizer@,m4_tokenizerdir@,m4_tokenizergit@) @>
 tempdir=`mktemp -d -t tok.XXXXXX`
 cd \$tempdir
@@ -1033,28 +1033,28 @@ cd m4_aprojroot
 rm -rf \$tempdir
 @| @}
 
-Unfortunately the above macro does no longer work because the commit
-that we used seems to have been disappeared from the Github
-repository. Therefore, we will use a jar that we have generated
-before and that has been stored in the snapshot tarball.
-
-@d install the tokenizer @{@%
-cp m4_asnapshotroot/ixa-pipe-tok/m4_tokenizerjar m4_ajardir
-@| @}
-
+@% Unfortunately the above macro does no longer work because the commit
+@% that we used seems to have been disappeared from the Github
+@% repository. Therefore, we will use a jar that we have generated
+@% before and that has been stored in the snapshot tarball.
+@% 
 @% @d install the tokenizer @{@%
-@% cd m4_amoddir
-@% @< move module @(m4_tokenizerdir@) @>
-@% git clone m4_tokenizergit
-@% if
-@%   [ $? -gt 0 ]
-@% then
-@%   @< logmess @(Cannot install current tokenizer version@) @>
-@%   @< re-instate old module @(m4_tokenizerdir@) @>
-@% else
-@%   @< remove old module @(m4_tokenizerdir@) @>
-@% fi
-@% @| @} 
+@% cp m4_asnapshotroot/ixa-pipe-tok/m4_tokenizerjar m4_ajardir
+@% @| @}
+@% 
+@% @% @d install the tokenizer @{@%
+@% @% cd m4_amoddir
+@% @% @< move module @(m4_tokenizerdir@) @>
+@% @% git clone m4_tokenizergit
+@% @% if
+@% @%   [ $? -gt 0 ]
+@% @% then
+@% @%   @< logmess @(Cannot install current tokenizer version@) @>
+@% @%   @< re-instate old module @(m4_tokenizerdir@) @>
+@% @% else
+@% @%   @< remove old module @(m4_tokenizerdir@) @>
+@% @% fi
+@% @% @| @} 
 
 \paragraph{Script}
 \label{par:tokenizerscript}
