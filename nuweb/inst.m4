@@ -12,15 +12,13 @@ m4_dnl Paths and URL's
 m4_dnl
 m4_dnl
 m4_define(m4_aprojroot, m4_regexp(m4_esyscmd(pwd), `\(^[a-zA-Z0-9/-]+\)/nuweb$', `\1'))m4_dnl
+m4_define(m4_asocket, m4_regexp(m4_esyscmd(pwd), `\(^[a-zA-Z0-9/-]+\)/nlpp/nuweb$', `\1'))m4_dnl
 m4_define(m4_projroot, `..')m4_dnl
 m4_define(m4_abindir, m4_aprojroot`/bin')m4_dnl     Binaries
 m4_define(m4_bindir, m4_projroot`/bin')m4_dnl     Binaries
 m4_define(m4_amoddir, m4_aprojroot`/modules')m4_dnl     Modules
 m4_define(m4_moddir, m4_projroot`/modules')m4_dnl     Modules
 m4_dnl m4_define(m4_lisanlproot, /home/phuijgen/nlp)m4_dnl
-m4_define(m4_snapshotrootURL, kyoto.let.vu.nl~huygen/dutch_snapshots)m4_dnl
-m4_define(m4_asnapshotroot, m4_aprojroot/snapshots)m4_dnl
-m4_define(m4_snapshotroot, m4_projroot/snapshots)m4_dnl
 m4_dnl
 m4_dnl HTML doc generation
 m4_define(m4_htmldocdir, m4_projroot/nuweb/html)m4_dnl . You can change this in a local m4 file.
@@ -38,7 +36,7 @@ m4_define(m4_aenvdir, m4_aprojroot`/env')m4_dnl     Program environment
 m4_define(m4_envdir, m4_projroot`/env')m4_dnl 
 m4_define(m4_usrlocaldir, m4_envdir`/usrlocal')m4_dnl     
 m4_define(m4_ausrlocaldir, m4_aenvdir`/usrlocal')m4_dnl
-m4_define(m4_ausrlocalbindir, m4_ausrlocaldir/bin')m4_dnl
+m4_define(m4_ausrlocalbindir, m4_ausrlocaldir/bin)m4_dnl
 m4_define(m4_ajavadir, m4_aenvdir`/java')m4_dnl   
 m4_define(m4_javadir, m4_envdir`/java')m4_dnl     
 m4_define(m4_ajardir, m4_ajavadir`/jars')m4_dnl     jars
@@ -47,8 +45,19 @@ m4_define(m4_javatarball, server-jre-7u72-linux-x64.tar.gz)m4_dnl
 m4_define(m4_javatarballurl, http://www.oracle.com/technetwork/java/javase/downloads/server-jre7-downloads-1931105.html)m4_dnl
 m4_define(m4_javajdk, jdk1.7.0_72)m4_dnl
 m4_define(m4_ahackdir, m4_aenvdir`/hacks')m4_dnl
+m4_define(m4_activepytonball, ActivePython-2.7.8.10-linux-x86_64.tar.gz)m4_dnl
 m4_define(m4_apythonenvdir, m4_aenvdir/python)m4_dnl
 m4_define(m4_pythonenvdir, m4_envdir/python)m4_dnl
+m4_dnl
+m4_dnl snapshot
+m4_dnl
+m4_define(m4_repo_url, kyoto.let.vu.nl)m4_dnl
+m4_define(m4_repo_user, newsreader)m4_dnl
+m4_define(m4_repo_path, nlpp_resources)m4_dnl
+m4_define(m4_snapshotkeyfile, m4_asocket/nrkey)m4_dnl
+m4_define(m4_snapshotrootURL, kyoto.let.vu.nl~huygen/dutch_snapshots)m4_dnl
+m4_define(m4_asnapshotroot, m4_aprojroot/snapshots)m4_dnl
+m4_define(m4_snapshotroot, m4_projroot/snapshots)m4_dnl
 m4_dnl
 m4_dnl Maven
 m4_dnl
@@ -263,6 +272,7 @@ m4_define(m4_treetagdir, treetagger)m4_dnl
 m4_dnl
 m4_dnl Spotlight
 m4_dnl
+m4_define(m4_spotlightball, spotlightnl.tgz)m4_dnl
 m4_define(m4_spotlight_nl_port, 2060)m4_dnl
 m4_define(m4_aspotlightdir, m4_aenvdir/spotlight)m4_dnl
 m4_define(m4_spotlighturl, http://spotlight.sztaki.hu)m4_dnl
@@ -270,9 +280,9 @@ m4_define(m4_spotlight_download_url, m4_spotlighturl/downloads)m4_dnl
 m4_define(m4_spotlightjarversion, 0.7)m4_dnl
 m4_define(m4_simple_spotlightjar, dbpedia-spotlight-`'m4_spotlightjarversion`'.jar)m4_dnl
 m4_define(m4_spotlightjar, dbpedia-spotlight-`'m4_spotlightjarversion`'-jar-with-dependencies-candidates.jar)m4_dnl
-m4_define(m4_spotlight_nl_model, nl.tar.gz)m4_dnl
+m4_define(m4_spotlight_nl_model_ball, nl.tar.gz)m4_dnl
 m4_define(m4_spotlight_nl_port, 2060)m4_dnl
-m4_define(m4_spotlight_en_model, en_2+2.tar.gz)m4_dnl
+m4_define(m4_spotlight_en_model_ball, en_2+2.tar.gz)m4_dnl
 m4_define(m4_spotlight_en_port, 2020)m4_dnl
 m4_dnl
 m4_dnl Wikipedia db

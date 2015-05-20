@@ -239,23 +239,20 @@ in a subdirectory of \texttt{m4_aenvdir}.
 @d directories to create @{m4_javadir @| @}
 
 
-@d check this first @{@%
-if
-  [ ! -e m4_aprojroot/m4_javatarball ]
-then
-  echo "Cannot find  m4_aprojroot/m4_javatarball"
-  exit 4
-fi
-@| @}
+@%@d check this first @{@%
+@%if
+@%  [ ! -e m4_aprojroot/m4_javatarball ]
+@%then
+@%  echo "Cannot find  m4_aprojroot/m4_javatarball"
+@%  exit 4
+@%fi
+@%@| @}
 
 @d set up java @{@%
-@< unpack the java tarball @>
-@| @}
-
-@d unpack the java tarball @{@%
+@< get or have @(m4_javatarball@) @>
 cd m4_aenvdir/java
-tar -xzf m4_aprojroot/m4_javatarball
-rm m4_aprojroot/m4_javatarball
+tar -xzf m4_asocket/m4_javatarball
+@% rm m4_asocket/m4_javatarball
 @| @}
 
 @d set up java environment in scripts @{@%
@@ -347,18 +344,20 @@ fi
 @| pythonok @}
 
 
-Check whether we have the ActivePython tarball and quit if tis is not
+Check whether we have the ActivePython tarball and quit if this is not
 the case.
 
 @d install ActivePython @{@%
-actpyt=`ls -1 m4_aprojroot/ActivePython*gz`
-if
-  [ $? -gt 0 ]
-then
-  echo "Cannot install Python 2.7."
-  echo "Please put ActivePython tarball in nlpp directory."
-  exit 1
-fi
+@< get or have @(m4_activepythonball@) @>
+@%
+@%actpyt=`ls -1 m4_aprojroot/ActivePython*gz`
+@%if
+@%  [ $? -gt 0 ]
+@%then
+@%  echo "Cannot install Python 2.7."
+@%  echo "Please put ActivePython tarball in nlpp directory."
+@%  exit 1
+@%fi
 @| @}
 
 Unpack the tarball in a temporary directory and install active python
@@ -371,7 +370,7 @@ and \url{https://github.com/ActiveState/activepython-docker/issues/1}).
 @d install ActivePython  @{@%
 pytinsdir=`mktemp -d -t activepyt.XXXXXX`
 cd $pytinsdir
-tar -xzf $actpyt
+tar -xzf m4_asocket/m4_activepythonball
 acdir=`ls -1`
 cd $acdir
 ./install.sh -I m4_ausrlocaldir
@@ -599,26 +598,61 @@ fi
 \label{sec:snapshotinstall}
 
 For some modules a public repository is not available or not
-known. They must be installed from a tarball with snapshots that can
-be obtained from the author. Let us first check whether we have the
-snapshot and complain if we don't. We expect the file
-\verb|m4_aprojroot/m4_snapshot_tarball|.
+known. They must be installed from a non-public repository. A key to
+connect to the repository can be requested from the author.
 
-
-@d unpack snapshots or die @{@%
-cd m4_aprojroot
+@d have an SSH key or die @{@%
 if
-  [ -e m4_snapshot_tarball ]
+  [ ! -e m4_snapshotkeyfile ]
 then
-  tar -zxf m4_snapshot_tarball
-fi
-if
-  [ ! -e m4_snapshotdir ]
-then
-  echo "No module snapshots"
+  echo "No key to connect to snapshot!"
   exit 1
 fi
 @| @}
+
+
+The following macro downloads a resource if it is not already present
+in the ``socket'' directory.
+
+@d get or have @{@%
+if
+  [ ! -e m4_asocket/@1 ]
+then
+  @< have an SSH key or die @>
+  cd m4_asocket
+  scp -i "m4_snapshotkeyfile" m4_repo_user<!!>@@<!!>m4_repo_url:m4_repo_path/@1 .
+  if
+    [ $? -gt 0 ]
+  then
+    echo "Cannot contact snapshot server"
+    exit 1
+  fi
+fi
+
+@| @}
+
+
+
+@% tarball with snapshots that can
+@%be obtained from the author. Let us first check whether we have the
+@%snapshot and complain if we don't. We expect the file
+@%\verb|m4_aprojroot/m4_snapshot_tarball|.
+
+
+@%@d unpack snapshots or die @{@%
+@%cd m4_aprojroot
+@%if
+@%  [ -e m4_snapshot_tarball ]
+@%then
+@%  tar -zxf m4_snapshot_tarball
+@%fi
+@%if
+@%  [ ! -e m4_snapshotdir ]
+@%then
+@%  echo "No module snapshots"
+@%  exit 1
+@%fi
+@%@| @}
 
 \subsection{The installation script}
 \label{sec:installscript}
@@ -629,21 +663,21 @@ The installation is performed by script \verb|m4_module_installer|
 @o m4_bindir/m4_module_installer @{@%
 #!/bin/bash
 echo Set up environment
-@< set local bin directory @>
+@%@< set local bin directory @>
 @< variables of m4_module_installer @>
-@< check this first @>
-@< unpack snapshots or die @>
-echo ... Java
-@< set up java @>
-@< set up java environment in scripts @>
-@< install maven @>
-echo ... Python
-@< set up python @>
-echo ... Alpino
-@< install Alpino @>
-echo ... Spotlight
-@< install the Spotlight server @>
-echo ... Treetagger
+@%@< check this first @>
+@%@< unpack snapshots or die @>
+@%echo ... Java
+@%@< set up java @>
+@%@< set up java environment in scripts @>
+@%@< install maven @>
+@%echo ... Python
+@%@< set up python @>
+@%echo ... Alpino
+@%@< install Alpino @>
+@%echo ... Spotlight
+@%@< install the Spotlight server @>
+ @%echo ... Treetagger
 @< install the treetagger utility @>
 echo ... Ticcutils and Timbl
 @< install the ticcutils utility @>
@@ -651,34 +685,34 @@ echo ... Ticcutils and Timbl
 @| @}
 
 @o m4_bindir/m4_module_installer @{@%
-echo Install modules
-echo ... Tokenizer
-@< install the tokenizer @>
-echo ... Morphosyntactic parser
-@< install the morphosyntactic parser @>
-echo ... NERC
-@< install the NERC module @>
-echo ... Coreference base
-@< install coreference-base @>
-echo ... WSD
-@< install the WSD module @>
-echo ... Ontotagger
-@< install the onto module @>
-echo ... Heideltime
-@< install the heideltime module @>
-echo ... SRL
-@< install the srl module @>
-echo ... NED
-@< install the \NED{} module @>
-echo ... Event-coreference
-@< install the event-coreference module @>
-echo ... lu2synset
-@< install the lu2synset converter @>
+@%echo Install modules
+@%echo ... Tokenizer
+@%@< install the tokenizer @>
+@%echo ... Morphosyntactic parser
+@%@< install the morphosyntactic parser @>
+@%echo ... NERC
+@%@< install the NERC module @>
+@%echo ... Coreference base
+@%@< install coreference-base @>
+@%echo ... WSD
+@%@< install the WSD module @>
+@%echo ... Ontotagger
+@%@< install the onto module @>
+@%echo ... Heideltime
+@%@< install the heideltime module @>
+@%echo ... SRL
+@%@< install the srl module @>
+@%echo ... NED
+@%@< install the \NED{} module @>
+@%echo ... Event-coreference
+@%@< install the event-coreference module @>
+@%echo ... lu2synset
+@%@< install the lu2synset converter @>
 echo Final
 @| @}
 
 @o m4_bindir/m4_module_installer @{@%
-@< remove maven @>
+@%@< remove maven @>
 @| @}
 
 @%@d make scripts executable @{@%
@@ -945,14 +979,20 @@ We set 8Gb for the English server, but the Italian and Dutch Spotlight will requ
 So, let's do that. 
 
 @d install the Spotlight server @{@%
-mkdir -p m4_aspotlightdir
+@< get or have @(m4_spotlightball@) @>
+@%mkdir -p m4_aspotlightdir
+cd m4_aenvdir
+tar -xzf m4_asocket/m4_spotlightball
+rm -rf m4_asocket/m4_spotlightball
 cd m4_aspotlightdir
-cp m4_asnapshotroot/spotlight/m4_spotlightjar .
+@%cp m4_asnapshotroot/spotlight/m4_spotlightjar .
 @% wget m4_spotlight_download_url/m4_spotlightjar
-wget m4_spotlight_download_url/m4_spotlight_nl_model
-tar -xzf m4_spotlight_nl_model
-wget m4_spotlight_download_url/m4_spotlight_en_model
-tar -xzf m4_spotlight_en_model
+wget m4_spotlight_download_url/m4_spotlight_nl_model_ball
+tar -xzf m4_spotlight_nl_model_ball
+rm m4_spotlight_nl_model_ball
+@%wget m4_spotlight_download_url/m4_spotlight_en_model_ball
+@%tar -xzf m4_spotlight_en_model_ball
+@%rm m4_spotlight_en_model_ball
 @% MVN_SPOTLIGHT_OPTIONS="-Dfile=m4_spotlightjar"
 @% MVN_SPOTLIGHT_OPTIONS="$MVN_SPOTLIGHT_OPTIONS -DgroupId=ixa"
 @% MVN_SPOTLIGHT_OPTIONS="$MVN_SPOTLIGHT_OPTIONS -DartifactId=dbpedia-spotlight"
@@ -2248,6 +2288,9 @@ Put the nuweb binary in the nuweb subdirectory, so that it can be used before th
 @% @| NUWEB @}
 
 @d expliciete make regels @{@%
+
+nuweb: $(NUWEB)
+
 $(NUWEB): m4_projroot/m4_nuwebsource
 	mkdir -p m4_ausrlocalbindir
 	cd m4_projroot/m4_nuwebsource && make nuweb
