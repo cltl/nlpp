@@ -2181,9 +2181,9 @@ well-equipped Linux system.
 
 @%\textbf{NOTE:} Currently, not the most recent version  of Nuweb is used, but an older version that has been modified by me, Paul Huygen.
 
-@% @d parameters in Makefile @{@%
-@% NUWEB=m4_nuwebbinary
-@% @| @}
+@d parameters in Makefile @{@%
+NUWEB=m4_nuwebbinary
+@| @}
 
 
 \subsection{Translate and run}
@@ -2208,6 +2208,13 @@ all : @< all targets @>
 .PHONY : all
 
 @|PHONY all @}
+
+@d make targets @{@%
+clean:
+	@< clean up @>
+
+@| @}
+
 
 
 One of the targets is certainly the \textsc{pdf} version of this
@@ -2236,16 +2243,22 @@ from where it can be downloaded with a script.
 
 Put the nuweb binary in the nuweb subdirectory, so that it can be used before the directory-structure has been generated.
 
-@d parameters in Makefile @{@%
-NUWEB=./nuweb
-@| NUWEB @}
+@% @d parameters in Makefile @{@%
+@% NUWEB=./nuweb
+@% @| NUWEB @}
 
 @d expliciete make regels @{@%
 $(NUWEB): m4_projroot/m4_nuwebsource
+	mkdir -p m4_ausrlocalbindir
 	cd m4_projroot/m4_nuwebsource && make nuweb
 	cp m4_projroot/m4_nuwebsource/nuweb $(NUWEB)
 
 @| @}
+
+@d clean up @{@%
+rm -rf m4_projroot/m4_nuwebsource
+@| @}
+
 
 @d expliciete make regels @{@%
 m4_projroot/m4_nuwebsource:

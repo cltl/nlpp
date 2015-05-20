@@ -1,4 +1,4 @@
-m4_define(m4_repoversion, `0.9.01')m4_dnl
+m4_define(m4_repoversion, `0.9.02')m4_dnl
 m4_dnl
 m4_dnl Titles
 m4_dnl
@@ -38,6 +38,7 @@ m4_define(m4_aenvdir, m4_aprojroot`/env')m4_dnl     Program environment
 m4_define(m4_envdir, m4_projroot`/env')m4_dnl 
 m4_define(m4_usrlocaldir, m4_envdir`/usrlocal')m4_dnl     
 m4_define(m4_ausrlocaldir, m4_aenvdir`/usrlocal')m4_dnl
+m4_define(m4_ausrlocalbindir, m4_ausrlocaldir/bin')m4_dnl
 m4_define(m4_ajavadir, m4_aenvdir`/java')m4_dnl   
 m4_define(m4_javadir, m4_envdir`/java')m4_dnl     
 m4_define(m4_ajardir, m4_ajavadir`/jars')m4_dnl     jars
@@ -291,8 +292,8 @@ m4_define(m4_mkportbib, `/home/paul/bin/mkportbib')m4_dnl
 m4_define(m4_printpdf, `lpr '$1`.pdf')m4_dnl
 m4_define(m4_viewpdf, `evince '$1`.pdf')m4_dnl
 m4_define(m4_latex, `pdflatex '$1)m4_dnl
-m4_dnl m4_define(m4_nuwebbinary, `/usr/local/bin/nuweb')m4_dnl
-m4_define(m4_nuwebbinary, m4_esyscmd(which nuweb))m4_dnl
+m4_define(m4_nuwebbinary, `m4_ausrlocalbindir/nuweb')m4_dnl
+m4_dnl m4_define(m4_nuwebbinary, m4_esyscmd(which nuweb))m4_dnl
 m4_dnl
 m4_dnl    subdirs 
 m4_dnl
