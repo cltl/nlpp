@@ -102,6 +102,7 @@ $(DIRS) :
 
 sources : nlpp.w $(DIRS) $(NUWEB)
 	$(NUWEB) nlpp.w
+	chmod 775  ../bin/install-modules
 	chmod -R 775  ../bin/*
 	
 

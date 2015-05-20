@@ -135,6 +135,7 @@ m4_define(m4_nercmodelsonar, nl-clusters-sonar.bin)m4_dnl
 m4_define(m4_nercscript, nerc)m4_dnl
 m4_define(m4_nerc_conll02_script, nerc_conll02)m4_dnl
 m4_define(m4_nerc_sonar_script, nerc_sonar)m4_dnl
+m4_define(m4_nercmodelsball, EHU-nerc.tgz)m4_dnl
 m4_dnl
 m4_dnl Coreference-base
 m4_dnl
@@ -169,6 +170,7 @@ m4_define(m4_wsdgit, https://github.com/cltl/svm_wsd.git)m4_dnl
 m4_define(m4_wsd_commitname, `2babeb40a81b3720274a0521ccc2a27c5eff28c9')m4_dnl
 m4_define(m4_wsddir, svm_wsd)m4_dnl
 m4_define(m4_wsdscript, wsd)m4_dnl
+m4_define(m4_wsd_snapball, svm_wsd.tgz)m4_dnl
 m4_dnl
 m4_dnl ONTO
 m4_define(m4_ontodir, vua-ontotagger-v1.0)m4_dnl  Subdir. of modules
@@ -195,27 +197,33 @@ m4_dnl SRL
 m4_define(m4_srlgit, `https://github.com/newsreader/vua-srl-nl.git' )m4_dnl  Subdir. of modules
 m4_dnl m4_define(m4_srl_commitname, a5e63ba512cc326274b1285cf2af81ff8a2e04b5)m4_dnl
 m4_define(m4_srl_commitname, 675d22d361289ede23df11dcdb17195f008c54bf)m4_dnl
-m4_define(m4_srlsrc, m4_asnapshotroot/srlModuleForBN)m4_dnl  Subdir. of modules
-m4_dnl m4_define(m4_srldir, srlModuleForBN)m4_dnl  Subdir. of modules
-m4_define(m4_srldir, vua-srl-nl)m4_dnl  Subdir. of modules
+m4_define(m4_srlsrc, m4_asnapshotroot/srlModuleForBN)m4_dnl
+m4_dnl m4_define(m4_srldir, srlModuleForBN)m4_dnl
+m4_define(m4_srldir, vua-srl-nl)m4_dnl
 m4_define(m4_srlscript, srl)m4_dnl
 m4_dnl
 m4_dnl Nom. coref
-m4_define(m4_ncorefsrc, /dev/null )m4_dnl  Subdir. of modules
-m4_define(m4_ncorefdir, nomcoref)m4_dnl  Subdir. of modules
+m4_define(m4_ncorefsrc, /dev/null )m4_dnl
+m4_define(m4_ncorefdir, nomcoref)m4_dnl
 m4_define(m4_ncorefscript, nomcoref)m4_dnl
 m4_dnl
 m4_dnl Ev. coref
-m4_define(m4_evcorefdir, vua-eventcoreference_v2)m4_dnl  Subdir. of modules
+m4_define(m4_evcorefdir, vua-eventcoreference_v2)m4_dnl
 m4_define(m4_evcoreftarball, m4_evcorefdir.tar.gz)m4_dnl
 m4_define(m4_evcorefscript, evcoref)m4_dnl
 m4_define(m4_evcorefjar, EventCoreference-1.0-SNAPSHOT-jar-with-dependencies.jar)m4_dnl
+m4_dnl
+m4_dnl Ev. coref
 
 m4_dnl
 m4_dnl Opinion-miner
-m4_define(m4_opinisrc, /dev/null )m4_dnl  Subdir. of modules
-m4_define(m4_opinidir, opinimin)m4_dnl  Subdir. of modules
+m4_define(m4_opinisrc, /dev/null )m4_dnl  
+m4_define(m4_opinidir, opinimin)m4_dnl  
 m4_define(m4_opiniscript, opinimin)m4_dnl
+m4_dnl
+m4_dnl lu2synset
+m4_define(m4_lu2synball, lu2synset.tgz)m4_dnl  
+
 m4_dnl
 m4_dnl Framenet Semantic Role Labeler
 m4_define(m4_fsrlsrc, /dev/null )m4_dnl  Subdir. of modules

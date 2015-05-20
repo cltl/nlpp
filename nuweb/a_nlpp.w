@@ -663,21 +663,21 @@ The installation is performed by script \verb|m4_module_installer|
 @o m4_bindir/m4_module_installer @{@%
 #!/bin/bash
 echo Set up environment
-@%@< set local bin directory @>
+@< set local bin directory @>
 @< variables of m4_module_installer @>
-@%@< check this first @>
+@< check this first @>
 @%@< unpack snapshots or die @>
-@%echo ... Java
-@%@< set up java @>
-@%@< set up java environment in scripts @>
-@%@< install maven @>
-@%echo ... Python
-@%@< set up python @>
-@%echo ... Alpino
-@%@< install Alpino @>
-@%echo ... Spotlight
-@%@< install the Spotlight server @>
- @%echo ... Treetagger
+echo ... Java
+@< set up java @>
+@< set up java environment in scripts @>
+@< install maven @>
+echo ... Python
+@< set up python @>
+echo ... Alpino
+@< install Alpino @>
+echo ... Spotlight
+@< install the Spotlight server @>
+echo ... Treetagger
 @< install the treetagger utility @>
 echo ... Ticcutils and Timbl
 @< install the ticcutils utility @>
@@ -685,39 +685,39 @@ echo ... Ticcutils and Timbl
 @| @}
 
 @o m4_bindir/m4_module_installer @{@%
-@%echo Install modules
-@%echo ... Tokenizer
-@%@< install the tokenizer @>
-@%echo ... Morphosyntactic parser
-@%@< install the morphosyntactic parser @>
-@%echo ... NERC
-@%@< install the NERC module @>
-@%echo ... Coreference base
-@%@< install coreference-base @>
-@%echo ... WSD
-@%@< install the WSD module @>
-@%echo ... Ontotagger
-@%@< install the onto module @>
-@%echo ... Heideltime
-@%@< install the heideltime module @>
-@%echo ... SRL
-@%@< install the srl module @>
-@%echo ... NED
-@%@< install the \NED{} module @>
-@%echo ... Event-coreference
-@%@< install the event-coreference module @>
-@%echo ... lu2synset
-@%@< install the lu2synset converter @>
+echo Install modules
+echo ... Tokenizer
+@< install the tokenizer @>
+echo ... Morphosyntactic parser
+@< install the morphosyntactic parser @>
+echo ... NERC
+@< install the NERC module @>
+echo ... Coreference base
+@< install coreference-base @>
+echo ... WSD
+@< install the WSD module @>
+echo ... Ontotagger
+@< install the onto module @>
+echo ... Heideltime
+@< install the heideltime module @>
+echo ... SRL
+@< install the srl module @>
+echo ... NED
+@< install the \NED{} module @>
+echo ... Event-coreference
+@< install the event-coreference module @>
+echo ... lu2synset
+@< install the lu2synset converter @>
 echo Final
 @| @}
 
-@o m4_bindir/m4_module_installer @{@%
+@%@o m4_bindir/m4_module_installer @{@%
 @%@< remove maven @>
-@| @}
-
-@%@d make scripts executable @{@%
-@%chmod 775  m4_bindir/m4_module_installer
 @%@| @}
+
+@d make scripts executable @{@%
+chmod 775  m4_bindir/m4_module_installer
+@| @}
 
 \subsection{Check availability of resources}
 \label{sec:check-availability}
@@ -1338,7 +1338,11 @@ have been placed in subdirectory \verb|/m4_nercdir/m4_nercmodeldir/nl| of
 the snapshot.
 
 @d get the nerc models @{@%
-mkdir -p m4_amoddir/m4_nercdir
+@< get or have @(m4_nercmodelsball@) @>
+@%mkdir -p m4_amoddir/m4_nercdir
+cd m4_amoddir
+tar -xzf m4_asocket/m4_nercmodelsball
+rm m4_nercmodelsball
 cp -r m4_asnapshotroot/m4_nercdir/m4_nercmodeldir m4_amoddir/m4_nercdir/
 chmod -R 775 m4_amoddir/m4_nercdir
 @| @}
@@ -1443,8 +1447,11 @@ echo LIBSVM installed correctly lib/libsvm
 This part has also been copied from \verb|install_naf.sh| in the \textsc{wsd} module.
 
 @d download svm models @{@%
-cd m4_amoddir/m4_wsddir
-cp -r m4_aprojroot/m4_snapshotdir/svm_wsd/models .
+@< get or have @(m4_wsd_snapball@) @>
+cd m4_amoddir
+tar -xzf m4_asocket/m4_wsdsnapball
+rm m4_asocket/m4_wsdsnapball
+@%cp -r m4_aprojroot/m4_snapshotdir/svm_wsd/models .
 @% echo 'Downloading models...(could take a while)'
 @% wget --user=cltl --password='.cltl.' kyoto.let.vu.nl/~izquierdo/models_wsd_svm_dsc.tgz 2> /dev/null
 @% echo 'Unzipping models...'
@@ -1558,7 +1565,10 @@ There is not an official repository for this module yet, so copy the
 module from the tarball.
 
 @d install the lu2synset converter @{@%
-cp -r m4_asnapshotroot/m4_lu2syndir m4_amoddir/
+@< get or have @((m4_lu2synball@) @>
+cd m4_amoddir
+tar -xzf m4_asocket/m4_lu2synball
+rm m4_asocket/m4_lu2synball
 @| @}
 
 \paragraph{Script}
@@ -1728,9 +1738,11 @@ install from a snapshot (\texttt{m4_ontotarball}).
 \label{sec:ontotagger-module}
 
 @d install the onto module @{@%
+@< get or have @(m4_ontotarball@) @>
 @%cp -r m4_asnapshotroot/m4_ontodir m4_amoddir/
 cd m4_amoddir
-tar -xzf m4_aprojroot/m4_snapshotdir/m4_ontotarball
+tar -xzf m4_asocket/m4_ontotarball
+rm asocket/m4_ontotarball
 chmod -R o+r m4_amoddir
 @| @}
 
@@ -1977,8 +1989,9 @@ rm -rf \$TEMPDIR
 Install the module from the snapshot.
 
 @d install the event-coreference module @{@%
+@< get or have @(m4_evcoreftarball@) @>
 cd m4_amoddir
-tar -xzf m4_asnapshotroot/m4_evcoreftarball
+tar -xzf m4_asocket/m4_evcoreftarball
 cd m4_evcorefdir
 cp lib/m4_evcorefjar m4_ajardir
 @| @}
