@@ -188,7 +188,7 @@ directories:
 @d directories to create @{m4_moddir @| @}
 @d directories to create @{m4_bindir m4_usrlocaldir/bin @| @}
 @d directories to create @{m4_usrlocaldir<!!>/lib @| @}
-@d directories to create @{m4_moddir/python @| @}
+@%@d directories to create @{m4_envdir/python @| @}
 
 Communicate the file-structure to scripts with a ``source'' script
 that sets variables.
