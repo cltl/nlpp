@@ -45,7 +45,7 @@ m4_define(m4_javatarball, server-jre-7u72-linux-x64.tar.gz)m4_dnl
 m4_define(m4_javatarballurl, http://www.oracle.com/technetwork/java/javase/downloads/server-jre7-downloads-1931105.html)m4_dnl
 m4_define(m4_javajdk, jdk1.7.0_72)m4_dnl
 m4_define(m4_ahackdir, m4_aenvdir`/hacks')m4_dnl
-m4_define(m4_activepytonball, ActivePython-2.7.8.10-linux-x86_64.tar.gz)m4_dnl
+m4_define(m4_activepythonball, ActivePython-2.7.8.10-linux-x86_64.tar.gz)m4_dnl
 m4_define(m4_apythonenvdir, m4_aenvdir/python)m4_dnl
 m4_define(m4_pythonenvdir, m4_envdir/python)m4_dnl
 m4_dnl
@@ -236,7 +236,7 @@ m4_dnl
 m4_dnl Alpino
 m4_define(m4_alpino_version, 20706)m4_dnl
 m4_define(m4_alpinosrc, Alpino-x86_64-linux-glibc2.5-`'m4_alpino_version`'-sicstus.tar.gz)
-m4_define(m4_alpinourl, http://www.let.rug.nl/vannoord/alp/Alpino/binary/versions/m4_alpinosrc)m4_dnl  
+m4_define(m4_alpinourl, http://www.let.rug.nl/vannoord/alp/Alpino/binary/versions/Old/m4_alpinosrc)m4_dnl  
 m4_define(m4_alpino_desc_url, http://www.let.rug.nl/~vannoord/alp/Alpino/)m4_dnl
 m4_define(m4_alpinodir, Alpino)m4_dnl  Subdir. of modules
 m4_define(m4_Alpinoscript, alpino)m4_dnl

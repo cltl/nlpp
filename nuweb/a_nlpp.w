@@ -1449,8 +1449,8 @@ This part has also been copied from \verb|install_naf.sh| in the \textsc{wsd} mo
 @d download svm models @{@%
 @< get or have @(m4_wsd_snapball@) @>
 cd m4_amoddir
-tar -xzf m4_asocket/m4_wsdsnapball
-rm m4_asocket/m4_wsdsnapball
+tar -xzf m4_asocket/m4_wsd_snapball
+rm m4_asocket/m4_wsd_snapball
 @%cp -r m4_aprojroot/m4_snapshotdir/svm_wsd/models .
 @% echo 'Downloading models...(could take a while)'
 @% wget --user=cltl --password='.cltl.' kyoto.let.vu.nl/~izquierdo/models_wsd_svm_dsc.tgz 2> /dev/null
@@ -1565,7 +1565,7 @@ There is not an official repository for this module yet, so copy the
 module from the tarball.
 
 @d install the lu2synset converter @{@%
-@< get or have @((m4_lu2synball@) @>
+@< get or have @(m4_lu2synball@) @>
 cd m4_amoddir
 tar -xzf m4_asocket/m4_lu2synball
 rm m4_asocket/m4_lu2synball
