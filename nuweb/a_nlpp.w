@@ -186,8 +186,8 @@ directories:
 \end{description}
 
 @d directories to create @{m4_moddir @| @}
-@d directories to create @{m4_bindir m4_usrlocaldir/bin@| @}
-@d directories to create @{m4_usrlocaldir<!!>/bin m4_usrlocaldir<!!>/lib @| @}
+@d directories to create @{m4_bindir m4_usrlocaldir/bin @| @}
+@d directories to create @{m4_usrlocaldir<!!>/lib @| @}
 @d directories to create @{m4_moddir/python @| @}
 
 Communicate the file-structure to scripts with a ``source'' script
@@ -612,24 +612,49 @@ fi
 
 
 The following macro downloads a resource if it is not already present
-in the ``socket'' directory.
+in the ``socket'' directory. It turns out that sometimes there is a
+time-out for unknown reasons. In that case we will try it multiple times.
 
 @d get or have @{@%
-if
+counter=0
+while
   [ ! -e m4_asocket/@1 ]
-then
+do
   @< have an SSH key or die @>
   cd m4_asocket
   scp -i "m4_snapshotkeyfile" m4_repo_user<!!>@@<!!>m4_repo_url:m4_repo_path/@1 .
   if
     [ $? -gt 0 ]
   then
-    echo "Cannot contact snapshot server"
-    exit 1
+    counter=$((counter+1))
+    if
+      [ $counter -gt 3 ]
+    then
+       echo "Cannot contact snapshot server"
+       exit 1
+    fi
   fi
-fi
+done
 
 @| @}
+
+
+@%@d get or have @{@%
+@%if
+@%  [ ! -e m4_asocket/@1 ]
+@%then
+@%  @< have an SSH key or die @>
+@%  cd m4_asocket
+@%  scp -i "m4_snapshotkeyfile" m4_repo_user<!!>@@<!!>m4_repo_url:m4_repo_path/@1 .
+@%  if
+@%    [ $? -gt 0 ]
+@%  then
+@%    echo "Cannot contact snapshot server"
+@%    exit 1
+@%  fi
+@%fi
+@%
+@%@| @}
 
 
 

@@ -95,7 +95,7 @@ view : nlpp.pdf
 
 htm : $(htmldir) $(htmltarget)
 
-DIRS = ../modules ../bin ../env/usrlocal/bin../env/usrlocal/bin ../env/usrlocal/lib ../modules/python ../env/java ../env/java/jars /home/newsreader/nlpp/env/apache-maven-3.0.5 /home/newsreader/nlpp/env/python ../nuweb/bin 
+DIRS = ../modules ../bin ../env/usrlocal/bin ../env/usrlocal/lib ../modules/python ../env/java ../env/java/jars /home/newsreader/nlpp/env/apache-maven-3.0.5 /home/newsreader/nlpp/env/python ../nuweb/bin 
 
 $(DIRS) : 
 	$(MKDIR) $@
