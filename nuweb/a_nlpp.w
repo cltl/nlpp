@@ -2330,7 +2330,7 @@ Put the nuweb binary in the nuweb subdirectory, so that it can be used before th
 nuweb: $(NUWEB)
 
 $(NUWEB): m4_projroot/m4_nuwebsource
-	mkdir -p m4_ausrlocalbindir
+	mkdir -p m4_usrlocalbindir
 	cd m4_projroot/m4_nuwebsource && make nuweb
 	cp m4_projroot/m4_nuwebsource/nuweb $(NUWEB)
 

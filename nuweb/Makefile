@@ -52,7 +52,7 @@ $(htmldir)/% : % $(htmldir)
 nuweb: $(NUWEB)
 
 $(NUWEB): ../nuweb-1.58
-	mkdir -p /home/newsreader/nlpp/env/usrlocal/bin
+	mkdir -p ../env/usrlocal/bin
 	cd ../nuweb-1.58 && make nuweb
 	cp ../nuweb-1.58/nuweb $(NUWEB)
 
