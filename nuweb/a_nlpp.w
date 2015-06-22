@@ -284,7 +284,7 @@ rm m4_maventarball
 @| @}
 
 @d install maven @{@%
-export MAVEN_HOME=m4_mavendir
+export MAVEN_HOME=m4_amavendir
 export PATH=${MAVEN_HOME}/bin:${PATH}
 @| @}
 
@@ -417,7 +417,7 @@ source m4_aenvdir/venv/bin/activate
 Subdirectory \texttt{m4_aenvdir/python} will contain general Python
 packages like KafnafParserPy.
 
-@d directories to create @{m4_aenvdir/python @| @}
+@d directories to create @{m4_envdir/python @| @}
 
 Activation of Python include pointing to the place where Python
 packages are:
@@ -2626,7 +2626,7 @@ Then it runs the four processors nuweb, \LaTeX{}, MakeIndex and bib\TeX{}, until
 they do not change the auxiliary file or the index. 
 
 @d compile nuweb @{@%
-NUWEB=m4_nuwebbinary
+NUWEB=m4_anuwebbinary
 @< run the processors until the aux file remains unchanged @>
 @< remove the copy of the aux file @>
 @| @}
@@ -2849,7 +2849,7 @@ Create a script that performs the translation.
 #  [filename]: Name of the nuweb source file.
 <!#!> m4_header
 echo "translate " \$1 >w2html.log
-NUWEB=m4_nuwebbinary
+NUWEB=m4_anuwebbinary
 @< filenames in w2html @>
 
 @< perform the task of w2html @>

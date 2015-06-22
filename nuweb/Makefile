@@ -3,7 +3,7 @@ all : nlpp.pdf
 
 
 
-NUWEB=/mnt/rd/nlpp/env/usrlocal/bin/nuweb
+NUWEB=../env/usrlocal/bin/nuweb
 .SUFFIXES: .pdf .w .tex .html .aux .log .php
 
 FIGFILES=fileschema
@@ -52,7 +52,7 @@ $(htmldir)/% : % $(htmldir)
 nuweb: $(NUWEB)
 
 $(NUWEB): ../nuweb-1.58
-	mkdir -p /mnt/rd/nlpp/env/usrlocal/bin
+	mkdir -p /home/newsreader/nlpp/env/usrlocal/bin
 	cd ../nuweb-1.58 && make nuweb
 	cp ../nuweb-1.58/nuweb $(NUWEB)
 
@@ -95,7 +95,7 @@ view : nlpp.pdf
 
 htm : $(htmldir) $(htmltarget)
 
-DIRS = ../modules ../bin ../env/usrlocal/bin ../env/usrlocal/lib ../env/java ../env/java/jars /mnt/rd/nlpp/env/apache-maven-3.0.5 /mnt/rd/nlpp/env/python ../nuweb/bin 
+DIRS = ../modules ../bin ../env/usrlocal/bin ../env/usrlocal/lib ../env/java ../env/java/jars ../env/apache-maven-3.0.5 ../env/python ../nuweb/bin 
 
 $(DIRS) : 
 	$(MKDIR) $@

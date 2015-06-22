@@ -1,4 +1,4 @@
-m4_define(m4_repoversion, `0.9.02')m4_dnl
+mavenm4_define(m4_repoversion, `0.9.02')m4_dnl
 m4_dnl
 m4_dnl Titles
 m4_dnl
@@ -37,6 +37,7 @@ m4_define(m4_envdir, m4_projroot`/env')m4_dnl
 m4_define(m4_usrlocaldir, m4_envdir`/usrlocal')m4_dnl     
 m4_define(m4_ausrlocaldir, m4_aenvdir`/usrlocal')m4_dnl
 m4_define(m4_ausrlocalbindir, m4_ausrlocaldir/bin)m4_dnl
+m4_define(m4_usrlocalbindir, m4_usrlocaldir/bin)m4_dnl
 m4_define(m4_ajavadir, m4_aenvdir`/java')m4_dnl   
 m4_define(m4_javadir, m4_envdir`/java')m4_dnl     
 m4_define(m4_ajardir, m4_ajavadir`/jars')m4_dnl     jars
@@ -62,7 +63,8 @@ m4_dnl
 m4_dnl Maven
 m4_dnl
 m4_define(m4_mavenversion, `3.0.5')m4_dnl
-m4_define(m4_mavendir, m4_aenvdir/apache-maven-`'m4_mavenversion)m4_dnl
+m4_define(m4_amavendir, m4_aenvdir/apache-maven-`'m4_mavenversion)m4_dnl
+m4_define(m4_mavendir, m4_envdir/apache-maven-`'m4_mavenversion)m4_dnl
 m4_define(m4_maventarball, apache-maven-`'m4_mavenversion`'-bin.tar.gz)m4_dnl
 m4_define(m4_maventarballurl, http://apache.rediris.es/maven/maven-3/`'m4_mavenversion`'/binaries/`'m4_maventarball)m4_dnl
 m4_define(m4_maven_javaversion, 1.7)m4_dnl
@@ -310,7 +312,8 @@ m4_define(m4_mkportbib, `/home/paul/bin/mkportbib')m4_dnl
 m4_define(m4_printpdf, `lpr '$1`.pdf')m4_dnl
 m4_define(m4_viewpdf, `evince '$1`.pdf')m4_dnl
 m4_define(m4_latex, `pdflatex '$1)m4_dnl
-m4_define(m4_nuwebbinary, `m4_ausrlocalbindir/nuweb')m4_dnl
+m4_define(m4_nuwebbinary, `m4_usrlocalbindir/nuweb')m4_dnl
+m4_define(m4_anuwebbinary, `m4_ausrlocalbindir/nuweb')m4_dnl
 m4_dnl m4_define(m4_nuwebbinary, m4_esyscmd(which nuweb))m4_dnl
 m4_dnl
 m4_dnl    subdirs 
