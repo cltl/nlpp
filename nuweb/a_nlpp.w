@@ -1714,8 +1714,8 @@ echo Put Spotlight jar in the Maven repository.
 tempdir=`mktemp -d -t simplespot.XXXXXX`
 cd $tempdir
 wget m4_spotlight_download_url/m4_simple_spotlightjar
-wget m4_spotlight_download_url/m4_spotlight_nl_model
-tar -xzf m4_spotlight_nl_model
+wget m4_spotlight_download_url/m4_spotlight_nl_model_ball
+tar -xzf m4_spotlight_nl_model_ball
 @% wget m4_spotlight_download_url/m4_spotlight_en_model
 @% tar -xzf m4_spotlight_en_model
 MVN_SPOTLIGHT_OPTIONS="-Dfile=m4_simple_spotlightjar"
