@@ -3,9 +3,9 @@ all : nlpp.pdf
 
 
 
+NUWEB=../env/usrlocal/bin/nuweb
 .SUFFIXES: .pdf .w .tex .html .aux .log .php
 
-NUWEB=./nuweb
 FIGFILES=fileschema
 
 FIGFILENAMES=$(foreach fil,$(FIGFILES), $(fil).fig)
@@ -48,7 +48,11 @@ $(htmldir)/% : % $(htmldir)
 	cp $< $(htmldir)/
 
 
+
+nuweb: $(NUWEB)
+
 $(NUWEB): ../nuweb-1.58
+	mkdir -p ../env/usrlocal/bin
 	cd ../nuweb-1.58 && make nuweb
 	cp ../nuweb-1.58/nuweb $(NUWEB)
 
@@ -77,6 +81,10 @@ $(htmltarget) : $(htmlmaterial) $(htmldir)
 	cd $(htmldir) && ./w2html nlpp.w
 
 
+clean:
+	rm -rf ../nuweb-1.58
+	
+
 pdf : nlpp.pdf
 
 print : nlpp.pdf
@@ -87,13 +95,14 @@ view : nlpp.pdf
 
 htm : $(htmldir) $(htmltarget)
 
-DIRS = ../modules ../bin ../env/usrlocal/bin../env/usrlocal/bin ../env/usrlocal/lib ../modules/python ../env/java ../env/java/jars /home/paul/projecten/cltl/pipelines/nlpp/env/apache-maven-3.0.5 /home/paul/projecten/cltl/pipelines/nlpp/env/python ../nuweb/bin 
+DIRS = ../modules ../bin ../env/usrlocal/bin ../env/usrlocal/lib ../env/java ../env/java/jars ../env/apache-maven-3.0.5 ../env/python ../nuweb/bin 
 
 $(DIRS) : 
 	$(MKDIR) $@
 
 sources : nlpp.w $(DIRS) $(NUWEB)
 	$(NUWEB) nlpp.w
+	chmod 775  ../bin/install-modules
 	chmod -R 775  ../bin/*
 	
 

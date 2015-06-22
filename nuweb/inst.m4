@@ -1,4 +1,4 @@
-m4_define(m4_repoversion, `0.9.01')m4_dnl
+m4_define(m4_repoversion, `0.9.02')m4_dnl
 m4_dnl
 m4_dnl Titles
 m4_dnl
@@ -12,15 +12,13 @@ m4_dnl Paths and URL's
 m4_dnl
 m4_dnl
 m4_define(m4_aprojroot, m4_regexp(m4_esyscmd(pwd), `\(^[a-zA-Z0-9/-]+\)/nuweb$', `\1'))m4_dnl
+m4_define(m4_asocket, m4_regexp(m4_esyscmd(pwd), `\(^[a-zA-Z0-9/-]+\)/nlpp/nuweb$', `\1'))m4_dnl
 m4_define(m4_projroot, `..')m4_dnl
 m4_define(m4_abindir, m4_aprojroot`/bin')m4_dnl     Binaries
 m4_define(m4_bindir, m4_projroot`/bin')m4_dnl     Binaries
 m4_define(m4_amoddir, m4_aprojroot`/modules')m4_dnl     Modules
 m4_define(m4_moddir, m4_projroot`/modules')m4_dnl     Modules
 m4_dnl m4_define(m4_lisanlproot, /home/phuijgen/nlp)m4_dnl
-m4_define(m4_snapshotrootURL, kyoto.let.vu.nl~huygen/dutch_snapshots)m4_dnl
-m4_define(m4_asnapshotroot, m4_aprojroot/snapshots)m4_dnl
-m4_define(m4_snapshotroot, m4_projroot/snapshots)m4_dnl
 m4_dnl
 m4_dnl HTML doc generation
 m4_define(m4_htmldocdir, m4_projroot/nuweb/html)m4_dnl . You can change this in a local m4 file.
@@ -38,6 +36,8 @@ m4_define(m4_aenvdir, m4_aprojroot`/env')m4_dnl     Program environment
 m4_define(m4_envdir, m4_projroot`/env')m4_dnl 
 m4_define(m4_usrlocaldir, m4_envdir`/usrlocal')m4_dnl     
 m4_define(m4_ausrlocaldir, m4_aenvdir`/usrlocal')m4_dnl
+m4_define(m4_usrlocalbindir, m4_usrlocaldir/bin)m4_dnl
+m4_define(m4_ausrlocalbindir, m4_ausrlocaldir/bin)m4_dnl
 m4_define(m4_ajavadir, m4_aenvdir`/java')m4_dnl   
 m4_define(m4_javadir, m4_envdir`/java')m4_dnl     
 m4_define(m4_ajardir, m4_ajavadir`/jars')m4_dnl     jars
@@ -46,13 +46,25 @@ m4_define(m4_javatarball, server-jre-7u72-linux-x64.tar.gz)m4_dnl
 m4_define(m4_javatarballurl, http://www.oracle.com/technetwork/java/javase/downloads/server-jre7-downloads-1931105.html)m4_dnl
 m4_define(m4_javajdk, jdk1.7.0_72)m4_dnl
 m4_define(m4_ahackdir, m4_aenvdir`/hacks')m4_dnl
+m4_define(m4_activepythonball, ActivePython-2.7.8.10-linux-x86_64.tar.gz)m4_dnl
 m4_define(m4_apythonenvdir, m4_aenvdir/python)m4_dnl
 m4_define(m4_pythonenvdir, m4_envdir/python)m4_dnl
+m4_dnl
+m4_dnl snapshot
+m4_dnl
+m4_define(m4_repo_url, kyoto.let.vu.nl)m4_dnl
+m4_define(m4_repo_user, newsreader)m4_dnl
+m4_define(m4_repo_path, nlpp_resources)m4_dnl
+m4_define(m4_snapshotkeyfile, m4_asocket/nrkey)m4_dnl
+m4_define(m4_snapshotrootURL, kyoto.let.vu.nl~huygen/dutch_snapshots)m4_dnl
+m4_define(m4_asnapshotroot, m4_aprojroot/snapshots)m4_dnl
+m4_define(m4_snapshotroot, m4_projroot/snapshots)m4_dnl
 m4_dnl
 m4_dnl Maven
 m4_dnl
 m4_define(m4_mavenversion, `3.0.5')m4_dnl
-m4_define(m4_mavendir, m4_aenvdir/apache-maven-`'m4_mavenversion)m4_dnl
+m4_define(m4_mavendir, m4_envdir/apache-maven-`'m4_mavenversion)m4_dnl
+m4_define(m4_amavendir, m4_aenvdir/apache-maven-`'m4_mavenversion)m4_dnl
 m4_define(m4_maventarball, apache-maven-`'m4_mavenversion`'-bin.tar.gz)m4_dnl
 m4_define(m4_maventarballurl, http://apache.rediris.es/maven/maven-3/`'m4_mavenversion`'/binaries/`'m4_maventarball)m4_dnl
 m4_define(m4_maven_javaversion, 1.7)m4_dnl
@@ -125,6 +137,7 @@ m4_define(m4_nercmodelsonar, nl-clusters-sonar.bin)m4_dnl
 m4_define(m4_nercscript, nerc)m4_dnl
 m4_define(m4_nerc_conll02_script, nerc_conll02)m4_dnl
 m4_define(m4_nerc_sonar_script, nerc_sonar)m4_dnl
+m4_define(m4_nercmodelsball, EHU-nerc.tgz)m4_dnl
 m4_dnl
 m4_dnl Coreference-base
 m4_dnl
@@ -159,6 +172,7 @@ m4_define(m4_wsdgit, https://github.com/cltl/svm_wsd.git)m4_dnl
 m4_define(m4_wsd_commitname, `2babeb40a81b3720274a0521ccc2a27c5eff28c9')m4_dnl
 m4_define(m4_wsddir, svm_wsd)m4_dnl
 m4_define(m4_wsdscript, wsd)m4_dnl
+m4_define(m4_wsd_snapball, svm_wsd.tgz)m4_dnl
 m4_dnl
 m4_dnl ONTO
 m4_define(m4_ontodir, vua-ontotagger-v1.0)m4_dnl  Subdir. of modules
@@ -185,27 +199,33 @@ m4_dnl SRL
 m4_define(m4_srlgit, `https://github.com/newsreader/vua-srl-nl.git' )m4_dnl  Subdir. of modules
 m4_dnl m4_define(m4_srl_commitname, a5e63ba512cc326274b1285cf2af81ff8a2e04b5)m4_dnl
 m4_define(m4_srl_commitname, 675d22d361289ede23df11dcdb17195f008c54bf)m4_dnl
-m4_define(m4_srlsrc, m4_asnapshotroot/srlModuleForBN)m4_dnl  Subdir. of modules
-m4_dnl m4_define(m4_srldir, srlModuleForBN)m4_dnl  Subdir. of modules
-m4_define(m4_srldir, vua-srl-nl)m4_dnl  Subdir. of modules
+m4_define(m4_srlsrc, m4_asnapshotroot/srlModuleForBN)m4_dnl
+m4_dnl m4_define(m4_srldir, srlModuleForBN)m4_dnl
+m4_define(m4_srldir, vua-srl-nl)m4_dnl
 m4_define(m4_srlscript, srl)m4_dnl
 m4_dnl
 m4_dnl Nom. coref
-m4_define(m4_ncorefsrc, /dev/null )m4_dnl  Subdir. of modules
-m4_define(m4_ncorefdir, nomcoref)m4_dnl  Subdir. of modules
+m4_define(m4_ncorefsrc, /dev/null )m4_dnl
+m4_define(m4_ncorefdir, nomcoref)m4_dnl
 m4_define(m4_ncorefscript, nomcoref)m4_dnl
 m4_dnl
 m4_dnl Ev. coref
-m4_define(m4_evcorefdir, vua-eventcoreference_v2)m4_dnl  Subdir. of modules
+m4_define(m4_evcorefdir, vua-eventcoreference_v2)m4_dnl
 m4_define(m4_evcoreftarball, m4_evcorefdir.tar.gz)m4_dnl
 m4_define(m4_evcorefscript, evcoref)m4_dnl
 m4_define(m4_evcorefjar, EventCoreference-1.0-SNAPSHOT-jar-with-dependencies.jar)m4_dnl
+m4_dnl
+m4_dnl Ev. coref
 
 m4_dnl
 m4_dnl Opinion-miner
-m4_define(m4_opinisrc, /dev/null )m4_dnl  Subdir. of modules
-m4_define(m4_opinidir, opinimin)m4_dnl  Subdir. of modules
+m4_define(m4_opinisrc, /dev/null )m4_dnl  
+m4_define(m4_opinidir, opinimin)m4_dnl  
 m4_define(m4_opiniscript, opinimin)m4_dnl
+m4_dnl
+m4_dnl lu2synset
+m4_define(m4_lu2synball, lu2synset.tgz)m4_dnl  
+
 m4_dnl
 m4_dnl Framenet Semantic Role Labeler
 m4_define(m4_fsrlsrc, /dev/null )m4_dnl  Subdir. of modules
@@ -218,7 +238,7 @@ m4_dnl
 m4_dnl Alpino
 m4_define(m4_alpino_version, 20706)m4_dnl
 m4_define(m4_alpinosrc, Alpino-x86_64-linux-glibc2.5-`'m4_alpino_version`'-sicstus.tar.gz)
-m4_define(m4_alpinourl, http://www.let.rug.nl/vannoord/alp/Alpino/binary/versions/m4_alpinosrc)m4_dnl  
+m4_define(m4_alpinourl, http://www.let.rug.nl/vannoord/alp/Alpino/binary/versions/Old/m4_alpinosrc)m4_dnl  
 m4_define(m4_alpino_desc_url, http://www.let.rug.nl/~vannoord/alp/Alpino/)m4_dnl
 m4_define(m4_alpinodir, Alpino)m4_dnl  Subdir. of modules
 m4_define(m4_Alpinoscript, alpino)m4_dnl
@@ -262,6 +282,7 @@ m4_define(m4_treetagdir, treetagger)m4_dnl
 m4_dnl
 m4_dnl Spotlight
 m4_dnl
+m4_define(m4_spotlightball, spotlightnl.tgz)m4_dnl
 m4_define(m4_spotlight_nl_port, 2060)m4_dnl
 m4_define(m4_aspotlightdir, m4_aenvdir/spotlight)m4_dnl
 m4_define(m4_spotlighturl, http://spotlight.sztaki.hu)m4_dnl
@@ -269,9 +290,9 @@ m4_define(m4_spotlight_download_url, m4_spotlighturl/downloads)m4_dnl
 m4_define(m4_spotlightjarversion, 0.7)m4_dnl
 m4_define(m4_simple_spotlightjar, dbpedia-spotlight-`'m4_spotlightjarversion`'.jar)m4_dnl
 m4_define(m4_spotlightjar, dbpedia-spotlight-`'m4_spotlightjarversion`'-jar-with-dependencies-candidates.jar)m4_dnl
-m4_define(m4_spotlight_nl_model, nl.tar.gz)m4_dnl
+m4_define(m4_spotlight_nl_model_ball, nl.tar.gz)m4_dnl
 m4_define(m4_spotlight_nl_port, 2060)m4_dnl
-m4_define(m4_spotlight_en_model, en_2+2.tar.gz)m4_dnl
+m4_define(m4_spotlight_en_model_ball, en_2+2.tar.gz)m4_dnl
 m4_define(m4_spotlight_en_port, 2020)m4_dnl
 m4_dnl
 m4_dnl Wikipedia db
@@ -291,8 +312,8 @@ m4_define(m4_mkportbib, `/home/paul/bin/mkportbib')m4_dnl
 m4_define(m4_printpdf, `lpr '$1`.pdf')m4_dnl
 m4_define(m4_viewpdf, `evince '$1`.pdf')m4_dnl
 m4_define(m4_latex, `pdflatex '$1)m4_dnl
-m4_dnl m4_define(m4_nuwebbinary, `/usr/local/bin/nuweb')m4_dnl
-m4_define(m4_nuwebbinary, m4_esyscmd(which nuweb))m4_dnl
+m4_define(m4_nuwebbinary, `m4_usrlocalbindir/nuweb')m4_dnl
+m4_dnl m4_define(m4_nuwebbinary, m4_esyscmd(which nuweb))m4_dnl
 m4_dnl
 m4_dnl    subdirs 
 m4_dnl

@@ -186,9 +186,9 @@ directories:
 \end{description}
 
 @d directories to create @{m4_moddir @| @}
-@d directories to create @{m4_bindir m4_usrlocaldir/bin@| @}
-@d directories to create @{m4_usrlocaldir<!!>/bin m4_usrlocaldir<!!>/lib @| @}
-@d directories to create @{m4_moddir/python @| @}
+@d directories to create @{m4_bindir m4_usrlocaldir/bin @| @}
+@d directories to create @{m4_usrlocaldir<!!>/lib @| @}
+@%@d directories to create @{m4_envdir/python @| @}
 
 Communicate the file-structure to scripts with a ``source'' script
 that sets variables.
@@ -239,23 +239,20 @@ in a subdirectory of \texttt{m4_aenvdir}.
 @d directories to create @{m4_javadir @| @}
 
 
-@d check this first @{@%
-if
-  [ ! -e m4_aprojroot/m4_javatarball ]
-then
-  echo "Cannot find  m4_aprojroot/m4_javatarball"
-  exit 4
-fi
-@| @}
+@%@d check this first @{@%
+@%if
+@%  [ ! -e m4_aprojroot/m4_javatarball ]
+@%then
+@%  echo "Cannot find  m4_aprojroot/m4_javatarball"
+@%  exit 4
+@%fi
+@%@| @}
 
 @d set up java @{@%
-@< unpack the java tarball @>
-@| @}
-
-@d unpack the java tarball @{@%
+@< get or have @(m4_javatarball@) @>
 cd m4_aenvdir/java
-tar -xzf m4_aprojroot/m4_javatarball
-rm m4_aprojroot/m4_javatarball
+tar -xzf m4_asocket/m4_javatarball
+@% rm m4_asocket/m4_javatarball
 @| @}
 
 @d set up java environment in scripts @{@%
@@ -287,7 +284,7 @@ rm m4_maventarball
 @| @}
 
 @d install maven @{@%
-export MAVEN_HOME=m4_mavendir
+export MAVEN_HOME=m4_amavendir
 export PATH=${MAVEN_HOME}/bin:${PATH}
 @| @}
 
@@ -347,18 +344,20 @@ fi
 @| pythonok @}
 
 
-Check whether we have the ActivePython tarball and quit if tis is not
+Check whether we have the ActivePython tarball and quit if this is not
 the case.
 
 @d install ActivePython @{@%
-actpyt=`ls -1 m4_aprojroot/ActivePython*gz`
-if
-  [ $? -gt 0 ]
-then
-  echo "Cannot install Python 2.7."
-  echo "Please put ActivePython tarball in nlpp directory."
-  exit 1
-fi
+@< get or have @(m4_activepythonball@) @>
+@%
+@%actpyt=`ls -1 m4_aprojroot/ActivePython*gz`
+@%if
+@%  [ $? -gt 0 ]
+@%then
+@%  echo "Cannot install Python 2.7."
+@%  echo "Please put ActivePython tarball in nlpp directory."
+@%  exit 1
+@%fi
 @| @}
 
 Unpack the tarball in a temporary directory and install active python
@@ -371,7 +370,7 @@ and \url{https://github.com/ActiveState/activepython-docker/issues/1}).
 @d install ActivePython  @{@%
 pytinsdir=`mktemp -d -t activepyt.XXXXXX`
 cd $pytinsdir
-tar -xzf $actpyt
+tar -xzf m4_asocket/m4_activepythonball
 acdir=`ls -1`
 cd $acdir
 ./install.sh -I m4_ausrlocaldir
@@ -418,7 +417,7 @@ source m4_aenvdir/venv/bin/activate
 Subdirectory \texttt{m4_aenvdir/python} will contain general Python
 packages like KafnafParserPy.
 
-@d directories to create @{m4_aenvdir/python @| @}
+@d directories to create @{m4_envdir/python @| @}
 
 Activation of Python include pointing to the place where Python
 packages are:
@@ -599,26 +598,86 @@ fi
 \label{sec:snapshotinstall}
 
 For some modules a public repository is not available or not
-known. They must be installed from a tarball with snapshots that can
-be obtained from the author. Let us first check whether we have the
-snapshot and complain if we don't. We expect the file
-\verb|m4_aprojroot/m4_snapshot_tarball|.
+known. They must be installed from a non-public repository. A key to
+connect to the repository can be requested from the author.
 
-
-@d unpack snapshots or die @{@%
-cd m4_aprojroot
+@d have an SSH key or die @{@%
 if
-  [ -e m4_snapshot_tarball ]
+  [ ! -e m4_snapshotkeyfile ]
 then
-  tar -zxf m4_snapshot_tarball
-fi
-if
-  [ ! -e m4_snapshotdir ]
-then
-  echo "No module snapshots"
+  echo "No key to connect to snapshot!"
   exit 1
 fi
 @| @}
+
+
+The following macro downloads a resource if it is not already present
+in the ``socket'' directory. It turns out that sometimes there is a
+time-out for unknown reasons. In that case we will try it multiple times.
+
+@d get or have @{@%
+counter=0
+while
+  [ ! -e m4_asocket/@1 ]
+do
+  @< have an SSH key or die @>
+  cd m4_asocket
+  scp -i "m4_snapshotkeyfile" m4_repo_user<!!>@@<!!>m4_repo_url:m4_repo_path/@1 .
+  if
+    [ $? -gt 0 ]
+  then
+    counter=$((counter+1))
+    if
+      [ $counter -gt 3 ]
+    then
+       echo "Cannot contact snapshot server"
+       exit 1
+    fi
+  fi
+done
+
+@| @}
+
+
+@%@d get or have @{@%
+@%if
+@%  [ ! -e m4_asocket/@1 ]
+@%then
+@%  @< have an SSH key or die @>
+@%  cd m4_asocket
+@%  scp -i "m4_snapshotkeyfile" m4_repo_user<!!>@@<!!>m4_repo_url:m4_repo_path/@1 .
+@%  if
+@%    [ $? -gt 0 ]
+@%  then
+@%    echo "Cannot contact snapshot server"
+@%    exit 1
+@%  fi
+@%fi
+@%
+@%@| @}
+
+
+
+@% tarball with snapshots that can
+@%be obtained from the author. Let us first check whether we have the
+@%snapshot and complain if we don't. We expect the file
+@%\verb|m4_aprojroot/m4_snapshot_tarball|.
+
+
+@%@d unpack snapshots or die @{@%
+@%cd m4_aprojroot
+@%if
+@%  [ -e m4_snapshot_tarball ]
+@%then
+@%  tar -zxf m4_snapshot_tarball
+@%fi
+@%if
+@%  [ ! -e m4_snapshotdir ]
+@%then
+@%  echo "No module snapshots"
+@%  exit 1
+@%fi
+@%@| @}
 
 \subsection{The installation script}
 \label{sec:installscript}
@@ -632,7 +691,7 @@ echo Set up environment
 @< set local bin directory @>
 @< variables of m4_module_installer @>
 @< check this first @>
-@< unpack snapshots or die @>
+@%@< unpack snapshots or die @>
 echo ... Java
 @< set up java @>
 @< set up java environment in scripts @>
@@ -677,13 +736,13 @@ echo ... lu2synset
 echo Final
 @| @}
 
-@o m4_bindir/m4_module_installer @{@%
-@< remove maven @>
-@| @}
-
-@%@d make scripts executable @{@%
-@%chmod 775  m4_bindir/m4_module_installer
+@%@o m4_bindir/m4_module_installer @{@%
+@%@< remove maven @>
 @%@| @}
+
+@d make scripts executable @{@%
+chmod 775  m4_bindir/m4_module_installer
+@| @}
 
 \subsection{Check availability of resources}
 \label{sec:check-availability}
@@ -945,14 +1004,20 @@ We set 8Gb for the English server, but the Italian and Dutch Spotlight will requ
 So, let's do that. 
 
 @d install the Spotlight server @{@%
-mkdir -p m4_aspotlightdir
+@< get or have @(m4_spotlightball@) @>
+@%mkdir -p m4_aspotlightdir
+cd m4_aenvdir
+tar -xzf m4_asocket/m4_spotlightball
+rm -rf m4_asocket/m4_spotlightball
 cd m4_aspotlightdir
-cp m4_asnapshotroot/spotlight/m4_spotlightjar .
+@%cp m4_asnapshotroot/spotlight/m4_spotlightjar .
 @% wget m4_spotlight_download_url/m4_spotlightjar
-wget m4_spotlight_download_url/m4_spotlight_nl_model
-tar -xzf m4_spotlight_nl_model
-wget m4_spotlight_download_url/m4_spotlight_en_model
-tar -xzf m4_spotlight_en_model
+wget m4_spotlight_download_url/m4_spotlight_nl_model_ball
+tar -xzf m4_spotlight_nl_model_ball
+rm m4_spotlight_nl_model_ball
+@%wget m4_spotlight_download_url/m4_spotlight_en_model_ball
+@%tar -xzf m4_spotlight_en_model_ball
+@%rm m4_spotlight_en_model_ball
 @% MVN_SPOTLIGHT_OPTIONS="-Dfile=m4_spotlightjar"
 @% MVN_SPOTLIGHT_OPTIONS="$MVN_SPOTLIGHT_OPTIONS -DgroupId=ixa"
 @% MVN_SPOTLIGHT_OPTIONS="$MVN_SPOTLIGHT_OPTIONS -DartifactId=dbpedia-spotlight"
@@ -1298,7 +1363,11 @@ have been placed in subdirectory \verb|/m4_nercdir/m4_nercmodeldir/nl| of
 the snapshot.
 
 @d get the nerc models @{@%
-mkdir -p m4_amoddir/m4_nercdir
+@< get or have @(m4_nercmodelsball@) @>
+@%mkdir -p m4_amoddir/m4_nercdir
+cd m4_amoddir
+tar -xzf m4_asocket/m4_nercmodelsball
+rm m4_nercmodelsball
 cp -r m4_asnapshotroot/m4_nercdir/m4_nercmodeldir m4_amoddir/m4_nercdir/
 chmod -R 775 m4_amoddir/m4_nercdir
 @| @}
@@ -1403,8 +1472,11 @@ echo LIBSVM installed correctly lib/libsvm
 This part has also been copied from \verb|install_naf.sh| in the \textsc{wsd} module.
 
 @d download svm models @{@%
-cd m4_amoddir/m4_wsddir
-cp -r m4_aprojroot/m4_snapshotdir/svm_wsd/models .
+@< get or have @(m4_wsd_snapball@) @>
+cd m4_amoddir
+tar -xzf m4_asocket/m4_wsd_snapball
+rm m4_asocket/m4_wsd_snapball
+@%cp -r m4_aprojroot/m4_snapshotdir/svm_wsd/models .
 @% echo 'Downloading models...(could take a while)'
 @% wget --user=cltl --password='.cltl.' kyoto.let.vu.nl/~izquierdo/models_wsd_svm_dsc.tgz 2> /dev/null
 @% echo 'Unzipping models...'
@@ -1518,7 +1590,10 @@ There is not an official repository for this module yet, so copy the
 module from the tarball.
 
 @d install the lu2synset converter @{@%
-cp -r m4_asnapshotroot/m4_lu2syndir m4_amoddir/
+@< get or have @(m4_lu2synball@) @>
+cd m4_amoddir
+tar -xzf m4_asocket/m4_lu2synball
+rm m4_asocket/m4_lu2synball
 @| @}
 
 \paragraph{Script}
@@ -1688,9 +1763,11 @@ install from a snapshot (\texttt{m4_ontotarball}).
 \label{sec:ontotagger-module}
 
 @d install the onto module @{@%
+@< get or have @(m4_ontotarball@) @>
 @%cp -r m4_asnapshotroot/m4_ontodir m4_amoddir/
 cd m4_amoddir
-tar -xzf m4_aprojroot/m4_snapshotdir/m4_ontotarball
+tar -xzf m4_asocket/m4_ontotarball
+rm asocket/m4_ontotarball
 chmod -R o+r m4_amoddir
 @| @}
 
@@ -1937,8 +2014,9 @@ rm -rf \$TEMPDIR
 Install the module from the snapshot.
 
 @d install the event-coreference module @{@%
+@< get or have @(m4_evcoreftarball@) @>
 cd m4_amoddir
-tar -xzf m4_asnapshotroot/m4_evcoreftarball
+tar -xzf m4_asocket/m4_evcoreftarball
 cd m4_evcorefdir
 cp lib/m4_evcorefjar m4_ajardir
 @| @}
@@ -2181,9 +2259,9 @@ well-equipped Linux system.
 
 @%\textbf{NOTE:} Currently, not the most recent version  of Nuweb is used, but an older version that has been modified by me, Paul Huygen.
 
-@% @d parameters in Makefile @{@%
-@% NUWEB=m4_nuwebbinary
-@% @| @}
+@d parameters in Makefile @{@%
+NUWEB=m4_nuwebbinary
+@| @}
 
 
 \subsection{Translate and run}
@@ -2208,6 +2286,13 @@ all : @< all targets @>
 .PHONY : all
 
 @|PHONY all @}
+
+@d make targets @{@%
+clean:
+	@< clean up @>
+
+@| @}
+
 
 
 One of the targets is certainly the \textsc{pdf} version of this
@@ -2236,16 +2321,25 @@ from where it can be downloaded with a script.
 
 Put the nuweb binary in the nuweb subdirectory, so that it can be used before the directory-structure has been generated.
 
-@d parameters in Makefile @{@%
-NUWEB=./nuweb
-@| NUWEB @}
+@% @d parameters in Makefile @{@%
+@% NUWEB=./nuweb
+@% @| NUWEB @}
 
 @d expliciete make regels @{@%
+
+nuweb: $(NUWEB)
+
 $(NUWEB): m4_projroot/m4_nuwebsource
+	mkdir -p m4_usrlocalbindir
 	cd m4_projroot/m4_nuwebsource && make nuweb
 	cp m4_projroot/m4_nuwebsource/nuweb $(NUWEB)
 
 @| @}
+
+@d clean up @{@%
+rm -rf m4_projroot/m4_nuwebsource
+@| @}
+
 
 @d expliciete make regels @{@%
 m4_projroot/m4_nuwebsource:
