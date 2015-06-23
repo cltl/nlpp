@@ -3,7 +3,7 @@ all : nlpp.pdf
 
 
 
-NUWEB=m4_usrlocalbindir/nuweb
+NUWEB=../env/bin/nuweb
 .SUFFIXES: .pdf .w .tex .html .aux .log .php
 
 FIGFILES=fileschema dirstructure
