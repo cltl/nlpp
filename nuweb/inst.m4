@@ -312,7 +312,8 @@ m4_define(m4_mkportbib, `/home/paul/bin/mkportbib')m4_dnl
 m4_define(m4_printpdf, `lpr '$1`.pdf')m4_dnl
 m4_define(m4_viewpdf, `evince '$1`.pdf')m4_dnl
 m4_define(m4_latex, `pdflatex '$1)m4_dnl
-m4_define(m4_nuwebbinary, `m4_usrlocalbindir/nuweb')m4_dnl
+m4_define(m4_nuwebbinary,   `m4_usrlocalbindir/nuweb')m4_dnl
+m4_define(m4_anuwebbinary, `m4_ausrlocalbindir/nuweb')m4_dnl
 m4_dnl m4_define(m4_nuwebbinary, m4_esyscmd(which nuweb))m4_dnl
 m4_dnl
 m4_dnl    subdirs 

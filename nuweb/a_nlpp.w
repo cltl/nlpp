@@ -1714,8 +1714,8 @@ echo Put Spotlight jar in the Maven repository.
 tempdir=`mktemp -d -t simplespot.XXXXXX`
 cd $tempdir
 wget m4_spotlight_download_url/m4_simple_spotlightjar
-wget m4_spotlight_download_url/m4_spotlight_nl_model
-tar -xzf m4_spotlight_nl_model
+wget m4_spotlight_download_url/m4_spotlight_nl_model_ball
+tar -xzf m4_spotlight_nl_model_ball
 @% wget m4_spotlight_download_url/m4_spotlight_en_model
 @% tar -xzf m4_spotlight_en_model
 MVN_SPOTLIGHT_OPTIONS="-Dfile=m4_simple_spotlightjar"
@@ -2626,7 +2626,7 @@ Then it runs the four processors nuweb, \LaTeX{}, MakeIndex and bib\TeX{}, until
 they do not change the auxiliary file or the index. 
 
 @d compile nuweb @{@%
-NUWEB=m4_nuwebbinary
+NUWEB=m4_anuwebbinary
 @< run the processors until the aux file remains unchanged @>
 @< remove the copy of the aux file @>
 @| @}
@@ -2849,7 +2849,7 @@ Create a script that performs the translation.
 #  [filename]: Name of the nuweb source file.
 <!#!> m4_header
 echo "translate " \$1 >w2html.log
-NUWEB=m4_nuwebbinary
+NUWEB=m4_anuwebbinary
 @< filenames in w2html @>
 
 @< perform the task of w2html @>
