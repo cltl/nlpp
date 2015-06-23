@@ -1,4 +1,4 @@
-m4_define(m4_repoversion, `0.9.02')m4_dnl
+m4_define(m4_repoversion, `1.0')m4_dnl
 m4_dnl
 m4_dnl Titles
 m4_dnl
@@ -34,10 +34,14 @@ m4_dnl Programming environment
 m4_dnl
 m4_define(m4_aenvdir, m4_aprojroot`/env')m4_dnl     Program environment
 m4_define(m4_envdir, m4_projroot`/env')m4_dnl 
-m4_define(m4_usrlocaldir, m4_envdir`/usrlocal')m4_dnl     
-m4_define(m4_ausrlocaldir, m4_aenvdir`/usrlocal')m4_dnl
-m4_define(m4_usrlocalbindir, m4_usrlocaldir/bin)m4_dnl
-m4_define(m4_ausrlocalbindir, m4_ausrlocaldir/bin)m4_dnl
+m4_define(m4_aenvbindir, m4_aenvdir`'/bin)m4_dnl     Program environment
+m4_define(m4_envbindir, m4_envdir`'/bin)m4_dnl 
+m4_define(m4_aenvlibdir, m4_aenvdir`'/lib)m4_dnl     Program environment
+m4_define(m4_envlibdir, m4_envdir`'/lib)m4_dnl 
+m4_dnl     m4_define(m4_usrlocaldir, m4_envdir`/usrlocal')m4_dnl     
+m4_dnl     m4_define(m4_ausrlocaldir, m4_aenvdir`/usrlocal')m4_dnl
+m4_dnl     m4_define(m4_usrlocalbindir, m4_usrlocaldir/bin)m4_dnl
+m4_dnl     m4_define(m4_ausrlocalbindir, m4_ausrlocaldir/bin)m4_dnl
 m4_define(m4_ajavadir, m4_aenvdir`/java')m4_dnl   
 m4_define(m4_javadir, m4_envdir`/java')m4_dnl     
 m4_define(m4_ajardir, m4_ajavadir`/jars')m4_dnl     jars

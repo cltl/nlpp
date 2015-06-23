@@ -3,10 +3,10 @@ all : nlpp.pdf
 
 
 
-NUWEB=../env/usrlocal/bin/nuweb
+NUWEB=m4_usrlocalbindir/nuweb
 .SUFFIXES: .pdf .w .tex .html .aux .log .php
 
-FIGFILES=fileschema
+FIGFILES=fileschema dirstructure
 
 FIGFILENAMES=$(foreach fil,$(FIGFILES), $(fil).fig)
 PDFT_NAMES=$(foreach fil,$(FIGFILES), $(fil).pdftex_t)
@@ -52,7 +52,7 @@ $(htmldir)/% : % $(htmldir)
 nuweb: $(NUWEB)
 
 $(NUWEB): ../nuweb-1.58
-	mkdir -p ../env/usrlocal/bin
+	mkdir -p ../env/bin
 	cd ../nuweb-1.58 && make nuweb
 	cp ../nuweb-1.58/nuweb $(NUWEB)
 
@@ -95,7 +95,7 @@ view : nlpp.pdf
 
 htm : $(htmldir) $(htmltarget)
 
-DIRS = ../modules ../bin ../env/usrlocal/bin ../env/usrlocal/lib ../env/java ../env/java/jars ../env/apache-maven-3.0.5 ../env/python ../nuweb/bin 
+DIRS = ../modules ../bin ../env/bin ../env/lib ../env/java ../env/java/jars ../env/apache-maven-3.0.5 ../env/python ../nuweb/bin 
 
 $(DIRS) : 
 	$(MKDIR) $@

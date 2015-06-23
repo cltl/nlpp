@@ -38,15 +38,15 @@ This document describes the current set-up of pipeline that annotates
 dutch texts in order to extract knowledge. The pipeline has been set
 up by the Computational Lexicology an Terminology Lab
 (\CLTL{}~\footnote{\url{http://wordpress.let.vupr.nl}}) as part
-of the newsreader~\footnote{http://www.newsreader-project.eu}. 
+of the newsreader~\footnote{http://www.newsreader-project.eu} project. 
 
-Apart from describing the pipeline set-up, the document actually constructs
-the pipeline. The described version has been made with an aim to run
-it on a specific supercomputer (Lisa, Surfsara,
-Amsterdam~\footnote{https://surfsara.nl/systems/lisa}), but it can
-probably be implemented on other unix-like systems without problems.
+Apart from describing the pipeline set-up, the document actually
+constructs the pipeline. Currently, the pipeline has been succesfully
+implemented on a specific supercomputer (Lisa, Surfsara,
+Amsterdam~\footnote{https://surfsara.nl/systems/lisa}) and on
+computers running Ubuntu and Centos. 
 
-The installation has been parameterized. The locations and names that
+The installation has been parameterised. The locations and names that
 you read (and that will be used to build the pipeline) have been read
 from variables in file \texttt{inst.m4} in the nuweb directory.  
 
@@ -164,30 +164,35 @@ table~\ref{tab:utillist}.
 \label{sec:filestructure}
 
 The files that make up the pipeline are organised in set of
-directories:
+directories as shown in figure~\ref{fig:directorystructure}. %
+\begin{figure}[hbtp]
+  \centering
+  \includegraphics{dirstructure.pdf}
+  \caption{Directory-structure of the pipeline (see text). }
+  \label{fig:directorystructure}
+\end{figure}%
+The directories have the follosing functions.
 
 \begin{description}
+\item[socket:] The directory in the host where the pipeline is to be implemented.
+\item[root:] The root of the pipeline directory-structure.
 \item[nuweb:] This directory contains this document and everything to
   create the pipeline from the open sources of the modules.
-\item[env:] For the programming environment. Contains the Python local
-  environment, the Java development kit/runtime, a directory
-  \texttt{jars} for jars and and a directory \texttt{bin} for binaries.
-\item[modules:] Contains the program code of each module in a
-  subdirectory.
-\item[bin:] Contains for each of the modules a script that reads
-  \NAF{} input, passes it to the module in the \texttt{modules}
+\item[modules:] Contains subdirectories with the \textsc{nlp} modules that can be applied in the pipeline.
+\item[bin:] Contains for each of the applicable modules a script that
+  reads \NAF{} input, passes it to the module in the \texttt{modules}
   directory and produces the output on standard out. Furthermore, the
   subdirectory contains the script \texttt{m4_module_installer} that
-  performs the installation,  and 
-  a script \texttt{test} that shows that the pipeline works in a trivial
-  case.
-\item[nuweb:] Contains this document, the nuweb source that creates
-  the documents and the sources and a Makefile to perform the actions.
+  performs the installation, and a script \texttt{test} that shows
+  that the pipeline works in a trivial case.
+\item[env:] The programming environment. It contains a.o. the Java
+  development kit, Python, the Python virtual environment
+  (\texttt{venv}, libraries and binaries.
 \end{description}
 
 @d directories to create @{m4_moddir @| @}
-@d directories to create @{m4_bindir m4_usrlocaldir/bin @| @}
-@d directories to create @{m4_usrlocaldir<!!>/lib @| @}
+@d directories to create @{m4_bindir m4_envbindir @| @}
+@d directories to create @{m4_envlibdir @| @}
 @%@d directories to create @{m4_envdir/python @| @}
 
 Communicate the file-structure to scripts with a ``source'' script
@@ -197,14 +202,14 @@ that sets variables.
 PIPEROOT=m4_aprojroot
 PIPEBIN=$PIPEROOT/bin
 PIPEMODD=$PIPEROOT/modules
-export PATH=m4_ausrlocaldir<!!>/bin:$PATH
+export PATH=m4_aenvbindir:$PATH
 @| @}
 
 
 Make binaries findable:
 
 @d set local bin directory @{@%
-export PATH=m4_ausrlocaldir<!!>/bin:$PATH
+export PATH=m4_aenvbindir:$PATH
 @| @}
 
 
@@ -373,7 +378,8 @@ cd $pytinsdir
 tar -xzf m4_asocket/m4_activepythonball
 acdir=`ls -1`
 cd $acdir
-./install.sh -I m4_ausrlocaldir
+@%./install.sh -I m4_ausrlocaldir
+./install.sh -I m4_aenvdir
 cd m4_aprojroot
 rm -rf $pytinsdir
 pip install -U pip virtualenv setuptools
@@ -899,8 +905,8 @@ C-compiler that happens to be available on the host. Installation involves:
 \item Unpack the tarball.
 \item cd to the unpacked directory and perform \verb|./configure|,
   \verb|make| and \verb|make install|. Note the argument that causes
-  the files to be installed in the \verb|usrlocal| subdirectory of the
-  modules directory.
+  the files to be installed in the \texttt{lib} and the \textt{bin} sub-directories of the
+  \texttt{env} directory.
 \end{enumerate}
 
 @d install the ticcutils utility @{@%
@@ -935,7 +941,7 @@ if
   [ \$SUCCES -eq 0 ]
 then
   cd \$DIR
-  ./configure --prefix=m4_ausrlocaldir
+  ./configure --prefix=m4_aenvdir
   make
   make install
 fi
@@ -2330,7 +2336,7 @@ Put the nuweb binary in the nuweb subdirectory, so that it can be used before th
 nuweb: $(NUWEB)
 
 $(NUWEB): m4_projroot/m4_nuwebsource
-	mkdir -p m4_usrlocalbindir
+	mkdir -p m4_envbindir
 	cd m4_projroot/m4_nuwebsource && make nuweb
 	cp m4_projroot/m4_nuwebsource/nuweb $(NUWEB)
 
@@ -2446,7 +2452,7 @@ document.
 The list of figures to be included:
 
 @d parameters in Makefile @{@%
-FIGFILES=fileschema
+FIGFILES=fileschema dirstructure
 
 @| FIGFILES @}
 
