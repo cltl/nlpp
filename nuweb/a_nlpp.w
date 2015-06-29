@@ -219,7 +219,7 @@ export envbindir=$envdir/bin
 export envlibdir=$envdir/lib
 export modulesdir=$piperoot/modules
 export pipebin=$piperoot/bin
-@% export javadir=$envdir/java
+export javadir=$envdir/java
 export jarsdir=$javadir/jars
 @| @}
 
@@ -718,6 +718,7 @@ The installation is performed by script
 @o m4_bindir/m4_module_installer @{@%
 #!/bin/bash
 echo Set up environment
+@< set variables that point to the directory-structure @>
 @< variables of m4_module_installer @>
 @< check this first @>
 @%@< unpack snapshots or die @>
@@ -803,33 +804,39 @@ fi
 \subsubsection{Alpino}
 \label{sec:install-alpino}
 
-Install Alpino from the website of Gertjan van Noort.
+Binary versions of Alpino can be obtained from the
+\href{http://www.let.rug.nl/vannoord/alp/Alpino/}{official Alpino
+  website} of Gertjan van Noort. However, it seems that older versions
+are not always retained there, or the location of older versions
+change. Therefore we have a copy in the snapshot.
 
 \paragraph{Module}
 \label{sec:installalpinomodule}
 
 @d install Alpino @{@%
-SUCCES=0
+@< get or have @(m4_alpinosrc@) @>
+@% SUCCES=0
 cd \$modulesdir
-@< move module @(Alpino@) @>
-wget m4_alpinourl
-SUCCES=\$?
-if
-  [ \$SUCCES -eq 0 ]
-then
-  tar -xzf m4_alpinosrc
-  SUCCES=\$?
-  rm -rf m4_alpinosrc
-fi
-if
-  [ $SUCCES -eq 0 ]
-then
-  @< logmess @(Installed Alpino@) @>
-  @< remove old module @(Alpino@) @>
-else
-  @< re-instate old module @(Alpino@) @>
-fi
-@|SUCCES @}
+tar -xzf \$pipesocket/m4_alpinosrc
+@% @< move module @(Alpino@) @>
+@% wget m4_alpinourl
+@% SUCCES=\$?
+@% if
+@%   [ \$SUCCES -eq 0 ]
+@% then
+@%   tar -xzf m4_alpinosrc
+@%   SUCCES=\$?
+@%   rm -rf m4_alpinosrc
+@% fi
+@% if
+@%   [ $SUCCES -eq 0 ]
+@% then
+@< logmess @(Installed Alpino@) @>
+@%   @< remove old module @(Alpino@) @>
+@% else
+@%   @< re-instate old module @(Alpino@) @>
+@% fi
+@| @}
 
 Currently, alpino is not used as a pipeline-module on its own, but it
 is included in other pipeline-modules. Modules that use Alpino should
@@ -838,6 +845,14 @@ set the following variables:
 @d set alpinohome @{@%
 export ALPINO_HOME=\$modulesdir/Alpino
 @| ALPINO_HOME @}
+
+Remove the tarball when cleaning up:
+
+@d clean up @{@%
+rm -rf \$pipesocket/m4_alpinosrc
+@| @}
+
+
 
 \subsubsection{Treetagger}
 \label{sec:installtreetagger}
@@ -1827,7 +1842,7 @@ GRAMMATICALWORDS="\$RESOURCESDIR/grammaticals/Grammatical-words.nl"
 TMPFIL=`mktemp -t stap6.XXXXXX`
 cat >$TMPFIL
 
-CLASSPATH=\$jarsdir/ontotagger-1.0-jar-with-dependencies.jar
+CLASSPATH=\$JARDIR/ontotagger-1.0-jar-with-dependencies.jar
 JAVASCRIPT=eu.kyotoproject.main.KafPredicateMatrixTagger
 
 @% JAVA_ARGS="-Xmx1812m"
@@ -1905,7 +1920,7 @@ GRAMMATICALWORDS="\$RESOURCESDIR/grammaticals/Grammatical-words.nl"
 TMPFIL=`mktemp -t framesrl.XXXXXX`
 cat >$TMPFIL
 
-CLASSPATH=\$jarsdir/ontotagger-1.0-jar-with-dependencies.jar
+CLASSPATH=\$JARDIR/ontotagger-1.0-jar-with-dependencies.jar
 JAVASCRIPT=eu.kyotoproject.main.SrlFrameNetTagger
 
 JAVA_ARGS="--naf-file \$TMPFIL"
@@ -3051,21 +3066,21 @@ sources : m4_progname.w \$(DIRS) \$(NUWEB)
 \bibliographystyle{plain}
 \bibliography{m4_progname}
 
-\subsection{URL's}
-\label{sec:urls}
-
-\begin{description}
-\item[Nuweb:] \url{m4_nuwebURL}
-\item[Apache Velocity:] \url{m4_velocityURL}
-\item[Velocitytools:] \url{m4_velocitytoolsURL}
-\item[Parameterparser tool:] \url{m4_parameterparserdocURL}
-\item[Cookietool:] \url{m4_cookietooldocURL}
-\item[VelocityView:] \url{m4_velocityviewURL}
-\item[VelocityLayoutServlet:] \url{m4_velocitylayoutservletURL}
-\item[Jetty:] \url{m4_jettycodehausURL}
-\item[UserBase javadoc:] \url{m4_userbasejavadocURL}
-\item[VU corpus Management development site:] \url{http://code.google.com/p/vucom} 
-\end{description}
+@% \subsection{URL's}
+@% \label{sec:urls}
+@% 
+@% \begin{description}
+@% \item[Nuweb:] \url{m4_nuwebURL}
+@% \item[Apache Velocity:] \url{m4_velocityURL}
+@% \item[Velocitytools:] \url{m4_velocitytoolsURL}
+@% \item[Parameterparser tool:] \url{m4_parameterparserdocURL}
+@% \item[Cookietool:] \url{m4_cookietooldocURL}
+@% \item[VelocityView:] \url{m4_velocityviewURL}
+@% \item[VelocityLayoutServlet:] \url{m4_velocitylayoutservletURL}
+@% \item[Jetty:] \url{m4_jettycodehausURL}
+@% \item[UserBase javadoc:] \url{m4_userbasejavadocURL}
+@% \item[VU corpus Management development site:] \url{http://code.google.com/p/vucom} 
+@% \end{description}
 
 \section{Indexes}
 \label{sec:indexes}
