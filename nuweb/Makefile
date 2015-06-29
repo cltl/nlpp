@@ -6,7 +6,7 @@ all : nlpp.pdf
 NUWEB=../env/bin/nuweb
 .SUFFIXES: .pdf .w .tex .html .aux .log .php
 
-FIGFILES=fileschema dirstructure
+FIGFILES=fileschema directorystructure
 
 FIGFILENAMES=$(foreach fil,$(FIGFILES), $(fil).fig)
 PDFT_NAMES=$(foreach fil,$(FIGFILES), $(fil).pdftex_t)
@@ -39,10 +39,6 @@ MKDIR = mkdir -p
 .PRECIOUS : %.pdftex
 %.pdftex_t: %.fig %.pstex
 	fig2dev -L pdftex_t -p $*.pdftex $< > $@
-
-%.pdf : %.w $(W2PDF)  $(PDF_FIG_NAMES) $(PDFT_NAMES)
-	chmod 775 $(W2PDF)
-	$(W2PDF) $*
 
 $(htmldir)/% : % $(htmldir)
 	cp $< $(htmldir)/
@@ -82,6 +78,8 @@ $(htmltarget) : $(htmlmaterial) $(htmldir)
 
 
 clean:
+	rm -rf $pipesocket/server-jre-7u72-linux-x64.tar.gz
+	rm -rf ../env/apache-maven-3.0.5
 	rm -rf ../nuweb-1.58
 	
 
@@ -92,6 +90,10 @@ print : nlpp.pdf
 
 view : nlpp.pdf
 	evince nlpp.pdf
+
+nlpp.pdf : nlpp.w $(W2PDF)  $(PDF_FIG_NAMES) $(PDFT_NAMES)
+	chmod 775 $(W2PDF)
+	$(W2PDF) $*
 
 htm : $(htmldir) $(htmltarget)
 
