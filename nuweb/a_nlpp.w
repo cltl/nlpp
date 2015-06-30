@@ -1965,7 +1965,7 @@ tempfil=`mktemp -t heideltmp.XXXXXX`
 mv $CONFIL \$tempfil
 @% MODDIR=\$modulesdir
 TREETAGDIR=m4_treetagdir
-AWKCOMMAND='/^treeTaggerHome/ {\$0="treeTaggerHome = \$modulesdir/m4_treetagdir"}; {print}'
+AWKCOMMAND='/^treeTaggerHome/ {\$0="treeTaggerHome = '\$modulesdir'/m4_treetagdir"}; {print}'
 gawk "\$AWKCOMMAND" \$tempfil >\$CONFIL
 rm -rf $tempfil
 @| @}
