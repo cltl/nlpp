@@ -1011,6 +1011,17 @@ else
 fi
 @| @}
 
+When the installation has been transplanted, Timbl and Ticcutils have
+to be re-installed.
+
+@d  re-install modules after the transplantation @{@%
+@< install the ticcutils utility @>
+@< install the timbl utility @>
+@| @}
+
+
+
+
 
 \subsubsection{Spotlight}
 \label{sec:spotlight}
@@ -2077,9 +2088,9 @@ python timblToAlpinoNAF.py \$INPUTFILE \$TIMBLOUTPUTFILE
 
 Clean up.
 
-@o m4_bindir/m4_srlscript @{@%
-rm -rf \$TEMPDIR
-@| @}
+@% @o m4_bindir/m4_srlscript @{@%
+@% rm -rf \$TEMPDIR
+@% @| @}
 
 
 @%@d make scripts executable @{@%
@@ -3059,6 +3070,7 @@ DIRS = @< directories to create @>
 
 @d make scripts executable @{@%
 chmod -R 775  m4_bindir/*
+chmod -R 775  m4_envbindir/*
 @| @}
 
 
@@ -3092,7 +3104,7 @@ be modified.
 @d make targets @{@%
 transplant :
 	touch a_<!!>m4_progname<!!>.w
-        $(MAKE) sources
+	$(MAKE) sources
 	m4_envbindir/transplant
 
 @| @}
@@ -3105,6 +3117,8 @@ after a transplantation.
 #!/bin/bash
 @< set variables that point to the directory-structure @>
 @< set paths after transplantation @>
+@< re-install modules after the transplantation @>
+
 @| @}
 
 
