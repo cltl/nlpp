@@ -38,15 +38,15 @@ This document describes the current set-up of pipeline that annotates
 dutch texts in order to extract knowledge. The pipeline has been set
 up by the Computational Lexicology an Terminology Lab
 (\CLTL{}~\footnote{\url{http://wordpress.let.vupr.nl}}) as part
-of the newsreader~\footnote{http://www.newsreader-project.eu}. 
+of the newsreader~\footnote{http://www.newsreader-project.eu} project. 
 
-Apart from describing the pipeline set-up, the document actually constructs
-the pipeline. The described version has been made with an aim to run
-it on a specific supercomputer (Lisa, Surfsara,
-Amsterdam~\footnote{https://surfsara.nl/systems/lisa}), but it can
-probably be implemented on other unix-like systems without problems.
+Apart from describing the pipeline set-up, the document actually
+constructs the pipeline. Currently, the pipeline has been succesfully
+implemented on a specific supercomputer (Lisa, Surfsara,
+Amsterdam~\footnote{https://surfsara.nl/systems/lisa}) and on
+computers running Ubuntu and Centos. 
 
-The installation has been parameterized. The locations and names that
+The installation has been parameterised. The locations and names that
 you read (and that will be used to build the pipeline) have been read
 from variables in file \texttt{inst.m4} in the nuweb directory.  
 
@@ -131,6 +131,8 @@ table~\ref{tab:utillist}.
                     & m4_timblversion   & \dref{sec:timbl}   & \href{m4_timblurl}{\textsc{ilk}}          \\
      \href{http://www.cis.uni-muenchen.de/~schmid/tools/TreeTagger/}{Treetagger}
                     & m4_treetag_version   & \dref{sec:installtreetagger} & \href{m4_treetag_base_url}{Uni. München}   \\
+     \href{m4_spotlighturl}{Spotlight server}
+                    & m4_spotlightjarversion   & \dref{sec:spotlight} & \href{spotlight.dbpedia.org}{Spotlight}   \\
   \end{tabular}
   \caption{List of the modules to be installed. Column description:
     \textbf{directory:} Name of the subdirectory below \texttt{mod} in
@@ -164,340 +166,101 @@ table~\ref{tab:utillist}.
 \label{sec:filestructure}
 
 The files that make up the pipeline are organised in set of
-directories:
+directories as shown in figure~\ref{fig:directorystructure}. %
+\begin{figure}[hbtp]
+  \centering
+%  \includegraphics{directorystructure.pdf}
+   \input{directorystructure.pdftex_t}
+  \caption{Directory-structure of the pipeline (see text). }
+  \label{fig:directorystructure}
+\end{figure}%
+The directories have the follosing functions.
 
 \begin{description}
+\item[socket:] The directory in the host where the pipeline is to be implemented.
+\item[root:] The root of the pipeline directory-structure.
 \item[nuweb:] This directory contains this document and everything to
   create the pipeline from the open sources of the modules.
-\item[env:] For the programming environment. Contains the Python local
-  environment, the Java development kit/runtime, a directory
-  \texttt{jars} for jars and and a directory \texttt{bin} for binaries.
-\item[modules:] Contains the program code of each module in a
-  subdirectory.
-\item[bin:] Contains for each of the modules a script that reads
-  \NAF{} input, passes it to the module in the \texttt{modules}
+\item[modules:] Contains subdirectories with the \textsc{nlp} modules that can be applied in the pipeline.
+\item[bin:] Contains for each of the applicable modules a script that
+  reads \NAF{} input, passes it to the module in the \texttt{modules}
   directory and produces the output on standard out. Furthermore, the
   subdirectory contains the script \texttt{m4_module_installer} that
-  performs the installation,  and 
-  a script \texttt{test} that shows that the pipeline works in a trivial
-  case.
-\item[nuweb:] Contains this document, the nuweb source that creates
-  the documents and the sources and a Makefile to perform the actions.
+  performs the installation, and a script \texttt{test} that shows
+  that the pipeline works in a trivial case.
+\item[env:] The programming environment. It contains a.o. the Java
+  development kit, Python, the Python virtual environment
+  (\texttt{venv}), libraries and binaries.
 \end{description}
 
 @d directories to create @{m4_moddir @| @}
-@d directories to create @{m4_bindir m4_usrlocaldir/bin @| @}
-@d directories to create @{m4_usrlocaldir<!!>/lib @| @}
+@d directories to create @{m4_bindir m4_envbindir @| @}
+@d directories to create @{m4_envlibdir @| @}
 @%@d directories to create @{m4_envdir/python @| @}
 
-Communicate the file-structure to scripts with a ``source'' script
-that sets variables.
+The following macro defines variable \verb|piperoot| and makes it to
+point to the root directory in
+figure~\ref{fig:directorystructure}. Next it defines variables that
+point to other directories in the figure. The value-setting of
+\verb|piperoot| can be overruled by defining the variable before
+running any of the script. In this way the directory tree can be moved
+to another location, even to another computer, after successful installation.
 
-@o m4_bindir/progenv @{@%
-PIPEROOT=m4_aprojroot
-PIPEBIN=$PIPEROOT/bin
-PIPEMODD=$PIPEROOT/modules
-export PATH=m4_ausrlocaldir<!!>/bin:$PATH
-@| @}
-
-
-Make binaries findable:
-
-@d set local bin directory @{@%
-export PATH=m4_ausrlocaldir<!!>/bin:$PATH
-@| @}
-
-
-\section{Java and Python environment}
-\label{sec:environment}
-
-To be independent from the software environment of the host computer
-and to perform reproducible processing, the pipeline features its own
-Java and Python environment. The costs of this feature are that the
-pipeline takes more disk-space by reproducing infra-structure that is
-already present in the system and that installation takes more time.
-
-The following file sets up the programming environment in scripts.
-
-@o m4_bindir/progenv @{@%
-@< set up java environment in scripts@>
-@< activate the python environment @>
-@| @}
-
-@d set up programming environment @{@%
-source m4_abindir/progenv
-@| @}
-
-
-\subsection{Java}
-\label{sec:java}
-
-To install Java, download \texttt{m4_javatarball} from
-\url{m4_javatarballurl}. Find it in the root directory and unpack it
-in a subdirectory of \texttt{m4_aenvdir}.
-
-@d directories to create @{m4_javadir @| @}
-
-
-@%@d check this first @{@%
-@%if
-@%  [ ! -e m4_aprojroot/m4_javatarball ]
-@%then
-@%  echo "Cannot find  m4_aprojroot/m4_javatarball"
-@%  exit 4
-@%fi
-@%@| @}
-
-@d set up java @{@%
-@< get or have @(m4_javatarball@) @>
-cd m4_aenvdir/java
-tar -xzf m4_asocket/m4_javatarball
-@% rm m4_asocket/m4_javatarball
-@| @}
-
-@d set up java environment in scripts @{@%
-export JAVA_HOME=m4_ajavadir/m4_javajdk
-export PATH=$JAVA_HOME/bin:$PATH
-@| JAVA_HOME @}
-
-Put jars in the jar subdirectory of the java directory:
-
-@d directories to create @{m4_jardir @| @}
-
-@d set up java environment in scripts @{@%
-export JARDIR=m4_ajardir
-@| @}
-
-
-
-\subsection{Maven}
-\label{sec:Maven}
-
-@d directories to create @{m4_mavendir @| @}
-
-
-@d install maven @{@%
-cd m4_aenvdir
-wget m4_maventarballurl
-tar -xzf m4_maventarball
-rm m4_maventarball
-@| @}
-
-@d install maven @{@%
-export MAVEN_HOME=m4_amavendir
-export PATH=${MAVEN_HOME}/bin:${PATH}
-@| @}
-
-When the installation has been done, remove maven, because it is no longer needed.
-
-@d remove maven @{@%
-rm -rf m4_mavendir
-@| @}
-
-
-
-\subsection{Python}
-\label{sec:python}
-
-Set up the environment for Python. I could not find an easy way to set
-up Python from scratch, so we have to rely on Python 2.7 being
-available on the host. However, we can make a virtual environment, so
-that we are not dependent on the existence of libraries in the right
-version on the host.
-
-In the virtual environment we will install KafNafParserPy and other
-Python packages that are needed.
-
-
-@d set up python @{@%
-@< check/install the correct version of python @>
-@< create a virtual environment for Python @>
-@< activate the python environment @>
-@< install kafnafparserpy @>
-@< install python packages @>
-@| @}
-
-
-\subsubsection{Python version}
-\label{sec:pythonversion}
-
-The pipeline relies on Python version 2.7 being available. If
-possible, the user should provide this version and make sure that the
-``python'' command invokes version 2.7.something of python. However,
-ikn some cases (notably in the case of a Centos 6.3 server) this is
-difficult to achieve. In that case we can use a binary python supplied
-by ActivePython
-(\url{http://www.activestate.com/activepython}). Download in that case the tarball
-\verb|ActivePython-2.7.8.10-linux-x86_64.tar.gz| from the ActivePython
-site and put it in the \texttt{nlpp} directory. The following macro
-checks whether the \texttt{python} command invokes a correct version
-of python and, if this is not the case and the ActivePython tarball is
-present, install ActivePython.
-
-@d check/install the correct version of python @{@%
-pythonok=`python --version 2>&1 | gawk '{if(match($2, "2.7")) print "yes" ; else print "no" }'`
-if
-  [ "$pythonok" == "no" ]
+@d set variables that point to the directory-structure @{@%
+if 
+  [ "$piperoot" == "" ]
 then
-  @< install ActivePython @>
+  export piperoot=m4_aprojroot
 fi
-@| pythonok @}
-
-
-Check whether we have the ActivePython tarball and quit if this is not
-the case.
-
-@d install ActivePython @{@%
-@< get or have @(m4_activepythonball@) @>
-@%
-@%actpyt=`ls -1 m4_aprojroot/ActivePython*gz`
-@%if
-@%  [ $? -gt 0 ]
-@%then
-@%  echo "Cannot install Python 2.7."
-@%  echo "Please put ActivePython tarball in nlpp directory."
-@%  exit 1
-@%fi
+export pipesocket=${piperoot%%/nlpp}
+export nuwebdir=$piperoot/nuweb
+export envdir=$piperoot/env
+export envbindir=$envdir/bin
+export envlibdir=$envdir/lib
+export modulesdir=$piperoot/modules
+export pipebin=$piperoot/bin
+export javadir=$envdir/java
+export jarsdir=$javadir/jars
 @| @}
 
-Unpack the tarball in a temporary directory and install active python
-in the \texttt{env} subdirectory of nlpp. It turns out that you must
-upgrade pip, virtualenv and setuptools after the installation (see
-\url{https://github.com/ActiveState/activepython-docker/commit/10fff72069e51dbd36330cb8a7c2f0845bcd7b38}
-and \url{https://github.com/ActiveState/activepython-docker/issues/1}).
+Add the environment \verb|bin| directory to \verb|PATH|:
 
+@d set variables that point to the directory-structure @{@%
+export PATH=\$envbindir:$PATH
+@| PATH @}
 
-@d install ActivePython  @{@%
-pytinsdir=`mktemp -d -t activepyt.XXXXXX`
-cd $pytinsdir
-tar -xzf m4_asocket/m4_activepythonball
-acdir=`ls -1`
-cd $acdir
-./install.sh -I m4_ausrlocaldir
-cd m4_aprojroot
-rm -rf $pytinsdir
-pip install -U pip virtualenv setuptools
-\@| @}
+While setting variables, \emph{source} a scripts that sets variables
+for directories of which we do not yet know where they are, e.g.{}
+paths to Python and Java that we may have to set up dynamically.
 
-
-
-
-
-\subsubsection{Virtual environment}
-\label{sec:pythonvirtenv}
-
-Create a virtual environment. To begin this, we need the python module
-virtualenv on the host.
-
-@d create a virtual environment for Python @{@%
-@< test whether virtualenv is present on the host @>
-cd m4_aenvdir
-virtualenv venv
+@d set variables that point to the directory-structure @{@%
+source \$envbindir/progenv
 @| @}
 
-@d test whether virtualenv is present on the host @{@%
-which virtualenv
-if
-  [ $? -ne 0 ]
-then
-  echo Please install virtualenv
-  exit 1
-fi
-@|virtualenv @}
-
-
-@d activate the python environment @{@%
-source m4_aenvdir/venv/bin/activate
-@|activate @}
-
-@% @d de-activate the python environment @{@%
-@% deactivate
+@% @o m4_envbindir/progenv @{@%
+@% @% pipemodd=$piperoot/modules
+@% export PATH=\$envbindir:$PATH
 @% @| @}
 
-Subdirectory \texttt{m4_aenvdir/python} will contain general Python
-packages like KafnafParserPy.
+\section{How to obtain modules and other material}
+\label{sec:downloadmethods}
 
-@d directories to create @{m4_envdir/python @| @}
+As illustrated in tables~\ref{tab:modulelist} and~\ref{tab:utillist},
+most of the modules are obtained as source-code from Github, some of
+the modules or parts of some modules are downloaded from a snapshot,
+and some of the utilities are obtained in binary form from the
+supplier.
 
-Activation of Python include pointing to the place where Python
-packages are:
+This section builds standardised methods to obtain modules and utilities from Github or from the snapshot.
 
-@d activate the python environment @{@%
-export PYTHONPATH=m4_aenvdir/python:\$PYTHONPATH
-@|PYTHONPATH @}
+\subsection{Reversable update}
+\label{sec:reversable_update}
 
-
-\subsubsection{KafNafParserPy}
-\label{sec:KafNafParserPy}
-
-@% Currently the pipeline uses Python as it has been installed on the
-@% host. This has to be changed and a virtual environment has to be
-@% used. Let us reserve directory \verb|modules/python| for Python
-@% utility modules. 
-@% 
-@% Make Python utilities findable with the following macro:
-@% 
-@% @d set pythonpath @{@%
-@% export PYTHONPATH=m4_pythonmoddir:\$PYTHONPATH
-@% @| @}
-
-A cornerstone Pythonmodule for the pipeline is
-\href{https://github.com/cltl/KafNafParserPy}{KafNafParserPy}. It is a
-feature of this module that you cannot install it with \textsc{pip}, but that
-you can add it to your \textsc{pythonpath}.
-
-
-@d install kafnafparserpy @{@%
-@% cd m4_pythonmoddir
-cd m4_aenvdir/python
-DIRN=KafNafParserPy
-@< move module @($DIRN@) @>
-git clone m4_kafnafgit
-if
-  [ $? -gt 0 ]
-then
-  @< logmess @(Cannot install current $DIRN version@) @>
-  @< re-instate old module @(\$DIRN@) @>
-else
-  @< remove old module @(\$DIRN@) @>
-fi
-@| @}
-
-\subsubsection{Python packages}
-\label{sec:pypacks}
-
-Install python packages:
-
-\begin{description}
-\item[lxml:]
-\item[pyyaml:] for coreference-graph
-\end{description}
-
-
-@d install python packages @{@%
-pip install lxml
-pip install pyyaml
-@| lxml pyyaml @}
-
-
-
-\section{Installation}
-\label{sec:install}
-
-This section describes how the modules are obtained from their
-(open-)source and installed. 
-
-\subsection{Installing vs. updating}
-\label{sec:installvsupdate}
-
-When the install-script installs something that has already been
-installed, it moves the installed module to a temporary location and
-then tries to install the module from its source. If that is
-successfull it removes the vormer version of the module, otherwise it
-moves the old version back. 
-
-The following macro's can be used to move or remove modules, provided
-they are called when the modules directory is the default directory. 
+This script might be used to update an existing installation. To
+minimize the risk that the ``update'' acually ruins an existing
+installation, move existing modules away before installing the latest
+version. When the new modules has been installed succesfully, the
+moved module will be removed. The following macro's help to achieve this:
 
 @d move module  @{@%
 if
@@ -521,10 +284,12 @@ MESS="Replaced previous version of @1"
 @| @}
 
 
+
+
 \subsection{Installation from Github}
 \label{sec:installfromgithub}
 
-The following macro can be used to install a module from github. Before issuing this macto, the following four variables must be set:
+The following macro can be used to install a module from Github. Before issuing this macro, the following four variables must be set:
 \begin{description}
 \item[MODNAM:] Name of the module.
 \item[DIRN:] Name of the root directory of the module.
@@ -538,8 +303,7 @@ The following macro can be used to install a module from github. Before issuing 
 @% DIRN=@2
 @% GITU=@3
 @% GITC=@4
-cd m4_amoddir
-@% @< cd to the modules directory @>
+cd \$modulesdir
 @< move module @(\$DIRN@) @>
 git clone $GITU
 if
@@ -549,7 +313,7 @@ then
   @< re-instate old module @(\$DIRN@) @>
 else
   @< remove old module @(\$DIRN@) @>
-  cd m4_amoddir/$DIRN
+  cd $modulesdir/$DIRN
   git checkout $GITC
 fi
 
@@ -559,7 +323,7 @@ fi
 @% MODNAM=@1
 @% DIRN=@2
 @% GITU=@3
-@% cd m4_amoddir
+@% cd \$modulesdir
 @% @% @< cd to the modules directory @>
 @% @< move module @(\$DIRN@) @>
 @% git clone $GITU
@@ -589,21 +353,26 @@ fi
 @% Note: Par.~1: Directory; par~2: path to directory; par~3: directory name.
 @% 
 @% @d find leave and tree @{@%
-@% FULLDIR=m4_amoddir/$DIRN
+@% FULLDIR=\$modulesdir/$DIRN
 @% LEAVE=${FULLDIR##*/}
 @% TREE=${FULLDIR%%\$LEAVE}
 @% @| @}
 
+
 \subsection{Installation from the snapshot}
 \label{sec:snapshotinstall}
 
-For some modules a public repository is not available or not
-known. They must be installed from a non-public repository. A key to
-connect to the repository can be requested from the author.
+The snapshot can be accessed over \texttt{scp} on \textsc{url}
+\url{m4_repo_user@@m4_repo_url}. Access is protected by a
+public/private key system. So, a private key is needed and this
+program expects to to find the key as \verb|\$pipesocket/nrkey|. The
+key can be obtained from the author. Let us check whether we indeed do
+have the key: 
 
-@d have an SSH key or die @{@%
+@d check this first @{@%
 if
-  [ ! -e m4_snapshotkeyfile ]
+@%   [ ! -e m4_snapshotkeyfile ]
+  [ ! -e \$pipesocket/m4_snapshotkeyfilename ]
 then
   echo "No key to connect to snapshot!"
   exit 1
@@ -611,18 +380,18 @@ fi
 @| @}
 
 
-The following macro downloads a resource if it is not already present
+Use the following macro to download a resource if it is not already present
 in the ``socket'' directory. It turns out that sometimes there is a
 time-out for unknown reasons. In that case we will try it multiple times.
 
 @d get or have @{@%
 counter=0
 while
-  [ ! -e m4_asocket/@1 ]
+  [ ! -e \$pipesocket/@1 ]
 do
-  @< have an SSH key or die @>
-  cd m4_asocket
-  scp -i "m4_snapshotkeyfile" m4_repo_user<!!>@@<!!>m4_repo_url:m4_repo_path/@1 .
+@%   @< have an SSH key or die @>
+  cd \$pipesocket
+  scp -i "m4_snapshotkeyfilename" m4_repo_user<!!>@@<!!>m4_repo_url:m4_repo_path/@1 .
   if
     [ $? -gt 0 ]
   then
@@ -641,10 +410,10 @@ done
 
 @%@d get or have @{@%
 @%if
-@%  [ ! -e m4_asocket/@1 ]
+@%  [ ! -e \$pipesocket/@1 ]
 @%then
 @%  @< have an SSH key or die @>
-@%  cd m4_asocket
+@%  cd \$pipesocket
 @%  scp -i "m4_snapshotkeyfile" m4_repo_user<!!>@@<!!>m4_repo_url:m4_repo_path/@1 .
 @%  if
 @%    [ $? -gt 0 ]
@@ -679,16 +448,277 @@ done
 @%fi
 @%@| @}
 
+
+
+\section{Java and Python environment}
+\label{sec:environment}
+
+To be independent from the software environment of the host computer
+and to perform reproducible processing, the pipeline features its own
+Java and Python environment. The costs of this feature are that the
+pipeline takes more disk-space by reproducing infra-structure that is
+already present in the system and that installation takes more time.
+
+The following file sets up the programming environment in scripts.
+
+@o m4_envbindir/progenv @{@%
+@< set up java environment in scripts@>
+@< activate the python environment @>
+@| @}
+
+@% @d set up programming environment @{@%
+@% source \$envbindir/progenv
+@% @| @}
+
+
+\subsection{Java}
+\label{sec:java}
+
+To install Java, download \texttt{m4_javatarball} from
+\url{m4_javatarballurl}. Find it in the root directory and unpack it
+in a subdirectory of \texttt{envdir}.
+
+@d directories to create @{m4_javadir @| @}
+
+
+@%@d check this first @{@%
+@%if
+@%  [ ! -e m4_aprojroot/m4_javatarball ]
+@%then
+@%  echo "Cannot find  m4_aprojroot/m4_javatarball"
+@%  exit 4
+@%fi
+@%@| @}
+
+@d set up java @{@%
+@< get or have @(m4_javatarball@) @>
+cd \$envdir/java
+tar -xzf \$pipesocket/m4_javatarball
+@% rm \$pipesocket/m4_javatarball
+@| @}
+
+Remove the java-ball when cleaning up:
+
+@d clean up @{@%
+rm -rf \$pipesocket/m4_javatarball
+@| @}
+
+
+@d set up java environment in scripts @{@%
+export JAVA_HOME=\$envdir/java/m4_javajdk
+export PATH=$JAVA_HOME/bin:$PATH
+@| JAVA_HOME @}
+
+Put jars in the jar subdirectory of the java directory:
+
+@d directories to create @{m4_jardir @| @}
+
+@d set up java environment in scripts @{@%
+export JARDIR=\$envdir/java/jars
+@| @}
+
+
+
+
+\subsection{Maven}
+\label{sec:Maven}
+
+Some Java-based modules can best be compiled with
+\href{m4_mavenurl}{Maven}. 
+
+@d directories to create @{m4_mavendir @| @}
+
+
+@d install maven @{@%
+cd \$envdir
+wget m4_maventarballurl
+tar -xzf m4_maventarball
+rm m4_maventarball
+@| @}
+
+@d install maven @{@%
+export MAVEN_HOME=\$envdir/m4_mavensubdir
+export PATH=${MAVEN_HOME}/bin:${PATH}
+@| @}
+
+When the installation has been done, remove maven, because it is no longer needed.
+
+@d clean up @{@%
+rm -rf m4_mavendir
+@| @}
+
+
+
+\subsection{Python}
+\label{sec:python}
+
+Set up the environment for Python (version 2.7). I could not find an easy way to set
+up Python from scratch. Therefore we wil use Python 2.7 if is has been
+installed on the host. Otherwise, we will use a binary distribution
+obtained from \href{m4_activepythonurl}{ActiveState}. A tarball of
+ActivePython can be obtained from the snapshot.
+
+In order to be independent of the software on the host, we generate a
+virtual Python environment. In the virtual environment we will install KafNafParserPy and other
+Python packages that are needed.
+
+
+@d set up python @{@%
+@< check/install the correct version of python @>
+@< create a virtual environment for Python @>
+@< activate the python environment @>
+@< install kafnafparserpy @>
+@< install python packages @>
+@| @}
+
+
+@d check/install the correct version of python @{@%
+pythonok=`python --version 2>&1 | gawk '{if(match($2, "2.7")) print "yes" ; else print "no" }'`
+if
+  [ "$pythonok" == "no" ]
+then
+  @< install ActivePython @>
+fi
+@| pythonok @}
+
+
+Unpack the tarball in a temporary directory and install active python
+in the \texttt{env} subdirectory of nlpp. It turns out that you must
+upgrade pip, virtualenv and setuptools after the installation (see
+\url{https://github.com/ActiveState/activepython-docker/commit/10fff72069e51dbd36330cb8a7c2f0845bcd7b38}
+and \url{https://github.com/ActiveState/activepython-docker/issues/1}).
+
+
+@d install ActivePython  @{@%
+@< get or have @(m4_activepythonball@) @>
+pytinsdir=`mktemp -d -t activepyt.XXXXXX`
+cd $pytinsdir
+tar -xzf \$pipesocket/m4_activepythonball
+acdir=`ls -1`
+cd $acdir
+@%./install.sh -I m4_ausrlocaldir
+./install.sh -I \$envdir
+cd \$piperoot
+rm -rf \$pytinsdir
+pip install -U pip virtualenv setuptools
+@| @}
+
+
+\subsubsection{Virtual environment}
+\label{sec:pythonvirtenv}
+
+Create a virtual environment. To begin this, we need the Python module
+virtualenv on the host.
+
+@d create a virtual environment for Python @{@%
+@< test whether virtualenv is present on the host @>
+cd \$envdir
+virtualenv venv
+@| @}
+
+@d test whether virtualenv is present on the host @{@%
+which virtualenv
+if
+  [ $? -ne 0 ]
+then
+  echo Please install virtualenv
+  exit 1
+fi
+@|virtualenv @}
+
+
+@d activate the python environment @{@%
+source \$envdir/venv/bin/activate
+@|activate @}
+
+@% @d de-activate the python environment @{@%
+@% deactivate
+@% @| @}
+
+Subdirectory \verb|\$envdir/python| will contain general Python
+packages like KafnafParserPy.
+
+@d directories to create @{m4_envdir/python @| @}
+
+Activation of Python include pointing to the place where Python
+packages are:
+
+@d activate the python environment @{@%
+export PYTHONPATH=\$envdir/python:\$PYTHONPATH
+@|PYTHONPATH @}
+
+
+\subsubsection{KafNafParserPy}
+\label{sec:KafNafParserPy}
+
+@% Currently the pipeline uses Python as it has been installed on the
+@% host. This has to be changed and a virtual environment has to be
+@% used. Let us reserve directory \verb|modules/python| for Python
+@% utility modules. 
+@% 
+@% Make Python utilities findable with the following macro:
+@% 
+@% @d set pythonpath @{@%
+@% export PYTHONPATH=m4_pythonmoddir:\$PYTHONPATH
+@% @| @}
+
+A cornerstone Pythonmodule for the pipeline is
+\href{https://github.com/cltl/KafNafParserPy}{KafNafParserPy}. It is a
+feature of this module that you cannot install it with \textsc{pip}, but that
+you can add it to your \texttt{PYTHONPATH}.
+
+
+@d install kafnafparserpy @{@%
+@% cd m4_pythonmoddir
+cd \$envdir/python
+DIRN=KafNafParserPy
+@< move module @($DIRN@) @>
+git clone m4_kafnafgit
+if
+  [ $? -gt 0 ]
+then
+  @< logmess @(Cannot install current $DIRN version@) @>
+  @< re-instate old module @(\$DIRN@) @>
+else
+  @< remove old module @(\$DIRN@) @>
+fi
+@| @}
+
+\subsubsection{Python packages}
+\label{sec:pypacks}
+
+Install python packages:
+
+\begin{description}
+\item[lxml:]
+\item[pyyaml:] for coreference-graph
+\end{description}
+
+
+@d install python packages @{@%
+pip install lxml
+pip install pyyaml
+@| lxml pyyaml @}
+
+
+
+\section{Installation of the modules}
+\label{sec:install}
+
+This section describes how the modules are obtained from their
+(open-)source and installed. 
+
 \subsection{The installation script}
 \label{sec:installscript}
 
-The installation is performed by script \verb|m4_module_installer|
+The installation is performed by script
+\verb|m4_module_installer|. The first part of the script installs the utilities:
 
 
 @o m4_bindir/m4_module_installer @{@%
 #!/bin/bash
 echo Set up environment
-@< set local bin directory @>
+@< set variables that point to the directory-structure @>
 @< variables of m4_module_installer @>
 @< check this first @>
 @%@< unpack snapshots or die @>
@@ -708,6 +738,8 @@ echo ... Ticcutils and Timbl
 @< install the ticcutils utility @>
 @< install the timbl utility @>
 @| @}
+
+Next, install the modules:
 
 @o m4_bindir/m4_module_installer @{@%
 echo Install modules
@@ -772,47 +804,61 @@ fi
 \subsubsection{Alpino}
 \label{sec:install-alpino}
 
-Install Alpino from the website of Gertjan van Noort.
+Binary versions of Alpino can be obtained from the
+\href{http://www.let.rug.nl/vannoord/alp/Alpino/}{official Alpino
+  website} of Gertjan van Noort. However, it seems that older versions
+are not always retained there, or the location of older versions
+change. Therefore we have a copy in the snapshot.
 
 \paragraph{Module}
 \label{sec:installalpinomodule}
 
 @d install Alpino @{@%
-SUCCES=0
-cd m4_amoddir
-@< move module @(Alpino@) @>
-wget m4_alpinourl
-SUCCES=\$?
-if
-  [ \$SUCCES -eq 0 ]
-then
-  tar -xzf m4_alpinosrc
-  SUCCES=\$?
-  rm -rf m4_alpinosrc
-fi
-if
-  [ $SUCCES -eq 0 ]
-then
-  @< logmess @(Installed Alpino@) @>
-  @< remove old module @(Alpino@) @>
-else
-  @< re-instate old module @(Alpino@) @>
-fi
-@|SUCCES @}
+@< get or have @(m4_alpinosrc@) @>
+@% SUCCES=0
+cd \$modulesdir
+tar -xzf \$pipesocket/m4_alpinosrc
+@% @< move module @(Alpino@) @>
+@% wget m4_alpinourl
+@% SUCCES=\$?
+@% if
+@%   [ \$SUCCES -eq 0 ]
+@% then
+@%   tar -xzf m4_alpinosrc
+@%   SUCCES=\$?
+@%   rm -rf m4_alpinosrc
+@% fi
+@% if
+@%   [ $SUCCES -eq 0 ]
+@% then
+@< logmess @(Installed Alpino@) @>
+@%   @< remove old module @(Alpino@) @>
+@% else
+@%   @< re-instate old module @(Alpino@) @>
+@% fi
+@| @}
 
 Currently, alpino is not used as a pipeline-module on its own, but it
 is included in other pipeline-modules. Modules that use Alpino should
 set the following variables:
 
 @d set alpinohome @{@%
-export ALPINO_HOME=m4_amoddir/Alpino
+export ALPINO_HOME=\$modulesdir/Alpino
 @| ALPINO_HOME @}
+
+Remove the tarball when cleaning up:
+
+@d clean up @{@%
+rm -rf \$pipesocket/m4_alpinosrc
+@| @}
+
+
 
 \subsubsection{Treetagger}
 \label{sec:installtreetagger}
 
 Installation of Treetagger goes as follows (See
-\href{http://www.cis.uni-muenchen.de/~schmid/tools/TreeTagger/}{Treetagger's homepage}:
+\href{http://www.cis.uni-muenchen.de/~schmid/tools/TreeTagger/}{Treetagger's homepage}):
 
 \begin{enumerate}
 \item Download and unpack the Treetagger tarball. This generates the
@@ -847,8 +893,8 @@ DUTCHPARS_2_GZ=m4_treetag_dutchparms2
 Download everything in the target directory:
 
 @d install the treetagger utility @{@%
-mkdir -p m4_amoddir/\$TREETAGDIR
-cd m4_amoddir/\$TREETAGDIR
+mkdir -p \$modulesdir/\$TREETAGDIR
+cd \$modulesdir/\$TREETAGDIR
 wget \$TREETAGURL/\$TREETAGSRC
 wget \$TREETAGURL/\$TREETAGSCRIPTS
 wget \$TREETAGURL/\$TREETAG_INSTALLSCRIPT
@@ -864,13 +910,13 @@ chmod 775 \$TREETAG_INSTALLSCRIPT
 ./\$TREETAG_INSTALLSCRIPT
 @| @}
 
-Make the treetagger utilities available for everbody.
+Make the treetagger utilities available for everybody.
 
 @d install the treetagger utility @{@%
-chmod -R o+rx m4_amoddir/\$TREETAGDIR/bin
-chmod -R o+rx m4_amoddir/\$TREETAGDIR/cmd
-chmod -R o+r m4_amoddir/\$TREETAGDIR/doc
-chmod -R o+rx m4_amoddir/\$TREETAGDIR/lib
+chmod -R o+rx \$modulesdir/\$TREETAGDIR/bin
+chmod -R o+rx \$modulesdir/\$TREETAGDIR/cmd
+chmod -R o+r \$modulesdir/\$TREETAGDIR/doc
+chmod -R o+rx \$modulesdir/\$TREETAGDIR/lib
 @% ./\$TREETAG_INSTALLSCRIPT
 @| @}
 
@@ -899,8 +945,8 @@ C-compiler that happens to be available on the host. Installation involves:
 \item Unpack the tarball.
 \item cd to the unpacked directory and perform \verb|./configure|,
   \verb|make| and \verb|make install|. Note the argument that causes
-  the files to be installed in the \verb|usrlocal| subdirectory of the
-  modules directory.
+  the files to be installed in the \texttt{lib} and the \texttt{bin} sub-directories of the
+  \texttt{env} directory.
 \end{enumerate}
 
 @d install the ticcutils utility @{@%
@@ -935,11 +981,11 @@ if
   [ \$SUCCES -eq 0 ]
 then
   cd \$DIR
-  ./configure --prefix=m4_ausrlocaldir
+  ./configure --prefix=\$envdir
   make
   make install
 fi
-cd m4_aprojroot
+cd \$piperoot
 rm -rf \$ticbeldir
 if
   [ \$SUCCES -eq 0 ]
@@ -986,7 +1032,8 @@ To start the dbpedia server:
 Italian server: 
 
 \begin{verbatim}
-java -jar -Xmx8g dbpedia-spotlight-0.7-jar-with-dependencies-candidates.jar it http://localhost:2050/rest 
+java -jar -Xmx8g dbpedia-spotlight-0.7-jar-with-dependencies-candidates.jar \
+    it http://localhost:2050/rest 
 
 \end{verbatim}
 
@@ -1006,10 +1053,10 @@ So, let's do that.
 @d install the Spotlight server @{@%
 @< get or have @(m4_spotlightball@) @>
 @%mkdir -p m4_aspotlightdir
-cd m4_aenvdir
-tar -xzf m4_asocket/m4_spotlightball
-rm -rf m4_asocket/m4_spotlightball
-cd m4_aspotlightdir
+cd \$envdir
+tar -xzf \$pipesocket/m4_spotlightball
+@% rm -rf \$pipesocket/m4_spotlightball
+cd \$envdir/spotlight
 @%cp m4_asnapshotroot/spotlight/m4_spotlightjar .
 @% wget m4_spotlight_download_url/m4_spotlightjar
 wget m4_spotlight_download_url/m4_spotlight_nl_model_ball
@@ -1031,7 +1078,7 @@ rm m4_spotlight_nl_model_ball
 We choose to put the Wikipedia database in the spotlight directory.
 
 @d install the Spotlight server @{@%
-cd m4_aspotlightdir
+cd \$envdir/spotlight
 wget m4_wikipediadb_url
 tar -xzf m4_wikipediadb_tarball
 rm  m4_wikipediadb_tarball
@@ -1045,7 +1092,7 @@ java -jar -Xmx8g dbpedia-spotlight-0.7-jar-with-dependencies-candidates.jar nl h
 @% java -jar -Xmx8g dbpedia-spotlight-0.7-jar-with-dependencies-candidates.jar nl http://localhost:2060/rest  &
 @| @}
 
-
+We start the spotlight-server only in case it is not already running. Assume that Spotlight runs when something listens on port~m4_spotlight_nl_port of localhost:
 
 @d check/start the Spotlight server @{@%
 spottasks=`netstat -an | grep :m4_spotlight_nl_port | wc -l`
@@ -1093,8 +1140,8 @@ git clone m4_tokenizergit
 cd m4_tokenizerdir
 git checkout m4_tokenizer_commitname
 mvn clean package
-mv target/m4_tokenizerjar m4_ajardir
-cd m4_aprojroot
+mv target/m4_tokenizerjar \$jarsdir
+cd \$piperoot
 rm -rf \$tempdir
 @| @}
 
@@ -1108,7 +1155,7 @@ rm -rf \$tempdir
 @% @| @}
 @% 
 @% @% @d install the tokenizer @{@%
-@% @% cd m4_amoddir
+@% @% cd \$modulesdir
 @% @% @< move module @(m4_tokenizerdir@) @>
 @% @% git clone m4_tokenizergit
 @% @% if
@@ -1128,8 +1175,9 @@ The script runs the tokenizerscript.
 
 @o m4_bindir/m4_tokenizerscript @{@%
 #!/bin/bash
-@< set up programming environment @>
-JARFILE=m4_ajardir/m4_tokenizerjar
+@< set variables that point to the directory-structure @>
+@% @< set up programming environment @>
+JARFILE=\$jarsdir/m4_tokenizerjar
 java -Xmx1000m  -jar \$JARFILE tok -l nl --inputkaf
 @| @}
 
@@ -1152,13 +1200,13 @@ DIRN=m4_morphpardir
 GITU=m4_morphpargit
 GITC=m4_morphpar_commitname
 @< install from github @>
-cd m4_amoddir/m4_morphpardir
+cd \$modulesdir/m4_morphpardir
 git checkout m4_morphpar_commitname
 @| @}
 
 
 @% @d install the morphosyntactic parser @{@%
-@% cd m4_amoddir
+@% cd \$modulesdir
 @% @< move module @(m4_morphpardir@) @>
 @% git clone m4_morphpargit
 @% if
@@ -1176,9 +1224,10 @@ git checkout m4_morphpar_commitname
 
 @o m4_bindir/m4_morphparscript @{@%
 #!/bin/bash
-@< set up programming environment @>
-ROOT=m4_aprojroot
-MODDIR=m4_amoddir/<!!>m4_morphpardir<!!>
+@< set variables that point to the directory-structure @>
+@% @< set up programming environment @>
+ROOT=\$piperoot
+MODDIR=\$modulesdir/<!!>m4_morphpardir<!!>
 @< set alpinohome @>
 cat | python \$MODDIR/core/morph_syn_parser.py
 @| @}
@@ -1222,7 +1271,7 @@ cat | python \$MODDIR/core/morph_syn_parser.py
 @% @o m4_bindir/m4_alpinohackscript @{@%
 @% #!/bin/bash
 @% ROOT=m4_aprojroot
-@% HACKDIR=m4_amoddir/m4_alpinohackdir
+@% HACKDIR=\$modulesdir/m4_alpinohackdir
 @% cat | python  \$HACKDIR/clean_hack.py 
 @% 
 @% @| @}
@@ -1260,8 +1309,9 @@ pip install --upgrade  networkx
 
 @o m4_bindir/m4_corefbasescript @{@%
 #!/bin/bash
-@< set up programming environment @>
-cd $PIPEMODD/m4_corefbasedir/core
+@< set variables that point to the directory-structure @>
+@% @< set up programming environment @>
+cd $modulesdir/m4_corefbasedir/core
 cat | python -m corefgraph.process.file --language nl --singleton --sieves NO
 @| @}
 
@@ -1285,7 +1335,7 @@ available. Therefore, models have been put in the snapshot-tarball.
 @< compile the nerc jar @>
 @< get the nerc models @>
 
-@% cp -r m4_asnapshotroot/m4_nercdir  m4_amoddir/
+@% cp -r m4_asnapshotroot/m4_nercdir  \$modulesdir/
 @| @}
 
 
@@ -1300,8 +1350,8 @@ git clone m4_nercgit
 cd ixa-pipe-nerc/
 git checkout m4_nerc_commitname
 mvn clean package
-mv target/m4_nercjar m4_ajardir/
-cd m4_aprojroot/nuweb
+mv target/m4_nercjar \$jarsdir/
+cd \$nuwebdir
 rm -rf $TEMPDIR
 @| @}
 
@@ -1364,12 +1414,12 @@ the snapshot.
 
 @d get the nerc models @{@%
 @< get or have @(m4_nercmodelsball@) @>
-@%mkdir -p m4_amoddir/m4_nercdir
-cd m4_amoddir
-tar -xzf m4_asocket/m4_nercmodelsball
-rm m4_nercmodelsball
-cp -r m4_asnapshotroot/m4_nercdir/m4_nercmodeldir m4_amoddir/m4_nercdir/
-chmod -R 775 m4_amoddir/m4_nercdir
+@%mkdir -p \$modulesdir/m4_nercdir
+cd \$modulesdir
+tar -xzf \$pipesocket/m4_nercmodelsball
+@% rm \$pipesocket/m4_nercmodelsball
+@% cp -r m4_asnapshotroot/m4_nercdir/m4_nercmodeldir \$modulesdir/m4_nercdir/
+chmod -R 775 \$modulesdir/m4_nercdir
 @| @}
 
 
@@ -1390,19 +1440,20 @@ Sonar model
 
 @o m4_bindir/m4_nerc_conll02_script @{@%
 #!/bin/bash
-@< set up programming environment @>
-MODDIR=$PIPEMODD/m4_nercdir
-JAR=$JARDIR/m4_nercjar
+@< set variables that point to the directory-structure @>
+@% @< set up programming environment @>
+MODDIR=$modulesdir/m4_nercdir
+JAR=$jarsdir/m4_nercjar
 MODEL=m4_nercmodelconll02
 cat | java -Xmx1000m -jar \$JAR tag -m $MODDIR/m4_nercmodeldir/nl/$MODEL
-#cat| java           -jar ixa-pipe-nerc-1.3.6.jar tag -m $nermodel
 @| @}
 
 @o m4_bindir/m4_nerc_sonar_script @{@%
 #!/bin/bash
-@< set up programming environment @>
-MODDIR=$PIPEMODD/m4_nercdir
-JAR=$JARDIR/m4_nercjar
+@< set variables that point to the directory-structure @>
+@% @< set up programming environment @>
+MODDIR=$modulesdir/m4_nercdir
+JAR=$jarsdir/m4_nercjar
 MODEL=m4_nercmodelsonar
 cat | java -Xmx1000m -jar \$JAR tag -m $MODDIR/m4_nercmodeldir/nl/$MODEL --clearFeatures yes
 #cat| java           -jar ixa-pipe-nerc-1.3.6.jar tag -m $nermodel --clearFeatures yes
@@ -1445,7 +1496,7 @@ DIRN=m4_wsddir
 GITU=m4_wsdgit
 GITC=m4_wsd_commitname
 @< install from github @>
-cd m4_amoddir/m4_wsddir
+cd \$modulesdir/m4_wsddir
 @< install svm lib @>
 @< download svm models @>
 
@@ -1473,9 +1524,9 @@ This part has also been copied from \verb|install_naf.sh| in the \textsc{wsd} mo
 
 @d download svm models @{@%
 @< get or have @(m4_wsd_snapball@) @>
-cd m4_amoddir
-tar -xzf m4_asocket/m4_wsd_snapball
-rm m4_asocket/m4_wsd_snapball
+cd \$modulesdir
+tar -xzf \$pipesocket/m4_wsd_snapball
+@% rm \$pipesocket/m4_wsd_snapball
 @%cp -r m4_aprojroot/m4_snapshotdir/svm_wsd/models .
 @% echo 'Downloading models...(could take a while)'
 @% wget --user=cltl --password='.cltl.' kyoto.let.vu.nl/~izquierdo/models_wsd_svm_dsc.tgz 2> /dev/null
@@ -1497,8 +1548,9 @@ rm m4_asocket/m4_wsd_snapball
 # WSD -- wrapper for word-sense disambiguation
 # 8 Jan 2014 Ruben Izquierdo
 # 16 sep 2014 Paul Huygen
-@< set up programming environment @>
-WSDDIR=$PIPEMODD/m4_wsddir
+@< set variables that point to the directory-structure @>
+@% @< set up programming environment @>
+WSDDIR=$modulesdir/m4_wsddir
 WSDSCRIPT=dsc_wsd_tagger.py
 cat | python $WSDDIR/$WSDSCRIPT --naf 
 @| @}
@@ -1516,7 +1568,7 @@ cat | python $WSDDIR/$WSDSCRIPT --naf
 @% # 8 Jan 2014 Ruben Izquierdo
 @% # 16 sep 2014 Paul Huygen
 @% ROOT=m4_aprojroot
-@% WSDDIR=m4_amoddir/m4_wsddir
+@% WSDDIR=\$modulesdir/m4_wsddir
 @% WSDSCRIPT=kaf_annotate_senses.pl
 @% UKB=\$WSDDIR/ukb_wsd_2.0
 @% POSMAP=$WSDDIR/posmap.NGV.txt
@@ -1545,8 +1597,8 @@ cat | python $WSDDIR/$WSDSCRIPT --naf
 @% \label{sec:wsd-module}
 @% 
 @% @d install the WSD module @{@%
-@% @%cp -r m4_asnapshotroot/m4_wsddir m4_amoddir/
-@% cp -r m4_aprojroot/m4_snapshotdir/m4_wsddir m4_amoddir/
+@% @%cp -r m4_asnapshotroot/m4_wsddir \$modulesdir/
+@% cp -r m4_aprojroot/m4_snapshotdir/m4_wsddir \$modulesdir/
 @% @| @}
 @% 
 @% 
@@ -1559,7 +1611,7 @@ cat | python $WSDDIR/$WSDSCRIPT --naf
 @% # 8 Jan 2014 Ruben Izquierdo
 @% # 16 sep 2014 Paul Huygen
 @% ROOT=m4_aprojroot
-@% WSDDIR=m4_amoddir/m4_wsddir
+@% WSDDIR=\$modulesdir/m4_wsddir
 @% WSDSCRIPT=kaf_annotate_senses.pl
 @% UKB=\$WSDDIR/ukb_wsd_2.0
 @% POSMAP=$WSDDIR/posmap.NGV.txt
@@ -1591,9 +1643,9 @@ module from the tarball.
 
 @d install the lu2synset converter @{@%
 @< get or have @(m4_lu2synball@) @>
-cd m4_amoddir
-tar -xzf m4_asocket/m4_lu2synball
-rm m4_asocket/m4_lu2synball
+cd \$modulesdir
+tar -xzf \$pipesocket/m4_lu2synball
+@% rm \$pipesocket/m4_lu2synball
 @| @}
 
 \paragraph{Script}
@@ -1601,9 +1653,9 @@ rm m4_asocket/m4_lu2synball
 
 @o m4_bindir/m4_lu2synsetscript  @{@%
 #!/bin/bash
-ROOT=m4_aprojroot
-JAVALIBDIR=m4_amoddir/m4_lu2syndir/lib
-RESOURCESDIR=m4_amoddir/m4_lu2syndir/resources
+ROOT=\$piperoot
+JAVALIBDIR=\$modulesdir/m4_lu2syndir/lib
+RESOURCESDIR=\$modulesdir/m4_lu2syndir/resources
 JARFILE=WordnetTools-1.0-jar-with-dependencies.jar
 java -Xmx812m -cp  $JAVALIBDIR/$JARFILE vu.wntools.util.NafLexicalUnitToSynsetReferences \
    --wn-lmf "\$RESOURCESDIR/cornetto2.1.lmf.xml" --format naf 
@@ -1614,10 +1666,10 @@ java -Xmx812m -cp  $JAVALIBDIR/$JARFILE vu.wntools.util.NafLexicalUnitToSynsetRe
 \subsubsection{NED}
 \label{sec:ned}
 
-The \NED{} module is rather picky about the structure of the \NAF{} file. In any case, it does not accept a file that has been produced by the ontotagger. Hence, in a pipeline \NER{} shuld be executed before the ontotagger.
+The \NED{} module is rather picky about the structure of the \NAF{} file. In any case, it does not accept a file that has been produced by the ontotagger. Hence, in a pipeline \NER{} should be executed before the ontotagger.
 
 
-The \NED{} module wants to consult the dbpedia spotlight server, so
+The \NED{} module wants to consult the Dbpedia Spotlight server, so
 that one has to be installed somewhere. For this moment, let us
 suppose that it has been installed on localhost.
 
@@ -1684,8 +1736,8 @@ suppose that it has been installed on localhost.
 
 @% @d install the \NED{} module @{@%
 @% cp m4_asnapshotroot/m4_neddir/m4_nedjar m4_ajardir/
-@% mkdir -p m4_amoddir/m4_neddir
-@% cd m4_amoddir/m4_neddir
+@% mkdir -p \$modulesdir/m4_neddir
+@% cd \$modulesdir/m4_neddir
 @% wget http://ixa2.si.ehu.es/ixa-pipes/models/wikipedia-db.v1.tar.gz
 @% tar -xzf wikipedia-db.v1.tar.gz
 @% @| @}
@@ -1697,11 +1749,11 @@ DIRN=m4_neddir
 GITU=m4_nedgit
 GITC=m4_ned_commitname
 @< install from github @>
-cd m4_amoddir/m4_neddir
+cd \$modulesdir/m4_neddir
 mvn -Dmaven.compiler.target=m4_maven_javaversion -Dmaven.compiler.source=m4_maven_javaversion clean package
-mv target/ixa-pipe-ned-<!!>m4_ned_version.jar m4_ajardir/ 
+mv target/ixa-pipe-ned-<!!>m4_ned_version.jar \$jarsdir/
 @% cp m4_asnapshotroot/m4_neddir/m4_nedjar m4_ajardir/
-@% @% mkdir -p m4_amoddir/m4_neddir
+@% @% mkdir -p \$modulesdir/m4_neddir
 @% wget http://ixa2.si.ehu.es/ixa-pipes/models/wikipedia-db.v1.tar.gz
 @% tar -xzf wikipedia-db.v1.tar.gz
 @| @}
@@ -1738,12 +1790,13 @@ rm -rf $tempdir
 
 @o m4_bindir/m4_nedscript @{@%
 #!/bin/bash
-@< set up programming environment @>
-ROOT=m4_aprojroot
-JARDIR=m4_ajardir
+@< set variables that point to the directory-structure @>
+@% @< set up programming environment @>
+ROOT=\$piperoot
+JARDIR=\$jarsdir
 @< check/start the Spotlight server @>
-cat | java -Xmx1000m -jar \$JARDIR/m4_nedjar  -p 2060 -e candidates -i m4_aspotlightdir/wikipedia-db -n nlEn
-@% cat | java -jar \$JARDIR/m4_nedjar  -p 2060  -n nl
+cat | java -Xmx1000m -jar \$jarsdir/m4_nedjar  -p 2060 -e candidates -i \$envdir/spotlight/wikipedia-db -n nlEn
+@% cat | java -jar \$jarsdir/m4_nedjar  -p 2060  -n nl
 @| @}
 
 
@@ -1764,11 +1817,11 @@ install from a snapshot (\texttt{m4_ontotarball}).
 
 @d install the onto module @{@%
 @< get or have @(m4_ontotarball@) @>
-@%cp -r m4_asnapshotroot/m4_ontodir m4_amoddir/
-cd m4_amoddir
-tar -xzf m4_asocket/m4_ontotarball
-rm asocket/m4_ontotarball
-chmod -R o+r m4_amoddir
+@%cp -r m4_asnapshotroot/m4_ontodir \$modulesdir/
+cd \$modulesdir
+tar -xzf \$pipesocket/m4_ontotarball
+rm \$pipesocket/m4_ontotarball
+chmod -R o+r \$modulesdir/m4_ontodir
 @| @}
 
 
@@ -1777,9 +1830,10 @@ chmod -R o+r m4_amoddir
 
 @o m4_bindir/m4_ontoscript @{@%
 #!/bin/bash
-@< set up programming environment @>
-ROOT=m4_aprojroot
-ONTODIR=$PIPEMODD/m4_ontodir
+@< set variables that point to the directory-structure @>
+@% @< set up programming environment @>
+ROOT=\$piperoot
+ONTODIR=$modulesdir/m4_ontodir
 JARDIR=\$ONTODIR/lib
 RESOURCESDIR=\$ONTODIR/resources
 @% PREDICATEMATRIX="\$RESOURCESDIR/PredicateMatrix.v1.1/PredicateMatrix.v1.1.role.nl-1.merged"
@@ -1792,7 +1846,7 @@ CLASSPATH=\$JARDIR/ontotagger-1.0-jar-with-dependencies.jar
 JAVASCRIPT=eu.kyotoproject.main.KafPredicateMatrixTagger
 
 @% JAVA_ARGS="-Xmx1812m"
-@% JAVA_ARGS=\$JAVA_ARGS " -cp \$JARDIR/ontotagger-1.0-jar-with-dependencies.jar"
+@% JAVA_ARGS=\$JAVA_ARGS " -cp \$jarsdir/ontotagger-1.0-jar-with-dependencies.jar"
 @% JAVA_ARGS=\$JAVA_ARGS " eu.kyotoproject.main.KafPredicateMatrixTagger"
 @% JAVA_ARGS="--mappings \"fn;pb;nb\" "
 MAPPINGS="fn;mcr;ili;eso"
@@ -1806,7 +1860,7 @@ java -Xmx1812m -cp \$CLASSPATH \$JAVASCRIPT \$JAVA_ARGS
 @% java -Xmx812m -cp ../lib/ontotagger-1.0-jar-with-dependencies.jar eu.kyotoproject.main.KafPredicateMatrixTagger --mappings "fn;mcr;ili;eso" --key odwn-eq --version 1.1 --predicate-matrix "../resources/PredicateMatrix_nl_lu_withESO.v0.2.role.txt" --grammatical-words "../resources/grammaticals/Grammatical-words.nl" --naf-file "../example/test.srl.lexicalunits.naf" > "../example/test.srl.lexicalunits.pm.naf"
 @% @< onto javacommand @>
 @% java \$JAVA_ARGS
-@% java -Xmx1812m -cp $JARDIR/ontotagger-1.0-jar-with-dependencies.jar \
+@% java -Xmx1812m -cp $jarsdir/ontotagger-1.0-jar-with-dependencies.jar \
 @%      eu.kyotoproject.main.KafPredicateMatrixTagger \
 @%      --mappings "fn;pb;nb" --key odwn-eq --version 1.1 \
 @%      --predicate-matrix \
@@ -1850,13 +1904,14 @@ The framenet \SRL{} is part of the package that contains the ontotagger. We only
 \label{sec:framesrlscript}
 
 The script contains a hack, because the framesrl script produces
-spiruous lines containint ``frameMap.size()=...''. A \textsc{gawk}
+spurious lines containining ``frameMap.size()=...''. A \textsc{gawk}
 script removes these lines.
 
 @o m4_bindir/m4_framesrlscript @{@%
 #!/bin/bash
-@< set up programming environment @>
-ONTODIR=$PIPEMODD/m4_ontodir
+@< set variables that point to the directory-structure @>
+@% @< set up programming environment @>
+ONTODIR=$modulesdir/m4_ontodir
 JARDIR=\$ONTODIR/lib
 RESOURCESDIR=\$ONTODIR/resources
 @% PREDICATEMATRIX="\$RESOURCESDIR/PredicateMatrix.v1.1/PredicateMatrix.v1.1.role.nl-1.merged"
@@ -1905,12 +1960,12 @@ GITC=m4_heidel_commitname
 @| @}
 
 @d adapt heideltime's config.props @{@%
-CONFIL=m4_amoddir/m4_heideldir/config.props
+CONFIL=\$modulesdir/m4_heideldir/config.props
 tempfil=`mktemp -t heideltmp.XXXXXX`
 mv $CONFIL \$tempfil
-MODDIR=m4_amoddir
+@% MODDIR=\$modulesdir
 TREETAGDIR=m4_treetagdir
-AWKCOMMAND='/^treeTaggerHome/ {\$0="treeTaggerHome = m4_amoddir/m4_treetagdir"}; {print}'
+AWKCOMMAND='/^treeTaggerHome/ {\$0="treeTaggerHome = '\$modulesdir'/m4_treetagdir"}; {print}'
 gawk "\$AWKCOMMAND" \$tempfil >\$CONFIL
 rm -rf $tempfil
 @| @}
@@ -1921,9 +1976,10 @@ rm -rf $tempfil
 
 @o m4_bindir/m4_heidelscript @{@%
 #!/bin/bash
-@< set up programming environment @>
+@< set variables that point to the directory-structure @>
+@% @< set up programming environment @>
 @% ROOT=m4_aprojroot
-HEIDELDIR=m4_amoddir/m4_heideldir
+HEIDELDIR=\$modulesdir/m4_heideldir
 TEMPDIR=`mktemp -t -d heideltmp.XXXXXX`
 cd $HEIDELDIR
 @% @< activate the python environment @>
@@ -1947,7 +2003,7 @@ DIRN=m4_srldir
 GITU=m4_srlgit
 GITC=m4_srl_commitname
 @< install from github @>
-@%cp -r m4_asnapshotroot/m4_srldir m4_amoddir/
+@%cp -r m4_asnapshotroot/m4_srldir \$modulesdir/
 @| @}
 
 
@@ -1963,9 +2019,10 @@ First:
 
 @o m4_bindir/m4_srlscript @{@%
 #!/bin/bash
-source m4_abindir/progenv
-ROOT=$PIPEROOT
-SRLDIR=m4_amoddir/m4_srldir
+@< set variables that point to the directory-structure @>
+source \$envbindir/progenv
+ROOT=$piperoot
+SRLDIR=\$modulesdir/m4_srldir
 TEMPDIR=`mktemp -d -t SRLTMP.XXXXXX`
 cd \$SRLDIR
 @% @< set local bin directory @>
@@ -2015,10 +2072,10 @@ Install the module from the snapshot.
 
 @d install the event-coreference module @{@%
 @< get or have @(m4_evcoreftarball@) @>
-cd m4_amoddir
-tar -xzf m4_asocket/m4_evcoreftarball
+cd \$modulesdir
+tar -xzf \$pipesocket/m4_evcoreftarball
 cd m4_evcorefdir
-cp lib/m4_evcorefjar m4_ajardir
+cp lib/m4_evcorefjar \$jarsdir
 @| @}
 
 
@@ -2028,10 +2085,11 @@ cp lib/m4_evcorefjar m4_ajardir
 
 @o m4_bindir/m4_evcorefscript @{@%
 #!/bin/bash
-@< set up programming environment @>
-MODROOT=$PIPEMODD/m4_evcorefdir
+@< set variables that point to the directory-structure @>
+@% @< set up programming environment @>
+MODROOT=$modulesdir/m4_evcorefdir
 RESOURCESDIR=$MODROOT/resources
-JARFILE=m4_ajardir/m4_evcorefjar
+JARFILE=\$jarsdir/m4_evcorefjar
 
 JAVAMODULE=eu.newsreader.eventcoreference.naf.EventCorefWordnetSim
 JAVAOPTIONS="--method leacock-chodorow"
@@ -2138,7 +2196,7 @@ Arg 1: URL; Arg 2: tarball; Arg 3: directory.
 
 @d install from tarball @{@%
 SUCCES=0
-cd m4_amoddir
+cd \$modulesdir
 @< move module @(\$DIR@) @>
 wget \$URL
 SUCCES=\$?
@@ -2330,7 +2388,7 @@ Put the nuweb binary in the nuweb subdirectory, so that it can be used before th
 nuweb: $(NUWEB)
 
 $(NUWEB): m4_projroot/m4_nuwebsource
-	mkdir -p m4_usrlocalbindir
+	mkdir -p m4_envbindir
 	cd m4_projroot/m4_nuwebsource && make nuweb
 	cp m4_projroot/m4_nuwebsource/nuweb $(NUWEB)
 
@@ -2446,7 +2504,7 @@ document.
 The list of figures to be included:
 
 @d parameters in Makefile @{@%
-FIGFILES=fileschema
+FIGFILES=fileschema directorystructure
 
 @| FIGFILES @}
 
@@ -2558,17 +2616,39 @@ is performed by a shell script \verb|w2pdf|.
 
 
 
-Note, that in the following \texttt{make} construct, the implicit rule
-\verb|.w.pdf| is not used. It turned out, that make did not calculate
-the dependencies correctly when I did use this rule.
+@% Note, that in the following \texttt{make} construct, the implicit rule
+@% \verb|.w.pdf| is not used. It turned out, that make did not calculate
+@% the dependencies correctly when I did use this rule.
+@% 
+@% @d  impliciete make regels@{@%
+@% @%.w.pdf :
+@% %.pdf : %.w \$(W2PDF)  \$(PDF_FIG_NAMES) \$(PDFT_NAMES)
+@% 	chmod 775 \$(W2PDF)
+@% 	\$(W2PDF) \$*
+@% 
+@% @| @}
 
-@d  impliciete make regels@{@%
-@%.w.pdf :
-%.pdf : %.w \$(W2PDF)  \$(PDF_FIG_NAMES) \$(PDFT_NAMES)
+@% Unfortunately, the above rule does not seem to work as expected. When
+@% the Makefile is invoked while  \texttt{nlpp.pdf} doens not exists,
+@% make produces the following message:
+@% 
+@% \begin{verbatim}
+@% paul@@klipperaak:/mnt/sdb1/pipelines/testnlpp/nlpp/nuweb$ make pdf
+@% make: *** No rule to make target `nlpp.pdf', needed by `pdf'.  Stop.
+@% 
+@% \end{verbatim}
+@% 
+@% Therefore we add the following explicit rule:
+
+
+@d make targets @{@%
+nlpp.pdf : nlpp.w \$(W2PDF)  \$(PDF_FIG_NAMES) \$(PDFT_NAMES)
 	chmod 775 \$(W2PDF)
 	\$(W2PDF) \$*
 
 @| @}
+
+
 
 The following is an ugly fix of an unsolved problem. Currently I
 develop this thing, while it resides on a remote computer that is
@@ -2986,21 +3066,21 @@ sources : m4_progname.w \$(DIRS) \$(NUWEB)
 \bibliographystyle{plain}
 \bibliography{m4_progname}
 
-\subsection{URL's}
-\label{sec:urls}
-
-\begin{description}
-\item[Nuweb:] \url{m4_nuwebURL}
-\item[Apache Velocity:] \url{m4_velocityURL}
-\item[Velocitytools:] \url{m4_velocitytoolsURL}
-\item[Parameterparser tool:] \url{m4_parameterparserdocURL}
-\item[Cookietool:] \url{m4_cookietooldocURL}
-\item[VelocityView:] \url{m4_velocityviewURL}
-\item[VelocityLayoutServlet:] \url{m4_velocitylayoutservletURL}
-\item[Jetty:] \url{m4_jettycodehausURL}
-\item[UserBase javadoc:] \url{m4_userbasejavadocURL}
-\item[VU corpus Management development site:] \url{http://code.google.com/p/vucom} 
-\end{description}
+@% \subsection{URL's}
+@% \label{sec:urls}
+@% 
+@% \begin{description}
+@% \item[Nuweb:] \url{m4_nuwebURL}
+@% \item[Apache Velocity:] \url{m4_velocityURL}
+@% \item[Velocitytools:] \url{m4_velocitytoolsURL}
+@% \item[Parameterparser tool:] \url{m4_parameterparserdocURL}
+@% \item[Cookietool:] \url{m4_cookietooldocURL}
+@% \item[VelocityView:] \url{m4_velocityviewURL}
+@% \item[VelocityLayoutServlet:] \url{m4_velocitylayoutservletURL}
+@% \item[Jetty:] \url{m4_jettycodehausURL}
+@% \item[UserBase javadoc:] \url{m4_userbasejavadocURL}
+@% \item[VU corpus Management development site:] \url{http://code.google.com/p/vucom} 
+@% \end{description}
 
 \section{Indexes}
 \label{sec:indexes}

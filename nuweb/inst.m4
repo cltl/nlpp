@@ -34,10 +34,14 @@ m4_dnl Programming environment
 m4_dnl
 m4_define(m4_aenvdir, m4_aprojroot`/env')m4_dnl     Program environment
 m4_define(m4_envdir, m4_projroot`/env')m4_dnl 
-m4_define(m4_usrlocaldir, m4_envdir`/usrlocal')m4_dnl     
-m4_define(m4_ausrlocaldir, m4_aenvdir`/usrlocal')m4_dnl
-m4_define(m4_usrlocalbindir, m4_usrlocaldir/bin)m4_dnl
-m4_define(m4_ausrlocalbindir, m4_ausrlocaldir/bin)m4_dnl
+m4_define(m4_aenvbindir, m4_aenvdir`'/bin)m4_dnl     Program environment
+m4_define(m4_envbindir, m4_envdir`'/bin)m4_dnl 
+m4_define(m4_aenvlibdir, m4_aenvdir`'/lib)m4_dnl     Program environment
+m4_define(m4_envlibdir, m4_envdir`'/lib)m4_dnl 
+m4_dnl     m4_define(m4_usrlocaldir, m4_envdir`/usrlocal')m4_dnl     
+m4_dnl     m4_define(m4_ausrlocaldir, m4_aenvdir`/usrlocal')m4_dnl
+m4_dnl     m4_define(m4_usrlocalbindir, m4_usrlocaldir/bin)m4_dnl
+m4_dnl     m4_define(m4_ausrlocalbindir, m4_ausrlocaldir/bin)m4_dnl
 m4_define(m4_ajavadir, m4_aenvdir`/java')m4_dnl   
 m4_define(m4_javadir, m4_envdir`/java')m4_dnl     
 m4_define(m4_ajardir, m4_ajavadir`/jars')m4_dnl     jars
@@ -46,6 +50,7 @@ m4_define(m4_javatarball, server-jre-7u72-linux-x64.tar.gz)m4_dnl
 m4_define(m4_javatarballurl, http://www.oracle.com/technetwork/java/javase/downloads/server-jre7-downloads-1931105.html)m4_dnl
 m4_define(m4_javajdk, jdk1.7.0_72)m4_dnl
 m4_define(m4_ahackdir, m4_aenvdir`/hacks')m4_dnl
+m4_define(m4_activepythonurl, http://www.activestate.com/activepython)m4_dnl
 m4_define(m4_activepythonball, ActivePython-2.7.8.10-linux-x86_64.tar.gz)m4_dnl
 m4_define(m4_apythonenvdir, m4_aenvdir/python)m4_dnl
 m4_define(m4_pythonenvdir, m4_envdir/python)m4_dnl
@@ -55,6 +60,7 @@ m4_dnl
 m4_define(m4_repo_url, kyoto.let.vu.nl)m4_dnl
 m4_define(m4_repo_user, newsreader)m4_dnl
 m4_define(m4_repo_path, nlpp_resources)m4_dnl
+m4_define(m4_snapshotkeyfilename, nrkey)m4_dnl
 m4_define(m4_snapshotkeyfile, m4_asocket/nrkey)m4_dnl
 m4_define(m4_snapshotrootURL, kyoto.let.vu.nl~huygen/dutch_snapshots)m4_dnl
 m4_define(m4_asnapshotroot, m4_aprojroot/snapshots)m4_dnl
@@ -62,9 +68,11 @@ m4_define(m4_snapshotroot, m4_projroot/snapshots)m4_dnl
 m4_dnl
 m4_dnl Maven
 m4_dnl
+m4_define(m4_mavenurl, `https://maven.apache.org')m4_dnl
 m4_define(m4_mavenversion, `3.0.5')m4_dnl
-m4_define(m4_mavendir, m4_envdir/apache-maven-`'m4_mavenversion)m4_dnl
-m4_define(m4_amavendir, m4_aenvdir/apache-maven-`'m4_mavenversion)m4_dnl
+m4_define(m4_mavensubdir, apache-maven-`'m4_mavenversion)m4_dnl
+m4_define(m4_mavendir,   m4_envdir/m4_mavensubdir)m4_dnl
+m4_define(m4_amavendir, m4_aenvdir/m4_mavensubdir)m4_dnl
 m4_define(m4_maventarball, apache-maven-`'m4_mavenversion`'-bin.tar.gz)m4_dnl
 m4_define(m4_maventarballurl, http://apache.rediris.es/maven/maven-3/`'m4_mavenversion`'/binaries/`'m4_maventarball)m4_dnl
 m4_define(m4_maven_javaversion, 1.7)m4_dnl
@@ -312,8 +320,8 @@ m4_define(m4_mkportbib, `/home/paul/bin/mkportbib')m4_dnl
 m4_define(m4_printpdf, `lpr '$1`.pdf')m4_dnl
 m4_define(m4_viewpdf, `evince '$1`.pdf')m4_dnl
 m4_define(m4_latex, `pdflatex '$1)m4_dnl
-m4_define(m4_nuwebbinary,   `m4_usrlocalbindir/nuweb')m4_dnl
-m4_define(m4_anuwebbinary, `m4_ausrlocalbindir/nuweb')m4_dnl
+m4_define(m4_nuwebbinary,   `m4_envbindir/nuweb')m4_dnl
+m4_define(m4_anuwebbinary, `m4_aenvbindir/nuweb')m4_dnl
 m4_dnl m4_define(m4_nuwebbinary, m4_esyscmd(which nuweb))m4_dnl
 m4_dnl
 m4_dnl    subdirs 
