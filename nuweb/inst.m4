@@ -202,6 +202,9 @@ m4_define(m4_heidel_commitname, 057c93ccc857a427145b9e2ff72fd645172d34df)m4_dnl
 m4_dnl m4_define(m4_heidelgit, `git@@github.com:PaulHuygen/NAF-HeidelTime.git' )m4_dnl  Subdir. of modules
 m4_define(m4_heideldir, NAF-HeidelTime)m4_dnl  Subdir. of modules
 m4_define(m4_heidelscript, heideltime)m4_dnl
+m4_define(m4_heidelstandalonejar, de.unihd.dbs.heideltime.standalone.jar)m4_dnl
+m4_define(m4_replace_heidelstandalonejar, 201506postfix.`'m4_heidelstandalonejar)m4_dnl
+
 m4_dnl
 m4_dnl SRL
 m4_define(m4_srlgit, `https://github.com/newsreader/vua-srl-nl.git' )m4_dnl  Subdir. of modules

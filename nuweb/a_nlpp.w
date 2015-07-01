@@ -1975,7 +1975,14 @@ rm -rf \$TMPFIL
 \paragraph{Module}
 \label{sec:heideltimmodule}
 
-Heideltime uses treetagger. It expects to find the location of treetagger in a variable \texttt{TreetaggerHome} in config-file \verb|config.props|.
+Heideltime uses treetagger. It expects to find the location of
+treetagger in a variable \texttt{TreetaggerHome} in config-file
+\verb|config.props|.
+
+One of the elements of Heideltime (the jar
+\verb|de.unihd.dbs.heideltime.standalone.jar| in
+\verb|NAF-HeidelTime/heideltime-standalone| has been updated and the
+Github version is outdated. Therefore, get the latest version from the snapshot.
 
 @d install the heideltime module @{@%
 MODNAM=heideltime
@@ -1983,8 +1990,8 @@ DIRN=m4_heideldir
 GITU=m4_heidelgit
 GITC=m4_heidel_commitname
 @< install from github @>
+@< update the heideltime jar @>
 @< adapt heideltime's config.props @>
-
 @| @}
 
 @d adapt heideltime's config.props @{@%
@@ -1997,6 +2004,16 @@ AWKCOMMAND='/^treeTaggerHome/ {\$0="treeTaggerHome = '\$modulesdir'/m4_treetagdi
 gawk "\$AWKCOMMAND" \$tempfil >\$CONFIL
 rm -rf $tempfil
 @| @}
+
+@d update the heideltime jar @{@%
+standalonejar=m4_heidelstandalonejar
+replstandalonejar=m4_replace_heidelstandalonejar
+cd \$modulesdir/m4_heideldir/heideltime-standalone
+rm -f \$standalonejar
+scp -i "\$pipesocket/m4_snapshotkeyfilename" m4_repo_user<!!>@@<!!>m4_repo_url:m4_repo_path/\$replstandalonejar ./\$standalonejar
+@| @}
+
+
 
 When the installation has been transplanted, \verb|config.props| must be updated:
 
