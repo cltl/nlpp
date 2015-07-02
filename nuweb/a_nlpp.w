@@ -78,7 +78,7 @@ Table~\ref{tab:modulelist}
        \hyperref[sec:onto]{Onto-tagger}
                        & \dref{sec:onto}                                     & snapshot       &                      & m4_ontoscript      \\
        \href{m4_heidelgit}{Heideltime}
-                       & \dref{sec:heideltime}              & \href{m4_heidelgit}{Github}     & m4_heidel_commitname  & m4_heidelscript   \\
+                       & \dref{sec:heideltime}              & \href{m4_heidelgit}{Gith.}/snap.     & m4_heidel_commitname  & m4_heidelscript   \\
        \href{m4_srlgit}{\textsc{srl}}
                        & \dref{sec:SRL}                        & \href{m4_srlgit}{Github}     & m4_srl_commitname   & m4_srlscript       \\
        \href{m4_nedgit}{\textsc{ned}}
@@ -91,6 +91,8 @@ Table~\ref{tab:modulelist}
 @%                       & \verb|m4_opinisrc|   & None           &  m4_opiniscript   & \\  
        \hyperref[sec:framesrl]{Framenet SRL} 
                        & \dref{sec:framesrl}                                  & snapshot      &                            &  m4_fsrlscript   \\  
+       \hyperref[sec:dbpedia-ner]{Dbpedia\_ner} 
+                       & \dref{sec:dbpedia-ner}                                  &  \href{m4_dbpnergit}{Github}       &  m4_dbpner_commitname                          &  m4_dbpnerscript   \\  
 @%     \hyperref[sec:install-alpino]{Alpino             & \verb|m4_alpinodir|    & \textsc{rug} & m4_Alpinoscript  & \\
 @%     \hyperref[]{Ticcutils          & \verb|m4_ticcdir|      & \textsc{ilk} & & \\
 @%     \hyperref[]{Timbl              & \verb|m4_timbldir|     & \textsc{ilk} & & \\
@@ -737,49 +739,51 @@ echo Set up environment
 @< variables of m4_module_installer @>
 @< check this first @>
 @%@< unpack snapshots or die @>
-echo ... Java
-@< set up java @>
-@< set up java environment in scripts @>
-@< install maven @>
-echo ... Python
-@< set up python @>
-echo ... Alpino
-@< install Alpino @>
-echo ... Spotlight
-@< install the Spotlight server @>
-echo ... Treetagger
-@< install the treetagger utility @>
-echo ... Ticcutils and Timbl
-@< install the ticcutils utility @>
-@< install the timbl utility @>
+@% (TMP) echo ... Java
+@% (TMP) @< set up java @>
+@% (TMP) @< set up java environment in scripts @>
+@% (TMP) @< install maven @>
+@% (TMP) echo ... Python
+@% (TMP) @< set up python @>
+@% (TMP) echo ... Alpino
+@% (TMP) @< install Alpino @>
+@% (TMP) echo ... Spotlight
+@% (TMP) @< install the Spotlight server @>
+@% (TMP) echo ... Treetagger
+@% (TMP) @< install the treetagger utility @>
+@% (TMP) echo ... Ticcutils and Timbl
+@% (TMP) @< install the ticcutils utility @>
+@% (TMP) @< install the timbl utility @>
 @| @}
 
 Next, install the modules:
 
 @o m4_bindir/m4_module_installer @{@%
-echo Install modules
-echo ... Tokenizer
-@< install the tokenizer @>
-echo ... Morphosyntactic parser
-@< install the morphosyntactic parser @>
-echo ... NERC
-@< install the NERC module @>
-echo ... Coreference base
-@< install coreference-base @>
-echo ... WSD
-@< install the WSD module @>
-echo ... Ontotagger
-@< install the onto module @>
-echo ... Heideltime
-@< install the heideltime module @>
-echo ... SRL
-@< install the srl module @>
-echo ... NED
-@< install the \NED{} module @>
-echo ... Event-coreference
-@< install the event-coreference module @>
-echo ... lu2synset
-@< install the lu2synset converter @>
+@% (TMP) echo Install modules
+@% (TMP) echo ... Tokenizer
+@% (TMP) @< install the tokenizer @>
+@% (TMP) echo ... Morphosyntactic parser
+@% (TMP) @< install the morphosyntactic parser @>
+@% (TMP) echo ... NERC
+@% (TMP) @< install the NERC module @>
+@% (TMP) echo ... Coreference base
+@% (TMP) @< install coreference-base @>
+@% (TMP) echo ... WSD
+@% (TMP) @< install the WSD module @>
+@% (TMP) echo ... Ontotagger
+@% (TMP) @< install the onto module @>
+@% (TMP) echo ... Heideltime
+@% (TMP) @< install the heideltime module @>
+@% (TMP) echo ... SRL
+@% (TMP) @< install the srl module @>
+@% (TMP) echo ... NED
+@% (TMP) @< install the \NED{} module @>
+@% (TMP) echo ... Event-coreference
+@% (TMP) @< install the event-coreference module @>
+@% (TMP) echo ... lu2synset
+@% (TMP) @< install the lu2synset converter @>
+echo ... dbpedia-ner
+@< install the dbpedia-ner module @>
 echo Final
 @| @}
 
@@ -2162,6 +2166,36 @@ java -Xmx812m -cp \$JARFILE \$JAVAMODULE  $JAVAOPTIONS
 @%chmod 775  m4_bindir/m4_evcorefscript
 @%@| @}
 
+\subsubsection{Dbpedia-ner}
+\label{sec:dbpedia-ner}
+
+
+\paragraph{Module}
+\label{sec:dbpedia-ner-module}
+
+@d install the dbpedia-ner module @{@%
+MODNAM=dbpedia_ner
+DIRN=m4_dbpnerdir
+GITU=m4_dbpnergit
+GITC=m4_dbpner_commitname
+@< install from github @>
+@| @}
+
+\paragraph{Script}
+\label{par:dbpnerscript}
+
+The main part of the module is a Python script. The \verb|README.md| file of the Github repo lists the options that
+can be applied. One of the options is about the \textsc{url} of the
+Spotlight server.
+
+@o m4_bindir/m4_dbpnerscript @{@%
+#!/bin/bash
+@< set variables that point to the directory-structure @>
+@< check/start the Spotlight server @>
+MODDIR=\$modulesdir/<!!>m4_dbpnerdir<!!>
+cat | iconv -f ISO8859-1 -t UTF-8 | $MODDIR/dbpedia_ner.py -url http://localhost:2060/rest/candidates
+@| @}
+
 
 \section{Utilities}
 \label{sec:utilities}
@@ -2190,6 +2224,7 @@ cat $TESTDIR/test.onto.naf | $BIND/heideltime > $TESTDIR/test.times.naf
 cat $TESTDIR/test.times.naf | $BIND/srl  > $TESTDIR/test.srl.naf
 cat $TESTDIR/test.srl.naf | $BIND/m4_evcorefscript  > $TESTDIR/test.ecrf.naf
 cat $TESTDIR/test.ecrf.naf | $BIND/m4_framesrlscript  > $TESTDIR/test.fsrl.naf
+cat $TESTDIR/test.fsrl.naf | $BIND/m4_dbpnerscript  > $TESTDIR/test.dbpner.naf
 @% cat $TESTDIR/test.wsd.naf | $BIND/lu2synset > $TESTDIR/test.l2s.naf
 
 @% #!/bin/bash

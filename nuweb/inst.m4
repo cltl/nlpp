@@ -236,12 +236,19 @@ m4_define(m4_opiniscript, opinimin)m4_dnl
 m4_dnl
 m4_dnl lu2synset
 m4_define(m4_lu2synball, lu2synset.tgz)m4_dnl  
-
 m4_dnl
 m4_dnl Framenet Semantic Role Labeler
 m4_define(m4_fsrlsrc, /dev/null )m4_dnl  Subdir. of modules
 m4_define(m4_fsrldir, fsrl)m4_dnl  Subdir. of modules
 m4_define(m4_fsrlscript, fsrl)m4_dnl
+m4_dnl
+m4_dnl dbpedia-ner
+m4_dnl
+m4_dnl m4_define(m4_dbpnergit, https://github.com/rubenIzquierdo/dbpedia_ner.git)m4_dnl
+m4_define(m4_dbpnergit, https://github.com/PaulHuygen/dbpedia_ner.git)m4_dnl
+m4_define(m4_dbpner_commitname, ab1dcbd860f0ff29bc979f646dc382122a101fc2)m4_dnl
+m4_define(m4_dbpnerdir, dbpedia_ner)m4_dnl
+m4_define(m4_dbpnerscript, dbpner)m4_dnl
 m4_dnl
 m4_dnl Utilities
 m4_dnl
@@ -311,11 +318,11 @@ m4_dnl
 m4_define(m4_wikipediadb_tarball, wikipedia-db.v1.tar.gz)m4_dnl
 m4_define(m4_wikipediadb_url, http://ixa2.si.ehu.es/ixa-pipes/models/m4_wikipediadb_tarball)m4_dnl
 m4_define(m4_wikipediadb_tarball, wikipedia-db.v1.tar.gz)m4_dnl
-
-
+m4_dnl
+m4_dnl
+m4_dnl
 m4_define(m4_spotlight_snapdir, spotlight)m4_dnl
 m4_define(m4_spotlight_dir, spotlight)m4_dnl
-
 m4_dnl
 m4_dnl Locations of programs and system-dependent definitions
 m4_dnl
