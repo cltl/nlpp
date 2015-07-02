@@ -250,6 +250,14 @@ m4_define(m4_dbpner_commitname, ab1dcbd860f0ff29bc979f646dc382122a101fc2)m4_dnl
 m4_define(m4_dbpnerdir, dbpedia_ner)m4_dnl
 m4_define(m4_dbpnerscript, dbpner)m4_dnl
 m4_dnl
+m4_dnl nomevents
+m4_dnl
+m4_dnl m4_define(m4_dbpnergit, https://github.com/rubenIzquierdo/dbpedia_ner.git)m4_dnl
+m4_define(m4_nomeventball, vua-postprocess-nl.zip)m4_dnl
+m4_dnl  m4_define(m4_dbpner_commitname, ab1dcbd860f0ff29bc979f646dc382122a101fc2)m4_dnl
+m4_define(m4_nomeventdir, vua-postprocess-nl)m4_dnl
+m4_define(m4_nomeventscript, nomevent)m4_dnl
+m4_dnl
 m4_dnl Utilities
 m4_dnl
 m4_dnl

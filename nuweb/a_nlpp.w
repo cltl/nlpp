@@ -784,6 +784,8 @@ Next, install the modules:
 @% (TMP) @< install the lu2synset converter @>
 echo ... dbpedia-ner
 @< install the dbpedia-ner module @>
+echo ... dbpedia-ner
+@< install the nomevent module @>
 echo Final
 @| @}
 
@@ -2197,6 +2199,44 @@ cat | iconv -f ISO8859-1 -t UTF-8 | $MODDIR/dbpedia_ner.py -url http://localhost
 @| @}
 
 
+\subsection{Nominal events}
+\label{sec:nomevents}
+
+The module ``postprocessing-nl'' adds nominal events to the srl
+annotations. It has been obtained directly from the author (Piek
+Vossen). It is not yet available in a public repo. Probably in future
+versions the jar from the ontotagger module can be used for this module.
+
+
+\paragraph{Module}
+\label{sec:nemeventmodule}
+
+@d install the nomevent module @{@%
+@< get or have @(m4_nomeventball@) @>
+cd \$modulesdir
+unzip -q \$pipesocket/m4_nomeventball
+@| @}
+
+\paragraph{Script}
+\label{par:dbpnerscript}
+
+@o m4_bindir/m4_nomeventscript @{@%
+#!/bin/bash
+@< set variables that point to the directory-structure @>
+MODDIR=\$modulesdir/<!!>m4_nomeventdir<!!>
+LIBDIR=\$MODDIR/lib
+RESOURCESDIR=\$MODDIR/resources
+
+JAR=\$LIBDIR/ontotagger-1.0-jar-with-dependencies.jar
+JAVAMODULE=eu.kyotoproject.main.NominalEventCoreference
+cat | iconv -f ISO8859-1 -t UTF-8 | java -Xmx812m -cp $JAR $JAVAMODULE --framenet-lu $RESOURCESDIR/nl-luIndex.xml
+@| @}
+
+
+
+
+
+
 \section{Utilities}
 \label{sec:utilities}
 
@@ -2225,18 +2265,7 @@ cat $TESTDIR/test.times.naf | $BIND/srl  > $TESTDIR/test.srl.naf
 cat $TESTDIR/test.srl.naf | $BIND/m4_evcorefscript  > $TESTDIR/test.ecrf.naf
 cat $TESTDIR/test.ecrf.naf | $BIND/m4_framesrlscript  > $TESTDIR/test.fsrl.naf
 cat $TESTDIR/test.fsrl.naf | $BIND/m4_dbpnerscript  > $TESTDIR/test.dbpner.naf
-@% cat $TESTDIR/test.wsd.naf | $BIND/lu2synset > $TESTDIR/test.l2s.naf
-
-@% #!/bin/bash
-@% ROOT=m4_aprojroot
-@% BIND=\$ROOT/bin
-@% echo "De hond eet jus." | \$BIND/tok | \$BIND/mor | \
-@% \$BIND/m4_alpinohackscript | \$BIND/m4_nercscript  | \$BIND/m4_wsdscript | \
-@% \$BIND/m4_ontoscript  > \$ROOT/test.onto
-@% cat \$ROOT/test.onto | \$BIND/m4_heidelscript  > \$ROOT/test.heidel
-@% cat \$ROOT/test.heidel | \$BIND/m4_srlscript  > \$ROOT/test.srl
-@% cat \$ROOT/test.srl | \$BIND/m4_srlscript  > \$ROOT/test.srl
-@% @% \$BIND/m4_ontoscript | \$BIND/m4_heidelscript | \$BIND/m4_srlscrip  > \$ROOT/test.out
+cat $TESTDIR/test.dbpner.naf | $BIND/m4_nomeventscript > $TESTDIR/test.nomev.naf
 @| @}
 
 @%@d make scripts executable @{@%
