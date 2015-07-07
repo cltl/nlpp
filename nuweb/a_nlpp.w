@@ -739,53 +739,54 @@ echo Set up environment
 @< variables of m4_module_installer @>
 @< check this first @>
 @%@< unpack snapshots or die @>
-@% (TMP) echo ... Java
-@% (TMP) @< set up java @>
-@% (TMP) @< set up java environment in scripts @>
-@% (TMP) @< install maven @>
-@% (TMP) echo ... Python
-@% (TMP) @< set up python @>
-@% (TMP) echo ... Alpino
-@% (TMP) @< install Alpino @>
-@% (TMP) echo ... Spotlight
-@% (TMP) @< install the Spotlight server @>
-@% (TMP) echo ... Treetagger
-@% (TMP) @< install the treetagger utility @>
-@% (TMP) echo ... Ticcutils and Timbl
-@% (TMP) @< install the ticcutils utility @>
-@% (TMP) @< install the timbl utility @>
+echo ... Java
+@< set up java @>
+@< set up java environment in scripts @>
+@< install maven @>
+echo ... Python
+@< set up python @>
+echo ... Alpino
+@< install Alpino @>
+echo ... Spotlight
+@< install the Spotlight server @>
+echo ... Treetagger
+@< install the treetagger utility @>
+echo ... Ticcutils and Timbl
+@< install the ticcutils utility @>
+@< install the timbl utility @>
 @| @}
 
 Next, install the modules:
 
 @o m4_bindir/m4_module_installer @{@%
-@% (TMP) echo Install modules
-@% (TMP) echo ... Tokenizer
-@% (TMP) @< install the tokenizer @>
-@% (TMP) echo ... Morphosyntactic parser
-@% (TMP) @< install the morphosyntactic parser @>
-@% (TMP) echo ... NERC
-@% (TMP) @< install the NERC module @>
-@% (TMP) echo ... Coreference base
-@% (TMP) @< install coreference-base @>
-@% (TMP) echo ... WSD
-@% (TMP) @< install the WSD module @>
-@% (TMP) echo ... Ontotagger
-@% (TMP) @< install the onto module @>
-@% (TMP) echo ... Heideltime
-@% (TMP) @< install the heideltime module @>
-@% (TMP) echo ... SRL
-@% (TMP) @< install the srl module @>
-@% (TMP) echo ... NED
-@% (TMP) @< install the \NED{} module @>
-@% (TMP) echo ... Event-coreference
-@% (TMP) @< install the event-coreference module @>
-@% (TMP) echo ... lu2synset
-@% (TMP) @< install the lu2synset converter @>
+echo Install modules
+echo ... Tokenizer
+@< install the tokenizer @>
+echo ... Morphosyntactic parser
+@< install the morphosyntactic parser @>
+echo ... NERC
+@< install the NERC module @>
+echo ... Coreference base
+@< install coreference-base @>
+echo ... WSD
+@< install the WSD module @>
+echo ... Ontotagger
+@< install the onto module @>
+echo ... Heideltime
+@< install the heideltime module @>
+echo ... SRL
+@< install the srl module @>
+echo ... NED
+@< install the \NED{} module @>
+echo ... Event-coreference
+@< install the event-coreference module @>
+echo ... lu2synset
+@< install the lu2synset converter @>
 echo ... dbpedia-ner
 @< install the dbpedia-ner module @>
-echo ... dbpedia-ner
+echo ... nominal event
 @< install the nomevent module @>
+@< install the post-SRL module @>
 echo Final
 @| @}
 
@@ -2115,6 +2116,35 @@ Clean up.
 @% rm -rf \$TEMPDIR
 @% @| @}
 
+\subsubsection{SRL postprocessing}
+\label{sec:srlpost}
+
+In addition to the Semantic Role Labeling there is hack that finds additional semantic roles. 
+
+\paragraph{Module}
+
+Find the (Python) module in the snapshot and unpack it.
+
+@d install the post-SRL module @{@%
+@< get or have @(m4_postsrlball@) @>
+cd \$modulesdir
+tar -xzf \$pipesocket/m4_postsrlball
+@| @}
+
+@d clean up @{@%
+rm -rf \$pipesocket/m4_postsrlball
+@| @}
+
+\paragraph{Script}
+
+@o m4_bindir/m4_postsrlscript @{@%
+#!/bin/bash
+@< set variables that point to the directory-structure @>
+MODDIR=\$modulesdir/<!!>m4_postsrldir
+cat | python \$MODDIR/m4_postsrlpy
+@| @}
+
+
 
 @%@d make scripts executable @{@%
 @%chmod 775  m4_bindir/m4_srlscript
@@ -2253,19 +2283,20 @@ TESTDIR=$ROOT/test
 BIND=$ROOT/bin
 mkdir -p $TESTDIR
 cd $TESTDIR
-cat $ROOT/nuweb/testin.naf | $BIND/tok > $TESTDIR/test.tok.naf
-cat test.tok.naf | $BIND/mor > $TESTDIR/test.mor.naf
+cat $ROOT/nuweb/testin.naf   | $BIND/tok                    > $TESTDIR/test.tok.naf
+cat test.tok.naf             | $BIND/mor                    > $TESTDIR/test.mor.naf
 @% cat test.mor.naf | $BIND/nerc > $TESTDIR/test.nerc.naf
-cat test.mor.naf | $BIND/m4_nerc_conll02_script > $TESTDIR/test.nerc.naf
-cat $TESTDIR/test.nerc.naf | $BIND/wsd > $TESTDIR/test.wsd.naf
-cat $TESTDIR/test.wsd.naf | $BIND/ned  > $TESTDIR/test.ned.naf
-cat $TESTDIR/test.ned.naf | $BIND/onto > $TESTDIR/test.onto.naf
-cat $TESTDIR/test.onto.naf | $BIND/heideltime > $TESTDIR/test.times.naf
-cat $TESTDIR/test.times.naf | $BIND/srl  > $TESTDIR/test.srl.naf
-cat $TESTDIR/test.srl.naf | $BIND/m4_evcorefscript  > $TESTDIR/test.ecrf.naf
-cat $TESTDIR/test.ecrf.naf | $BIND/m4_framesrlscript  > $TESTDIR/test.fsrl.naf
-cat $TESTDIR/test.fsrl.naf | $BIND/m4_dbpnerscript  > $TESTDIR/test.dbpner.naf
-cat $TESTDIR/test.dbpner.naf | $BIND/m4_nomeventscript > $TESTDIR/test.nomev.naf
+cat test.mor.naf             | $BIND/m4_nerc_conll02_script > $TESTDIR/test.nerc.naf
+cat $TESTDIR/test.nerc.naf   | $BIND/wsd                    > $TESTDIR/test.wsd.naf
+cat $TESTDIR/test.wsd.naf    | $BIND/ned                    > $TESTDIR/test.ned.naf
+cat $TESTDIR/test.ned.naf    | $BIND/onto                   > $TESTDIR/test.onto.naf
+cat $TESTDIR/test.onto.naf   | $BIND/heideltime             > $TESTDIR/test.times.naf
+cat $TESTDIR/test.times.naf  | $BIND/srl                    > $TESTDIR/test.srl.naf
+cat $TESTDIR/test.srl.naf    | $BIND/m4_evcorefscript       > $TESTDIR/test.ecrf.naf
+cat $TESTDIR/test.ecrf.naf   | $BIND/m4_framesrlscript      > $TESTDIR/test.fsrl.naf
+cat $TESTDIR/test.fsrl.naf   | $BIND/m4_dbpnerscript        > $TESTDIR/test.dbpner.naf
+cat $TESTDIR/test.dbpner.naf | $BIND/m4_nomeventscript      > $TESTDIR/test.nomev.naf
+cat $TESTDIR/test.nomev.naf  | $BIND/m4_postsrlscript       > $TESTDIR/test.psrl.naf
 @| @}
 
 @%@d make scripts executable @{@%

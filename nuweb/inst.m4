@@ -215,14 +215,20 @@ m4_dnl m4_define(m4_srldir, srlModuleForBN)m4_dnl
 m4_define(m4_srldir, vua-srl-nl)m4_dnl
 m4_define(m4_srlscript, srl)m4_dnl
 m4_dnl
+m4_dnl SRL post
+m4_define(m4_postsrldir, `vua-srl-dutch-additional-roles')m4_dnl  Subdir. of modules
+m4_define(m4_postsrlball, 20150706`'m4_postsrldir`'.tgz )m4_dnl  Subdir. of modules
+m4_define(m4_postsrlscript, postsrl)m4_dnl
+m4_define(m4_postsrlpy, vua-srl-dutch-additional-roles.py)m4_dnl
+m4_dnl
 m4_dnl Nom. coref
 m4_define(m4_ncorefsrc, /dev/null )m4_dnl
 m4_define(m4_ncorefdir, nomcoref)m4_dnl
 m4_define(m4_ncorefscript, nomcoref)m4_dnl
 m4_dnl
 m4_dnl Ev. coref
-m4_define(m4_evcorefdir, vua-eventcoreference_v2)m4_dnl
-m4_define(m4_evcoreftarball, m4_evcorefdir.tar.gz)m4_dnl
+m4_define(m4_evcorefdir, `vua-eventcoreference_v2')m4_dnl
+m4_define(m4_evcoreftarball, 20150702-`'m4_evcorefdir`'.tgz)m4_dnl
 m4_define(m4_evcorefscript, evcoref)m4_dnl
 m4_define(m4_evcorefjar, EventCoreference-1.0-SNAPSHOT-jar-with-dependencies.jar)m4_dnl
 m4_dnl
