@@ -476,12 +476,20 @@ Java and Python environment. The costs of this feature are that the
 pipeline takes more disk-space by reproducing infra-structure that is
 already present in the system and that installation takes more time.
 
-The following file sets up the programming environment in scripts.
+The following macro generates a script that specifies the programming
+environment. Initially it is empty, because we have to create the
+programming environment first.
 
-@o m4_envbindir/progenv @{@%
-@< set up java environment in scripts@>
-@< activate the python environment @>
+@d create progenv script @{@%
+echo '<!#!>!/bin/bash' > m4_aenvbindir/progenv
 @| @}
+
+
+@% @o m4_envbindir/progenv @{@%
+@% #!/bin/bash
+@% @% @< set up java environment in scripts@>
+@% @% @< activate the python environment @>
+@% @| @}
 
 @% @d set up programming environment @{@%
 @% source \$envbindir/progenv
@@ -521,18 +529,26 @@ rm -rf \$pipesocket/m4_javatarball
 @| @}
 
 
-@d set up java environment in scripts @{@%
+@d set up java @{@%
+echo 'export JAVA_HOME=\$envdir/java/m4_javajdk' >> m4_aenvbindir/progenv
+echo 'export PATH=$JAVA_HOME/bin:$PATH' >> m4_aenvbindir/progenv
 export JAVA_HOME=\$envdir/java/m4_javajdk
 export PATH=$JAVA_HOME/bin:$PATH
-@| JAVA_HOME @}
+@| @}
+
+
+@% @d set up java environment in scripts @{@%
+@% export JAVA_HOME=\$envdir/java/m4_javajdk
+@% export PATH=$JAVA_HOME/bin:$PATH
+@% @| JAVA_HOME @}
 
 Put jars in the jar subdirectory of the java directory:
 
 @d directories to create @{m4_jardir @| @}
 
-@d set up java environment in scripts @{@%
-export JARDIR=\$envdir/java/jars
-@| @}
+@% @d set up java environment in scripts @{@%
+@% export JARDIR=\$envdir/java/jars
+@% @| @}
 
 
 
@@ -646,6 +662,7 @@ fi
 
 @d activate the python environment @{@%
 source \$envdir/venv/bin/activate
+echo 'source \$envdir/venv/bin/activate' >> m4_aenvbindir/progenv
 @|activate @}
 
 @% @d de-activate the python environment @{@%
@@ -661,6 +678,7 @@ Activation of Python include pointing to the place where Python
 packages are:
 
 @d activate the python environment @{@%
+echo export 'PYTHONPATH=\$envdir/python:\$PYTHONPATH' >> m4_aenvbindir/progenv
 export PYTHONPATH=\$envdir/python:\$PYTHONPATH
 @|PYTHONPATH @}
 
@@ -735,13 +753,14 @@ The installation is performed by script
 @o m4_bindir/m4_module_installer @{@%
 #!/bin/bash
 echo Set up environment
+@< create progenv script @>
 @< set variables that point to the directory-structure @>
 @< variables of m4_module_installer @>
 @< check this first @>
 @%@< unpack snapshots or die @>
 echo ... Java
 @< set up java @>
-@< set up java environment in scripts @>
+@% @< set up java environment in scripts @>
 @< install maven @>
 echo ... Python
 @< set up python @>
