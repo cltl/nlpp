@@ -1,4 +1,4 @@
-m4_define(m4_repoversion, `1.0.00')m4_dnl
+m4_define(m4_repoversion, `1.0.01')m4_dnl
 m4_dnl
 m4_dnl Titles
 m4_dnl
@@ -202,6 +202,9 @@ m4_define(m4_heidel_commitname, 057c93ccc857a427145b9e2ff72fd645172d34df)m4_dnl
 m4_dnl m4_define(m4_heidelgit, `git@@github.com:PaulHuygen/NAF-HeidelTime.git' )m4_dnl  Subdir. of modules
 m4_define(m4_heideldir, NAF-HeidelTime)m4_dnl  Subdir. of modules
 m4_define(m4_heidelscript, heideltime)m4_dnl
+m4_define(m4_heidelstandalonejar, de.unihd.dbs.heideltime.standalone.jar)m4_dnl
+m4_define(m4_replace_heidelstandalonejar, 201506postfix.`'m4_heidelstandalonejar)m4_dnl
+
 m4_dnl
 m4_dnl SRL
 m4_define(m4_srlgit, `https://github.com/newsreader/vua-srl-nl.git' )m4_dnl  Subdir. of modules
@@ -212,14 +215,20 @@ m4_dnl m4_define(m4_srldir, srlModuleForBN)m4_dnl
 m4_define(m4_srldir, vua-srl-nl)m4_dnl
 m4_define(m4_srlscript, srl)m4_dnl
 m4_dnl
+m4_dnl SRL post
+m4_define(m4_postsrldir, `vua-srl-dutch-additional-roles')m4_dnl  Subdir. of modules
+m4_define(m4_postsrlball, 20150706`'m4_postsrldir`'.tgz )m4_dnl  Subdir. of modules
+m4_define(m4_postsrlscript, postsrl)m4_dnl
+m4_define(m4_postsrlpy, vua-srl-dutch-additional-roles.py)m4_dnl
+m4_dnl
 m4_dnl Nom. coref
 m4_define(m4_ncorefsrc, /dev/null )m4_dnl
 m4_define(m4_ncorefdir, nomcoref)m4_dnl
 m4_define(m4_ncorefscript, nomcoref)m4_dnl
 m4_dnl
 m4_dnl Ev. coref
-m4_define(m4_evcorefdir, vua-eventcoreference_v2)m4_dnl
-m4_define(m4_evcoreftarball, m4_evcorefdir.tar.gz)m4_dnl
+m4_define(m4_evcorefdir, `vua-eventcoreference_v2')m4_dnl
+m4_define(m4_evcoreftarball, 20150702-`'m4_evcorefdir`'.tgz)m4_dnl
 m4_define(m4_evcorefscript, evcoref)m4_dnl
 m4_define(m4_evcorefjar, EventCoreference-1.0-SNAPSHOT-jar-with-dependencies.jar)m4_dnl
 m4_dnl
@@ -233,12 +242,27 @@ m4_define(m4_opiniscript, opinimin)m4_dnl
 m4_dnl
 m4_dnl lu2synset
 m4_define(m4_lu2synball, lu2synset.tgz)m4_dnl  
-
 m4_dnl
 m4_dnl Framenet Semantic Role Labeler
 m4_define(m4_fsrlsrc, /dev/null )m4_dnl  Subdir. of modules
 m4_define(m4_fsrldir, fsrl)m4_dnl  Subdir. of modules
 m4_define(m4_fsrlscript, fsrl)m4_dnl
+m4_dnl
+m4_dnl dbpedia-ner
+m4_dnl
+m4_dnl m4_define(m4_dbpnergit, https://github.com/rubenIzquierdo/dbpedia_ner.git)m4_dnl
+m4_define(m4_dbpnergit, https://github.com/PaulHuygen/dbpedia_ner.git)m4_dnl
+m4_define(m4_dbpner_commitname, ab1dcbd860f0ff29bc979f646dc382122a101fc2)m4_dnl
+m4_define(m4_dbpnerdir, dbpedia_ner)m4_dnl
+m4_define(m4_dbpnerscript, dbpner)m4_dnl
+m4_dnl
+m4_dnl nomevents
+m4_dnl
+m4_dnl m4_define(m4_dbpnergit, https://github.com/rubenIzquierdo/dbpedia_ner.git)m4_dnl
+m4_define(m4_nomeventball, vua-postprocess-nl.zip)m4_dnl
+m4_dnl  m4_define(m4_dbpner_commitname, ab1dcbd860f0ff29bc979f646dc382122a101fc2)m4_dnl
+m4_define(m4_nomeventdir, vua-postprocess-nl)m4_dnl
+m4_define(m4_nomeventscript, nomevent)m4_dnl
 m4_dnl
 m4_dnl Utilities
 m4_dnl
@@ -308,11 +332,11 @@ m4_dnl
 m4_define(m4_wikipediadb_tarball, wikipedia-db.v1.tar.gz)m4_dnl
 m4_define(m4_wikipediadb_url, http://ixa2.si.ehu.es/ixa-pipes/models/m4_wikipediadb_tarball)m4_dnl
 m4_define(m4_wikipediadb_tarball, wikipedia-db.v1.tar.gz)m4_dnl
-
-
+m4_dnl
+m4_dnl
+m4_dnl
 m4_define(m4_spotlight_snapdir, spotlight)m4_dnl
 m4_define(m4_spotlight_dir, spotlight)m4_dnl
-
 m4_dnl
 m4_dnl Locations of programs and system-dependent definitions
 m4_dnl

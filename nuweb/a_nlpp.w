@@ -78,7 +78,7 @@ Table~\ref{tab:modulelist}
        \hyperref[sec:onto]{Onto-tagger}
                        & \dref{sec:onto}                                     & snapshot       &                      & m4_ontoscript      \\
        \href{m4_heidelgit}{Heideltime}
-                       & \dref{sec:heideltime}              & \href{m4_heidelgit}{Github}     & m4_heidel_commitname  & m4_heidelscript   \\
+                       & \dref{sec:heideltime}              & \href{m4_heidelgit}{Gith.}/snap.     & m4_heidel_commitname  & m4_heidelscript   \\
        \href{m4_srlgit}{\textsc{srl}}
                        & \dref{sec:SRL}                        & \href{m4_srlgit}{Github}     & m4_srl_commitname   & m4_srlscript       \\
        \href{m4_nedgit}{\textsc{ned}}
@@ -91,6 +91,8 @@ Table~\ref{tab:modulelist}
 @%                       & \verb|m4_opinisrc|   & None           &  m4_opiniscript   & \\  
        \hyperref[sec:framesrl]{Framenet SRL} 
                        & \dref{sec:framesrl}                                  & snapshot      &                            &  m4_fsrlscript   \\  
+       \hyperref[sec:dbpedia-ner]{Dbpedia\_ner} 
+                       & \dref{sec:dbpedia-ner}                                  &  \href{m4_dbpnergit}{Github}       &  m4_dbpner_commitname                          &  m4_dbpnerscript   \\  
 @%     \hyperref[sec:install-alpino]{Alpino             & \verb|m4_alpinodir|    & \textsc{rug} & m4_Alpinoscript  & \\
 @%     \hyperref[]{Ticcutils          & \verb|m4_ticcdir|      & \textsc{ilk} & & \\
 @%     \hyperref[]{Timbl              & \verb|m4_timbldir|     & \textsc{ilk} & & \\
@@ -474,12 +476,20 @@ Java and Python environment. The costs of this feature are that the
 pipeline takes more disk-space by reproducing infra-structure that is
 already present in the system and that installation takes more time.
 
-The following file sets up the programming environment in scripts.
+The following macro generates a script that specifies the programming
+environment. Initially it is empty, because we have to create the
+programming environment first.
 
-@o m4_envbindir/progenv @{@%
-@< set up java environment in scripts@>
-@< activate the python environment @>
+@d create progenv script @{@%
+echo '<!#!>!/bin/bash' > m4_aenvbindir/progenv
 @| @}
+
+
+@% @o m4_envbindir/progenv @{@%
+@% #!/bin/bash
+@% @% @< set up java environment in scripts@>
+@% @% @< activate the python environment @>
+@% @| @}
 
 @% @d set up programming environment @{@%
 @% source \$envbindir/progenv
@@ -519,18 +529,26 @@ rm -rf \$pipesocket/m4_javatarball
 @| @}
 
 
-@d set up java environment in scripts @{@%
+@d set up java @{@%
+echo 'export JAVA_HOME=\$envdir/java/m4_javajdk' >> m4_aenvbindir/progenv
+echo 'export PATH=$JAVA_HOME/bin:$PATH' >> m4_aenvbindir/progenv
 export JAVA_HOME=\$envdir/java/m4_javajdk
 export PATH=$JAVA_HOME/bin:$PATH
-@| JAVA_HOME @}
+@| @}
+
+
+@% @d set up java environment in scripts @{@%
+@% export JAVA_HOME=\$envdir/java/m4_javajdk
+@% export PATH=$JAVA_HOME/bin:$PATH
+@% @| JAVA_HOME @}
 
 Put jars in the jar subdirectory of the java directory:
 
 @d directories to create @{m4_jardir @| @}
 
-@d set up java environment in scripts @{@%
-export JARDIR=\$envdir/java/jars
-@| @}
+@% @d set up java environment in scripts @{@%
+@% export JARDIR=\$envdir/java/jars
+@% @| @}
 
 
 
@@ -644,6 +662,7 @@ fi
 
 @d activate the python environment @{@%
 source \$envdir/venv/bin/activate
+echo 'source \$envdir/venv/bin/activate' >> m4_aenvbindir/progenv
 @|activate @}
 
 @% @d de-activate the python environment @{@%
@@ -659,6 +678,7 @@ Activation of Python include pointing to the place where Python
 packages are:
 
 @d activate the python environment @{@%
+echo export 'PYTHONPATH=\$envdir/python:\$PYTHONPATH' >> m4_aenvbindir/progenv
 export PYTHONPATH=\$envdir/python:\$PYTHONPATH
 @|PYTHONPATH @}
 
@@ -733,13 +753,14 @@ The installation is performed by script
 @o m4_bindir/m4_module_installer @{@%
 #!/bin/bash
 echo Set up environment
+@< create progenv script @>
 @< set variables that point to the directory-structure @>
 @< variables of m4_module_installer @>
 @< check this first @>
 @%@< unpack snapshots or die @>
 echo ... Java
 @< set up java @>
-@< set up java environment in scripts @>
+@% @< set up java environment in scripts @>
 @< install maven @>
 echo ... Python
 @< set up python @>
@@ -780,6 +801,11 @@ echo ... Event-coreference
 @< install the event-coreference module @>
 echo ... lu2synset
 @< install the lu2synset converter @>
+echo ... dbpedia-ner
+@< install the dbpedia-ner module @>
+echo ... nominal event
+@< install the nomevent module @>
+@< install the post-SRL module @>
 echo Final
 @| @}
 
@@ -1975,7 +2001,14 @@ rm -rf \$TMPFIL
 \paragraph{Module}
 \label{sec:heideltimmodule}
 
-Heideltime uses treetagger. It expects to find the location of treetagger in a variable \texttt{TreetaggerHome} in config-file \verb|config.props|.
+Heideltime uses treetagger. It expects to find the location of
+treetagger in a variable \texttt{TreetaggerHome} in config-file
+\verb|config.props|.
+
+One of the elements of Heideltime (the jar
+\verb|de.unihd.dbs.heideltime.standalone.jar| in
+\verb|NAF-HeidelTime/heideltime-standalone| has been updated and the
+Github version is outdated. Therefore, get the latest version from the snapshot.
 
 @d install the heideltime module @{@%
 MODNAM=heideltime
@@ -1983,8 +2016,8 @@ DIRN=m4_heideldir
 GITU=m4_heidelgit
 GITC=m4_heidel_commitname
 @< install from github @>
+@< update the heideltime jar @>
 @< adapt heideltime's config.props @>
-
 @| @}
 
 @d adapt heideltime's config.props @{@%
@@ -1997,6 +2030,16 @@ AWKCOMMAND='/^treeTaggerHome/ {\$0="treeTaggerHome = '\$modulesdir'/m4_treetagdi
 gawk "\$AWKCOMMAND" \$tempfil >\$CONFIL
 rm -rf $tempfil
 @| @}
+
+@d update the heideltime jar @{@%
+standalonejar=m4_heidelstandalonejar
+replstandalonejar=m4_replace_heidelstandalonejar
+cd \$modulesdir/m4_heideldir/heideltime-standalone
+rm -f \$standalonejar
+scp -i "\$pipesocket/m4_snapshotkeyfilename" m4_repo_user<!!>@@<!!>m4_repo_url:m4_repo_path/\$replstandalonejar ./\$standalonejar
+@| @}
+
+
 
 When the installation has been transplanted, \verb|config.props| must be updated:
 
@@ -2092,6 +2135,35 @@ Clean up.
 @% rm -rf \$TEMPDIR
 @% @| @}
 
+\subsubsection{SRL postprocessing}
+\label{sec:srlpost}
+
+In addition to the Semantic Role Labeling there is hack that finds additional semantic roles. 
+
+\paragraph{Module}
+
+Find the (Python) module in the snapshot and unpack it.
+
+@d install the post-SRL module @{@%
+@< get or have @(m4_postsrlball@) @>
+cd \$modulesdir
+tar -xzf \$pipesocket/m4_postsrlball
+@| @}
+
+@d clean up @{@%
+rm -rf \$pipesocket/m4_postsrlball
+@| @}
+
+\paragraph{Script}
+
+@o m4_bindir/m4_postsrlscript @{@%
+#!/bin/bash
+@< set variables that point to the directory-structure @>
+MODDIR=\$modulesdir/<!!>m4_postsrldir
+cat | python \$MODDIR/m4_postsrlpy
+@| @}
+
+
 
 @%@d make scripts executable @{@%
 @%chmod 775  m4_bindir/m4_srlscript
@@ -2145,6 +2217,74 @@ java -Xmx812m -cp \$JARFILE \$JAVAMODULE  $JAVAOPTIONS
 @%chmod 775  m4_bindir/m4_evcorefscript
 @%@| @}
 
+\subsubsection{Dbpedia-ner}
+\label{sec:dbpedia-ner}
+
+
+\paragraph{Module}
+\label{sec:dbpedia-ner-module}
+
+@d install the dbpedia-ner module @{@%
+MODNAM=dbpedia_ner
+DIRN=m4_dbpnerdir
+GITU=m4_dbpnergit
+GITC=m4_dbpner_commitname
+@< install from github @>
+@| @}
+
+\paragraph{Script}
+\label{par:dbpnerscript}
+
+The main part of the module is a Python script. The \verb|README.md| file of the Github repo lists the options that
+can be applied. One of the options is about the \textsc{url} of the
+Spotlight server.
+
+@o m4_bindir/m4_dbpnerscript @{@%
+#!/bin/bash
+@< set variables that point to the directory-structure @>
+@< check/start the Spotlight server @>
+MODDIR=\$modulesdir/<!!>m4_dbpnerdir<!!>
+cat | iconv -f ISO8859-1 -t UTF-8 | $MODDIR/dbpedia_ner.py -url http://localhost:2060/rest/candidates
+@| @}
+
+
+\subsection{Nominal events}
+\label{sec:nomevents}
+
+The module ``postprocessing-nl'' adds nominal events to the srl
+annotations. It has been obtained directly from the author (Piek
+Vossen). It is not yet available in a public repo. Probably in future
+versions the jar from the ontotagger module can be used for this module.
+
+
+\paragraph{Module}
+\label{sec:nemeventmodule}
+
+@d install the nomevent module @{@%
+@< get or have @(m4_nomeventball@) @>
+cd \$modulesdir
+unzip -q \$pipesocket/m4_nomeventball
+@| @}
+
+\paragraph{Script}
+\label{par:dbpnerscript}
+
+@o m4_bindir/m4_nomeventscript @{@%
+#!/bin/bash
+@< set variables that point to the directory-structure @>
+MODDIR=\$modulesdir/<!!>m4_nomeventdir<!!>
+LIBDIR=\$MODDIR/lib
+RESOURCESDIR=\$MODDIR/resources
+
+JAR=\$LIBDIR/ontotagger-1.0-jar-with-dependencies.jar
+JAVAMODULE=eu.kyotoproject.main.NominalEventCoreference
+cat | iconv -f ISO8859-1 -t UTF-8 | java -Xmx812m -cp $JAR $JAVAMODULE --framenet-lu $RESOURCESDIR/nl-luIndex.xml
+@| @}
+
+
+
+
+
 
 \section{Utilities}
 \label{sec:utilities}
@@ -2162,29 +2302,20 @@ TESTDIR=$ROOT/test
 BIND=$ROOT/bin
 mkdir -p $TESTDIR
 cd $TESTDIR
-cat $ROOT/nuweb/testin.naf | $BIND/tok > $TESTDIR/test.tok.naf
-cat test.tok.naf | $BIND/mor > $TESTDIR/test.mor.naf
+cat $ROOT/nuweb/testin.naf   | $BIND/tok                    > $TESTDIR/test.tok.naf
+cat test.tok.naf             | $BIND/mor                    > $TESTDIR/test.mor.naf
 @% cat test.mor.naf | $BIND/nerc > $TESTDIR/test.nerc.naf
-cat test.mor.naf | $BIND/m4_nerc_conll02_script > $TESTDIR/test.nerc.naf
-cat $TESTDIR/test.nerc.naf | $BIND/wsd > $TESTDIR/test.wsd.naf
-cat $TESTDIR/test.wsd.naf | $BIND/ned  > $TESTDIR/test.ned.naf
-cat $TESTDIR/test.ned.naf | $BIND/onto > $TESTDIR/test.onto.naf
-cat $TESTDIR/test.onto.naf | $BIND/heideltime > $TESTDIR/test.times.naf
-cat $TESTDIR/test.times.naf | $BIND/srl  > $TESTDIR/test.srl.naf
-cat $TESTDIR/test.srl.naf | $BIND/m4_evcorefscript  > $TESTDIR/test.ecrf.naf
-cat $TESTDIR/test.ecrf.naf | $BIND/m4_framesrlscript  > $TESTDIR/test.fsrl.naf
-@% cat $TESTDIR/test.wsd.naf | $BIND/lu2synset > $TESTDIR/test.l2s.naf
-
-@% #!/bin/bash
-@% ROOT=m4_aprojroot
-@% BIND=\$ROOT/bin
-@% echo "De hond eet jus." | \$BIND/tok | \$BIND/mor | \
-@% \$BIND/m4_alpinohackscript | \$BIND/m4_nercscript  | \$BIND/m4_wsdscript | \
-@% \$BIND/m4_ontoscript  > \$ROOT/test.onto
-@% cat \$ROOT/test.onto | \$BIND/m4_heidelscript  > \$ROOT/test.heidel
-@% cat \$ROOT/test.heidel | \$BIND/m4_srlscript  > \$ROOT/test.srl
-@% cat \$ROOT/test.srl | \$BIND/m4_srlscript  > \$ROOT/test.srl
-@% @% \$BIND/m4_ontoscript | \$BIND/m4_heidelscript | \$BIND/m4_srlscrip  > \$ROOT/test.out
+cat test.mor.naf             | $BIND/m4_nerc_conll02_script > $TESTDIR/test.nerc.naf
+cat $TESTDIR/test.nerc.naf   | $BIND/wsd                    > $TESTDIR/test.wsd.naf
+cat $TESTDIR/test.wsd.naf    | $BIND/ned                    > $TESTDIR/test.ned.naf
+cat $TESTDIR/test.ned.naf    | $BIND/onto                   > $TESTDIR/test.onto.naf
+cat $TESTDIR/test.onto.naf   | $BIND/heideltime             > $TESTDIR/test.times.naf
+cat $TESTDIR/test.times.naf  | $BIND/srl                    > $TESTDIR/test.srl.naf
+cat $TESTDIR/test.srl.naf    | $BIND/m4_evcorefscript       > $TESTDIR/test.ecrf.naf
+cat $TESTDIR/test.ecrf.naf   | $BIND/m4_framesrlscript      > $TESTDIR/test.fsrl.naf
+cat $TESTDIR/test.fsrl.naf   | $BIND/m4_dbpnerscript        > $TESTDIR/test.dbpner.naf
+cat $TESTDIR/test.dbpner.naf | $BIND/m4_nomeventscript      > $TESTDIR/test.nomev.naf
+cat $TESTDIR/test.nomev.naf  | $BIND/m4_postsrlscript       > $TESTDIR/test.psrl.naf
 @| @}
 
 @%@d make scripts executable @{@%
