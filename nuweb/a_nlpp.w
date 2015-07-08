@@ -68,19 +68,18 @@ Table~\ref{tab:modulelist}
 @%                       & \dref{sec:installtokenizer}           &  snapshot          & m4_tokenizer_commitname & \texttt{m4_tokenizerscript}  \\
        \href{m4_morphpargit}{morphosyntactic parser} 
                        & \dref{sec:install-morphsynt-parser} & \href{m4_morphpargit}{Github}  & m4_morphpar_commitname  & \verb|m4_morphparscript|     \\
-@%     \hyperref[sec:alpinohack]{alpinohack}
-@%                       & \verb|clean_hack|      & This doc. &  m4_alpinohackscript  & \footnote{not a  module, but an  encoding hack} \\
-@%                                                                                         
        \href{m4_nercgit}{\textsc{nerc}} 
-                       & \dref{sec:nerc}                     & \href{m4_nercgit}{Github}      & m4_nerc_commitname   & m4_nercscript      \\
+                       & \dref{sec:nerc}                     & \href{m4_nercgit}{Gith.}/snap      & m4_nerc_commitname   & m4_nercscript      \\
        \href{m4_wsdgit}{\textsc{wsd}}
-                       & \dref{sec:wsd}                       & \href{m4_wsdgit}{Github}      & m4_wsd_commitname   & m4_wsdscript       \\
+                       & \dref{sec:wsd}                       & \href{m4_wsdgit}{Gith.}/snap      & m4_wsd_commitname   & m4_wsdscript       \\
        \hyperref[sec:onto]{Onto-tagger}
                        & \dref{sec:onto}                                     & snapshot       &                      & m4_ontoscript      \\
        \href{m4_heidelgit}{Heideltime}
                        & \dref{sec:heideltime}              & \href{m4_heidelgit}{Gith.}/snap.     & m4_heidel_commitname  & m4_heidelscript   \\
        \href{m4_srlgit}{\textsc{srl}}
                        & \dref{sec:SRL}                        & \href{m4_srlgit}{Github}     & m4_srl_commitname   & m4_srlscript       \\
+       \href{m4_srlgit}{\textsc{srl-post}}
+                       & \dref{sec:srlpost}                                  & snapshot        &                    & m4_postsrlscript       \\
        \href{m4_nedgit}{\textsc{ned}}
                        & \dref{sec:ned}                        & \href{m4_nedgit}{Github}     & m4_ned_commitname   & m4_nedscript       \\
        \href{m4_corefbasegit}{Nom. coref}
@@ -2461,6 +2460,7 @@ The raw document is named
 \begin{figure}[hbtp]
   \centering
 @%  \includegraphics{fileschema.fig}
+  \input{fileschema.pdftex_t}
   \caption{Translation of the raw code of this document into
     printable/viewable documents and into program sources. The figure
     shows the pathways and the main files involved.}
