@@ -3,10 +3,10 @@ all : nlpp.pdf
 
 
 
-NUWEB=../env/usrlocal/bin/nuweb
+NUWEB=../env/bin/nuweb
 .SUFFIXES: .pdf .w .tex .html .aux .log .php
 
-FIGFILES=fileschema
+FIGFILES=fileschema directorystructure
 
 FIGFILENAMES=$(foreach fil,$(FIGFILES), $(fil).fig)
 PDFT_NAMES=$(foreach fil,$(FIGFILES), $(fil).pdftex_t)
@@ -40,10 +40,6 @@ MKDIR = mkdir -p
 %.pdftex_t: %.fig %.pstex
 	fig2dev -L pdftex_t -p $*.pdftex $< > $@
 
-%.pdf : %.w $(W2PDF)  $(PDF_FIG_NAMES) $(PDFT_NAMES)
-	chmod 775 $(W2PDF)
-	$(W2PDF) $*
-
 $(htmldir)/% : % $(htmldir)
 	cp $< $(htmldir)/
 
@@ -52,7 +48,7 @@ $(htmldir)/% : % $(htmldir)
 nuweb: $(NUWEB)
 
 $(NUWEB): ../nuweb-1.58
-	mkdir -p ../env/usrlocal/bin
+	mkdir -p ../env/bin
 	cd ../nuweb-1.58 && make nuweb
 	cp ../nuweb-1.58/nuweb $(NUWEB)
 
@@ -82,6 +78,10 @@ $(htmltarget) : $(htmlmaterial) $(htmldir)
 
 
 clean:
+	rm -rf $pipesocket/server-jre-7u72-linux-x64.tar.gz
+	rm -rf ../env/apache-maven-3.0.5
+	rm -rf $pipesocket/Alpino-x86_64-linux-glibc2.5-20706-sicstus.tar.gz
+	rm -rf $pipesocket/20150706vua-srl-dutch-additional-roles.tgz 
 	rm -rf ../nuweb-1.58
 	
 
@@ -93,9 +93,13 @@ print : nlpp.pdf
 view : nlpp.pdf
 	evince nlpp.pdf
 
+nlpp.pdf : nlpp.w $(W2PDF)  $(PDF_FIG_NAMES) $(PDFT_NAMES)
+	chmod 775 $(W2PDF)
+	$(W2PDF) $*
+
 htm : $(htmldir) $(htmltarget)
 
-DIRS = ../modules ../bin ../env/usrlocal/bin ../env/usrlocal/lib ../env/java ../env/java/jars ../env/apache-maven-3.0.5 ../env/python ../nuweb/bin 
+DIRS = ../modules ../bin ../env/bin ../env/lib ../env/java ../env/java/jars ../env/apache-maven-3.0.5 ../env/python ../nuweb/bin 
 
 $(DIRS) : 
 	$(MKDIR) $@
@@ -104,6 +108,12 @@ sources : nlpp.w $(DIRS) $(NUWEB)
 	$(NUWEB) nlpp.w
 	chmod 775  ../bin/install-modules
 	chmod -R 775  ../bin/*
+	chmod -R 775  ../env/bin/*
 	
+
+transplant :
+	touch a_nlpp.w
+	$(MAKE) sources
+	../env/bin/transplant
 
 
