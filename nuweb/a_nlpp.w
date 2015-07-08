@@ -62,10 +62,10 @@ Table~\ref{tab:modulelist}
   \begin{footnotesize}
     \begin{tabular}{llllll}
      \textbf{Module}   & \textbf{Section}     & \textbf{Source} &  \textbf{Commit} & \textbf{Script} \\
-@%       \href{m4_tokenizergit}{Tokenizer}          
-@%                       & \dref{sec:installtokenizer}         & \href{m4_tokenizergit}{Github} & m4_tokenizer_commitname & \texttt{m4_tokenizerscript}  \\
        \href{m4_tokenizergit}{Tokenizer}          
-                       & \dref{sec:installtokenizer}           &  snapshot          & m4_tokenizer_commitname & \texttt{m4_tokenizerscript}  \\
+                       & \dref{sec:installtokenizer}         & \href{m4_tokenizergit}{Github} & m4_tokenizer_commitname & \texttt{m4_tokenizerscript}  \\
+@%       \href{m4_tokenizergit}{Tokenizer}          
+@%                       & \dref{sec:installtokenizer}           &  snapshot          & m4_tokenizer_commitname & \texttt{m4_tokenizerscript}  \\
        \href{m4_morphpargit}{morphosyntactic parser} 
                        & \dref{sec:install-morphsynt-parser} & \href{m4_morphpargit}{Github}  & m4_morphpar_commitname  & \verb|m4_morphparscript|     \\
 @%     \hyperref[sec:alpinohack]{alpinohack}
@@ -1339,7 +1339,9 @@ cat | python \$MODDIR/core/morph_syn_parser.py
 Get this thing from Github
 (\url{https://github.com/opener-project/coreference-base/}) and apply
 the instruction of
-\url{https://github.com/opener-project/coreference-base/blob/master/core/README.md}.
+\url{https://github.com/opener-project/coreference-base/blob/master/core/README.md}. We
+implement it, but it does not work yet, because it is too picky on the
+structure of the ~NAF~ format.
 
 
 \paragraph{Module}
@@ -1705,6 +1707,7 @@ tar -xzf \$pipesocket/m4_lu2synball
 
 @o m4_bindir/m4_lu2synsetscript  @{@%
 #!/bin/bash
+@< set variables that point to the directory-structure @>
 ROOT=\$piperoot
 JAVALIBDIR=\$modulesdir/m4_lu2syndir/lib
 RESOURCESDIR=\$modulesdir/m4_lu2syndir/resources
@@ -1718,7 +1721,7 @@ java -Xmx812m -cp  $JAVALIBDIR/$JARFILE vu.wntools.util.NafLexicalUnitToSynsetRe
 \subsubsection{NED}
 \label{sec:ned}
 
-The \NED{} module is rather picky about the structure of the \NAF{} file. In any case, it does not accept a file that has been produced by the ontotagger. Hence, in a pipeline \NER{} should be executed before the ontotagger.
+The \NED{} module is rather picky about the structure of the \NAF{} file. In any case, it does not accept a file that has been produced by the ontotagger. Hence, in a pipeline \NED{} should be executed before the ontotagger.
 
 
 The \NED{} module wants to consult the Dbpedia Spotlight server, so
@@ -2131,9 +2134,9 @@ python timblToAlpinoNAF.py \$INPUTFILE \$TIMBLOUTPUTFILE
 
 Clean up.
 
-@% @o m4_bindir/m4_srlscript @{@%
-@% rm -rf \$TEMPDIR
-@% @| @}
+@o m4_bindir/m4_srlscript @{@%
+rm -rf \$TEMPDIR
+@| @}
 
 \subsubsection{SRL postprocessing}
 \label{sec:srlpost}
@@ -2219,6 +2222,9 @@ java -Xmx812m -cp \$JARFILE \$JAVAMODULE  $JAVAOPTIONS
 
 \subsubsection{Dbpedia-ner}
 \label{sec:dbpedia-ner}
+
+Dbpedia-ner finds more named entities thatn NER, because it checks
+DBpedia for the candidate NE-'s.
 
 
 \paragraph{Module}
