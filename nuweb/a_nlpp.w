@@ -11,6 +11,7 @@ m4_sinclude(local.m4)m4_dnl
 \newcommand{\thedoctitle}{m4_doctitle}
 \newcommand{\theauthor}{m4_author}
 \newcommand{\thesubject}{m4_subject}
+\newcommand{\AWK}{\textsc{awk}}
 \newcommand{\CLTL}{\textsc{cltl}}
 \newcommand{\EHU}{\textsc{ehu}}
 \newcommand{\NAF}{\textsc{naf}}
@@ -634,6 +635,79 @@ cd \$piperoot
 rm -rf \$pytinsdir
 pip install -U pip virtualenv setuptools
 @| @}
+
+\subsubsection{Transplant ActivePython}
+\label{sec:transplantactivepython}
+
+
+Activepython produces scripts in \verb|env/bin| that contain
+``shabangs'' with absolute path. Furthermore, activePython seems to
+have an implicit pythonpath with an absolute path. So, when
+transplanting the directorytree to another location we have to solve
+these two problems.
+
+Modify the scripts as follows:
+
+\begin{enumerate}
+\item Create a temporary directory.
+\item Generate an \AWK{} script that replaces the shabang line with a
+  correct one.
+\item Generate a script that moves a script from \verb|env/bin| to the
+  temporary directory and then applies the \AWK{} script.
+\item Apply the generated script on the scripts in \verb|env/bin|.
+\end{enumerate}
+
+@d set paths after transplantation @{@%
+transdir=`mkdir -d -t trans.XXXXXX`
+cd $transdir
+@< write script tran @>
+@< write script chasbang.awk @>
+@< apply script tran on the scripts in env/bin @>
+@% find $envbindir -type f -exec file {} + | grep script | gawk '{print $1}' FS=':' | xargs -iaap ./tran aap
+cd $projroot
+rm -rf $transdir
+@| @}
+
+@d write script tran @{@%
+cat <<EOF >tran
+workfil=\\$1
+mv $workfil ./wor
+gawk -f chasbang.awk ./wor >$workfil 
+EOF
+chmod 775 ./tran
+@| @}
+
+@d write script chasbang.awk @{@%
+cat <<EOF >chasbang.awk
+#!/usr/bin/gawk -f
+BEGIN { shabang="#!$envbindir/python"}
+
+/^\#\!.*python.*/ { print shabang
+                    next
+                   }
+{print}
+EOF
+@| @}
+
+The following looks complicated. The \texttt{find} command applies the
+\texttt{file} command on the files in the \verb|env/bin|
+directory. The grep command filters out the names of the files that
+are scripts. it produces a filename, followed by a colon, followed by
+a description of the type of the file. The \texttt{gawk} command
+prints the filenames only and the \texttt{xargs} command applies the
+\verb|tran| script on the file.  
+
+@d apply script tran on the scripts in env/bin @{@%
+find $envbindir -type f -exec file {} + | grep script | gawk '{print $1}' FS=':' | xargs -iaap ./tran aap
+@| @}
+
+
+Add \texttt{env/lib/python2.7} to the \texttt{PYTHONPATH} variable.
+
+@d set paths after transplantation @{@%
+echo export PYTHONPATH=\\$envdir/lib/python2.7:\\$PYTHONPATH >>$envbindir/progenv
+@| @}
+
 
 
 \subsubsection{Virtual environment}
@@ -3252,6 +3326,7 @@ after a transplantation.
 
 @o m4_envbindir/transplant @{@%
 #!/bin/bash
+LOGLEVEL=1
 @< set variables that point to the directory-structure @>
 @< set paths after transplantation @>
 @< re-install modules after the transplantation @>
