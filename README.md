@@ -41,7 +41,6 @@ sudo apt-get -y install libboost-all-dev libbz2-dev pkg-config libgfortran3
 scp -i nrkey newsreader@kyoto.let.vu.nl:nlpp_resources/* .
 git clone https://github.com/PaulHuygen/nlpp.git
 cd nlpp
-git checkout develop
 cd $PROJROOT/nuweb
 make sources
 ../bin/install-modules
