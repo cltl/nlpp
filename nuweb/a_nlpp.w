@@ -2230,7 +2230,7 @@ Therefore we have compiled the module in a computer where it worked and put the 
 @d install the new heideltime module @{@%
 @< get or have @(m4_heidelnball@) @>
 cd \$modulesdir
-tar -xfz \$pipesocket/m4_heidelnball
+tar -xzf \$pipesocket/m4_heidelnball
 @| @}
 
 
