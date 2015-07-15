@@ -231,18 +231,20 @@ Add the environment \verb|bin| directory to \verb|PATH|:
 export PATH=\$envbindir:$PATH
 @| PATH @}
 
-While setting variables, \emph{source} a scripts that sets variables
-for directories of which we do not yet know where they are, e.g.{}
-paths to Python and Java that we may have to set up dynamically.
+@% While setting variables, \emph{source} a scripts that sets variables
+@% for directories of which we do not yet know where they are, e.g.{}
+@% paths to Python and Java that we may have to set up dynamically.
 
-@d set variables that point to the directory-structure @{@%
-source \$envbindir/progenv
+Put the macro to set variables in a script that can later be sourced by the scripts of the pipeline modules.
+
+@%@d set variables that point to the directory-structure @{@%
+@%source \$envbindir/progenv
+@%@| @}
+
+@o m4_envbindir/progenv @{@%
+#!/bin/bash
+@< set variables that point to the directory-structure @>
 @| @}
-
-@% @o m4_envbindir/progenv @{@%
-@% @% pipemodd=$piperoot/modules
-@% export PATH=\$envbindir:$PATH
-@% @| @}
 
 \section{How to obtain modules and other material}
 \label{sec:downloadmethods}
@@ -480,8 +482,14 @@ The following macro generates a script that specifies the programming
 environment. Initially it is empty, because we have to create the
 programming environment first.
 
-@d create progenv script @{@%
-echo '<!#!>!/bin/bash' > m4_aenvbindir/progenv
+@d create javapython script @{@%
+echo '<!#!>!/bin/bash' > m4_aenvbindir/javapython
+@| @}
+
+Cause the module scripts to read the javapython script.
+
+@o m4_envbindir/progenv @{@%
+source $envbindir/javapython
 @| @}
 
 
@@ -530,8 +538,8 @@ rm -rf \$pipesocket/m4_javatarball
 
 
 @d set up java @{@%
-echo 'export JAVA_HOME=\$envdir/java/m4_javajdk' >> m4_aenvbindir/progenv
-echo 'export PATH=$JAVA_HOME/bin:$PATH' >> m4_aenvbindir/progenv
+echo 'export JAVA_HOME=\$envdir/java/m4_javajdk' >> m4_aenvbindir/javapython
+echo 'export PATH=$JAVA_HOME/bin:$PATH' >> m4_aenvbindir/javapython
 export JAVA_HOME=\$envdir/java/m4_javajdk
 export PATH=$JAVA_HOME/bin:$PATH
 @| @}
@@ -705,7 +713,8 @@ find $envbindir -type f -exec file {} + | grep script | gawk '{print $1}' FS=':'
 Add \texttt{env/lib/python2.7} to the \texttt{PYTHONPATH} variable.
 
 @d set paths after transplantation @{@%
-echo export PYTHONPATH=\\$envdir/lib/python2.7:\\$PYTHONPATH >>$envbindir/progenv
+echo export PYTHONPATH=\\$envdir/lib/python2.7:\\$PYTHONPATH >> $envbindir/javapython
+export PYTHONPATH=\\$envdir/lib/python2.7:\\$PYTHONPATH 
 @| @}
 
 
@@ -735,7 +744,7 @@ fi
 
 @d activate the python environment @{@%
 source \$envdir/venv/bin/activate
-echo 'source \$envdir/venv/bin/activate' >> m4_aenvbindir/progenv
+echo 'source \$envdir/venv/bin/activate' >> m4_aenvbindir/javapython
 @|activate @}
 
 @% @d de-activate the python environment @{@%
@@ -751,7 +760,7 @@ Activation of Python include pointing to the place where Python
 packages are:
 
 @d activate the python environment @{@%
-echo export 'PYTHONPATH=\$envdir/python:\$PYTHONPATH' >> m4_aenvbindir/progenv
+echo export 'PYTHONPATH=\$envdir/python:\$PYTHONPATH' >> m4_aenvbindir/javapython
 export PYTHONPATH=\$envdir/python:\$PYTHONPATH
 @|PYTHONPATH @}
 
@@ -826,11 +835,12 @@ The installation is performed by script
 @o m4_bindir/m4_module_installer @{@%
 #!/bin/bash
 echo Set up environment
-@< create progenv script @>
+@% @< create progenv script @>
 @< set variables that point to the directory-structure @>
 @< variables of m4_module_installer @>
 @< check this first @>
 @%@< unpack snapshots or die @>
+@< create javapython script @>
 echo ... Java
 @< set up java @>
 @% @< set up java environment in scripts @>
@@ -866,6 +876,7 @@ echo ... Ontotagger
 @< install the onto module @>
 echo ... Heideltime
 @< install the heideltime module @>
+@% @< install the new heideltime module @>
 echo ... SRL
 @< install the srl module @>
 echo ... NED
@@ -1300,7 +1311,8 @@ The script runs the tokenizerscript.
 
 @o m4_bindir/m4_tokenizerscript @{@%
 #!/bin/bash
-@< set variables that point to the directory-structure @>
+source m4_envbindir/progenv
+@% @< set variables that point to the directory-structure @>
 @% @< set up programming environment @>
 JARFILE=\$jarsdir/m4_tokenizerjar
 java -Xmx1000m  -jar \$JARFILE tok -l nl --inputkaf
@@ -1349,7 +1361,8 @@ git checkout m4_morphpar_commitname
 
 @o m4_bindir/m4_morphparscript @{@%
 #!/bin/bash
-@< set variables that point to the directory-structure @>
+source m4_envbindir/progenv
+@% @< set variables that point to the directory-structure @>
 @% @< set up programming environment @>
 ROOT=\$piperoot
 MODDIR=\$modulesdir/<!!>m4_morphpardir<!!>
@@ -1436,7 +1449,8 @@ pip install --upgrade  networkx
 
 @o m4_bindir/m4_corefbasescript @{@%
 #!/bin/bash
-@< set variables that point to the directory-structure @>
+source m4_envbindir/progenv
+@% @< set variables that point to the directory-structure @>
 @% @< set up programming environment @>
 cd $modulesdir/m4_corefbasedir/core
 cat | python -m corefgraph.process.file --language nl --singleton --sieves NO
@@ -1567,7 +1581,8 @@ Sonar model
 
 @o m4_bindir/m4_nerc_conll02_script @{@%
 #!/bin/bash
-@< set variables that point to the directory-structure @>
+source m4_envbindir/progenv
+@% @< set variables that point to the directory-structure @>
 @% @< set up programming environment @>
 MODDIR=$modulesdir/m4_nercdir
 JAR=$jarsdir/m4_nercjar
@@ -1577,7 +1592,8 @@ cat | java -Xmx1000m -jar \$JAR tag -m $MODDIR/m4_nercmodeldir/nl/$MODEL
 
 @o m4_bindir/m4_nerc_sonar_script @{@%
 #!/bin/bash
-@< set variables that point to the directory-structure @>
+source m4_envbindir/progenv
+@% @< set variables that point to the directory-structure @>
 @% @< set up programming environment @>
 MODDIR=$modulesdir/m4_nercdir
 JAR=$jarsdir/m4_nercjar
@@ -1675,7 +1691,8 @@ tar -xzf \$pipesocket/m4_wsd_snapball
 # WSD -- wrapper for word-sense disambiguation
 # 8 Jan 2014 Ruben Izquierdo
 # 16 sep 2014 Paul Huygen
-@< set variables that point to the directory-structure @>
+source m4_envbindir/progenv
+@% @< set variables that point to the directory-structure @>
 @% @< set up programming environment @>
 WSDDIR=$modulesdir/m4_wsddir
 WSDSCRIPT=dsc_wsd_tagger.py
@@ -1780,7 +1797,8 @@ tar -xzf \$pipesocket/m4_lu2synball
 
 @o m4_bindir/m4_lu2synsetscript  @{@%
 #!/bin/bash
-@< set variables that point to the directory-structure @>
+@% @< set variables that point to the directory-structure @>
+source m4_envbindir/progenv
 ROOT=\$piperoot
 JAVALIBDIR=\$modulesdir/m4_lu2syndir/lib
 RESOURCESDIR=\$modulesdir/m4_lu2syndir/resources
@@ -1918,7 +1936,8 @@ rm -rf $tempdir
 
 @o m4_bindir/m4_nedscript @{@%
 #!/bin/bash
-@< set variables that point to the directory-structure @>
+source m4_envbindir/progenv
+@% @< set variables that point to the directory-structure @>
 @% @< set up programming environment @>
 ROOT=\$piperoot
 JARDIR=\$jarsdir
@@ -1958,7 +1977,8 @@ chmod -R o+r \$modulesdir/m4_ontodir
 
 @o m4_bindir/m4_ontoscript @{@%
 #!/bin/bash
-@< set variables that point to the directory-structure @>
+source m4_envbindir/progenv
+@% @< set variables that point to the directory-structure @>
 @% @< set up programming environment @>
 ROOT=\$piperoot
 ONTODIR=$modulesdir/m4_ontodir
@@ -2037,7 +2057,8 @@ script removes these lines.
 
 @o m4_bindir/m4_framesrlscript @{@%
 #!/bin/bash
-@< set variables that point to the directory-structure @>
+source m4_envbindir/progenv
+@% @< set variables that point to the directory-structure @>
 @% @< set up programming environment @>
 ONTODIR=$modulesdir/m4_ontodir
 JARDIR=\$ONTODIR/lib
@@ -2123,6 +2144,55 @@ When the installation has been transplanted, \verb|config.props| must be updated
 @< adapt heideltime's config.props @>
 @| @}
 
+\paragraph{New module}
+\label{sec:heideltimenewmodule}
+
+Heideltime has been updated and the updated version can be installed as follows:
+
+\begin{enumerate}
+\item Download the code: \verb|git clone https://github.com/ixa-ehu/ixa-pipe-time.git|
+\item Get the heideltime stand-alone jar from 
+\end{enumerate}
+
+@d install the new heideltime module @{@%
+MODNAM=m4_heidelndir
+DIRN=m4_heidelndir
+GITU=m4_heidelngit
+GITC=m4_heidelncommitname
+@< install from github @>
+@< get the heideltime standalone jar and config.props @>
+@< get and execute m4_installtoprojectpy @>
+@< download the mappings file @>
+@< create the jar file for the time module @>
+@| @}
+
+@d get the heideltime standalone jar and config.props @{@%
+cd \$modulesdir/m4_heidelndir
+mkdir lib
+wget m4_heidelnstandaloneurl
+tar -zxf m4_heidelnstandaloneball
+mv heideltime-standalone/m4_heidelnstandalonejar lib/
+mv heideltime-standalone/config.props .
+cd lib
+wget  http://ixa2.si.ehu.es/~jibalari/jvntextpro-2.0.jar
+cd ..
+wget  m4_installtoprojectpyurl
+@| @}
+
+@d get and execute m4_installtoprojectpy @{@%
+cd \$modulesdir/m4_heidelndir
+wget  m4_installtoprojectpyurl
+python m4_installtoprojectpy
+@| @}
+
+@d download the mappings file @{@%
+wget m4_mappingsfileurl
+@| @}
+
+@d create the jar file for the time module @{@%
+mvn clean install
+@| @}
+
 
 
 \paragraph{Script}
@@ -2130,7 +2200,8 @@ When the installation has been transplanted, \verb|config.props| must be updated
 
 @o m4_bindir/m4_heidelscript @{@%
 #!/bin/bash
-@< set variables that point to the directory-structure @>
+source m4_envbindir/progenv
+@% @< set variables that point to the directory-structure @>
 @% @< set up programming environment @>
 @% ROOT=m4_aprojroot
 HEIDELDIR=\$modulesdir/m4_heideldir
@@ -2173,7 +2244,8 @@ First:
 
 @o m4_bindir/m4_srlscript @{@%
 #!/bin/bash
-@< set variables that point to the directory-structure @>
+source m4_envbindir/progenv
+@% @< set variables that point to the directory-structure @>
 source \$envbindir/progenv
 ROOT=$piperoot
 SRLDIR=\$modulesdir/m4_srldir
@@ -2234,7 +2306,8 @@ rm -rf \$pipesocket/m4_postsrlball
 
 @o m4_bindir/m4_postsrlscript @{@%
 #!/bin/bash
-@< set variables that point to the directory-structure @>
+source m4_envbindir/progenv
+@% @< set variables that point to the directory-structure @>
 MODDIR=\$modulesdir/<!!>m4_postsrldir
 cat | python \$MODDIR/m4_postsrlpy
 @| @}
@@ -2268,7 +2341,8 @@ cp lib/m4_evcorefjar \$jarsdir
 
 @o m4_bindir/m4_evcorefscript @{@%
 #!/bin/bash
-@< set variables that point to the directory-structure @>
+source m4_envbindir/progenv
+@% @< set variables that point to the directory-structure @>
 @% @< set up programming environment @>
 MODROOT=$modulesdir/m4_evcorefdir
 RESOURCESDIR=$MODROOT/resources
@@ -2320,7 +2394,8 @@ Spotlight server.
 
 @o m4_bindir/m4_dbpnerscript @{@%
 #!/bin/bash
-@< set variables that point to the directory-structure @>
+source m4_envbindir/progenv
+@% @< set variables that point to the directory-structure @>
 @< check/start the Spotlight server @>
 MODDIR=\$modulesdir/<!!>m4_dbpnerdir<!!>
 cat | iconv -f ISO8859-1 -t UTF-8 | $MODDIR/dbpedia_ner.py -url http://localhost:2060/rest/candidates
@@ -2350,7 +2425,8 @@ unzip -q \$pipesocket/m4_nomeventball
 
 @o m4_bindir/m4_nomeventscript @{@%
 #!/bin/bash
-@< set variables that point to the directory-structure @>
+source m4_envbindir/progenv
+@% @< set variables that point to the directory-structure @>
 MODDIR=\$modulesdir/<!!>m4_nomeventdir<!!>
 LIBDIR=\$MODDIR/lib
 RESOURCESDIR=\$MODDIR/resources
