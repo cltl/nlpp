@@ -132,8 +132,7 @@ m4_dnl
 m4_dnl NERC
 m4_dnl
 m4_define(m4_nercgit, https://github.com/ixa-ehu/ixa-pipe-nerc)m4_dnl
-m4_dnl m4_define(m4_nerc_commitname, 8b518284eface454a4f954dfb88bea4d98b2073a)m4_dnl
-m4_define(m4_nerc_commitname, 9927fdb32d943f0aa9748a656958af99eeb1f5b7)m4_dnl
+m4_define(m4_nerc_commitname, 5cacac28fcaa6e91d5f2a4cc9b486b24ac163641)m4_dnl
 m4_define(m4_nercdir, EHU-nerc)m4_dnl  Subdir. of modules
 m4_dnl m4_define(m4_nercversion, 1.3.3)m4_dnl
 m4_define(m4_nercversion, 1.3.6)m4_dnl
