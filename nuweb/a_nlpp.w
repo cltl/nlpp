@@ -848,48 +848,48 @@ echo ... Java
 echo ... Python
 @< set up python @>
 echo ... Alpino
-@< install Alpino @>
-echo ... Spotlight
-@< install the Spotlight server @>
-echo ... Treetagger
-@< install the treetagger utility @>
-echo ... Ticcutils and Timbl
-@< install the ticcutils utility @>
-@< install the timbl utility @>
+@% @< install Alpino @>
+@% echo ... Spotlight
+@% @< install the Spotlight server @>
+@% echo ... Treetagger
+@% @< install the treetagger utility @>
+@% echo ... Ticcutils and Timbl
+@% @< install the ticcutils utility @>
+@% @< install the timbl utility @>
 @| @}
 
 Next, install the modules:
 
 @o m4_bindir/m4_module_installer @{@%
-echo Install modules
-echo ... Tokenizer
-@< install the tokenizer @>
-echo ... Morphosyntactic parser
-@< install the morphosyntactic parser @>
-echo ... NERC
-@< install the NERC module @>
-echo ... Coreference base
-@< install coreference-base @>
-echo ... WSD
-@< install the WSD module @>
-echo ... Ontotagger
-@< install the onto module @>
-echo ... Heideltime
-@< install the heideltime module @>
-@% @< install the new heideltime module @>
-echo ... SRL
-@< install the srl module @>
-echo ... NED
-@< install the \NED{} module @>
-echo ... Event-coreference
-@< install the event-coreference module @>
-echo ... lu2synset
-@< install the lu2synset converter @>
-echo ... dbpedia-ner
-@< install the dbpedia-ner module @>
-echo ... nominal event
-@< install the nomevent module @>
-@< install the post-SRL module @>
+@% echo Install modules
+@% echo ... Tokenizer
+@% @< install the tokenizer @>
+@% echo ... Morphosyntactic parser
+@% @< install the morphosyntactic parser @>
+@% echo ... NERC
+@% @< install the NERC module @>
+@% echo ... Coreference base
+@% @< install coreference-base @>
+@% echo ... WSD
+@% @< install the WSD module @>
+@% echo ... Ontotagger
+@% @< install the onto module @>
+@% echo ... Heideltime
+@% @< install the heideltime module @>
+@< install the new heideltime module @>
+@% echo ... SRL
+@% @< install the srl module @>
+@% echo ... NED
+@% @< install the \NED{} module @>
+@% echo ... Event-coreference
+@% @< install the event-coreference module @>
+@% echo ... lu2synset
+@% @< install the lu2synset converter @>
+@% echo ... dbpedia-ner
+@% @< install the dbpedia-ner module @>
+@% echo ... nominal event
+@% @< install the nomevent module @>
+@% @< install the post-SRL module @>
 echo Final
 @| @}
 
@@ -2147,51 +2147,138 @@ When the installation has been transplanted, \verb|config.props| must be updated
 \paragraph{New module}
 \label{sec:heideltimenewmodule}
 
-Heideltime has been updated and the updated version can be installed as follows:
+Heideltime has been updated. In princple the Heideltim module ought to be installed as described in the follosing message from Itziar Aldabe:
 
-\begin{enumerate}
-\item Download the code: \verb|git clone https://github.com/ixa-ehu/ixa-pipe-time.git|
-\item Get the heideltime stand-alone jar from 
-\end{enumerate}
+\begin{verbatim}
+
+I managed to get everything ready, except for the README in github. I'll update it next
+week but I think I can give you some simple steps that should be enough to correctly
+use the module 
+
+1.- Download the code: git clone https://github.com/ixa-ehu/ixa-pipe-time.git
+
+2.- In the ixa-pipe-time create the lib directory
+
+3.- Download the HeidelTimeStandalone jar file from https://code.google.com/p/heideltime/
+
+  If you download the heideltime-standalone-1.7 zip file, you will find two files that you need:
+  - de.unihd.dbs.heideltime.standalone.jar
+  - config.props => you will need this file to correctly execute the new time module
+
+  move the jar file to the lib directory
+
+4.- Download a copy of JVnTextPro from http://ixa2.si.ehu.es/~jibalari/jvntextpro-2.0.jar
+
+  move the jar file to the lib directory
+
+5.- Download the following script https://github.com/carchrae/install-to-project-repo/blob/master/install-to-project-repo.py
+
+6.- Execute the script within the ixa-pipe-time directory
+
+   => It will create the repo directory and two dependencies that you don't need to copy in the pom.xml file. It is necessary to run the scrip to correctly create the repo directory. Don't copy the anything in the pom file.
+
+7.- Download the mappings file: http://ixa2.si.ehu.es/~jibalari/eagles-to-treetager.csv
+
+8.- Create the jar file for the time module
+    mvn clean install
+
+9.- Test the module
+
+   cat pos.naf | java -jar ${dirToJAR}/ixa.pipe.time.jar -m ${dirToFile}/eagles-to-treetager.csv -c ${dirToFile}/config.props
+
+
+   I think everything needed is included in the list of steps. Let me know if something is not clear.
+
+
+Regards,
+Itziar
+
+
+\end{verbatim}
+
+Unfortunately, this procedure does not always seem to work. On the test-computer (Ubuntu Linux version 14.04) the instruction 
+\verb|mvn clean package| results in the following error message:
+
+\begin{verbatim}
+(venv)paul@@klipperaak:~/projecten/cltl/pipelines/nlpp/modules/ixa-pipe-time$ mvn clean package
+[INFO] Scanning for projects...
+[INFO]                                                                         
+[INFO] ------------------------------------------------------------------------
+[INFO] Building IXAPipeHeidelTime 1.0.1
+[INFO] ------------------------------------------------------------------------
+[WARNING] The POM for local:de.unihd.dbs.heideltime.standalone:jar:1.0 is missing, no dependency information available
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time: 0.650s
+[INFO] Finished at: Wed Jul 15 09:40:39 CEST 2015
+[INFO] Final Memory: 7M/232M
+[INFO] ------------------------------------------------------------------------
+[ERROR] Failed to execute goal on project time: Could not resolve dependencies for project ixa.pipe:time:jar:1.0.1: Failure to find local:de.unihd.dbs.heideltime.standalone:jar:1.0 in file:///home/paul/projecten/cltl/pipelines/nlpp/modules/ixa-pipe-time/repo was cached in the local repository, resolution will not be reattempted until the update interval of heideltime-local-dependency-repo has elapsed or updates are forced -> [Help 1]
+[ERROR] 
+[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+[ERROR] Re-run Maven using the -X switch to enable full debug logging.
+[ERROR] 
+[ERROR] For more information about the errors and possible solutions, please read the following articles:
+[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/DependencyResolutionException
+
+\end{verbatim}
+
+
+Therefore we have compiled the module in a computer where it worked and put the result in the snapshot.
 
 @d install the new heideltime module @{@%
-MODNAM=m4_heidelndir
-DIRN=m4_heidelndir
-GITU=m4_heidelngit
-GITC=m4_heidelncommitname
-@< install from github @>
-@< get the heideltime standalone jar and config.props @>
-@< get and execute m4_installtoprojectpy @>
-@< download the mappings file @>
-@< create the jar file for the time module @>
+@< get or have @(m4_heidelnball@) @>
+cd \$modulesdir
+tar -xfz \$pipesocket/m4_heidelnball
 @| @}
 
-@d get the heideltime standalone jar and config.props @{@%
-cd \$modulesdir/m4_heidelndir
-mkdir lib
-wget m4_heidelnstandaloneurl
-tar -zxf m4_heidelnstandaloneball
-mv heideltime-standalone/m4_heidelnstandalonejar lib/
-mv heideltime-standalone/config.props .
-cd lib
-wget  http://ixa2.si.ehu.es/~jibalari/jvntextpro-2.0.jar
-cd ..
-wget  m4_installtoprojectpyurl
-@| @}
 
-@d get and execute m4_installtoprojectpy @{@%
-cd \$modulesdir/m4_heidelndir
-wget  m4_installtoprojectpyurl
-python m4_installtoprojectpy
-@| @}
 
-@d download the mappings file @{@%
-wget m4_mappingsfileurl
-@| @}
-
-@d create the jar file for the time module @{@%
-mvn clean install
-@| @}
+@% \begin{enumerate}
+@% \item Download the code: \verb|git clone https://github.com/ixa-ehu/ixa-pipe-time.git|
+@% \item Get the heideltime stand-alone jar from 
+@% \end{enumerate}
+@% 
+@% @d install the new heideltime module @{@%
+@% MODNAM=m4_heidelndir
+@% DIRN=m4_heidelndir
+@% GITU=m4_heidelngit
+@% GITC=m4_heidelncommitname
+@% @< install from github @>
+@% @< get the heideltime standalone jar and config.props @>
+@% @< get and execute m4_installtoprojectpy @>
+@% @< download the mappings file @>
+@% @< create the jar file for the time module @>
+@% @| @}
+@% 
+@% @d get the heideltime standalone jar and config.props @{@%
+@% cd \$modulesdir/m4_heidelndir
+@% mkdir lib
+@% wget m4_heidelnstandaloneurl
+@% tar -zxf m4_heidelnstandaloneball
+@% mv heideltime-standalone/m4_heidelnstandalonejar lib/
+@% mv heideltime-standalone/config.props .
+@% cd lib
+@% wget  http://ixa2.si.ehu.es/~jibalari/jvntextpro-2.0.jar
+@% cd ..
+@% @| @}
+@% 
+@% @d get and execute m4_installtoprojectpy @{@%
+@% cd \$modulesdir/m4_heidelndir
+@% git clone https://github.com/carchrae/install-to-project-repo.git
+@% python m4_installtoprojectpy
+@% 
+@% wget  m4_installtoprojectpyurl
+@% @| @}
+@% 
+@% @d download the mappings file @{@%
+@% wget m4_mappingsfileurl
+@% @| @}
+@% 
+@% @d create the jar file for the time module @{@%
+@% mvn clean install
+@% @| @}
 
 
 
@@ -2201,16 +2288,24 @@ mvn clean install
 @o m4_bindir/m4_heidelscript @{@%
 #!/bin/bash
 source m4_envbindir/progenv
-@% @< set variables that point to the directory-structure @>
-@% @< set up programming environment @>
-@% ROOT=m4_aprojroot
-HEIDELDIR=\$modulesdir/m4_heideldir
-TEMPDIR=`mktemp -t -d heideltmp.XXXXXX`
+HEIDELDIR=\$modulesdir/m4_heidelndir
 cd $HEIDELDIR
-@% @< activate the python environment @>
-iconv -t utf-8//IGNORE | python \$HEIDELDIR/HeidelTime_NafKaf.py \$HEIDELDIR/heideltime-standalone/ \$TEMPDIR
-rm -rf $TEMPDIR
+iconv -t utf-8//IGNORE | java -jar target/ixa.pipe.time.jar -m alpino-to-treetagger.csv -c config.props
 @| @}
+
+@% @o m4_bindir/m4_heidelscript @{@%
+@% #!/bin/bash
+@% source m4_envbindir/progenv
+@% @% @< set variables that point to the directory-structure @>
+@% @% @< set up programming environment @>
+@% @% ROOT=m4_aprojroot
+@% HEIDELDIR=\$modulesdir/m4_heideldir
+@% TEMPDIR=`mktemp -t -d heideltmp.XXXXXX`
+@% cd $HEIDELDIR
+@% @% @< activate the python environment @>
+@% iconv -t utf-8//IGNORE | python \$HEIDELDIR/HeidelTime_NafKaf.py \$HEIDELDIR/heideltime-standalone/ \$TEMPDIR
+@% rm -rf $TEMPDIR
+@% @| @}
 
 @%@d make scripts executable @{@%
 @%chmod 775  m4_bindir/m4_heidelscript
@@ -2463,9 +2558,9 @@ cat test.tok.naf             | $BIND/mor                    > $TESTDIR/test.mor.
 cat test.mor.naf             | $BIND/m4_nerc_conll02_script > $TESTDIR/test.nerc.naf
 cat $TESTDIR/test.nerc.naf   | $BIND/wsd                    > $TESTDIR/test.wsd.naf
 cat $TESTDIR/test.wsd.naf    | $BIND/ned                    > $TESTDIR/test.ned.naf
-cat $TESTDIR/test.ned.naf    | $BIND/onto                   > $TESTDIR/test.onto.naf
-cat $TESTDIR/test.onto.naf   | $BIND/heideltime             > $TESTDIR/test.times.naf
-cat $TESTDIR/test.times.naf  | $BIND/srl                    > $TESTDIR/test.srl.naf
+cat $TESTDIR/test.ned.naf    | $BIND/heideltime             > $TESTDIR/test.times.naf
+cat $TESTDIR/test.times.naf  | $BIND/onto                   > $TESTDIR/test.onto.naf
+cat $TESTDIR/test.onto.naf   | $BIND/srl                    > $TESTDIR/test.srl.naf
 cat $TESTDIR/test.srl.naf    | $BIND/m4_evcorefscript       > $TESTDIR/test.ecrf.naf
 cat $TESTDIR/test.ecrf.naf   | $BIND/m4_framesrlscript      > $TESTDIR/test.fsrl.naf
 cat $TESTDIR/test.fsrl.naf   | $BIND/m4_dbpnerscript        > $TESTDIR/test.dbpner.naf

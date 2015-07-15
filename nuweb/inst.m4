@@ -207,11 +207,13 @@ m4_define(m4_replace_heidelstandalonejar, 201506postfix.`'m4_heidelstandalonejar
 m4_dnl
 m4_dnl New Heideltime
 m4_define(m4_heidelndir, ixa-pipe-time)m4_dnl
+m4_define(m4_heidelnball, ixa-pipe-time.tgz)m4_dnl
 m4_define(m4_heidelngit, https://github.com/ixa-ehu/`'m4_heidelndir`'.git)m4_dnl
 m4_define(m4_heidelncommitname, 2a2999bb6558401326bf88bda44e9a9c404492c6)m4_dnl
 m4_define(m4_heidelnstandaloneball, `D6lUEN')m4_dnl
 m4_define(m4_heidelnstandaloneurl, `http://goo.gl/m4_heidelnstandaloneball')m4_dnl
 m4_define(m4_heidelnstandalonejar, `de.unihd.dbs.heideltime.standalone.jar')m4_dnl
+m4_define(m4_installtoprojectgit, https://github.com/carchrae/install-to-project-repo.git)m4_dnl
 m4_define(m4_installtoprojectpy, install-to-project-repo.py)m4_dnl
 m4_define(m4_installtoprojectpyurl, https://github.com/carchrae/install-to-project-repo/blob/master/m4_installtoprojectpy)m4_dnl
 m4_define(m4_mappingsfile, eagles-to-treetager.csv)m4_dnl
