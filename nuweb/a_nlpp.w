@@ -1311,7 +1311,7 @@ The script runs the tokenizerscript.
 
 @o m4_bindir/m4_tokenizerscript @{@%
 #!/bin/bash
-source m4_envbindir/progenv
+source m4_aenvbindir/progenv
 @% @< set variables that point to the directory-structure @>
 @% @< set up programming environment @>
 JARFILE=\$jarsdir/m4_tokenizerjar
@@ -1361,7 +1361,7 @@ git checkout m4_morphpar_commitname
 
 @o m4_bindir/m4_morphparscript @{@%
 #!/bin/bash
-source m4_envbindir/progenv
+source m4_aenvbindir/progenv
 @% @< set variables that point to the directory-structure @>
 @% @< set up programming environment @>
 ROOT=\$piperoot
@@ -1449,7 +1449,7 @@ pip install --upgrade  networkx
 
 @o m4_bindir/m4_corefbasescript @{@%
 #!/bin/bash
-source m4_envbindir/progenv
+source m4_aenvbindir/progenv
 @% @< set variables that point to the directory-structure @>
 @% @< set up programming environment @>
 cd $modulesdir/m4_corefbasedir/core
@@ -1581,7 +1581,7 @@ Sonar model
 
 @o m4_bindir/m4_nerc_conll02_script @{@%
 #!/bin/bash
-source m4_envbindir/progenv
+source m4_aenvbindir/progenv
 @% @< set variables that point to the directory-structure @>
 @% @< set up programming environment @>
 MODDIR=$modulesdir/m4_nercdir
@@ -1592,7 +1592,7 @@ cat | java -Xmx1000m -jar \$JAR tag -m $MODDIR/m4_nercmodeldir/nl/$MODEL
 
 @o m4_bindir/m4_nerc_sonar_script @{@%
 #!/bin/bash
-source m4_envbindir/progenv
+source m4_aenvbindir/progenv
 @% @< set variables that point to the directory-structure @>
 @% @< set up programming environment @>
 MODDIR=$modulesdir/m4_nercdir
@@ -1691,7 +1691,7 @@ tar -xzf \$pipesocket/m4_wsd_snapball
 # WSD -- wrapper for word-sense disambiguation
 # 8 Jan 2014 Ruben Izquierdo
 # 16 sep 2014 Paul Huygen
-source m4_envbindir/progenv
+source m4_aenvbindir/progenv
 @% @< set variables that point to the directory-structure @>
 @% @< set up programming environment @>
 WSDDIR=$modulesdir/m4_wsddir
@@ -1798,7 +1798,7 @@ tar -xzf \$pipesocket/m4_lu2synball
 @o m4_bindir/m4_lu2synsetscript  @{@%
 #!/bin/bash
 @% @< set variables that point to the directory-structure @>
-source m4_envbindir/progenv
+source m4_aenvbindir/progenv
 ROOT=\$piperoot
 JAVALIBDIR=\$modulesdir/m4_lu2syndir/lib
 RESOURCESDIR=\$modulesdir/m4_lu2syndir/resources
@@ -1936,7 +1936,7 @@ rm -rf $tempdir
 
 @o m4_bindir/m4_nedscript @{@%
 #!/bin/bash
-source m4_envbindir/progenv
+source m4_aenvbindir/progenv
 @% @< set variables that point to the directory-structure @>
 @% @< set up programming environment @>
 ROOT=\$piperoot
@@ -1977,7 +1977,7 @@ chmod -R o+r \$modulesdir/m4_ontodir
 
 @o m4_bindir/m4_ontoscript @{@%
 #!/bin/bash
-source m4_envbindir/progenv
+source m4_aenvbindir/progenv
 @% @< set variables that point to the directory-structure @>
 @% @< set up programming environment @>
 ROOT=\$piperoot
@@ -2057,7 +2057,7 @@ script removes these lines.
 
 @o m4_bindir/m4_framesrlscript @{@%
 #!/bin/bash
-source m4_envbindir/progenv
+source m4_aenvbindir/progenv
 @% @< set variables that point to the directory-structure @>
 @% @< set up programming environment @>
 ONTODIR=$modulesdir/m4_ontodir
@@ -2287,7 +2287,7 @@ tar -xzf \$pipesocket/m4_heidelnball
 
 @o m4_bindir/m4_heidelscript @{@%
 #!/bin/bash
-source m4_envbindir/progenv
+source m4_aenvbindir/progenv
 HEIDELDIR=\$modulesdir/m4_heidelndir
 cd $HEIDELDIR
 iconv -t utf-8//IGNORE | java -jar target/ixa.pipe.time.jar -m alpino-to-treetagger.csv -c config.props
@@ -2295,7 +2295,7 @@ iconv -t utf-8//IGNORE | java -jar target/ixa.pipe.time.jar -m alpino-to-treetag
 
 @% @o m4_bindir/m4_heidelscript @{@%
 @% #!/bin/bash
-@% source m4_envbindir/progenv
+@% source m4_aenvbindir/progenv
 @% @% @< set variables that point to the directory-structure @>
 @% @% @< set up programming environment @>
 @% @% ROOT=m4_aprojroot
@@ -2339,9 +2339,8 @@ First:
 
 @o m4_bindir/m4_srlscript @{@%
 #!/bin/bash
-source m4_envbindir/progenv
+source m4_aenvbindir/progenv
 @% @< set variables that point to the directory-structure @>
-source \$envbindir/progenv
 ROOT=$piperoot
 SRLDIR=\$modulesdir/m4_srldir
 TEMPDIR=`mktemp -d -t SRLTMP.XXXXXX`
@@ -2401,7 +2400,7 @@ rm -rf \$pipesocket/m4_postsrlball
 
 @o m4_bindir/m4_postsrlscript @{@%
 #!/bin/bash
-source m4_envbindir/progenv
+source m4_aenvbindir/progenv
 @% @< set variables that point to the directory-structure @>
 MODDIR=\$modulesdir/<!!>m4_postsrldir
 cat | python \$MODDIR/m4_postsrlpy
@@ -2436,7 +2435,7 @@ cp lib/m4_evcorefjar \$jarsdir
 
 @o m4_bindir/m4_evcorefscript @{@%
 #!/bin/bash
-source m4_envbindir/progenv
+source m4_aenvbindir/progenv
 @% @< set variables that point to the directory-structure @>
 @% @< set up programming environment @>
 MODROOT=$modulesdir/m4_evcorefdir
@@ -2489,7 +2488,7 @@ Spotlight server.
 
 @o m4_bindir/m4_dbpnerscript @{@%
 #!/bin/bash
-source m4_envbindir/progenv
+source m4_aenvbindir/progenv
 @% @< set variables that point to the directory-structure @>
 @< check/start the Spotlight server @>
 MODDIR=\$modulesdir/<!!>m4_dbpnerdir<!!>
@@ -2520,7 +2519,7 @@ unzip -q \$pipesocket/m4_nomeventball
 
 @o m4_bindir/m4_nomeventscript @{@%
 #!/bin/bash
-source m4_envbindir/progenv
+source m4_aenvbindir/progenv
 @% @< set variables that point to the directory-structure @>
 MODDIR=\$modulesdir/<!!>m4_nomeventdir<!!>
 LIBDIR=\$MODDIR/lib
