@@ -1,4 +1,4 @@
-m4_define(m4_repoversion, `1.0.02')m4_dnl
+m4_define(m4_repoversion, `1.0.03')m4_dnl
 m4_dnl
 m4_dnl Titles
 m4_dnl

@@ -1082,7 +1082,7 @@ DIR=m4_ticcdir
 @| @}
 
 @d install the timbl utility @{@%
-URL=m4_timblurl
+@% URL=m4_timblurl
 TARB=m4_timblsrc
 DIR=m4_timbldir
 @< unpack ticcutils or timbl @>
@@ -1090,35 +1090,43 @@ DIR=m4_timbldir
 
 
 @d unpack ticcutils or timbl @{@%
+@< get or have @(\$TARB@) @>
 SUCCES=0
 ticbeldir=`mktemp -t -d tickbel.XXXXXX`
 cd \$ticbeldir
-wget \$URL
-SUCCES=\$?
-if
-  [ \$SUCCES -eq 0 ]
-then
-  tar -xzf \$TARB
-  SUCCES=\$?
-  rm -rf \$TARB
-fi
-if
-  [ \$SUCCES -eq 0 ]
-then
-  cd \$DIR
-  ./configure --prefix=\$envdir
-  make
-  make install
-fi
+tar -xzf \$pipesocket/\$TARB
+cd \$DIR
+./configure --prefix=\$envdir
+make 
+make install
 cd \$piperoot
 rm -rf \$ticbeldir
-if
-  [ \$SUCCES -eq 0 ]
-then
-  @< logmess @(Installed \$DIR@) @>
-else
-  @< logmess @(NOT installed \$DIR@) @>
-fi
+@% @% wget \$URL
+@% SUCCES=\$?
+@% if
+@%   [ \$SUCCES -eq 0 ]
+@% then
+@%   tar -xzf \$TARB
+@%   SUCCES=\$?
+@%   rm -rf \$TARB
+@% fi
+@% if
+@%   [ \$SUCCES -eq 0 ]
+@% then
+@%   cd \$DIR
+@%   ./configure --prefix=\$envdir
+@%   make
+@%   make install
+@% fi
+@% cd \$piperoot
+@% rm -rf \$ticbeldir
+@% if
+@%   [ \$SUCCES -eq 0 ]
+@% then
+@%   @< logmess @(Installed \$DIR@) @>
+@% else
+@%   @< logmess @(NOT installed \$DIR@) @>
+@% fi
 @| @}
 
 When the installation has been transplanted, Timbl and Ticcutils have
