@@ -666,7 +666,7 @@ Modify the scripts as follows:
 \end{enumerate}
 
 @d set paths after transplantation @{@%
-transdir=`mkdir -d -t trans.XXXXXX`
+transdir=`mktemp -d -t trans.XXXXXX`
 cd $transdir
 @< write script tran @>
 @< write script chasbang.awk @>
@@ -678,8 +678,8 @@ rm -rf $transdir
 
 @d write script tran @{@%
 cat <<EOF >tran
-workfil=\\$1
-mv $workfil ./wor
+workfil=\$1
+mv \$workfil ./wor
 gawk -f chasbang.awk ./wor >$workfil 
 EOF
 chmod 775 ./tran
