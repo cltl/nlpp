@@ -1482,18 +1482,30 @@ available. Therefore, models have been put in the snapshot-tarball.
 
 @d install the NERC module @{@%
 @< compile the nerc jar @>
+@% @< get the nerc jar @>
 @< get the nerc models @>
 
 @% cp -r m4_asnapshotroot/m4_nercdir  \$modulesdir/
 @| @}
 
+@% The current version of nerc in Github (\texttt{m4_nercgit}, version
+@% m4_nercversion) produces a run-time error and the version that we used
+@% previously (version 1.3.6) can no longer be compiled because the
+@% correct version of opennlp-tools does no longer exist. Therefore, we
+@% just copy an existing jar into the directory for the jars:
+@% 
+@% @d get the nerc jar @{@%
+@% @< get or have @(m4_nercjar@) @>
+@% cp \$pipesocket/m4_nercjar \$jarsdir
+@% @| @}
+@% 
 
-The nerc module is a Java program that is contained in a jar. Pul the
+The nerc module is a Java program that is contained in a jar. Put the
 source from Github in a temporary directory, compile the jar with java
 and move the jar to the jars directory.
 
 @d compile the nerc jar  @{@%
-TEMPDIR==`mktemp -d -t nerc.XXXXXX`
+TEMPDIR=`mktemp -d -t nerc.XXXXXX`
 cd $TEMPDIR
 git clone m4_nercgit
 cd ixa-pipe-nerc/
@@ -1563,8 +1575,8 @@ the snapshot.
 
 @d get the nerc models @{@%
 @< get or have @(m4_nercmodelsball@) @>
-@%mkdir -p \$modulesdir/m4_nercdir
-cd \$modulesdir
+mkdir -p \$modulesdir/m4_nercdir
+cd \$modulesdir/m4_nercdir
 tar -xzf \$pipesocket/m4_nercmodelsball
 @% rm \$pipesocket/m4_nercmodelsball
 @% cp -r m4_asnapshotroot/m4_nercdir/m4_nercmodeldir \$modulesdir/m4_nercdir/
@@ -1595,21 +1607,24 @@ source m4_aenvbindir/progenv
 MODDIR=$modulesdir/m4_nercdir
 JAR=$jarsdir/m4_nercjar
 MODEL=m4_nercmodelconll02
-cat | java -Xmx1000m -jar \$JAR tag -m $MODDIR/m4_nercmodeldir/nl/$MODEL
+cat | java -Xmx1000m -jar \$JAR tag -m $MODDIR/nl/$MODEL
 @| @}
 
-@o m4_bindir/m4_nerc_sonar_script @{@%
-#!/bin/bash
-source m4_aenvbindir/progenv
-@% @< set variables that point to the directory-structure @>
-@% @< set up programming environment @>
-MODDIR=$modulesdir/m4_nercdir
-JAR=$jarsdir/m4_nercjar
-MODEL=m4_nercmodelsonar
-cat | java -Xmx1000m -jar \$JAR tag -m $MODDIR/m4_nercmodeldir/nl/$MODEL --clearFeatures yes
-#cat| java           -jar ixa-pipe-nerc-1.3.6.jar tag -m $nermodel --clearFeatures yes
-@| @}
 
+@% It seems that version 1.5.2 does not contain the Sonar model.
+@% 
+@% @o m4_bindir/m4_nerc_sonar_script @{@%
+@% #!/bin/bash
+@% source m4_aenvbindir/progenv
+@% @% @< set variables that point to the directory-structure @>
+@% @% @< set up programming environment @>
+@% MODDIR=$modulesdir/m4_nercdir
+@% JAR=$jarsdir/m4_nercjar
+@% MODEL=m4_nercmodelsonar
+@% cat | java -Xmx1000m -jar \$JAR tag -m $MODDIR/m4_nercmodeldir/nl/$MODEL --clearFeatures yes
+@% #cat| java           -jar ixa-pipe-nerc-1.3.6.jar tag -m $nermodel --clearFeatures yes
+@% @| @}
+@% 
 
 
 @%@d make scripts executable @{@%
