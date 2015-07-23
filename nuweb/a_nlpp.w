@@ -647,12 +647,14 @@ pip install -U pip virtualenv setuptools
 \subsubsection{Transplant ActivePython}
 \label{sec:transplantactivepython}
 
-
 Activepython produces scripts in \verb|env/bin| that contain
 ``shabangs'' with absolute path. Furthermore, activePython seems to
 have an implicit pythonpath with an absolute path. So, when
 transplanting the directorytree to another location we have to solve
 these two problems.
+
+While doing this, we also modify the scripts in the Python Virtenv
+binary directory (see~\ref{sec:pythonvirtenv}).
 
 Modify the scripts as follows:
 
@@ -670,7 +672,8 @@ transdir=`mktemp -d -t trans.XXXXXX`
 cd $transdir
 @< write script tran @>
 @< write script chasbang.awk @>
-@< apply script tran on the scripts in env/bin @>
+@< apply script tran on the scripts in @($envbindir@) @>
+@< apply script tran on the scripts in @($envdir/venv/bin@) @>
 @% find $envbindir -type f -exec file {} + | grep script | gawk '{print $1}' FS=':' | xargs -iaap ./tran aap
 cd $projroot
 rm -rf $transdir
@@ -705,8 +708,8 @@ a description of the type of the file. The \texttt{gawk} command
 prints the filenames only and the \texttt{xargs} command applies the
 \verb|tran| script on the file.  
 
-@d apply script tran on the scripts in env/bin @{@%
-find $envbindir -type f -exec file {} + | grep script | gawk '{print $1}' FS=':' | xargs -iaap ./tran aap
+@d apply script tran on the scripts in  @{@%
+find @1 -type f -exec file {} + | grep script | gawk '{print $1}' FS=':' | xargs -iaap ./tran aap
 @| @}
 
 
@@ -763,6 +766,31 @@ packages are:
 echo export 'PYTHONPATH=\$envdir/python:\$PYTHONPATH' >> m4_aenvbindir/javapython
 export PYTHONPATH=\$envdir/python:\$PYTHONPATH
 @|PYTHONPATH @}
+
+\subsubsection{Transplant the virtual environment}
+\label{sec:transplant_virt_env}
+
+It turns out that the script ``activate'' to engage the virtual
+environment contains an absolute path, in the definition of \verb|VIRTUAL_ENV|
+
+@d set paths after transplantation @{@%
+transdir=`mktemp -d -t trans.XXXXXX`
+cd $transdir
+cat <<EOF >redef.awk
+#!/usr/bin/gawk -f
+BEGIN { envd="$envdir/venv"}
+
+/^VIRTUAL_ENV=/ { print "VIRTUAL_ENV=\"" envd "\""
+                  next
+                }
+{print}
+EOF
+
+mv \$envdir/venv/bin/activate .
+gawk -f redef.awk ./activate > \$envdir/venv/bin/activate 
+cd $projroot
+rm -rf $transdir
+@| @}
 
 
 \subsubsection{KafNafParserPy}
