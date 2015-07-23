@@ -11,6 +11,7 @@ m4_sinclude(local.m4)m4_dnl
 \newcommand{\thedoctitle}{m4_doctitle}
 \newcommand{\theauthor}{m4_author}
 \newcommand{\thesubject}{m4_subject}
+\newcommand{\AWK}{\textsc{awk}}
 \newcommand{\CLTL}{\textsc{cltl}}
 \newcommand{\EHU}{\textsc{ehu}}
 \newcommand{\NAF}{\textsc{naf}}
@@ -230,18 +231,20 @@ Add the environment \verb|bin| directory to \verb|PATH|:
 export PATH=\$envbindir:$PATH
 @| PATH @}
 
-While setting variables, \emph{source} a scripts that sets variables
-for directories of which we do not yet know where they are, e.g.{}
-paths to Python and Java that we may have to set up dynamically.
+@% While setting variables, \emph{source} a scripts that sets variables
+@% for directories of which we do not yet know where they are, e.g.{}
+@% paths to Python and Java that we may have to set up dynamically.
 
-@d set variables that point to the directory-structure @{@%
-source \$envbindir/progenv
+Put the macro to set variables in a script that can later be sourced by the scripts of the pipeline modules.
+
+@%@d set variables that point to the directory-structure @{@%
+@%source \$envbindir/progenv
+@%@| @}
+
+@o m4_envbindir/progenv @{@%
+#!/bin/bash
+@< set variables that point to the directory-structure @>
 @| @}
-
-@% @o m4_envbindir/progenv @{@%
-@% @% pipemodd=$piperoot/modules
-@% export PATH=\$envbindir:$PATH
-@% @| @}
 
 \section{How to obtain modules and other material}
 \label{sec:downloadmethods}
@@ -479,8 +482,14 @@ The following macro generates a script that specifies the programming
 environment. Initially it is empty, because we have to create the
 programming environment first.
 
-@d create progenv script @{@%
-echo '<!#!>!/bin/bash' > m4_aenvbindir/progenv
+@d create javapython script @{@%
+echo '<!#!>!/bin/bash' > m4_aenvbindir/javapython
+@| @}
+
+Cause the module scripts to read the javapython script.
+
+@o m4_envbindir/progenv @{@%
+source $envbindir/javapython
 @| @}
 
 
@@ -529,8 +538,8 @@ rm -rf \$pipesocket/m4_javatarball
 
 
 @d set up java @{@%
-echo 'export JAVA_HOME=\$envdir/java/m4_javajdk' >> m4_aenvbindir/progenv
-echo 'export PATH=$JAVA_HOME/bin:$PATH' >> m4_aenvbindir/progenv
+echo 'export JAVA_HOME=\$envdir/java/m4_javajdk' >> m4_aenvbindir/javapython
+echo 'export PATH=$JAVA_HOME/bin:$PATH' >> m4_aenvbindir/javapython
 export JAVA_HOME=\$envdir/java/m4_javajdk
 export PATH=$JAVA_HOME/bin:$PATH
 @| @}
@@ -635,6 +644,83 @@ rm -rf \$pytinsdir
 pip install -U pip virtualenv setuptools
 @| @}
 
+\subsubsection{Transplant ActivePython}
+\label{sec:transplantactivepython}
+
+Activepython produces scripts in \verb|env/bin| that contain
+``shabangs'' with absolute path. Furthermore, activePython seems to
+have an implicit pythonpath with an absolute path. So, when
+transplanting the directorytree to another location we have to solve
+these two problems.
+
+While doing this, we also modify the scripts in the Python Virtenv
+binary directory (see~\ref{sec:pythonvirtenv}).
+
+Modify the scripts as follows:
+
+\begin{enumerate}
+\item Create a temporary directory.
+\item Generate an \AWK{} script that replaces the shabang line with a
+  correct one.
+\item Generate a script that moves a script from \verb|env/bin| to the
+  temporary directory and then applies the \AWK{} script.
+\item Apply the generated script on the scripts in \verb|env/bin|.
+\end{enumerate}
+
+@d set paths after transplantation @{@%
+transdir=`mktemp -d -t trans.XXXXXX`
+cd $transdir
+@< write script tran @>
+@< write script chasbang.awk @>
+@< apply script tran on the scripts in @($envbindir@) @>
+@< apply script tran on the scripts in @($envdir/venv/bin@) @>
+@% find $envbindir -type f -exec file {} + | grep script | gawk '{print $1}' FS=':' | xargs -iaap ./tran aap
+cd $projroot
+rm -rf $transdir
+@| @}
+
+@d write script tran @{@%
+cat <<EOF >tran
+workfil=\$1
+mv \$workfil ./wor
+gawk -f chasbang.awk ./wor >$workfil 
+EOF
+chmod 775 ./tran
+@| @}
+
+@d write script chasbang.awk @{@%
+cat <<EOF >chasbang.awk
+#!/usr/bin/gawk -f
+BEGIN { shabang="#!$envbindir/python"}
+
+/^\#\!.*python.*/ { print shabang
+                    next
+                   }
+{print}
+EOF
+@| @}
+
+The following looks complicated. The \texttt{find} command applies the
+\texttt{file} command on the files in the \verb|env/bin|
+directory. The grep command filters out the names of the files that
+are scripts. it produces a filename, followed by a colon, followed by
+a description of the type of the file. The \texttt{gawk} command
+prints the filenames only and the \texttt{xargs} command applies the
+\verb|tran| script on the file.  
+
+@d apply script tran on the scripts in  @{@%
+find @1 -type f -exec file {} + | grep script | gawk '{print $1}' FS=':' | xargs -iaap ./tran aap
+@| @}
+
+
+Add \texttt{env/lib/python2.7} to the \texttt{PYTHONPATH} variable.
+
+@d set paths after transplantation @{@%
+echo export PYTHONPATH=\\$envdir/lib/python2.7:\\$PYTHONPATH >> $envbindir/javapython
+export PYTHONPATH=\\$envdir/lib/python2.7:\\$PYTHONPATH 
+@| @}
+
+
 
 \subsubsection{Virtual environment}
 \label{sec:pythonvirtenv}
@@ -661,7 +747,7 @@ fi
 
 @d activate the python environment @{@%
 source \$envdir/venv/bin/activate
-echo 'source \$envdir/venv/bin/activate' >> m4_aenvbindir/progenv
+echo 'source \$envdir/venv/bin/activate' >> m4_aenvbindir/javapython
 @|activate @}
 
 @% @d de-activate the python environment @{@%
@@ -677,9 +763,34 @@ Activation of Python include pointing to the place where Python
 packages are:
 
 @d activate the python environment @{@%
-echo export 'PYTHONPATH=\$envdir/python:\$PYTHONPATH' >> m4_aenvbindir/progenv
+echo export 'PYTHONPATH=\$envdir/python:\$PYTHONPATH' >> m4_aenvbindir/javapython
 export PYTHONPATH=\$envdir/python:\$PYTHONPATH
 @|PYTHONPATH @}
+
+\subsubsection{Transplant the virtual environment}
+\label{sec:transplant_virt_env}
+
+It turns out that the script ``activate'' to engage the virtual
+environment contains an absolute path, in the definition of \verb|VIRTUAL_ENV|
+
+@d set paths after transplantation @{@%
+transdir=`mktemp -d -t trans.XXXXXX`
+cd $transdir
+cat <<EOF >redef.awk
+#!/usr/bin/gawk -f
+BEGIN { envd="$envdir/venv"}
+
+/^VIRTUAL_ENV=/ { print "VIRTUAL_ENV=\"" envd "\""
+                  next
+                }
+{print}
+EOF
+
+mv \$envdir/venv/bin/activate .
+gawk -f redef.awk ./activate > \$envdir/venv/bin/activate 
+cd $projroot
+rm -rf $transdir
+@| @}
 
 
 \subsubsection{KafNafParserPy}
@@ -752,11 +863,12 @@ The installation is performed by script
 @o m4_bindir/m4_module_installer @{@%
 #!/bin/bash
 echo Set up environment
-@< create progenv script @>
+@% @< create progenv script @>
 @< set variables that point to the directory-structure @>
 @< variables of m4_module_installer @>
 @< check this first @>
 @%@< unpack snapshots or die @>
+@< create javapython script @>
 echo ... Java
 @< set up java @>
 @% @< set up java environment in scripts @>
@@ -791,7 +903,8 @@ echo ... WSD
 echo ... Ontotagger
 @< install the onto module @>
 echo ... Heideltime
-@< install the heideltime module @>
+@% @< install the heideltime module @>
+@< install the new heideltime module @>
 echo ... SRL
 @< install the srl module @>
 echo ... NED
@@ -997,7 +1110,7 @@ DIR=m4_ticcdir
 @| @}
 
 @d install the timbl utility @{@%
-URL=m4_timblurl
+@% URL=m4_timblurl
 TARB=m4_timblsrc
 DIR=m4_timbldir
 @< unpack ticcutils or timbl @>
@@ -1005,35 +1118,43 @@ DIR=m4_timbldir
 
 
 @d unpack ticcutils or timbl @{@%
+@< get or have @(\$TARB@) @>
 SUCCES=0
 ticbeldir=`mktemp -t -d tickbel.XXXXXX`
 cd \$ticbeldir
-wget \$URL
-SUCCES=\$?
-if
-  [ \$SUCCES -eq 0 ]
-then
-  tar -xzf \$TARB
-  SUCCES=\$?
-  rm -rf \$TARB
-fi
-if
-  [ \$SUCCES -eq 0 ]
-then
-  cd \$DIR
-  ./configure --prefix=\$envdir
-  make
-  make install
-fi
+tar -xzf \$pipesocket/\$TARB
+cd \$DIR
+./configure --prefix=\$envdir
+make 
+make install
 cd \$piperoot
 rm -rf \$ticbeldir
-if
-  [ \$SUCCES -eq 0 ]
-then
-  @< logmess @(Installed \$DIR@) @>
-else
-  @< logmess @(NOT installed \$DIR@) @>
-fi
+@% @% wget \$URL
+@% SUCCES=\$?
+@% if
+@%   [ \$SUCCES -eq 0 ]
+@% then
+@%   tar -xzf \$TARB
+@%   SUCCES=\$?
+@%   rm -rf \$TARB
+@% fi
+@% if
+@%   [ \$SUCCES -eq 0 ]
+@% then
+@%   cd \$DIR
+@%   ./configure --prefix=\$envdir
+@%   make
+@%   make install
+@% fi
+@% cd \$piperoot
+@% rm -rf \$ticbeldir
+@% if
+@%   [ \$SUCCES -eq 0 ]
+@% then
+@%   @< logmess @(Installed \$DIR@) @>
+@% else
+@%   @< logmess @(NOT installed \$DIR@) @>
+@% fi
 @| @}
 
 When the installation has been transplanted, Timbl and Ticcutils have
@@ -1226,7 +1347,8 @@ The script runs the tokenizerscript.
 
 @o m4_bindir/m4_tokenizerscript @{@%
 #!/bin/bash
-@< set variables that point to the directory-structure @>
+source m4_aenvbindir/progenv
+@% @< set variables that point to the directory-structure @>
 @% @< set up programming environment @>
 JARFILE=\$jarsdir/m4_tokenizerjar
 java -Xmx1000m  -jar \$JARFILE tok -l nl --inputkaf
@@ -1275,7 +1397,8 @@ git checkout m4_morphpar_commitname
 
 @o m4_bindir/m4_morphparscript @{@%
 #!/bin/bash
-@< set variables that point to the directory-structure @>
+source m4_aenvbindir/progenv
+@% @< set variables that point to the directory-structure @>
 @% @< set up programming environment @>
 ROOT=\$piperoot
 MODDIR=\$modulesdir/<!!>m4_morphpardir<!!>
@@ -1362,7 +1485,8 @@ pip install --upgrade  networkx
 
 @o m4_bindir/m4_corefbasescript @{@%
 #!/bin/bash
-@< set variables that point to the directory-structure @>
+source m4_aenvbindir/progenv
+@% @< set variables that point to the directory-structure @>
 @% @< set up programming environment @>
 cd $modulesdir/m4_corefbasedir/core
 cat | python -m corefgraph.process.file --language nl --singleton --sieves NO
@@ -1386,18 +1510,30 @@ available. Therefore, models have been put in the snapshot-tarball.
 
 @d install the NERC module @{@%
 @< compile the nerc jar @>
+@% @< get the nerc jar @>
 @< get the nerc models @>
 
 @% cp -r m4_asnapshotroot/m4_nercdir  \$modulesdir/
 @| @}
 
+@% The current version of nerc in Github (\texttt{m4_nercgit}, version
+@% m4_nercversion) produces a run-time error and the version that we used
+@% previously (version 1.3.6) can no longer be compiled because the
+@% correct version of opennlp-tools does no longer exist. Therefore, we
+@% just copy an existing jar into the directory for the jars:
+@% 
+@% @d get the nerc jar @{@%
+@% @< get or have @(m4_nercjar@) @>
+@% cp \$pipesocket/m4_nercjar \$jarsdir
+@% @| @}
+@% 
 
-The nerc module is a Java program that is contained in a jar. Pul the
+The nerc module is a Java program that is contained in a jar. Put the
 source from Github in a temporary directory, compile the jar with java
 and move the jar to the jars directory.
 
 @d compile the nerc jar  @{@%
-TEMPDIR==`mktemp -d -t nerc.XXXXXX`
+TEMPDIR=`mktemp -d -t nerc.XXXXXX`
 cd $TEMPDIR
 git clone m4_nercgit
 cd ixa-pipe-nerc/
@@ -1467,8 +1603,8 @@ the snapshot.
 
 @d get the nerc models @{@%
 @< get or have @(m4_nercmodelsball@) @>
-@%mkdir -p \$modulesdir/m4_nercdir
-cd \$modulesdir
+mkdir -p \$modulesdir/m4_nercdir
+cd \$modulesdir/m4_nercdir
 tar -xzf \$pipesocket/m4_nercmodelsball
 @% rm \$pipesocket/m4_nercmodelsball
 @% cp -r m4_asnapshotroot/m4_nercdir/m4_nercmodeldir \$modulesdir/m4_nercdir/
@@ -1493,25 +1629,30 @@ Sonar model
 
 @o m4_bindir/m4_nerc_conll02_script @{@%
 #!/bin/bash
-@< set variables that point to the directory-structure @>
+source m4_aenvbindir/progenv
+@% @< set variables that point to the directory-structure @>
 @% @< set up programming environment @>
 MODDIR=$modulesdir/m4_nercdir
 JAR=$jarsdir/m4_nercjar
 MODEL=m4_nercmodelconll02
-cat | java -Xmx1000m -jar \$JAR tag -m $MODDIR/m4_nercmodeldir/nl/$MODEL
+cat | java -Xmx1000m -jar \$JAR tag -m $MODDIR/nl/$MODEL
 @| @}
 
-@o m4_bindir/m4_nerc_sonar_script @{@%
-#!/bin/bash
-@< set variables that point to the directory-structure @>
-@% @< set up programming environment @>
-MODDIR=$modulesdir/m4_nercdir
-JAR=$jarsdir/m4_nercjar
-MODEL=m4_nercmodelsonar
-cat | java -Xmx1000m -jar \$JAR tag -m $MODDIR/m4_nercmodeldir/nl/$MODEL --clearFeatures yes
-#cat| java           -jar ixa-pipe-nerc-1.3.6.jar tag -m $nermodel --clearFeatures yes
-@| @}
 
+@% It seems that version 1.5.2 does not contain the Sonar model.
+@% 
+@% @o m4_bindir/m4_nerc_sonar_script @{@%
+@% #!/bin/bash
+@% source m4_aenvbindir/progenv
+@% @% @< set variables that point to the directory-structure @>
+@% @% @< set up programming environment @>
+@% MODDIR=$modulesdir/m4_nercdir
+@% JAR=$jarsdir/m4_nercjar
+@% MODEL=m4_nercmodelsonar
+@% cat | java -Xmx1000m -jar \$JAR tag -m $MODDIR/m4_nercmodeldir/nl/$MODEL --clearFeatures yes
+@% #cat| java           -jar ixa-pipe-nerc-1.3.6.jar tag -m $nermodel --clearFeatures yes
+@% @| @}
+@% 
 
 
 @%@d make scripts executable @{@%
@@ -1601,7 +1742,8 @@ tar -xzf \$pipesocket/m4_wsd_snapball
 # WSD -- wrapper for word-sense disambiguation
 # 8 Jan 2014 Ruben Izquierdo
 # 16 sep 2014 Paul Huygen
-@< set variables that point to the directory-structure @>
+source m4_aenvbindir/progenv
+@% @< set variables that point to the directory-structure @>
 @% @< set up programming environment @>
 WSDDIR=$modulesdir/m4_wsddir
 WSDSCRIPT=dsc_wsd_tagger.py
@@ -1706,7 +1848,8 @@ tar -xzf \$pipesocket/m4_lu2synball
 
 @o m4_bindir/m4_lu2synsetscript  @{@%
 #!/bin/bash
-@< set variables that point to the directory-structure @>
+@% @< set variables that point to the directory-structure @>
+source m4_aenvbindir/progenv
 ROOT=\$piperoot
 JAVALIBDIR=\$modulesdir/m4_lu2syndir/lib
 RESOURCESDIR=\$modulesdir/m4_lu2syndir/resources
@@ -1844,7 +1987,8 @@ rm -rf $tempdir
 
 @o m4_bindir/m4_nedscript @{@%
 #!/bin/bash
-@< set variables that point to the directory-structure @>
+source m4_aenvbindir/progenv
+@% @< set variables that point to the directory-structure @>
 @% @< set up programming environment @>
 ROOT=\$piperoot
 JARDIR=\$jarsdir
@@ -1884,7 +2028,8 @@ chmod -R o+r \$modulesdir/m4_ontodir
 
 @o m4_bindir/m4_ontoscript @{@%
 #!/bin/bash
-@< set variables that point to the directory-structure @>
+source m4_aenvbindir/progenv
+@% @< set variables that point to the directory-structure @>
 @% @< set up programming environment @>
 ROOT=\$piperoot
 ONTODIR=$modulesdir/m4_ontodir
@@ -1963,7 +2108,8 @@ script removes these lines.
 
 @o m4_bindir/m4_framesrlscript @{@%
 #!/bin/bash
-@< set variables that point to the directory-structure @>
+source m4_aenvbindir/progenv
+@% @< set variables that point to the directory-structure @>
 @% @< set up programming environment @>
 ONTODIR=$modulesdir/m4_ontodir
 JARDIR=\$ONTODIR/lib
@@ -2000,54 +2146,190 @@ rm -rf \$TMPFIL
 \subsubsection{Heideltime}
 \label{sec:heideltime}
 
-\paragraph{Module}
-\label{sec:heideltimmodule}
+@% \paragraph{Module}
+@% \label{sec:heideltimmodule}
+@% 
+@% Heideltime uses treetagger. It expects to find the location of
+@% treetagger in a variable \texttt{TreetaggerHome} in config-file
+@% \verb|config.props|.
+@% 
+@% One of the elements of Heideltime (the jar
+@% \verb|de.unihd.dbs.heideltime.standalone.jar| in
+@% \verb|NAF-HeidelTime/heideltime-standalone| has been updated and the
+@% Github version is outdated. Therefore, get the latest version from the snapshot.
+@% 
+@% @d install the heideltime module @{@%
+@% MODNAM=heideltime
+@% DIRN=m4_heideldir
+@% GITU=m4_heidelgit
+@% GITC=m4_heidel_commitname
+@% @< install from github @>
+@% @< update the heideltime jar @>
+@% @< adapt heideltime's config.props @>
+@% @| @}
+@% 
+@% @d adapt heideltime's config.props @{@%
+@% CONFIL=\$modulesdir/m4_heideldir/config.props
+@% tempfil=`mktemp -t heideltmp.XXXXXX`
+@% mv $CONFIL \$tempfil
+@% @% MODDIR=\$modulesdir
+@% TREETAGDIR=m4_treetagdir
+@% AWKCOMMAND='/^treeTaggerHome/ {\$0="treeTaggerHome = '\$modulesdir'/m4_treetagdir"}; {print}'
+@% gawk "\$AWKCOMMAND" \$tempfil >\$CONFIL
+@% rm -rf $tempfil
+@% @| @}
+@% 
+@% @d update the heideltime jar @{@%
+@% standalonejar=m4_heidelstandalonejar
+@% replstandalonejar=m4_replace_heidelstandalonejar
+@% cd \$modulesdir/m4_heideldir/heideltime-standalone
+@% rm -f \$standalonejar
+@% scp -i "\$pipesocket/m4_snapshotkeyfilename" m4_repo_user<!!>@@<!!>m4_repo_url:m4_repo_path/\$replstandalonejar ./\$standalonejar
+@% @| @}
+@% 
+@% 
+@% 
+@% When the installation has been transplanted, \verb|config.props| must be updated:
+@% 
+@% @d set paths after transplantation @{@%
+@% @< adapt heideltime's config.props @>
+@% @| @}
 
-Heideltime uses treetagger. It expects to find the location of
-treetagger in a variable \texttt{TreetaggerHome} in config-file
-\verb|config.props|.
+\paragraph{New module}
+\label{sec:heideltimenewmodule}
 
-One of the elements of Heideltime (the jar
-\verb|de.unihd.dbs.heideltime.standalone.jar| in
-\verb|NAF-HeidelTime/heideltime-standalone| has been updated and the
-Github version is outdated. Therefore, get the latest version from the snapshot.
+Heideltime has been updated. In princple the Heideltim module ought to be installed as described in the follosing message from Itziar Aldabe:
 
-@d install the heideltime module @{@%
-MODNAM=heideltime
-DIRN=m4_heideldir
-GITU=m4_heidelgit
-GITC=m4_heidel_commitname
-@< install from github @>
-@< update the heideltime jar @>
-@< adapt heideltime's config.props @>
+\begin{verbatim}
+
+I managed to get everything ready, except for the README in github. I'll update it next
+week but I think I can give you some simple steps that should be enough to correctly
+use the module 
+
+1.- Download the code: git clone https://github.com/ixa-ehu/ixa-pipe-time.git
+
+2.- In the ixa-pipe-time create the lib directory
+
+3.- Download the HeidelTimeStandalone jar file from https://code.google.com/p/heideltime/
+
+  If you download the heideltime-standalone-1.7 zip file, you will find two files that you need:
+  - de.unihd.dbs.heideltime.standalone.jar
+  - config.props => you will need this file to correctly execute the new time module
+
+  move the jar file to the lib directory
+
+4.- Download a copy of JVnTextPro from http://ixa2.si.ehu.es/~jibalari/jvntextpro-2.0.jar
+
+  move the jar file to the lib directory
+
+5.- Download the following script https://github.com/carchrae/install-to-project-repo/blob/master/install-to-project-repo.py
+
+6.- Execute the script within the ixa-pipe-time directory
+
+   => It will create the repo directory and two dependencies that you don't need to copy in the pom.xml file. It is necessary to run the scrip to correctly create the repo directory. Don't copy the anything in the pom file.
+
+7.- Download the mappings file: http://ixa2.si.ehu.es/~jibalari/eagles-to-treetager.csv
+
+8.- Create the jar file for the time module
+    mvn clean install
+
+9.- Test the module
+
+   cat pos.naf | java -jar ${dirToJAR}/ixa.pipe.time.jar -m ${dirToFile}/eagles-to-treetager.csv -c ${dirToFile}/config.props
+
+
+   I think everything needed is included in the list of steps. Let me know if something is not clear.
+
+
+Regards,
+Itziar
+
+
+\end{verbatim}
+
+Unfortunately, this procedure does not always seem to work. On the test-computer (Ubuntu Linux version 14.04) the instruction 
+\verb|mvn clean package| results in the following error message:
+
+\begin{verbatim}
+(venv)paul@@klipperaak:~/projecten/cltl/pipelines/nlpp/modules/ixa-pipe-time$ mvn clean package
+[INFO] Scanning for projects...
+[INFO]                                                                         
+[INFO] ------------------------------------------------------------------------
+[INFO] Building IXAPipeHeidelTime 1.0.1
+[INFO] ------------------------------------------------------------------------
+[WARNING] The POM for local:de.unihd.dbs.heideltime.standalone:jar:1.0 is missing, no dependency information available
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time: 0.650s
+[INFO] Finished at: Wed Jul 15 09:40:39 CEST 2015
+[INFO] Final Memory: 7M/232M
+[INFO] ------------------------------------------------------------------------
+[ERROR] Failed to execute goal on project time: Could not resolve dependencies for project ixa.pipe:time:jar:1.0.1: Failure to find local:de.unihd.dbs.heideltime.standalone:jar:1.0 in file:///home/paul/projecten/cltl/pipelines/nlpp/modules/ixa-pipe-time/repo was cached in the local repository, resolution will not be reattempted until the update interval of heideltime-local-dependency-repo has elapsed or updates are forced -> [Help 1]
+[ERROR] 
+[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+[ERROR] Re-run Maven using the -X switch to enable full debug logging.
+[ERROR] 
+[ERROR] For more information about the errors and possible solutions, please read the following articles:
+[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/DependencyResolutionException
+
+\end{verbatim}
+
+
+Therefore we have compiled the module in a computer where it worked and put the result in the snapshot.
+
+@d install the new heideltime module @{@%
+@< get or have @(m4_heidelnball@) @>
+cd \$modulesdir
+tar -xzf \$pipesocket/m4_heidelnball
 @| @}
 
-@d adapt heideltime's config.props @{@%
-CONFIL=\$modulesdir/m4_heideldir/config.props
-tempfil=`mktemp -t heideltmp.XXXXXX`
-mv $CONFIL \$tempfil
-@% MODDIR=\$modulesdir
-TREETAGDIR=m4_treetagdir
-AWKCOMMAND='/^treeTaggerHome/ {\$0="treeTaggerHome = '\$modulesdir'/m4_treetagdir"}; {print}'
-gawk "\$AWKCOMMAND" \$tempfil >\$CONFIL
-rm -rf $tempfil
-@| @}
-
-@d update the heideltime jar @{@%
-standalonejar=m4_heidelstandalonejar
-replstandalonejar=m4_replace_heidelstandalonejar
-cd \$modulesdir/m4_heideldir/heideltime-standalone
-rm -f \$standalonejar
-scp -i "\$pipesocket/m4_snapshotkeyfilename" m4_repo_user<!!>@@<!!>m4_repo_url:m4_repo_path/\$replstandalonejar ./\$standalonejar
-@| @}
 
 
-
-When the installation has been transplanted, \verb|config.props| must be updated:
-
-@d set paths after transplantation @{@%
-@< adapt heideltime's config.props @>
-@| @}
+@% \begin{enumerate}
+@% \item Download the code: \verb|git clone https://github.com/ixa-ehu/ixa-pipe-time.git|
+@% \item Get the heideltime stand-alone jar from 
+@% \end{enumerate}
+@% 
+@% @d install the new heideltime module @{@%
+@% MODNAM=m4_heidelndir
+@% DIRN=m4_heidelndir
+@% GITU=m4_heidelngit
+@% GITC=m4_heidelncommitname
+@% @< install from github @>
+@% @< get the heideltime standalone jar and config.props @>
+@% @< get and execute m4_installtoprojectpy @>
+@% @< download the mappings file @>
+@% @< create the jar file for the time module @>
+@% @| @}
+@% 
+@% @d get the heideltime standalone jar and config.props @{@%
+@% cd \$modulesdir/m4_heidelndir
+@% mkdir lib
+@% wget m4_heidelnstandaloneurl
+@% tar -zxf m4_heidelnstandaloneball
+@% mv heideltime-standalone/m4_heidelnstandalonejar lib/
+@% mv heideltime-standalone/config.props .
+@% cd lib
+@% wget  http://ixa2.si.ehu.es/~jibalari/jvntextpro-2.0.jar
+@% cd ..
+@% @| @}
+@% 
+@% @d get and execute m4_installtoprojectpy @{@%
+@% cd \$modulesdir/m4_heidelndir
+@% git clone https://github.com/carchrae/install-to-project-repo.git
+@% python m4_installtoprojectpy
+@% 
+@% wget  m4_installtoprojectpyurl
+@% @| @}
+@% 
+@% @d download the mappings file @{@%
+@% wget m4_mappingsfileurl
+@% @| @}
+@% 
+@% @d create the jar file for the time module @{@%
+@% mvn clean install
+@% @| @}
 
 
 
@@ -2056,16 +2338,25 @@ When the installation has been transplanted, \verb|config.props| must be updated
 
 @o m4_bindir/m4_heidelscript @{@%
 #!/bin/bash
-@< set variables that point to the directory-structure @>
-@% @< set up programming environment @>
-@% ROOT=m4_aprojroot
-HEIDELDIR=\$modulesdir/m4_heideldir
-TEMPDIR=`mktemp -t -d heideltmp.XXXXXX`
+source m4_aenvbindir/progenv
+HEIDELDIR=\$modulesdir/m4_heidelndir
 cd $HEIDELDIR
-@% @< activate the python environment @>
-iconv -t utf-8//IGNORE | python \$HEIDELDIR/HeidelTime_NafKaf.py \$HEIDELDIR/heideltime-standalone/ \$TEMPDIR
-rm -rf $TEMPDIR
+iconv -t utf-8//IGNORE | java -jar target/ixa.pipe.time.jar -m alpino-to-treetagger.csv -c config.props
 @| @}
+
+@% @o m4_bindir/m4_heidelscript @{@%
+@% #!/bin/bash
+@% source m4_aenvbindir/progenv
+@% @% @< set variables that point to the directory-structure @>
+@% @% @< set up programming environment @>
+@% @% ROOT=m4_aprojroot
+@% HEIDELDIR=\$modulesdir/m4_heideldir
+@% TEMPDIR=`mktemp -t -d heideltmp.XXXXXX`
+@% cd $HEIDELDIR
+@% @% @< activate the python environment @>
+@% iconv -t utf-8//IGNORE | python \$HEIDELDIR/HeidelTime_NafKaf.py \$HEIDELDIR/heideltime-standalone/ \$TEMPDIR
+@% rm -rf $TEMPDIR
+@% @| @}
 
 @%@d make scripts executable @{@%
 @%chmod 775  m4_bindir/m4_heidelscript
@@ -2099,8 +2390,8 @@ First:
 
 @o m4_bindir/m4_srlscript @{@%
 #!/bin/bash
-@< set variables that point to the directory-structure @>
-source \$envbindir/progenv
+source m4_aenvbindir/progenv
+@% @< set variables that point to the directory-structure @>
 ROOT=$piperoot
 SRLDIR=\$modulesdir/m4_srldir
 TEMPDIR=`mktemp -d -t SRLTMP.XXXXXX`
@@ -2160,7 +2451,8 @@ rm -rf \$pipesocket/m4_postsrlball
 
 @o m4_bindir/m4_postsrlscript @{@%
 #!/bin/bash
-@< set variables that point to the directory-structure @>
+source m4_aenvbindir/progenv
+@% @< set variables that point to the directory-structure @>
 MODDIR=\$modulesdir/<!!>m4_postsrldir
 cat | python \$MODDIR/m4_postsrlpy
 @| @}
@@ -2194,7 +2486,8 @@ cp lib/m4_evcorefjar \$jarsdir
 
 @o m4_bindir/m4_evcorefscript @{@%
 #!/bin/bash
-@< set variables that point to the directory-structure @>
+source m4_aenvbindir/progenv
+@% @< set variables that point to the directory-structure @>
 @% @< set up programming environment @>
 MODROOT=$modulesdir/m4_evcorefdir
 RESOURCESDIR=$MODROOT/resources
@@ -2246,7 +2539,8 @@ Spotlight server.
 
 @o m4_bindir/m4_dbpnerscript @{@%
 #!/bin/bash
-@< set variables that point to the directory-structure @>
+source m4_aenvbindir/progenv
+@% @< set variables that point to the directory-structure @>
 @< check/start the Spotlight server @>
 MODDIR=\$modulesdir/<!!>m4_dbpnerdir<!!>
 cat | iconv -f ISO8859-1 -t UTF-8 | $MODDIR/dbpedia_ner.py -url http://localhost:2060/rest/candidates
@@ -2276,7 +2570,8 @@ unzip -q \$pipesocket/m4_nomeventball
 
 @o m4_bindir/m4_nomeventscript @{@%
 #!/bin/bash
-@< set variables that point to the directory-structure @>
+source m4_aenvbindir/progenv
+@% @< set variables that point to the directory-structure @>
 MODDIR=\$modulesdir/<!!>m4_nomeventdir<!!>
 LIBDIR=\$MODDIR/lib
 RESOURCESDIR=\$MODDIR/resources
@@ -2313,9 +2608,9 @@ cat test.tok.naf             | $BIND/mor                    > $TESTDIR/test.mor.
 cat test.mor.naf             | $BIND/m4_nerc_conll02_script > $TESTDIR/test.nerc.naf
 cat $TESTDIR/test.nerc.naf   | $BIND/wsd                    > $TESTDIR/test.wsd.naf
 cat $TESTDIR/test.wsd.naf    | $BIND/ned                    > $TESTDIR/test.ned.naf
-cat $TESTDIR/test.ned.naf    | $BIND/onto                   > $TESTDIR/test.onto.naf
-cat $TESTDIR/test.onto.naf   | $BIND/heideltime             > $TESTDIR/test.times.naf
-cat $TESTDIR/test.times.naf  | $BIND/srl                    > $TESTDIR/test.srl.naf
+cat $TESTDIR/test.ned.naf    | $BIND/heideltime             > $TESTDIR/test.times.naf
+cat $TESTDIR/test.times.naf  | $BIND/onto                   > $TESTDIR/test.onto.naf
+cat $TESTDIR/test.onto.naf   | $BIND/srl                    > $TESTDIR/test.srl.naf
 cat $TESTDIR/test.srl.naf    | $BIND/m4_evcorefscript       > $TESTDIR/test.ecrf.naf
 cat $TESTDIR/test.ecrf.naf   | $BIND/m4_framesrlscript      > $TESTDIR/test.fsrl.naf
 cat $TESTDIR/test.fsrl.naf   | $BIND/m4_dbpnerscript        > $TESTDIR/test.dbpner.naf
@@ -3252,6 +3547,7 @@ after a transplantation.
 
 @o m4_envbindir/transplant @{@%
 #!/bin/bash
+LOGLEVEL=1
 @< set variables that point to the directory-structure @>
 @< set paths after transplantation @>
 @< re-install modules after the transplantation @>

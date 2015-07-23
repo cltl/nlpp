@@ -1,4 +1,4 @@
-m4_define(m4_repoversion, `1.0.01')m4_dnl
+m4_define(m4_repoversion, `1.0.03')m4_dnl
 m4_dnl
 m4_dnl Titles
 m4_dnl
@@ -132,11 +132,12 @@ m4_dnl
 m4_dnl NERC
 m4_dnl
 m4_define(m4_nercgit, https://github.com/ixa-ehu/ixa-pipe-nerc)m4_dnl
-m4_dnl m4_define(m4_nerc_commitname, 8b518284eface454a4f954dfb88bea4d98b2073a)m4_dnl
-m4_define(m4_nerc_commitname, 9927fdb32d943f0aa9748a656958af99eeb1f5b7)m4_dnl
-m4_define(m4_nercdir, EHU-nerc)m4_dnl  Subdir. of modules
+m4_define(m4_nerc_commitname, 5cacac28fcaa6e91d5f2a4cc9b486b24ac163641)m4_dnl
+m4_dnl m4_define(m4_nercdir, EHU-nerc)m4_dnl  Subdir. of modules
+m4_define(m4_nercdir, nerc-models-nl)m4_dnl  Subdir. of modules
 m4_dnl m4_define(m4_nercversion, 1.3.3)m4_dnl
-m4_define(m4_nercversion, 1.3.6)m4_dnl
+m4_dnl m4_define(m4_nercversion, 1.3.6)m4_dnl
+m4_define(m4_nercversion, 1.5.2)m4_dnl
 m4_define(m4_nercjar, ixa-pipe-nerc-`'m4_nercversion`'.jar)m4_dnl
 m4_define(m4_nercmodeldir, nerc-resources)m4_dnl
 m4_dnl m4_define(m4_nercmodel, nl-local-conll02-testa.bin)m4_dnl
@@ -145,7 +146,8 @@ m4_define(m4_nercmodelsonar, nl-clusters-sonar.bin)m4_dnl
 m4_define(m4_nercscript, nerc)m4_dnl
 m4_define(m4_nerc_conll02_script, nerc_conll02)m4_dnl
 m4_define(m4_nerc_sonar_script, nerc_sonar)m4_dnl
-m4_define(m4_nercmodelsball, EHU-nerc.tgz)m4_dnl
+m4_dnl m4_define(m4_nercmodelsball, EHU-nerc.tgz)m4_dnl
+m4_define(m4_nercmodelsball, nerc-models-nl.tgz)m4_dnl
 m4_dnl
 m4_dnl Coreference-base
 m4_dnl
@@ -153,8 +155,6 @@ m4_define(m4_corefbasedir, coreference-base)m4_dnl  Subdir. of modules
 m4_define(m4_corefbasescript, coreference-base)m4_dnl
 m4_define(m4_corefbasegit, https://github.com/opener-project/coreference-base.git)m4_dnl
 m4_define(m4_corefbase_commitname, `bfa5aec0fa498e57fe14dd4d2c51365dd09a0757')m4_dnl
-
-
 m4_dnl
 m4_dnl LU2SYN
 m4_dnl
@@ -204,6 +204,20 @@ m4_define(m4_heideldir, NAF-HeidelTime)m4_dnl  Subdir. of modules
 m4_define(m4_heidelscript, heideltime)m4_dnl
 m4_define(m4_heidelstandalonejar, de.unihd.dbs.heideltime.standalone.jar)m4_dnl
 m4_define(m4_replace_heidelstandalonejar, 201506postfix.`'m4_heidelstandalonejar)m4_dnl
+m4_dnl
+m4_dnl New Heideltime
+m4_define(m4_heidelndir, ixa-pipe-time)m4_dnl
+m4_define(m4_heidelnball, ixa-pipe-time.tgz)m4_dnl
+m4_define(m4_heidelngit, https://github.com/ixa-ehu/`'m4_heidelndir`'.git)m4_dnl
+m4_define(m4_heidelncommitname, 2a2999bb6558401326bf88bda44e9a9c404492c6)m4_dnl
+m4_define(m4_heidelnstandaloneball, `D6lUEN')m4_dnl
+m4_define(m4_heidelnstandaloneurl, `http://goo.gl/m4_heidelnstandaloneball')m4_dnl
+m4_define(m4_heidelnstandalonejar, `de.unihd.dbs.heideltime.standalone.jar')m4_dnl
+m4_define(m4_installtoprojectgit, https://github.com/carchrae/install-to-project-repo.git)m4_dnl
+m4_define(m4_installtoprojectpy, install-to-project-repo.py)m4_dnl
+m4_define(m4_installtoprojectpyurl, https://github.com/carchrae/install-to-project-repo/blob/master/m4_installtoprojectpy)m4_dnl
+m4_define(m4_mappingsfile, eagles-to-treetager.csv)m4_dnl
+m4_define(m4_mappingsfileurl, http://ixa2.si.ehu.es/~jibalari/eagles-to-treetager.csv)m4_dnl
 
 m4_dnl
 m4_dnl SRL
