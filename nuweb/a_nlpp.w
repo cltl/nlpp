@@ -2336,12 +2336,28 @@ tar -xzf \$pipesocket/m4_heidelnball
 \paragraph{Script}
 \label{sec:heideltime-script}
 
+The script run the heideltime jar. 
+
 @o m4_bindir/m4_heidelscript @{@%
 #!/bin/bash
 source m4_aenvbindir/progenv
 HEIDELDIR=\$modulesdir/m4_heidelndir
 cd $HEIDELDIR
-iconv -t utf-8//IGNORE | java -jar target/ixa.pipe.time.jar -m alpino-to-treetagger.csv -c config.props
+iconv -t utf-8//IGNORE | java -jar target/ixa.pipe.time.jar -m alpino-to-treetagger.csv -c config.props | gawk -g 
+@| @}
+
+Sometimes the Heideltime jar writes log to standard out. Therefore we will remove text preceeding the first xml tag in an extra pipeline-step.
+
+@o m4_bindir/remprol.awk @{@%
+#!/usr/bin/gawk -f
+BEGIN {prolog="y"}
+
+/^<?xml/ {prolog="n"}
+/^<NAF/ {prolog="n"}
+/^<?XML/ {prolog="n"}
+/^<naf/ {prolog="n"}
+
+prolog=="n" {print}
 @| @}
 
 @% @o m4_bindir/m4_heidelscript @{@%
@@ -2608,7 +2624,8 @@ cat test.tok.naf             | $BIND/mor                    > $TESTDIR/test.mor.
 cat test.mor.naf             | $BIND/m4_nerc_conll02_script > $TESTDIR/test.nerc.naf
 cat $TESTDIR/test.nerc.naf   | $BIND/wsd                    > $TESTDIR/test.wsd.naf
 cat $TESTDIR/test.wsd.naf    | $BIND/ned                    > $TESTDIR/test.ned.naf
-cat $TESTDIR/test.ned.naf    | $BIND/heideltime             > $TESTDIR/test.times.naf
+cat $TESTDIR/test.ned.naf    | $BIND/heideltime             > $TESTDIR/test.otimes.naf
+cat $TESTDIR/test.otimes.naf | gawk -f $BIND/remprol.awk    > $TESTDIR/test.times.naf
 cat $TESTDIR/test.times.naf  | $BIND/onto                   > $TESTDIR/test.onto.naf
 cat $TESTDIR/test.onto.naf   | $BIND/srl                    > $TESTDIR/test.srl.naf
 cat $TESTDIR/test.srl.naf    | $BIND/m4_evcorefscript       > $TESTDIR/test.ecrf.naf

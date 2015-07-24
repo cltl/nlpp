@@ -185,7 +185,7 @@ m4_dnl
 m4_dnl ONTO
 m4_define(m4_ontodir, vua-ontotagger-v1.0)m4_dnl  Subdir. of modules
 m4_define(m4_ontoscript, onto)m4_dnl
-m4_define(m4_ontotarball, vua-ontotagger-v1.0.tar.gz)m4_dnl  Subdir. of modules
+m4_define(m4_ontotarball, 20150724_vua-ontotagger-v1.0.tar.gz)m4_dnl  Subdir. of modules
 m4_dnl
 m4_dnl Framenet SRL
 m4_define(m4_ontodir, vua-ontotagger-v1.0)m4_dnl  Subdir. of modules
