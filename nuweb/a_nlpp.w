@@ -2343,7 +2343,7 @@ The script run the heideltime jar.
 source m4_aenvbindir/progenv
 HEIDELDIR=\$modulesdir/m4_heidelndir
 cd $HEIDELDIR
-iconv -t utf-8//IGNORE | java -jar target/ixa.pipe.time.jar -m alpino-to-treetagger.csv -c config.props | gawk -g 
+iconv -t utf-8//IGNORE | java -jar target/ixa.pipe.time.jar -m alpino-to-treetagger.csv -c config.props
 @| @}
 
 Sometimes the Heideltime jar writes log to standard out. Therefore we will remove text preceeding the first xml tag in an extra pipeline-step.
