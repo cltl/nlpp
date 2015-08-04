@@ -251,8 +251,20 @@ m4_dnl Ev. coref
 m4_dnl
 m4_dnl Opinion-miner
 m4_define(m4_opinisrc, /dev/null )m4_dnl  
-m4_define(m4_opinidir, opinimin)m4_dnl  
+m4_define(m4_opinigit, https://github.com/cltl/opinion_miner_deluxe.git)m4_dnl
+m4_define(m4_opi_commitname, 3486ba98e4368c1d6119c6308bf7bef0bef8836b)m4_dnl
+m4_define(m4_opinidir, opinion_miner_deluxe)m4_dnl  
 m4_define(m4_opiniscript, opinimin)m4_dnl
+m4_define(m4_opimodelsball, 20150730_opimin_final_models.tgz)m4_dnl
+m4_define(m4_opimodelsdir, final_models)m4_dnl
+m4_define(m4_opimodelsconffile, `nl/news_cfg1/config.cfg')m4_dnl
+
+m4_define(m4_subj_det_ball, 20150803_subjectivity_detector.tgz)m4_dnl
+m4_define(m4_subj_det_dir, subjectivity_detector)m4_dnl
+m4_dnl m4_define(m4_subj_pathfinderpath, m4_amoddir/m4_opinidir/m4_subj_det_dir/lib/path_finder.py)m4_dnl
+m4_define(m4_subj_pathfinderpath, m4_aenvdir/python/m4_subj_det_dir/lib/path_finder.py)m4_dnl
+
+
 m4_dnl
 m4_dnl lu2synset
 m4_define(m4_lu2synball, lu2synset.tgz)m4_dnl  
@@ -310,6 +322,11 @@ m4_define(m4_kafnafversion, `feb 1, 2015')m4_dnl
 m4_define(m4_kafnafgit, https://github.com/cltl/KafNafParserPy.git)m4_dnl
 m4_define(m4_kafnafdir, python/KafNafParserPy)m4_dnl
 m4_dnl
+m4_dnl VUA_pylib
+m4_dnl m4_define(m4_kafnafversion, `feb 1, 2015')m4_dnl
+m4_define(m4_pylibgit, https://github.com/cltl/VUA_pylib.git)m4_dnl
+m4_define(m4_pylibdir, VUA_pylib)m4_dnl
+m4_dnl
 m4_dnl Treetagger
 m4_define(m4_treetag_base_url, `http://www.cis.uni-muenchen.de/%7Eschmid/tools/TreeTagger/data/')m4_dnl
 m4_define(m4_treetag_version, 3.2)m4_dnl
@@ -341,11 +358,33 @@ m4_define(m4_spotlight_nl_port, 2060)m4_dnl
 m4_define(m4_spotlight_en_model_ball, en_2+2.tar.gz)m4_dnl
 m4_define(m4_spotlight_en_port, 2020)m4_dnl
 m4_dnl
+m4_dnl SVMLight
+m4_dnl
+m4_define(m4_SVM_download_url, http://download.joachims.org/svm_light/current/svm_light.tar.gz)m4_dnl
+m4_define(m4_SVMLight_url, http://svmlight.joachims.org)m4_dnl
+m4_define(m4_SVMLight_ball, svm_light.tar.gz)m4_dnl
+m4_define(m4_SVMLight_bin, svm_classify)m4_dnl
+m4_dnl
+m4_dnl CRFsuite
+m4_dnl
+m4_define(m4_CRF_url, http://www.chokkan.org/software/crfsuite/)m4_dnl
+m4_define(m4_CRF_download_url, https://github.com/downloads/chokkan/crfsuite/crfsuite-0.12.tar.gz)m4_dnl
+m4_define(m4_CRF_ball, crfsuite-0.12.tar.gz)m4_dnl
+m4_define(m4_CRF_dir, crfsuite-0.12)m4_dnl
+m4_dnl
+m4_dnl IBFGS
+m4_dnl
+m4_define(m4_IBFGS_download_url, https://github.com/downloads/chokkan/liblbfgs/liblbfgs-1.10.tar.gz)m4_dnl
+m4_define(m4_SVMLight_url, http://svmlight.joachims.org)m4_dnl
+m4_define(m4_IBFGS_ball, liblbfgs-1.10.tar.gz)m4_dnl
+m4_define(m4_IBFGS_dir, liblbfgs-1.10)m4_dnl
+m4_define(m4_IBFSG_url, http://www.chokkan.org/software/liblbfgs)m4_dnl
+
+m4_dnl
 m4_dnl Wikipedia db
 m4_dnl
 m4_define(m4_wikipediadb_tarball, wikipedia-db.v1.tar.gz)m4_dnl
-m4_define(m4_wikipediadb_url, http://ixa2.si.ehu.es/ixa-pipes/models/m4_wikipediadb_tarball)m4_dnl
-m4_define(m4_wikipediadb_tarball, wikipedia-db.v1.tar.gz)m4_dnl
+m4_define(m4_ixa_wikipediadb_download_url, http://ixa2.si.ehu.es/ixa-pipes/models)m4_dnl
 m4_dnl
 m4_dnl
 m4_dnl

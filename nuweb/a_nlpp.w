@@ -87,8 +87,7 @@ Table~\ref{tab:modulelist}
                        & \dref{sec:nomcorefgraph}       & \href{m4_corefbasegit}{Github}      & m4_corefbase_commitname   & m4_ncorefscript   \\  
        \href{m4_evcorefscript}{Ev. coref}
                        & \dref{sec:eventcoref}                                & snapshot      &                           &  m4_evcorefscript  \\  
-@%       \hyperref[]{Opinion miner}
-@%                       & \verb|m4_opinisrc|   & None           &  m4_opiniscript   & \\  
+       \href{m4_opiniscript}{Opinion miner}                 &  \href{m4_opinigit}{Github}     &  m4_opi_commitname  &  m4_opiniscript   & \\  
        \hyperref[sec:framesrl]{Framenet SRL} 
                        & \dref{sec:framesrl}                                  & snapshot      &                            &  m4_fsrlscript   \\  
        \hyperref[sec:dbpedia-ner]{Dbpedia\_ner} 
@@ -230,6 +229,18 @@ Add the environment \verb|bin| directory to \verb|PATH|:
 @d set variables that point to the directory-structure @{@%
 export PATH=\$envbindir:$PATH
 @| PATH @}
+
+We will place libraries in the \texttt{env/lib} and place C include
+files in \texttt{env/include}. Therefore, set parameters to point to
+these directories.
+
+@d set variables that point to the directory-structure @{@%
+export CPPFLAGS="-I$envdir/include"
+export LD_LIBRARY_PATH=$envdir/lib:$LD_LIBRARY_PATH
+export LD_RUN_PATH=$envdir/lib:$LD_RUN_PATH
+@| CPPFLAGS LD_LIBRARY_PATH LD_RUN_PATH @}
+
+
 
 @% While setting variables, \emph{source} a scripts that sets variables
 @% for directories of which we do not yet know where they are, e.g.{}
@@ -466,6 +477,25 @@ done
 @%  exit 1
 @%fi
 @%@| @}
+
+\subsection{Installation from other sources}
+\label{sec:installation_other}
+
+Download modules or packages from other sources than Github or the
+snapshot when they are not already present in the ``socket'' with the
+folowing macro that accepts the http url and the name of the module or
+package as arguments.
+
+@d wget or have @{@%
+cd \$pipesocket
+if
+  [ ! -e @2 ]
+then
+  wget @1/@2
+fi
+
+@| @}
+
 
 
 
@@ -837,6 +867,7 @@ Install python packages:
 \begin{description}
 \item[lxml:]
 \item[pyyaml:] for coreference-graph
+\item[VUA\_pylib:] For the opinion-miner 
 \end{description}
 
 
@@ -844,6 +875,19 @@ Install python packages:
 pip install lxml
 pip install pyyaml
 @| lxml pyyaml @}
+
+@d install python packages @{@%
+cd $envdir/python
+if 
+  [ -d m4_pylibdir ]
+then
+  cd m4_pylibdir
+  git pull
+else
+   git clone m4_pylibgit
+fi
+@| @}
+
 
 
 
@@ -884,6 +928,7 @@ echo ... Treetagger
 echo ... Ticcutils and Timbl
 @< install the ticcutils utility @>
 @< install the timbl utility @>
+@< install other utilities @>
 @| @}
 
 Next, install the modules:
@@ -917,7 +962,11 @@ echo ... dbpedia-ner
 @< install the dbpedia-ner module @>
 echo ... nominal event
 @< install the nomevent module @>
+echo ... post-SRL
 @< install the post-SRL module @>
+echo ... opinion-miner
+@< install the opinion-miner @>
+
 echo Final
 @| @}
 
@@ -1224,16 +1273,16 @@ So, let's do that.
 
 @d install the Spotlight server @{@%
 @< get or have @(m4_spotlightball@) @>
+@< spotlight get or have @>
 @%mkdir -p m4_aspotlightdir
 cd \$envdir
 tar -xzf \$pipesocket/m4_spotlightball
 @% rm -rf \$pipesocket/m4_spotlightball
-cd \$envdir/spotlight
 @%cp m4_asnapshotroot/spotlight/m4_spotlightjar .
 @% wget m4_spotlight_download_url/m4_spotlightjar
-wget m4_spotlight_download_url/m4_spotlight_nl_model_ball
-tar -xzf m4_spotlight_nl_model_ball
-rm m4_spotlight_nl_model_ball
+cd \$envdir/spotlight
+tar -xzf \$pipesocket/m4_spotlight_nl_model_ball
+@%rm m4_spotlight_nl_model_ball
 @%wget m4_spotlight_download_url/m4_spotlight_en_model_ball
 @%tar -xzf m4_spotlight_en_model_ball
 @%rm m4_spotlight_en_model_ball
@@ -1257,6 +1306,14 @@ rm  m4_wikipediadb_tarball
 @| @}
 
 
+
+@d spotlight get or have @{@%
+@< wget or have @(m4_spotlight_download_url@,m4_spotlight_nl_model_ball@) @>
+@< wget or have @(m4_spotlight_download_url@,m4_spotlightball@) @>
+@< wget or have @(m4_ixa_wikipediadb_download_url@,m4_wikipediadb_tarball@) @>
+@| @}
+
+
 @d start the Spotlight server @{@%
 cd m4_aspotlightdir
 @% java  -Xmx8g -jar m4_spotlightjar nl http://localhost:m4_spotlight_nl_port/rest
@@ -1274,6 +1331,67 @@ then
   @< start the Spotlight server @>
   sleep 60
 fi
+@| @}
+
+
+\subsubsection{SVMLight and CRFsuite}
+\label{sec:SVMLight}
+
+\newcommand{\SVMLight}{\textsc{svml}ight}
+\newcommand{\CRFsuite}{\textsc{crf}suite}
+\newcommand{\libLBFGS}{lib\textsc{LFGFS}}
+
+Install \href{m4_SVMLight_url}{\SVMLight} and \href{m4_CRF_url}{\CRFsuite} on behalf of the
+opinion-miner. Install \href{m4_IBFSG_url}{\libLBFGS} because
+\CRFsuite{} needs that.
+
+
+The source-tarball for \SVMLight{} can be obtained from
+\url{m4_SVM_download_url}, but we have it in the
+snapshot. Installation is simple: unpack in a tempdir, make, move the
+new binary tom its place and remove the tempdir.
+
+@d install other utilities @{@%
+@< get or have @(m4_SVMLight_ball@) @>
+tempd=`mktemp -d -t svm.XXXXXX`
+cd $tempd
+tar -xzf \$pipesocket/m4_SVMLight_ball
+make
+cp m4_SVMLight_bin $envbindir/
+cd \$piperoot
+rm -rf $tempd
+@| @}
+
+
+The sourcecode for libLBFGS has been obtained from
+\url{m4_IBFGS_download_url} and placed in the snapshot-repo. The ball
+contains an \texttt{INSTALL} text that we follow below:
+
+@d install other utilities @{@%
+@< get or have @(m4_IBFGS_ball@) @>
+tempd=`mktemp -d -t libibfsg.XXXXXX`
+cd \$tempd
+tar -xzf \$pipesocket/m4_IBFGS_ball
+cd m4_IBFGS_dir
+./configure --prefix=\$envdir
+make
+make install
+cd \$piperoot
+rm -rf \$tempd
+@| @}
+
+@d install other utilities @{@%
+@< get or have @(m4_CRF_ball@) @>
+tempd=`mktemp -d -t crf.XXXXXX`
+cd $tempd
+tar -xzf \$pipesocket/crfsuite-0.12.tar.gz
+cd m4_CRF_dir
+./configure --prefix=\$envdir
+make
+make install
+cd \$piperoot
+rm -rf \$tempd
+
 @| @}
 
 
@@ -1960,14 +2078,12 @@ repository. That is a different jar than the jar that we use to start Spotlight.
 
 @d put spotlight jar in the Maven repository @{@%
 echo Put Spotlight jar in the Maven repository.
+@< wget or have @(m4_spotlight_download_url@,m4_simple_spotlightjar@) @>
+@< wget or have @(m4_spotlight_download_url@,m4_spotlight_nl_model_ball@) @>
 tempdir=`mktemp -d -t simplespot.XXXXXX`
 cd $tempdir
-wget m4_spotlight_download_url/m4_simple_spotlightjar
-wget m4_spotlight_download_url/m4_spotlight_nl_model_ball
-tar -xzf m4_spotlight_nl_model_ball
-@% wget m4_spotlight_download_url/m4_spotlight_en_model
-@% tar -xzf m4_spotlight_en_model
-MVN_SPOTLIGHT_OPTIONS="-Dfile=m4_simple_spotlightjar"
+tar -xzf \$pipesocket/m4_spotlight_nl_model_ball
+MVN_SPOTLIGHT_OPTIONS="-Dfile=\$pipesocket/m4_simple_spotlightjar"
 MVN_SPOTLIGHT_OPTIONS="$MVN_SPOTLIGHT_OPTIONS -DgroupId=ixa"
 MVN_SPOTLIGHT_OPTIONS="$MVN_SPOTLIGHT_OPTIONS -DartifactId=dbpedia-spotlight"
 MVN_SPOTLIGHT_OPTIONS="$MVN_SPOTLIGHT_OPTIONS -Dversion=m4_spotlightjarversion"
@@ -2008,7 +2124,7 @@ cat | java -Xmx1000m -jar \$jarsdir/m4_nedjar  -p 2060 -e candidates -i \$envdir
 \label{sec:onto}
 
 We do not yet have a source-repository of the Ontotagger module. Therefore,
-install from a snapshot (\texttt{m4_ontotarball}).
+install from a snapshot (\verb|m4_ontotarball|).
 
 \paragraph{Module}
 \label{sec:ontotagger-module}
@@ -2017,8 +2133,9 @@ install from a snapshot (\texttt{m4_ontotarball}).
 @< get or have @(m4_ontotarball@) @>
 @%cp -r m4_asnapshotroot/m4_ontodir \$modulesdir/
 cd \$modulesdir
+rm -rf m4_ontodir
 tar -xzf \$pipesocket/m4_ontotarball
-rm \$pipesocket/m4_ontotarball
+@%rm \$pipesocket/m4_ontotarball
 chmod -R o+r \$modulesdir/m4_ontodir
 @| @}
 
@@ -2563,7 +2680,7 @@ cat | iconv -f ISO8859-1 -t UTF-8 | $MODDIR/dbpedia_ner.py -url http://localhost
 @| @}
 
 
-\subsection{Nominal events}
+\subsubsection{Nominal events}
 \label{sec:nomevents}
 
 The module ``postprocessing-nl'' adds nominal events to the srl
@@ -2578,11 +2695,12 @@ versions the jar from the ontotagger module can be used for this module.
 @d install the nomevent module @{@%
 @< get or have @(m4_nomeventball@) @>
 cd \$modulesdir
+rm -rf m4_nomeventdir
 unzip -q \$pipesocket/m4_nomeventball
 @| @}
 
 \paragraph{Script}
-\label{par:dbpnerscript}
+\label{par:nomeventscript}
 
 @o m4_bindir/m4_nomeventscript @{@%
 #!/bin/bash
@@ -2597,8 +2715,138 @@ JAVAMODULE=eu.kyotoproject.main.NominalEventCoreference
 cat | iconv -f ISO8859-1 -t UTF-8 | java -Xmx812m -cp $JAR $JAVAMODULE --framenet-lu $RESOURCESDIR/nl-luIndex.xml
 @| @}
 
+\subsubsection{Opinion-miner}
+\label{sec:openiminer}
+
+The opinion-miner can be obtained from
+\href{https://github.com/cltl/opinion_miner_deluxe}{Github}. However,
+in order to use it, the following must be done:
+
+\begin{itemize}
+\item The script \verb|classify_kaf_naf_file.py| contains absolute
+  paths that must be repaired.
+\item Models must be supplied. They are available in the snapshot and
+  they will be placed in subdirectory \verb|final_models|. 
+\item The file \verb|final_models/nl/news_cfg/config.cfg| contains
+  absolute paths that must be corrected.
+\item A ``subjectivity detector'' module must be supplied. This is in
+  the snapshot as well.
+\item The file \verb|subjectivity_detector/lib/path_finder.py|
+  contains absolute paths that must be corrected.
+\end{itemize}
+
+The installation works without problems, but the opinion-miner causes
+the test-file to shrink and therefore I do not really trust it yet.
+
+Download the opinion-miner from Github and install the models
+in a subdirectory.
+
+@d install the opinion-miner @{@%
+@< install the opinion-miner module @>
+@< install the opinion-miner models @>
+@< install the subjectivity-detector @>
+@| @}
+
+@d install the opinion-miner module  @{@%
+MODNAM=m4_opinidir
+DIRN=m4_opinidir
+GITU=m4_opinigit
+GITC=m4_opi_commitname
+@< install from github @>
+@< repair paths in classify\_kaf\_naf\_file.py @>
+@| @}
 
 
+
+@d repair paths in classify\_kaf\_naf\_file.py @{@%
+repascript=\$modulesdir/m4_opinidir/classify_kaf_naf_file.py
+oldpath='\/home\/izquierdo\/cltl_repos\/opinion_miner_deluxe'
+newpath=\$envdir/python
+newpathsed=`echo \$newpath | sed 's/\//\\\\\\//g'`
+tempdir=`mktemp -d -t temp.XXXXXX`
+cd \$tempdir
+mv \$repascript ./tempfil
+sed "s/\$oldpath/\$newpathsed/g" ./tempfil >\$repascript
+cd \$piperoot
+@% rm -rf \$tempdir 
+@| @}
+
+
+
+
+@d install the opinion-miner models @{@%
+@< get or have @(m4_opimodelsball@) @>
+cd \$modulesdir/m4_opinidir
+tar -xzf \$pipesocket/m4_opimodelsball
+@< repair opinion-miner-models config-file @>
+
+
+@| @}
+
+File \verb|m4_opimodelsdir/nl/news_cfg1/config.cfg| contains absolute
+paths that must be repaired for the following variables that are
+defined in the file:
+\begin{description}
+\item[path\_to\_binary:] Path of the \verb|crfsuite| binary.
+\item[path\_to\_binary\_classify:] Path to the \verb|SVMlight| classify binary 
+\end{description}
+
+
+
+@d repair opinion-miner-models config-file @{@%
+opinion_miner_models_config_file=\$modulesdir/m4_opinidir/m4_opimodelsdir/nl/news_cfg1/config.cfg 
+tempdir=`mktemp -d -t opconftemp.XXXXXX`
+cd $tempdir
+cat <<EOF >opocon.awk
+/^path_to_binary_classify/ { print "path_to_binary_classify = m4_aenvbindir/svm_classify"; next}
+/^path_to_binary / { print "path_to_binary = m4_aenvbindir/crfsuite"; next}
+{print}
+EOF
+mv \$opinion_miner_models_config_file ./old.config.cfg
+gawk -f opocon.awk ./old.config.cfg > \$opinion_miner_models_config_file
+cd \$piperoot
+rm -rf $tempdir
+@| @}
+
+@% @d install the subjectivity-detector @{@%
+@% @< get or have @(m4_subj_det_ball@) @>
+@% cd \$modulesdir/m4_opinidir
+@% tar -xzf \$pipesocket/m4_subj_det_ball
+@% @< repair subjectivity_detector pathfinder @>
+@% @| @}
+
+@d install the subjectivity-detector @{@%
+@< get or have @(m4_subj_det_ball@) @>
+cd \$envdir/python
+tar -xzf \$pipesocket/m4_subj_det_ball
+@< repair subjectivity\_detector pathfinder @>
+@| @}
+
+
+@d repair subjectivity\_detector pathfinder  @{@%
+pathfinder=m4_subj_pathfinderpath
+cat <<EOF  >\$pathfinder
+def find_svmlight_learn():
+    path = "\$envbindir/svm_learn"
+    return path
+
+def find_svmlight_classify():
+    path = "\$envbindir/svm_classify"
+    return path
+EOF
+@| @}
+
+
+
+\paragraph{Script}
+
+@o m4_bindir/m4_opiniscript @{@%
+#!/bin/bash
+source m4_aenvbindir/progenv
+MODDIR=\$modulesdir/m4_opinidir
+datamodel=\$MODDIR/final_models/nl/news_cfg1
+cat | python $MODDIR/classify_kaf_naf_file.py -m $datamodel
+@| @}
 
 
 
@@ -2633,6 +2881,7 @@ cat $TESTDIR/test.ecrf.naf   | $BIND/m4_framesrlscript      > $TESTDIR/test.fsrl
 cat $TESTDIR/test.fsrl.naf   | $BIND/m4_dbpnerscript        > $TESTDIR/test.dbpner.naf
 cat $TESTDIR/test.dbpner.naf | $BIND/m4_nomeventscript      > $TESTDIR/test.nomev.naf
 cat $TESTDIR/test.nomev.naf  | $BIND/m4_postsrlscript       > $TESTDIR/test.psrl.naf
+cat $TESTDIR/test.psrl.naf   | $BIND/m4_opiniscript         > $TESTDIR/test.opi.naf
 @| @}
 
 @%@d make scripts executable @{@%
@@ -3566,8 +3815,8 @@ after a transplantation.
 #!/bin/bash
 LOGLEVEL=1
 @< set variables that point to the directory-structure @>
-@< set paths after transplantation @>
-@< re-install modules after the transplantation @>
+@% @< set paths after transplantation @>
+@% @< re-install modules after the transplantation @>
 
 @| @}
 
