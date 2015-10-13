@@ -1292,7 +1292,7 @@ Module VUA-pylib is needed for the opinion-miner. Install it in the Python libra
 
 @d install VUA-pylib @{@%
 cd \$envdir/python
-git clone m4_vuapylibdir
+git clone m4_vuapylibgit
 @| @}
 
 
