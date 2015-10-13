@@ -38,6 +38,8 @@ m4_define(m4_aenvbindir, m4_aenvdir`'/bin)m4_dnl     Program environment
 m4_define(m4_envbindir, m4_envdir`'/bin)m4_dnl 
 m4_define(m4_aenvlibdir, m4_aenvdir`'/lib)m4_dnl     Program environment
 m4_define(m4_envlibdir, m4_envdir`'/lib)m4_dnl 
+m4_define(m4_aenvetcdir, m4_aenvdir`'/etc)m4_dnl 
+m4_define(m4_envetcdir, m4_envdir`'/etc)m4_dnl 
 m4_dnl     m4_define(m4_usrlocaldir, m4_envdir`/usrlocal')m4_dnl     
 m4_dnl     m4_define(m4_ausrlocaldir, m4_aenvdir`/usrlocal')m4_dnl
 m4_dnl     m4_define(m4_usrlocalbindir, m4_usrlocaldir/bin)m4_dnl
@@ -185,7 +187,7 @@ m4_dnl
 m4_dnl ONTO
 m4_define(m4_ontodir, vua-ontotagger-v1.0)m4_dnl  Subdir. of modules
 m4_define(m4_ontoscript, onto)m4_dnl
-m4_define(m4_ontotarball, vua-ontotagger-v1.0.tar.gz)m4_dnl  Subdir. of modules
+m4_define(m4_ontotarball, 20150724_vua-ontotagger-v1.0.tar.gz)m4_dnl  Subdir. of modules
 m4_dnl
 m4_dnl Framenet SRL
 m4_define(m4_ontodir, vua-ontotagger-v1.0)m4_dnl  Subdir. of modules
@@ -247,12 +249,19 @@ m4_define(m4_evcorefscript, evcoref)m4_dnl
 m4_define(m4_evcorefjar, EventCoreference-1.0-SNAPSHOT-jar-with-dependencies.jar)m4_dnl
 m4_dnl
 m4_dnl Ev. coref
-
 m4_dnl
 m4_dnl Opinion-miner
-m4_define(m4_opinisrc, /dev/null )m4_dnl  
-m4_define(m4_opinidir, opinimin)m4_dnl  
+m4_define(m4_opinigit, https://github.com/cltl/opinion_miner_deluxe.git )m4_dnl  
+m4_dnl m4_define(m4_opinidir, opinion_miner_de_luxe)m4_dnl  
 m4_define(m4_opiniscript, opinimin)m4_dnl
+m4_define(m4_opini_trained_models_ball, 20150730_opimin_final_models.tgz)m4_dnl
+m4_define(m4_opini_commitname, b559d303da0c2da17f97d3fa41960d7fa3e1595b)m4_dnl
+m4_define(m4_opini_nl_conf, opini_nl.cfg)m4_dnl
+m4_dnl
+m4_dnl Opinion-miner, temporary solution (20151013)
+m4_define(m4_opini_temp_ball, 20151012VUA-opinion-miner.tgz)m4_dnl
+m4_define(m4_opinidir, VUA-opinion-miner)m4_dnl
+m4_define(m4_opini_dutchmodel_subdir, final_models/nl/news_cfg1)m4_dnl
 m4_dnl
 m4_dnl lu2synset
 m4_define(m4_lu2synball, lu2synset.tgz)m4_dnl  
@@ -309,6 +318,26 @@ m4_dnl KafNafParserPy
 m4_define(m4_kafnafversion, `feb 1, 2015')m4_dnl
 m4_define(m4_kafnafgit, https://github.com/cltl/KafNafParserPy.git)m4_dnl
 m4_define(m4_kafnafdir, python/KafNafParserPy)m4_dnl
+m4_dnl
+m4_dnl VUA-pylib
+m4_define(m4_vuapylibgit, https://github.com/cltl/VUA_pylib.git)m4_dnl
+m4_define(m4_vuapylibdir, python/VUA_pylib)m4_dnl
+m4_dnl
+m4_dnl SVMlight
+m4_define(m4_SVMlightsite, http://svmlight.joachims.org/)m4_dnl
+m4_define(m4_SVMlightball, svm_light.tar.gz)m4_dnl
+m4_define(m4_SVMlightball_url, http://download.joachims.org/svm_light/current/`'m4_SVMlightball)m4_dnl
+m4_define(m4_SVMlightdir, SVMlight)m4_dnl
+m4_dnl
+m4_dnl CRFsuite
+m4_define(m4_CRFsuitesite, http://svmlight.joachims.org/)m4_dnl
+m4_define(m4_CRFsuiteball, crfsuite-0.12.tar.gz)m4_dnl
+m4_define(m4_CRFsuiteball_url, https://github.com/downloads/chokkan/crfsuite/`'m4_CRFsuiteball)m4_dnl
+m4_define(m4_CRFsuitedir, crfsuite-0.12)m4_dnl
+m4_dnl
+m4_dnl liblblbfgs
+m4_define(m4_liblblbfgs_git, https://github.com/chokkan/liblbfgs.git)m4_dnl
+m4_define(m4_liblblbfgs_ball, )m4_dnl
 m4_dnl
 m4_dnl Treetagger
 m4_define(m4_treetag_base_url, `http://www.cis.uni-muenchen.de/%7Eschmid/tools/TreeTagger/data/')m4_dnl
