@@ -99,7 +99,7 @@ nlpp.pdf : nlpp.w $(W2PDF)  $(PDF_FIG_NAMES) $(PDFT_NAMES)
 
 htm : $(htmldir) $(htmltarget)
 
-DIRS = ../modules ../bin ../env/bin ../env/lib ../env/java ../env/java/jars ../env/apache-maven-3.0.5 ../env/python ../nuweb/bin 
+DIRS = ../modules ../bin ../env/bin ../env/lib ../env/etc ../env/java ../env/java/jars ../env/apache-maven-3.0.5 ../env/python ../nuweb/bin 
 
 $(DIRS) : 
 	$(MKDIR) $@

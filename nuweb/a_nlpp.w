@@ -2678,8 +2678,6 @@ miner from the English \textsc{nwr} pipeline.
 @< get or have @(m4_opini_temp_ball@) @>
 cd m4_amoddir
 tar -xzf m4_asocket/m4_opini_temp_ball
-cd m4_opinidir
-cp m4_aenvetcdir/m4_opini_nl_conf m4_opini_dutchmodel_subdir
 @| @}
 
 The opinion-miner needs a configuration file that is located in the
@@ -2702,7 +2700,8 @@ path_to_binary_classify = m4_aenvbindir/svm_classify
 @| @}
 
 @d install the opinion-miner @{@%
-cp m4_aenvetcdir/m4_opini_nl_conf \$modulesdir/m4_opinidir/m4_opini_dutchmodel_subdir
+cd m4_opinidir
+cp m4_aenvetcdir/m4_opini_nl_conf \$modulesdir/m4_opinidir/m4_opini_dutchmodel_subdir/config.cfg
 @| @}
 
 
@@ -2773,20 +2772,21 @@ TESTDIR=$ROOT/test
 BIND=$ROOT/bin
 mkdir -p $TESTDIR
 cd $TESTDIR
-cat $ROOT/nuweb/testin.naf   | $BIND/tok                    > $TESTDIR/test.tok.naf
-cat test.tok.naf             | $BIND/mor                    > $TESTDIR/test.mor.naf
+cat \$ROOT/nuweb/testin.naf    | \$BIND/tok                    > \$TESTDIR/test.tok.naf
+cat test.tok.naf              | \$BIND/mor                    > \$TESTDIR/test.mor.naf
 @% cat test.mor.naf | $BIND/nerc > $TESTDIR/test.nerc.naf
-cat test.mor.naf             | $BIND/m4_nerc_conll02_script > $TESTDIR/test.nerc.naf
-cat $TESTDIR/test.nerc.naf   | $BIND/wsd                    > $TESTDIR/test.wsd.naf
-cat $TESTDIR/test.wsd.naf    | $BIND/ned                    > $TESTDIR/test.ned.naf
-cat $TESTDIR/test.ned.naf    | $BIND/heideltime             > $TESTDIR/test.times.naf
-cat $TESTDIR/test.times.naf  | $BIND/onto                   > $TESTDIR/test.onto.naf
-cat $TESTDIR/test.onto.naf   | $BIND/srl                    > $TESTDIR/test.srl.naf
-cat $TESTDIR/test.srl.naf    | $BIND/m4_evcorefscript       > $TESTDIR/test.ecrf.naf
-cat $TESTDIR/test.ecrf.naf   | $BIND/m4_framesrlscript      > $TESTDIR/test.fsrl.naf
-cat $TESTDIR/test.fsrl.naf   | $BIND/m4_dbpnerscript        > $TESTDIR/test.dbpner.naf
-cat $TESTDIR/test.dbpner.naf | $BIND/m4_nomeventscript      > $TESTDIR/test.nomev.naf
-cat $TESTDIR/test.psrl.naf   | $BIND/m4_opiniscript         > $TESTDIR/test.opin.naf
+cat test.mor.naf              | \$BIND/m4_nerc_conll02_script > \$TESTDIR/test.nerc.naf
+cat \$TESTDIR/test.nerc.naf    | \$BIND/wsd                    > \$TESTDIR/test.wsd.naf
+cat \$TESTDIR/test.wsd.naf     | \$BIND/ned                    > \$TESTDIR/test.ned.naf
+cat \$TESTDIR/test.ned.naf     | \$BIND/heideltime             > \$TESTDIR/test.times.naf
+cat \$TESTDIR/test.times.naf   | \$BIND/onto                   > \$TESTDIR/test.onto.naf
+cat \$TESTDIR/test.onto.naf    | \$BIND/srl                    > \$TESTDIR/test.srl.naf
+cat \$TESTDIR/test.srl.naf     | \$BIND/m4_evcorefscript       > \$TESTDIR/test.ecrf.naf
+cat \$TESTDIR/test.ecrf.naf    | \$BIND/m4_framesrlscript      > \$TESTDIR/test.fsrl.naf
+cat \$TESTDIR/test.fsrl.naf    | \$BIND/m4_dbpnerscript        > \$TESTDIR/test.dbpner.naf
+cat \$TESTDIR/test.dbpner.naf  | \$BIND/m4_nomeventscript      > \$TESTDIR/test.nomev.naf
+cat \$TESTDIR/test.nomev.naf   | \$BIND/postsrl                > \$TESTDIR/test.psrl.naf
+cat \$TESTDIR/test.psrl.naf    | \$BIND/m4_opiniscript         > \$TESTDIR/test.opin.naf
 @| @}
 
 @%@d make scripts executable @{@%
