@@ -87,8 +87,8 @@ Table~\ref{tab:modulelist}
                        & \dref{sec:nomcorefgraph}       & \href{m4_corefbasegit}{Github}      & m4_corefbase_commitname   & m4_ncorefscript   \\  
        \href{m4_evcorefscript}{Ev. coref}
                        & \dref{sec:eventcoref}                                & snapshot      &                           &  m4_evcorefscript  \\  
-@%       \hyperref[]{Opinion miner}
-@%                       & \verb|m4_opinisrc|   & None           &  m4_opiniscript   & \\  
+       \hyperref[]{Opinion miner}
+                       & \dref{sec:opinimin}   & \href{m4_opinigit}{Github} &           &  m4_opiniscript   & \\  
        \hyperref[sec:framesrl]{Framenet SRL} 
                        & \dref{sec:framesrl}                                  & snapshot      &                            &  m4_fsrlscript   \\  
        \hyperref[sec:dbpedia-ner]{Dbpedia\_ner} 
@@ -198,6 +198,7 @@ The directories have the follosing functions.
 @d directories to create @{m4_moddir @| @}
 @d directories to create @{m4_bindir m4_envbindir @| @}
 @d directories to create @{m4_envlibdir @| @}
+@d directories to create @{m4_envetcdir @| @}
 @%@d directories to create @{m4_envdir/python @| @}
 
 The following macro defines variable \verb|piperoot| and makes it to
@@ -884,6 +885,11 @@ echo ... Treetagger
 echo ... Ticcutils and Timbl
 @< install the ticcutils utility @>
 @< install the timbl utility @>
+echo ... VUA-pylib, SVMlight, CRFsuite
+@< install VUA-pylib @>
+@< install SVMLight @>
+@< install CRFsuite @>
+
 @| @}
 
 Next, install the modules:
@@ -918,6 +924,8 @@ echo ... dbpedia-ner
 echo ... nominal event
 @< install the nomevent module @>
 @< install the post-SRL module @>
+@< install the opinion-miner @>
+
 echo Final
 @| @}
 
@@ -1274,6 +1282,73 @@ then
   @< start the Spotlight server @>
   sleep 60
 fi
+@| @}
+
+
+\subsubsection{VUA-pylib}
+\label{sec:vua-pylib}
+
+Module VUA-pylib is needed for the opinion-miner. Install it in the Python library
+
+@d install VUA-pylib @{@%
+cd \$envdir/python
+git clone m4_vuapylibgit
+@| @}
+
+
+\subsubsection{SVMLight}
+\label{sec:svmlight}
+
+SVMlight supplies a Support Vector Machine. It is used by the
+opinion-miner. SVMlight can be obtaied from 
+\href{m4_SVMlightsite}{the site} where it is documented.
+
+Installation goes like this:
+
+@d install SVMLight @{@%
+tempdir=`mktemp -d -t SVMlight.XXXXXX`
+cd $tempdir
+wget m4_SVMlightball_url
+tar -xzf m4_SVMlightball
+make all
+cp svm_classify m4_aenvbindir/
+cp svm_learn m4_aenvbindir/
+cd m4_aprojroot
+rm -rf \$tempdir
+@| @}
+
+
+\subsubsection{CRFsuite}
+\label{sec:crfsuite}
+
+CRFsuite is an implementation of Conditional Random Fields
+(\textsc{crf}). 
+
+@d install liblblbfgs @{@%
+tempdir=`mktemp -d -t liblblbfgs.XXXXXX`
+cd \$tempdir
+git clone m4_liblblbfgs_git
+cd lblblfgs
+./autogen.sh
+./configure --prefix=\$envdir
+make
+make install
+cd m4_aprojroot
+rm -rf \$tempdir
+@| @}
+
+@d install CRFsuite @{@%
+@< install liblblbfgs @>
+tempdir=`mktemp -d -t crfsuite.XXXXXX`
+cd \$tempdir
+wget m4_CRFsuiteball_url
+tar -xzf m4_CRFsuiteball
+cd m4_CRFsuitedir
+./configure --prefix=\$envdir
+make
+make install
+cd m4_aprojroot
+rm -rf \$tempdir
 @| @}
 
 
@@ -2547,7 +2622,7 @@ cat | iconv -f ISO8859-1 -t UTF-8 | $MODDIR/dbpedia_ner.py -url http://localhost
 @| @}
 
 
-\subsection{Nominal events}
+\subsubsection{Nominal events}
 \label{sec:nomevents}
 
 The module ``postprocessing-nl'' adds nominal events to the srl
@@ -2582,8 +2657,103 @@ cat | iconv -f ISO8859-1 -t UTF-8 | java -Xmx812m -cp $JAR $JAVAMODULE --framene
 @| @}
 
 
+\subsubsection{Opinion miner}
+\label{sec:opinimin}
+
+To run the opinion-miner, the following things are needed:
+
+\begin{itemize}
+\item SVMlight
+\item crfsuite
+\item vua-pylib
+\end{itemize}
+
+\paragraph{Module}
+
+The module can be cloned from Github. However, currently there are
+problems with the Github installation. Therefore we borrow the opinion
+miner from the English \textsc{nwr} pipeline.
+
+@d install the opinion-miner @{@%
+@< get or have @(m4_opini_temp_ball@) @>
+cd m4_amoddir
+tar -xzf m4_asocket/m4_opini_temp_ball
+@| @}
+
+The opinion-miner needs a configuration file that is located in the
+directory where the model-data resides. In this pipeline we will use
+model-data derived from news-articles. An alternative model, derived
+from hotel evaluations can also be used. Put the configuration file in
+the \texttt{etc} subdir and copy it to its proper location during the
+installation of the opinion-miner.
+
+@o m4_envetcdir/m4_opini_nl_conf @{@%
+[general]
+output_folder = m4_amoddir/m4_opinidir/final_models/nl/news_cfg1
+
+[crfsuite]
+path_to_binary = m4_aenvbindir/crfsuite
+
+[svmlight]
+path_to_binary_learn = m4_aenvbindir/svm_learn
+path_to_binary_classify = m4_aenvbindir/svm_classify
+@| @}
+
+@d install the opinion-miner @{@%
+cd m4_opinidir
+cp m4_aenvetcdir/m4_opini_nl_conf \$modulesdir/m4_opinidir/m4_opini_dutchmodel_subdir/config.cfg
+@| @}
 
 
+
+@% It must be completed with
+@%trained models and a configuration file that tells where things
+@%can be found.
+@%
+@%@d install the opinion-miner @{@%
+@%MODNAM=opiniminer
+@%DIRN=m4_opinidir
+@%GITU=m4_opinigit
+@%GITC=m4_opini_commitname
+@%@< install from github @>
+@%cd m4_amoddir/m4_opinidir
+@%@< get or have @(m4_opini_trained_models_ball@) @>
+@%tar -xzf m4_asocket/m4_opini_trained_models_ball
+@%
+@%@| @}
+@%
+@% @o m4_envetcdir/m4_opini_nl_conf @{@%
+@% [general]
+@% output_folder = m4_amoddir/m4_opinidir/final_models/nl/news_cfg1
+@% 
+@% 
+@% [crfsuite]
+@% path_to_binary = m4_aenvbindir/crfsuite
+@% 
+@% [svmlight]
+@% path_to_binary_learn = m4_aenvbindir/svm_learn
+@% path_to_binary_classify = m4_aenvbindir/svm_classify
+@% @| @}
+
+\paragraph{Script}
+
+@o m4_bindir/m4_opiniscript @{@%
+#!/bin/bash
+source m4_aenvbindir/progenv
+rootDir=\$modulesdir/m4_opinidir
+cd $rootDir
+export PATH=$PATH:.
+python classify_kaf_naf_file.py -m \$rootDir/final_models/nl/news_cfg1
+
+
+@| @}
+
+@% @o m4_bindir/m4_opiniscript @{@%
+@% #!/bin/bash
+@% source m4_aenvbindir/progenv
+@% cd m4_amoddir/m4_opinidir
+@% python classify_kaf_naf_file.py m4_aenvetcdir/m4_opini_nl_conf
+@% @| @}
 
 
 \section{Utilities}
@@ -2602,20 +2772,21 @@ TESTDIR=$ROOT/test
 BIND=$ROOT/bin
 mkdir -p $TESTDIR
 cd $TESTDIR
-cat $ROOT/nuweb/testin.naf   | $BIND/tok                    > $TESTDIR/test.tok.naf
-cat test.tok.naf             | $BIND/mor                    > $TESTDIR/test.mor.naf
+cat \$ROOT/nuweb/testin.naf    | \$BIND/tok                    > \$TESTDIR/test.tok.naf
+cat test.tok.naf              | \$BIND/mor                    > \$TESTDIR/test.mor.naf
 @% cat test.mor.naf | $BIND/nerc > $TESTDIR/test.nerc.naf
-cat test.mor.naf             | $BIND/m4_nerc_conll02_script > $TESTDIR/test.nerc.naf
-cat $TESTDIR/test.nerc.naf   | $BIND/wsd                    > $TESTDIR/test.wsd.naf
-cat $TESTDIR/test.wsd.naf    | $BIND/ned                    > $TESTDIR/test.ned.naf
-cat $TESTDIR/test.ned.naf    | $BIND/heideltime             > $TESTDIR/test.times.naf
-cat $TESTDIR/test.times.naf  | $BIND/onto                   > $TESTDIR/test.onto.naf
-cat $TESTDIR/test.onto.naf   | $BIND/srl                    > $TESTDIR/test.srl.naf
-cat $TESTDIR/test.srl.naf    | $BIND/m4_evcorefscript       > $TESTDIR/test.ecrf.naf
-cat $TESTDIR/test.ecrf.naf   | $BIND/m4_framesrlscript      > $TESTDIR/test.fsrl.naf
-cat $TESTDIR/test.fsrl.naf   | $BIND/m4_dbpnerscript        > $TESTDIR/test.dbpner.naf
-cat $TESTDIR/test.dbpner.naf | $BIND/m4_nomeventscript      > $TESTDIR/test.nomev.naf
-cat $TESTDIR/test.nomev.naf  | $BIND/m4_postsrlscript       > $TESTDIR/test.psrl.naf
+cat test.mor.naf              | \$BIND/m4_nerc_conll02_script > \$TESTDIR/test.nerc.naf
+cat \$TESTDIR/test.nerc.naf    | \$BIND/wsd                    > \$TESTDIR/test.wsd.naf
+cat \$TESTDIR/test.wsd.naf     | \$BIND/ned                    > \$TESTDIR/test.ned.naf
+cat \$TESTDIR/test.ned.naf     | \$BIND/heideltime             > \$TESTDIR/test.times.naf
+cat \$TESTDIR/test.times.naf   | \$BIND/onto                   > \$TESTDIR/test.onto.naf
+cat \$TESTDIR/test.onto.naf    | \$BIND/srl                    > \$TESTDIR/test.srl.naf
+cat \$TESTDIR/test.srl.naf     | \$BIND/m4_evcorefscript       > \$TESTDIR/test.ecrf.naf
+cat \$TESTDIR/test.ecrf.naf    | \$BIND/m4_framesrlscript      > \$TESTDIR/test.fsrl.naf
+cat \$TESTDIR/test.fsrl.naf    | \$BIND/m4_dbpnerscript        > \$TESTDIR/test.dbpner.naf
+cat \$TESTDIR/test.dbpner.naf  | \$BIND/m4_nomeventscript      > \$TESTDIR/test.nomev.naf
+cat \$TESTDIR/test.nomev.naf   | \$BIND/postsrl                > \$TESTDIR/test.psrl.naf
+cat \$TESTDIR/test.psrl.naf    | \$BIND/m4_opiniscript         > \$TESTDIR/test.opin.naf
 @| @}
 
 @%@d make scripts executable @{@%
