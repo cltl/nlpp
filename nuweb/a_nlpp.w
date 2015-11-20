@@ -411,7 +411,7 @@ while
 do
 @%   @< have an SSH key or die @>
   cd \$pipesocket
-  scp -i "m4_snapshotkeyfilename" m4_repo_user<!!>@@<!!>m4_repo_url:m4_repo_path/@1 .
+  scp -i "m4_snapshotkeyfile" m4_repo_user<!!>@@<!!>m4_repo_url:m4_repo_path/@1 .
   if
     [ $? -gt 0 ]
   then
@@ -909,8 +909,8 @@ echo ... WSD
 echo ... Ontotagger
 @< install the onto module @>
 echo ... Heideltime
-@% @< install the heideltime module @>
-@< install the new heideltime module @>
+@< install the heideltime module @>
+@% @< install the new heideltime module @>
 echo ... SRL
 @< install the srl module @>
 echo ... NED
@@ -2221,12 +2221,82 @@ rm -rf \$TMPFIL
 \subsubsection{Heideltime}
 \label{sec:heideltime}
 
-@% \paragraph{Module}
-@% \label{sec:heideltimmodule}
-@% 
-@% Heideltime uses treetagger. It expects to find the location of
-@% treetagger in a variable \texttt{TreetaggerHome} in config-file
-@% \verb|config.props|.
+\paragraph{Module}
+\label{sec:heideltimmodule}
+
+The code for Heideltime can be found in
+\href{https://github.com/HeidelTime/heideltime}{Github}. However, we
+use a compiled Heideltime Jar, compiled by Antske Fokkens, because
+some bugs have been repaired in that version.
+
+Use Heideltime via a wrapper, \texttt{ixa-pipe-time}, obtained from
+\href{https://github.com/ixa-ehu/ixa-pipe-time}{Github}.
+
+Heideltime uses treetagger. It expects to find the location of
+treetagger in a variable \texttt{TreetaggerHome} in config-file
+\verb|config.props|.
+
+
+
+
+@d install the heideltime module @{@%
+moduledir=m4_amoddir/m4_heideldir
+@< clone the heideltime wrapper @>
+@< put Antske's material in the heideltime wrapper @>
+@< compile the heideltime wrapper @>
+@| @}
+
+
+@d clone the heideltime wrapper @{@%
+MODNAM=heideltime
+DIRN=m4_heideldir
+GITU=m4_heidelgit
+GITC=m4_heidel_commitname
+@< install from github @(m4_heidelndir@) @>
+mkdir $moduledir/lib
+@| @}
+
+In the wrapper we need the following extra material:
+\begin{itemize}
+\item A debugged version of the Heidelberg jar.
+\item A configuration file \texttt{config.props}, although it does not seem to be actually used.
+\item Another configuration file: \texttt{alpino-to-treetagger.csv}
+\end{itemize}
+The extra material has been provided by Antske Fokkens.
+
+
+@d put Antske's material in the heideltime wrapper @{@%
+@< get or have @(m4_heidelantske@) @>
+cd $modulesdir/$DIRN
+tar -xzf m4_asocket/m4_heidelantske
+mv antske_heideltime_stuff/m4_heidelstandalonejar lib/
+mv antske_heideltime_stuff/config.props .
+mv antske_heideltime_stuff/alpino-to-treetagger.csv .
+rm -rf antske_heideltime_stuff
+@| @}
+
+Compile the Heideltime wrapper according to the \href{m4_heidelhtml}{instruction} on Github.
+
+@d compile the heideltime wrapper @{@%
+@< get jvntextpro-2.0.jar @>
+@< activate the install-to-project-repo utility @>
+cd m4_amoddir/$DIRN
+mvn clean install
+@| @}
+
+@d get jvntextpro-2.0.jar @{@%
+cd  m4_amoddir/$DIRN/lib
+wget http://ixa2.si.ehu.es/%7Ejibalari/jvntextpro-2.0.jar
+@| @}
+
+@d activate the install-to-project-repo utility @{@%
+cd m4_amoddir/$DIRN/
+git clone git@@github.com:carchrae/install-to-project-repo.git
+mv install-to-project-repo/install-to-project-repo.py .
+rm -rf install-to-project-repo
+python ./install-to-project-repo.py
+@| @}
+
 @% 
 @% One of the elements of Heideltime (the jar
 @% \verb|de.unihd.dbs.heideltime.standalone.jar| in
@@ -2234,11 +2304,6 @@ rm -rf \$TMPFIL
 @% Github version is outdated. Therefore, get the latest version from the snapshot.
 @% 
 @% @d install the heideltime module @{@%
-@% MODNAM=heideltime
-@% DIRN=m4_heideldir
-@% GITU=m4_heidelgit
-@% GITC=m4_heidel_commitname
-@% @< install from github @>
 @% @< update the heideltime jar @>
 @% @< adapt heideltime's config.props @>
 @% @| @}
@@ -2270,94 +2335,94 @@ rm -rf \$TMPFIL
 @% @< adapt heideltime's config.props @>
 @% @| @}
 
-\paragraph{New module}
-\label{sec:heideltimenewmodule}
-
-Heideltime has been updated. In princple the Heideltim module ought to be installed as described in the follosing message from Itziar Aldabe:
-
-\begin{verbatim}
-
-I managed to get everything ready, except for the README in github. I'll update it next
-week but I think I can give you some simple steps that should be enough to correctly
-use the module 
-
-1.- Download the code: git clone https://github.com/ixa-ehu/ixa-pipe-time.git
-
-2.- In the ixa-pipe-time create the lib directory
-
-3.- Download the HeidelTimeStandalone jar file from https://code.google.com/p/heideltime/
-
-  If you download the heideltime-standalone-1.7 zip file, you will find two files that you need:
-  - de.unihd.dbs.heideltime.standalone.jar
-  - config.props => you will need this file to correctly execute the new time module
-
-  move the jar file to the lib directory
-
-4.- Download a copy of JVnTextPro from http://ixa2.si.ehu.es/~jibalari/jvntextpro-2.0.jar
-
-  move the jar file to the lib directory
-
-5.- Download the following script https://github.com/carchrae/install-to-project-repo/blob/master/install-to-project-repo.py
-
-6.- Execute the script within the ixa-pipe-time directory
-
-   => It will create the repo directory and two dependencies that you don't need to copy in the pom.xml file. It is necessary to run the scrip to correctly create the repo directory. Don't copy the anything in the pom file.
-
-7.- Download the mappings file: http://ixa2.si.ehu.es/~jibalari/eagles-to-treetager.csv
-
-8.- Create the jar file for the time module
-    mvn clean install
-
-9.- Test the module
-
-   cat pos.naf | java -jar ${dirToJAR}/ixa.pipe.time.jar -m ${dirToFile}/eagles-to-treetager.csv -c ${dirToFile}/config.props
-
-
-   I think everything needed is included in the list of steps. Let me know if something is not clear.
-
-
-Regards,
-Itziar
-
-
-\end{verbatim}
-
-Unfortunately, this procedure does not always seem to work. On the test-computer (Ubuntu Linux version 14.04) the instruction 
-\verb|mvn clean package| results in the following error message:
-
-\begin{verbatim}
-(venv)paul@@klipperaak:~/projecten/cltl/pipelines/nlpp/modules/ixa-pipe-time$ mvn clean package
-[INFO] Scanning for projects...
-[INFO]                                                                         
-[INFO] ------------------------------------------------------------------------
-[INFO] Building IXAPipeHeidelTime 1.0.1
-[INFO] ------------------------------------------------------------------------
-[WARNING] The POM for local:de.unihd.dbs.heideltime.standalone:jar:1.0 is missing, no dependency information available
-[INFO] ------------------------------------------------------------------------
-[INFO] BUILD FAILURE
-[INFO] ------------------------------------------------------------------------
-[INFO] Total time: 0.650s
-[INFO] Finished at: Wed Jul 15 09:40:39 CEST 2015
-[INFO] Final Memory: 7M/232M
-[INFO] ------------------------------------------------------------------------
-[ERROR] Failed to execute goal on project time: Could not resolve dependencies for project ixa.pipe:time:jar:1.0.1: Failure to find local:de.unihd.dbs.heideltime.standalone:jar:1.0 in file:///home/paul/projecten/cltl/pipelines/nlpp/modules/ixa-pipe-time/repo was cached in the local repository, resolution will not be reattempted until the update interval of heideltime-local-dependency-repo has elapsed or updates are forced -> [Help 1]
-[ERROR] 
-[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
-[ERROR] Re-run Maven using the -X switch to enable full debug logging.
-[ERROR] 
-[ERROR] For more information about the errors and possible solutions, please read the following articles:
-[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/DependencyResolutionException
-
-\end{verbatim}
-
-
-Therefore we have compiled the module in a computer where it worked and put the result in the snapshot.
-
-@d install the new heideltime module @{@%
-@< get or have @(m4_heidelnball@) @>
-cd \$modulesdir
-tar -xzf \$pipesocket/m4_heidelnball
-@| @}
+@% \paragraph{New module}
+@% \label{sec:heideltimenewmodule}
+@% 
+@% Heideltime has been updated. In princple the Heideltim module ought to be installed as described in the following message from Itziar Aldabe:
+@% 
+@% \begin{verbatim}
+@% 
+@% I managed to get everything ready, except for the README in github. I'll update it next
+@% week but I think I can give you some simple steps that should be enough to correctly
+@% use the module 
+@% 
+@% 1.- Download the code: git clone https://github.com/ixa-ehu/ixa-pipe-time.git
+@% 
+@% 2.- In the ixa-pipe-time create the lib directory
+@% 
+@% 3.- Download the HeidelTimeStandalone jar file from https://code.google.com/p/heideltime/
+@% 
+@%   If you download the heideltime-standalone-1.7 zip file, you will find two files that you need:
+@%   - de.unihd.dbs.heideltime.standalone.jar
+@%   - config.props => you will need this file to correctly execute the new time module
+@% 
+@%   move the jar file to the lib directory
+@% 
+@% 4.- Download a copy of JVnTextPro from http://ixa2.si.ehu.es/~jibalari/jvntextpro-2.0.jar
+@% 
+@%   move the jar file to the lib directory
+@% 
+@% 5.- Download the following script https://github.com/carchrae/install-to-project-repo/blob/master/install-to-project-repo.py
+@% 
+@% 6.- Execute the script within the ixa-pipe-time directory
+@% 
+@%    => It will create the repo directory and two dependencies that you don't need to copy in the pom.xml file. It is necessary to run the scrip to correctly create the repo directory. Don't copy the anything in the pom file.
+@% 
+@% 7.- Download the mappings file: http://ixa2.si.ehu.es/~jibalari/eagles-to-treetager.csv
+@% 
+@% 8.- Create the jar file for the time module
+@%     mvn clean install
+@% 
+@% 9.- Test the module
+@% 
+@%    cat pos.naf | java -jar ${dirToJAR}/ixa.pipe.time.jar -m ${dirToFile}/eagles-to-treetager.csv -c ${dirToFile}/config.props
+@% 
+@% 
+@%    I think everything needed is included in the list of steps. Let me know if something is not clear.
+@% 
+@% 
+@% Regards,
+@% Itziar
+@% 
+@% 
+@% \end{verbatim}
+@% 
+@% Unfortunately, this procedure does not always seem to work. On the test-computer (Ubuntu Linux version 14.04) the instruction 
+@% \verb|mvn clean package| results in the following error message:
+@% 
+@% \begin{verbatim}
+@% (venv)paul@@klipperaak:~/projecten/cltl/pipelines/nlpp/modules/ixa-pipe-time$ mvn clean package
+@% [INFO] Scanning for projects...
+@% [INFO]                                                                         
+@% [INFO] ------------------------------------------------------------------------
+@% [INFO] Building IXAPipeHeidelTime 1.0.1
+@% [INFO] ------------------------------------------------------------------------
+@% [WARNING] The POM for local:de.unihd.dbs.heideltime.standalone:jar:1.0 is missing, no dependency information available
+@% [INFO] ------------------------------------------------------------------------
+@% [INFO] BUILD FAILURE
+@% [INFO] ------------------------------------------------------------------------
+@% [INFO] Total time: 0.650s
+@% [INFO] Finished at: Wed Jul 15 09:40:39 CEST 2015
+@% [INFO] Final Memory: 7M/232M
+@% [INFO] ------------------------------------------------------------------------
+@% [ERROR] Failed to execute goal on project time: Could not resolve dependencies for project ixa.pipe:time:jar:1.0.1: Failure to find local:de.unihd.dbs.heideltime.standalone:jar:1.0 in file:///home/paul/projecten/cltl/pipelines/nlpp/modules/ixa-pipe-time/repo was cached in the local repository, resolution will not be reattempted until the update interval of heideltime-local-dependency-repo has elapsed or updates are forced -> [Help 1]
+@% [ERROR] 
+@% [ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+@% [ERROR] Re-run Maven using the -X switch to enable full debug logging.
+@% [ERROR] 
+@% [ERROR] For more information about the errors and possible solutions, please read the following articles:
+@% [ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/DependencyResolutionException
+@% 
+@% \end{verbatim}
+@% 
+@% 
+@% Therefore we have compiled the module in a computer where it worked and put the result in the snapshot.
+@% 
+@% @d install the new heideltime module @{@%
+@% @< get or have @(m4_heidelnball@) @>
+@% cd \$modulesdir
+@% tar -xzf \$pipesocket/m4_heidelnball
+@% @| @}
 
 
 
@@ -2414,7 +2479,7 @@ tar -xzf \$pipesocket/m4_heidelnball
 @o m4_bindir/m4_heidelscript @{@%
 #!/bin/bash
 source m4_aenvbindir/progenv
-HEIDELDIR=\$modulesdir/m4_heidelndir
+HEIDELDIR=\$modulesdir/m4_heideldir
 cd $HEIDELDIR
 iconv -t utf-8//IGNORE | java -jar target/ixa.pipe.time.jar -m alpino-to-treetagger.csv -c config.props
 @| @}
