@@ -196,16 +196,17 @@ m4_define(m4_ontotarball, vua-ontotagger-v1.0.tar.gz)m4_dnl  Subdir. of modules
 
 m4_dnl
 m4_dnl Heideltime
+m4_dnl
 m4_dnl m4_define(m4_heidelsrc, m4_lisanlproot/mods/HeidelTimeModule)m4_dnl  Subdir. of modules
-m4_dnl m4_define(m4_heideldir, HeidelTimeModule)m4_dnl  Subdir. of modules
+m4_dnl m4_define(m4_heideldir, HeidelTimeModule)m4_dnl 
 m4_dnl m4_define(m4_heidelscript, heideltime)m4_dnl
-m4_define(m4_heidelgit, https://github.com/cltl/NAF-HeidelTime.git)m4_dnl  Subdir. of modules
-m4_define(m4_heidel_commitname, 057c93ccc857a427145b9e2ff72fd645172d34df)m4_dnl
-m4_dnl m4_define(m4_heidelgit, `git@@github.com:PaulHuygen/NAF-HeidelTime.git' )m4_dnl  Subdir. of modules
-m4_define(m4_heideldir, NAF-HeidelTime)m4_dnl  Subdir. of modules
+m4_define(m4_heideldir, ixa-pipe-time)m4_dnl
+m4_define(m4_heidelgit, https://github.com/ixa-ehu/ixa-pipe-time.git)m4_dnl
+m4_define(m4_heidelhtml, https://github.com/ixa-ehu/ixa-pipe-time)m4_dnl
+m4_define(m4_heidel_commitname, da4604a7b33975e977017440cbc10f7d59917ddf)m4_dnl
 m4_define(m4_heidelscript, heideltime)m4_dnl
 m4_define(m4_heidelstandalonejar, de.unihd.dbs.heideltime.standalone.jar)m4_dnl
-m4_define(m4_replace_heidelstandalonejar, 201506postfix.`'m4_heidelstandalonejar)m4_dnl
+m4_define(m4_heidelantske, 20151119_antske_heideltime_stuff.tgz)m4_dnl
 m4_dnl
 m4_dnl New Heideltime
 m4_define(m4_heidelndir, ixa-pipe-time)m4_dnl
