@@ -206,7 +206,7 @@ m4_define(m4_heidelhtml, https://github.com/ixa-ehu/ixa-pipe-time)m4_dnl
 m4_define(m4_heidel_commitname, da4604a7b33975e977017440cbc10f7d59917ddf)m4_dnl
 m4_define(m4_heidelscript, heideltime)m4_dnl
 m4_define(m4_heidelstandalonejar, de.unihd.dbs.heideltime.standalone.jar)m4_dnl
-m4_define(m4_heidelantske, 20151119_antske_heideltime_stuff.tgz)m4_dnl
+m4_define(m4_heidelantske, 20151123_antske_heideltime_stuff.tgz)m4_dnl
 m4_dnl
 m4_dnl New Heideltime
 m4_define(m4_heidelndir, ixa-pipe-time)m4_dnl
@@ -221,6 +221,8 @@ m4_define(m4_installtoprojectpy, install-to-project-repo.py)m4_dnl
 m4_define(m4_installtoprojectpyurl, https://github.com/carchrae/install-to-project-repo/blob/master/m4_installtoprojectpy)m4_dnl
 m4_define(m4_mappingsfile, eagles-to-treetager.csv)m4_dnl
 m4_define(m4_mappingsfileurl, http://ixa2.si.ehu.es/~jibalari/eagles-to-treetager.csv)m4_dnl
+m4_define(m4_heidel_mvn_localdir, `$HOME/.m2/repository/local/de.unihd.dbs.heideltime.standalone
+m4_define(m4_jvntextpro_mvn_localdir, `$HOME/.m2/repository/local/jvntextpro-2.0
 
 m4_dnl
 m4_dnl SRL
