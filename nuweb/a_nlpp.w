@@ -2289,12 +2289,32 @@ cd  m4_amoddir/$DIRN/lib
 wget http://ixa2.si.ehu.es/%7Ejibalari/jvntextpro-2.0.jar
 @| @}
 
+
+Scipt \verb|install-to-project-repo.py| generates a library in
+subdirectory \verb|repo| and copies the jars that it finds in the
+\verb|lib| subdirectory in this repo in such a way that Maven finds it
+there. Somewhere in the \verb|install-to-project.py| \ldots \verb|mvn|
+process the jars are copied in your local repository (\verb|~/.m2|)
+too. As a result, only a Maven Guru understands precisely where Maven
+obtains its jar from and the best thing to do is to empty the
+\verb|repo| subdirectory and the local repository before (re-)
+applying \verb|install-to-project-repo.py|.
+
+
 @d activate the install-to-project-repo utility @{@%
+@< remove outdated heideltime jars @>
 cd m4_amoddir/$DIRN/
 git clone git@@github.com:carchrae/install-to-project-repo.git
 mv install-to-project-repo/install-to-project-repo.py .
 rm -rf install-to-project-repo
 python ./install-to-project-repo.py
+@| @}
+
+@d remove outdated heideltime jars @{@%
+rm -rf m4_amoddir/$DIRN/repo
+mkdir -p m4_amoddir/$DIRN/repo/local
+rm -rf m4_heidel_mvn_localdir
+rm -rf m4_jvntextpro_mvn_localdir
 @| @}
 
 @% 
