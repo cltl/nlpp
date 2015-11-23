@@ -221,8 +221,8 @@ m4_define(m4_installtoprojectpy, install-to-project-repo.py)m4_dnl
 m4_define(m4_installtoprojectpyurl, https://github.com/carchrae/install-to-project-repo/blob/master/m4_installtoprojectpy)m4_dnl
 m4_define(m4_mappingsfile, eagles-to-treetager.csv)m4_dnl
 m4_define(m4_mappingsfileurl, http://ixa2.si.ehu.es/~jibalari/eagles-to-treetager.csv)m4_dnl
-m4_define(m4_heidel_mvn_localdir, `$HOME/.m2/repository/local/de.unihd.dbs.heideltime.standalone
-m4_define(m4_jvntextpro_mvn_localdir, `$HOME/.m2/repository/local/jvntextpro-2.0
+m4_define(m4_heidel_mvn_localdir, `$HOME/.m2/repository/local/de.unihd.dbs.heideltime.standalone')m4_dnl
+m4_define(m4_jvntextpro_mvn_localdir, `$HOME/.m2/repository/local/jvntextpro-2.0')m4_dnl
 
 m4_dnl
 m4_dnl SRL
