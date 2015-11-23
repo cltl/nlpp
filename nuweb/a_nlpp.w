@@ -87,7 +87,7 @@ Table~\ref{tab:modulelist}
                        & \dref{sec:nomcorefgraph}       & \href{m4_corefbasegit}{Github}      & m4_corefbase_commitname   & m4_ncorefscript   \\  
        \href{m4_evcorefscript}{Ev. coref}
                        & \dref{sec:eventcoref}                                & snapshot      &                           &  m4_evcorefscript  \\  
-       \hyperref[]{Opinion miner}
+       \hyperref[sec:vua-pylib]{Opinion miner}
                        & \dref{sec:opinimin}   & \href{m4_opinigit}{Github} &           &  m4_opiniscript   & \\  
        \hyperref[sec:framesrl]{Framenet SRL} 
                        & \dref{sec:framesrl}                                  & snapshot      &                            &  m4_fsrlscript   \\  
@@ -2083,7 +2083,7 @@ cat | java -Xmx1000m -jar \$jarsdir/m4_nedjar  -p 2060 -e candidates -i \$envdir
 \label{sec:onto}
 
 We do not yet have a source-repository of the Ontotagger module. Therefore,
-install from a snapshot (\texttt{m4_ontotarball}).
+install from a snapshot (\verb|m4_ontotarball|).
 
 \paragraph{Module}
 \label{sec:ontotagger-module}
@@ -2726,7 +2726,7 @@ unzip -q \$pipesocket/m4_nomeventball
 @| @}
 
 \paragraph{Script}
-\label{par:dbpnerscript}
+\label{par:nomeventscript}
 
 @o m4_bindir/m4_nomeventscript @{@%
 #!/bin/bash
