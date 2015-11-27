@@ -2189,7 +2189,7 @@ source m4_aenvbindir/progenv
 ROOT=\$piperoot
 JARDIR=\$jarsdir
 [ $spotlightrunning ] || source m4_abindir/start-spotlight
-cat | java -Xmx1000m -jar \$jarsdir/m4_nedjar -H $spotlighthost -p m4_spotlight_nl_port -e candidates -i \$envdir/spotlight/wikipedia-db -n nlEn
+cat | java -Xmx1000m -jar \$jarsdir/m4_nedjar -H http://$spotlighthost -p m4_spotlight_nl_port -e candidates -i \$envdir/spotlight/wikipedia-db -n nlEn
 @% cat | java -jar \$jarsdir/m4_nedjar  -p 2060  -n nl
 @| @}
 
