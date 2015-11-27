@@ -294,6 +294,7 @@ m4_dnl Utilities
 m4_dnl
 m4_dnl
 m4_dnl Alpino
+m4_dnl
 m4_define(m4_alpino_version, 20706)m4_dnl
 m4_define(m4_alpinosrc, Alpino-x86_64-linux-glibc2.5-`'m4_alpino_version`'-sicstus.tar.gz)
 m4_define(m4_alpinourl, http://www.let.rug.nl/vannoord/alp/Alpino/binary/versions/Old/m4_alpinosrc)m4_dnl  
@@ -361,6 +362,7 @@ m4_dnl
 m4_dnl Spotlight
 m4_dnl
 m4_define(m4_spotlightball, spotlightnl.tgz)m4_dnl
+m4_define(m4_spotlight_host, `localhost')m4_dnl
 m4_define(m4_spotlight_nl_port, 2060)m4_dnl
 m4_define(m4_aspotlightdir, m4_aenvdir/spotlight)m4_dnl
 m4_define(m4_spotlighturl, http://spotlight.sztaki.hu)m4_dnl
@@ -369,9 +371,10 @@ m4_define(m4_spotlightjarversion, 0.7)m4_dnl
 m4_define(m4_simple_spotlightjar, dbpedia-spotlight-`'m4_spotlightjarversion`'.jar)m4_dnl
 m4_define(m4_spotlightjar, dbpedia-spotlight-`'m4_spotlightjarversion`'-jar-with-dependencies-candidates.jar)m4_dnl
 m4_define(m4_spotlight_nl_model_ball, nl.tar.gz)m4_dnl
-m4_define(m4_spotlight_nl_port, 2060)m4_dnl
 m4_define(m4_spotlight_en_model_ball, en_2+2.tar.gz)m4_dnl
 m4_define(m4_spotlight_en_port, 2020)m4_dnl
+m4_define(m4_spotlight_snapdir, spotlight)m4_dnl
+m4_define(m4_spotlight_dir, spotlight)m4_dnl
 m4_dnl
 m4_dnl Wikipedia db
 m4_dnl
@@ -381,8 +384,6 @@ m4_define(m4_wikipediadb_tarball, wikipedia-db.v1.tar.gz)m4_dnl
 m4_dnl
 m4_dnl
 m4_dnl
-m4_define(m4_spotlight_snapdir, spotlight)m4_dnl
-m4_define(m4_spotlight_dir, spotlight)m4_dnl
 m4_dnl
 m4_dnl Locations of programs and system-dependent definitions
 m4_dnl
