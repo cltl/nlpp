@@ -245,6 +245,7 @@ Put the macro to set variables in a script that can later be sourced by the scri
 @o m4_envbindir/progenv @{@%
 #!/bin/bash
 @< set variables that point to the directory-structure @>
+export progenvset=0
 @| @}
 
 \section{How to obtain modules and other material}
@@ -1228,7 +1229,7 @@ We set 8Gb for the English server, but the Italian and Dutch Spotlight will requ
 \end{quotation}
 
 
-So, let's do that. 
+So, let us do that:
 
 @d install the Spotlight server @{@%
 @< get or have @(m4_spotlightball@) @>
@@ -1264,25 +1265,145 @@ tar -xzf m4_wikipediadb_tarball
 rm  m4_wikipediadb_tarball
 @| @}
 
+Script \verb|bin/start-spotlight| starts spotlight if it is not
+already running. It does the following:
 
-@d start the Spotlight server @{@%
+\begin{enumerate}
+\item If variable \verb|spotlighthost| exists, it checks whether
+  Spotlight is already running on that host.
+\item If Spotlight does not run on that host or if If variable
+  \verb|spotlighthost| does not exist, it sets variable
+  \verb|spotlighthost| to localhost and then checks whether Spotlight
+  runs on localhost.
+\item If Spotlight has not yet been found, install spotlight on localhost.
+\item If a running spotlight has been found, set variable
+  \verb|spotlightrunning| to 0.
+\end{enumerate}
+
+@o m4_bindir/start-spotlight @{@%
+# NOTE: This script ought to be sourced.
+# Afterwards, on success, the following variables exist:
+# > spotlighthost
+# > spotlightrunning
+if 
+  [ ! $spotlightrunning ]
+then
+  [ $spotlighthost ] || export spotlighthost=m4_spotlight_host
+  @< try to obtain a running spotlightserver @>
+fi
+@| @}
+
+If variable \verb|spotlighthost| does not exist, set it to
+localhost. Test whether a Spotlightserver runs on
+\verb|spotlighthost|. If that fails and \verb|spotlighthost| did not
+point to localhost, try localhost. 
+
+If the previous attempts were not succesfull, start the
+spotlightserver on localhost. 
+
+If some spotlightserver has been contacted, set variable
+\verb|spotlightrunning|. Otherwise exit. At the end variable
+\verb|spotlighthost| ought to contain the address of the Spotlight-host.
+
+@d try to obtain a running spotlightserver @{@%
+@< test whether spotlighthost runs @($spotlighthost@) @>
+if 
+  [ ! $spotlightrunning ]
+then
+  if
+    [ "$spotlighthost" != "localhost" ]
+  then
+    export spotlighthost=localhost
+    @< test whether spotlighthost runs @($spotlighthost@) @>
+  fi
+fi
+if
+  [ ! $spotlightrunning ]
+then
+  @< start the Spotlight server on localhost @>
+  @< test whether spotlighthost runs @($spotlighthost@) @>
+fi
+if
+  [ ! $spotlightrunning ]
+then
+  echo "Cannot start spotlight"
+  exit 4
+fi
+@| @}
+
+Test whether the Spotlightserver runs on a given host. The
+``spotlight-test'' does not really test Spotlight, but it tests
+whether something is listening on the port and host where we expect
+Spotlight. I found the test-construction that is used here on
+\href{http://stackoverflow.com/questions/9609130/quick-way-to-find-if-a-port-is-open-on-linux}{Stackoverflow}.
+If the test is positive, set variable \verb|spotlightrunning| to
+0. Otherwise, unset that variable.
+
+
+@d test whether spotlighthost runs @{@%
+exec 6<>/dev/tcp/@1/m4_spotlight_nl_port
+if
+  [ $? -eq 0 ]
+then
+  export spotlightrunning=0
+else
+  spotlightrunning=
+fi
+exec 6<&-
+exec 6>&-
+@| @}
+
+@d start the Spotlight server on localhost @{@%
+[ $progenvset ] || source m4_aenvbindir/progenv
 cd m4_aspotlightdir
 @% java  -Xmx8g -jar m4_spotlightjar nl http://localhost:m4_spotlight_nl_port/rest
 java -jar -Xmx8g dbpedia-spotlight-0.7-jar-with-dependencies-candidates.jar nl http://localhost:2060/rest  &
 @% java -jar -Xmx8g dbpedia-spotlight-0.7-jar-with-dependencies-candidates.jar nl http://localhost:2060/rest  &
+sleep 60
 @| @}
 
-We start the spotlight-server only in case it is not already running. Assume that Spotlight runs when something listens on port~m4_spotlight_nl_port of localhost:
 
-@d check/start the Spotlight server @{@%
-spottasks=`netstat -an | grep :m4_spotlight_nl_port | wc -l`
-if
-  [ $spottasks -eq 0 ]
-then
-  @< start the Spotlight server @>
-  sleep 60
-fi
-@| @}
+
+Start the Spotlight if it is not already running. First find out what
+the host is on which we may expect to find a listening Spotlight.
+
+Variable \verb|spotlighthost| contains the address of the
+host where we expect to find Spotlight. If the expectation does not
+come true, and the Spotlighthost was not localhost, test whether
+Spotlight can be found on localhost. If the spotlight-server cannot be
+found, start it up on localhost.
+
+@% @d check/start the Spotlight server @{@%
+@% export spotlighthost=m4_spotlight_host
+@% @< test whether spotlighthost runs @($spotlighthost@) @>
+@% if
+@%   [ $spotlightrunning -ne 0 ]
+@% then
+@%   if
+@%     [ $spotlighthost != "localhost" ]
+@%   then
+@%     export spotlighthost="localhost"
+@%     @< test whether spotlighthost runs @($spotlighthost@) @>
+@%   fi
+@% fi
+@% @| @}
+@% 
+@% 
+@% 
+@% Start spotlight on localhost if we couldn't find one.
+@% 
+@% @d check/start the Spotlight server @{@%
+@% if
+@%   [ $spotlightrunning -ne 0 ]
+@% then
+@%   @< start the Spotlight server on localhost @>
+@% fi
+@% @| @}
+@% 
+@% 
+@%  If
+@% the expectation did not come true, start up Spotlight locally 
+
 
 
 \subsubsection{VUA-pylib}
@@ -2067,8 +2188,8 @@ source m4_aenvbindir/progenv
 @% @< set up programming environment @>
 ROOT=\$piperoot
 JARDIR=\$jarsdir
-@< check/start the Spotlight server @>
-cat | java -Xmx1000m -jar \$jarsdir/m4_nedjar  -p 2060 -e candidates -i \$envdir/spotlight/wikipedia-db -n nlEn
+[ $spotlightrunning ] || source m4_abindir/start-spotlight
+cat | java -Xmx1000m -jar \$jarsdir/m4_nedjar -H $spotlighthost -p m4_spotlight_nl_port -e candidates -i \$envdir/spotlight/wikipedia-db -n nlEn
 @% cat | java -jar \$jarsdir/m4_nedjar  -p 2060  -n nl
 @| @}
 
@@ -2701,9 +2822,11 @@ Spotlight server.
 #!/bin/bash
 source m4_aenvbindir/progenv
 @% @< set variables that point to the directory-structure @>
-@< check/start the Spotlight server @>
+@% @< check/start the Spotlight server @>
+[ $spotlightrunning ] || source m4_bindir/start-spotlight
+
 MODDIR=\$modulesdir/<!!>m4_dbpnerdir<!!>
-cat | iconv -f ISO8859-1 -t UTF-8 | $MODDIR/dbpedia_ner.py -url http://localhost:2060/rest/candidates
+cat | iconv -f ISO8859-1 -t UTF-8 | $MODDIR/dbpedia_ner.py -url http://$spotlighthost:<!!>m4_spotlight_nl_port<!!>/rest/candidates
 @| @}
 
 
@@ -2857,6 +2980,7 @@ TESTDIR=$ROOT/test
 BIND=$ROOT/bin
 mkdir -p $TESTDIR
 cd $TESTDIR
+[ $spotlightrunning ] || source m4_abindir/start-spotlight
 cat \$ROOT/nuweb/testin.naf    | \$BIND/tok                    > \$TESTDIR/test.tok.naf
 cat test.tok.naf              | \$BIND/mor                    > \$TESTDIR/test.mor.naf
 @% cat test.mor.naf | $BIND/nerc > $TESTDIR/test.nerc.naf
