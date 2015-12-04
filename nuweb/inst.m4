@@ -1,4 +1,4 @@
-m4_define(m4_repoversion, `1.0.04')m4_dnl
+m4_define(m4_repoversion, `1.0.05')m4_dnl
 m4_dnl
 m4_dnl Titles
 m4_dnl
@@ -121,7 +121,8 @@ m4_define(m4_tokenizerscript, tok)m4_dnl
 m4_dnl
 m4_dnl Morphosyntactic parser
 m4_define(m4_morphpargit, https://github.com/cltl/morphosyntactic_parser_nl.git)m4_dnl  Subdir. of modules
-m4_define(m4_morphpar_commitname, `c6cabea2cc37ac3098c5927f5ec5b180ac31246f')m4_dnl
+m4_dnl m4_define(m4_morphpar_commitname, `c6cabea2cc37ac3098c5927f5ec5b180ac31246f')m4_dnl
+m4_define(m4_morphpar_commitname, `807e938ce4ebb71afd9d7c7f42d9d9ac5f98a184')m4_dnl
 m4_define(m4_morphpardir, morphosyntactic_parser_nl)m4_dnl  Subdir. of modules
 m4_define(m4_morphparscript, mor)m4_dnl
 m4_dnl

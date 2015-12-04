@@ -1449,7 +1449,7 @@ CRFsuite is an implementation of Conditional Random Fields
 tempdir=`mktemp -d -t liblblbfgs.XXXXXX`
 cd \$tempdir
 git clone m4_liblblbfgs_git
-cd lblblfgs
+cd liblblfgs
 ./autogen.sh
 ./configure --prefix=\$envdir
 make
