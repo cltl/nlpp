@@ -1,4 +1,4 @@
-m4_define(m4_repoversion, `1.0.05')m4_dnl
+m4_define(m4_repoversion, `1.0.06')m4_dnl
 m4_dnl
 m4_dnl Titles
 m4_dnl
@@ -335,10 +335,11 @@ m4_define(m4_SVMlightball_url, http://download.joachims.org/svm_light/current/`'
 m4_define(m4_SVMlightdir, SVMlight)m4_dnl
 m4_dnl
 m4_dnl CRFsuite
-m4_define(m4_CRFsuitesite, http://svmlight.joachims.org/)m4_dnl
+m4_define(m4_CRFsuitesite, http://www.chokkan.org/software/crfsuite)m4_dnl
 m4_define(m4_CRFsuiteball, crfsuite-0.12.tar.gz)m4_dnl
 m4_define(m4_CRFsuiteball_url, https://github.com/downloads/chokkan/crfsuite/`'m4_CRFsuiteball)m4_dnl
 m4_define(m4_CRFsuitedir, crfsuite-0.12)m4_dnl
+m4_define(m4_CRFsuitebinball, crfsuite-0.12-x86_64.tar.gz)m4_dnl
 m4_dnl
 m4_dnl liblblbfgs
 m4_define(m4_liblblbfgs_git, https://github.com/chokkan/liblbfgs.git)m4_dnl

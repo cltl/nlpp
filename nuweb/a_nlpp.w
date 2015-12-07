@@ -1421,7 +1421,7 @@ git clone m4_vuapylibgit
 \label{sec:svmlight}
 
 SVMlight supplies a Support Vector Machine. It is used by the
-opinion-miner. SVMlight can be obtaied from 
+opinion-miner. SVMlight can be obtained from 
 \href{m4_SVMlightsite}{the site} where it is documented.
 
 Installation goes like this:
@@ -1442,35 +1442,56 @@ rm -rf \$tempdir
 \subsubsection{CRFsuite}
 \label{sec:crfsuite}
 
-CRFsuite is an implementation of Conditional Random Fields
-(\textsc{crf}). 
+\href{http://www.chokkan.org/software/crfsuite}{CRFsuite} is an
+implementation of Conditional Random Fields (\textsc{crf}). Module
+\href{https://github.com/cltl/opinion_miner_deluxe}{opinion-miner-de-luxe}
+needs it. It can be installed from it's sources, but I did not manage
+to this. Therefore, currently we use a pre-compiled ball. 
 
-@d install liblblbfgs @{@%
-tempdir=`mktemp -d -t liblblbfgs.XXXXXX`
-cd \$tempdir
-git clone m4_liblblbfgs_git
-cd liblblfgs
-./autogen.sh
-./configure --prefix=\$envdir
-make
-make install
-cd m4_aprojroot
-rm -rf \$tempdir
-@| @}
-
-@d install CRFsuite @{@%
-@< install liblblbfgs @>
+@d install crfsuite @{@%
+@< get or have @(m4_CRFsuitebinball@) @>
 tempdir=`mktemp -d -t crfsuite.XXXXXX`
-cd \$tempdir
-wget m4_CRFsuiteball_url
-tar -xzf m4_CRFsuiteball
-cd m4_CRFsuitedir
-./configure --prefix=\$envdir
-make
-make install
-cd m4_aprojroot
-rm -rf \$tempdir
+cd $tempdir
+tar -xzf \$pipesocket/m4_CRFsuitebinball
+cd crfsuite-0.12
+cp -r bin/crfsuite $envbindir/
+mkdir -p $envdir/include/
+cp -r include/* $envdir/include/
+mkdir -p $envdir/lib/
+cp -r lib/* $envdir/lib/
+cd m4_aprojdir
+rm -rf $tempdir
 @| @}
+
+
+
+@% @d install liblblbfgs @{@%
+@% tempdir=`mktemp -d -t liblblbfgs.XXXXXX`
+@% cd \$tempdir
+@% git clone m4_liblblbfgs_git
+@% cd liblblfgs
+@% ./autogen.sh
+@% ./configure --prefix=\$envdir
+@% make
+@% make install
+@% cd m4_aprojroot
+@% rm -rf \$tempdir
+@% @| @}
+@% 
+@% @d install CRFsuite @{@%
+@% @< install liblblbfgs @>
+@% tempdir=`mktemp -d -t crfsuite.XXXXXX`
+@% cd \$tempdir
+@% wget m4_CRFsuiteball_url
+@% tar -xzf m4_CRFsuiteball
+@% cd m4_CRFsuitedir
+@% ./configure --prefix=\$envdir
+@% make
+@% make install
+@% cd m4_aprojroot
+@% rm -rf \$tempdir
+@% @| @}
+
 
 
 
