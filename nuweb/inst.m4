@@ -180,7 +180,8 @@ m4_dnl
 m4_dnl WSD
 m4_dnl m4_define(m4_wsdsrc, m4_lisanlproot/mods/ukb)m4_dnl  Subdir. of modules
 m4_define(m4_wsdgit, https://github.com/cltl/svm_wsd.git)m4_dnl
-m4_define(m4_wsd_commitname, `2babeb40a81b3720274a0521ccc2a27c5eff28c9')m4_dnl
+m4_define(m4_wsd_commitname, `030043903b42f77cd20a9b2443de137e2efe8513')m4_dnl
+m4_dnl m4_define(m4_wsd_commitname, `2babeb40a81b3720274a0521ccc2a27c5eff28c9')m4_dnl
 m4_define(m4_wsddir, svm_wsd)m4_dnl
 m4_define(m4_wsdscript, wsd)m4_dnl
 m4_define(m4_wsd_snapball, svm_wsd.tgz)m4_dnl

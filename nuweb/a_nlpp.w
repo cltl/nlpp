@@ -1963,17 +1963,17 @@ echo LIBSVM installed correctly lib/libsvm
 This part has also been copied from \verb|install_naf.sh| in the \textsc{wsd} module.
 
 @d download svm models @{@%
-@< get or have @(m4_wsd_snapball@) @>
+#@< get or have @(m4_wsd_snapball@) @>
 cd \$modulesdir
-tar -xzf \$pipesocket/m4_wsd_snapball
+#tar -xzf \$pipesocket/m4_wsd_snapball
 @% rm \$pipesocket/m4_wsd_snapball
 @%cp -r m4_aprojroot/m4_snapshotdir/svm_wsd/models .
 @% echo 'Downloading models...(could take a while)'
-@% wget --user=cltl --password='.cltl.' kyoto.let.vu.nl/~izquierdo/models_wsd_svm_dsc.tgz 2> /dev/null
-@% echo 'Unzipping models...'
-@% tar xzf models_wsd_svm_dsc.tgz
-@% rm models_wsd_svm_dsc.tgz
-@% echo 'Models installed in folder models'
+wget --user=cltl --password='.cltl.' kyoto.let.vu.nl/~izquierdo/models_wsd_svm_dsc.tgz 2> /dev/null
+echo 'Unzipping models...'
+tar xzf models_wsd_svm_dsc.tgz
+rm models_wsd_svm_dsc.tgz
+echo 'Models installed in folder models'
 
 @| @}
 
@@ -1993,7 +1993,8 @@ source m4_aenvbindir/progenv
 @% @< set up programming environment @>
 WSDDIR=$modulesdir/m4_wsddir
 WSDSCRIPT=dsc_wsd_tagger.py
-cat | python $WSDDIR/$WSDSCRIPT --naf 
+@% cat | python $WSDDIR/$WSDSCRIPT --naf 
+cat | python $WSDDIR/$WSDSCRIPT --naf -ref odwnSY
 @| @}
 
 @%@d make scripts executable @{@%
