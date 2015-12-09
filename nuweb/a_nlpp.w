@@ -1448,7 +1448,7 @@ implementation of Conditional Random Fields (\textsc{crf}). Module
 needs it. It can be installed from it's sources, but I did not manage
 to this. Therefore, currently we use a pre-compiled ball. 
 
-@d install crfsuite @{@%
+@d install CRFsuite @{@%
 @< get or have @(m4_CRFsuitebinball@) @>
 tempdir=`mktemp -d -t crfsuite.XXXXXX`
 cd $tempdir
@@ -1612,16 +1612,45 @@ git checkout m4_morphpar_commitname
 \paragraph{Script}
 \label{sec:morphparserscript}
 
+The morpho-syntactic module parses the sentences with Alpino. Alpino
+takes a lot of time to handle long sentences. Therefore the
+morpho-syntactic module has an option \verb|-t| to set a time-out (in minutes) for sentence
+parsing. 
+
 @o m4_bindir/m4_morphparscript @{@%
 #!/bin/bash
 source m4_aenvbindir/progenv
 @% @< set variables that point to the directory-structure @>
 @% @< set up programming environment @>
+@< get the mor time-out parameter @>
 ROOT=\$piperoot
 MODDIR=\$modulesdir/<!!>m4_morphpardir<!!>
 @< set alpinohome @>
-cat | python \$MODDIR/core/morph_syn_parser.py
+cat | python \$MODDIR/core/morph_syn_parser.py $timeoutarg
 @| @}
+
+Use \href{http://mywiki.wooledge.org/BashFAQ/035#getopts}{getopts} to
+read the \verb|-t| option.
+
+@d get the mor time-out parameter @{@%
+OPTIND=1
+stimeout=
+timeoutarg=
+while getopts "t:" opt; do
+    case "$opt" in
+    t)  stimeout=$OPTARG
+        ;;
+    esac
+done
+shift $((OPTIND-1))
+if
+  [ $stimeout ]
+then
+  timeoutarg="-t $stimeout"
+fi
+@| @}
+
+
 
 @%@d make scripts executable @{@%
 @%chmod 775  m4_bindir/m4_morphparscript
@@ -2643,7 +2672,7 @@ rm -rf m4_jvntextpro_mvn_localdir
 source m4_aenvbindir/progenv
 HEIDELDIR=\$modulesdir/m4_heideldir
 cd $HEIDELDIR
-iconv -t utf-8//IGNORE | java -jar target/ixa.pipe.time.jar -m alpino-to-treetagger.csv -c config.props
+iconv -t utf-8//IGNORE | java -Xmx1000m -jar target/ixa.pipe.time.jar -m alpino-to-treetagger.csv -c config.props
 @| @}
 
 @% @o m4_bindir/m4_heidelscript @{@%
@@ -2844,7 +2873,7 @@ Spotlight server.
 source m4_aenvbindir/progenv
 @% @< set variables that point to the directory-structure @>
 @% @< check/start the Spotlight server @>
-[ $spotlightrunning ] || source m4_bindir/start-spotlight
+[ $spotlightrunning ] || source m4_abindir/start-spotlight
 
 MODDIR=\$modulesdir/<!!>m4_dbpnerdir<!!>
 cat | iconv -f ISO8859-1 -t UTF-8 | $MODDIR/dbpedia_ner.py -url http://$spotlighthost:<!!>m4_spotlight_nl_port<!!>/rest/candidates
