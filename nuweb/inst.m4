@@ -1,4 +1,4 @@
-m4_define(m4_repoversion, `1.0.04')m4_dnl
+m4_define(m4_repoversion, `1.0.06')m4_dnl
 m4_dnl
 m4_dnl Titles
 m4_dnl
@@ -38,6 +38,8 @@ m4_define(m4_aenvbindir, m4_aenvdir`'/bin)m4_dnl     Program environment
 m4_define(m4_envbindir, m4_envdir`'/bin)m4_dnl 
 m4_define(m4_aenvlibdir, m4_aenvdir`'/lib)m4_dnl     Program environment
 m4_define(m4_envlibdir, m4_envdir`'/lib)m4_dnl 
+m4_define(m4_aenvetcdir, m4_aenvdir`'/etc)m4_dnl 
+m4_define(m4_envetcdir, m4_envdir`'/etc)m4_dnl 
 m4_dnl     m4_define(m4_usrlocaldir, m4_envdir`/usrlocal')m4_dnl     
 m4_dnl     m4_define(m4_ausrlocaldir, m4_aenvdir`/usrlocal')m4_dnl
 m4_dnl     m4_define(m4_usrlocalbindir, m4_usrlocaldir/bin)m4_dnl
@@ -119,7 +121,8 @@ m4_define(m4_tokenizerscript, tok)m4_dnl
 m4_dnl
 m4_dnl Morphosyntactic parser
 m4_define(m4_morphpargit, https://github.com/cltl/morphosyntactic_parser_nl.git)m4_dnl  Subdir. of modules
-m4_define(m4_morphpar_commitname, `c6cabea2cc37ac3098c5927f5ec5b180ac31246f')m4_dnl
+m4_dnl m4_define(m4_morphpar_commitname, `c6cabea2cc37ac3098c5927f5ec5b180ac31246f')m4_dnl
+m4_define(m4_morphpar_commitname, `807e938ce4ebb71afd9d7c7f42d9d9ac5f98a184')m4_dnl
 m4_define(m4_morphpardir, morphosyntactic_parser_nl)m4_dnl  Subdir. of modules
 m4_define(m4_morphparscript, mor)m4_dnl
 m4_dnl
@@ -177,7 +180,8 @@ m4_dnl
 m4_dnl WSD
 m4_dnl m4_define(m4_wsdsrc, m4_lisanlproot/mods/ukb)m4_dnl  Subdir. of modules
 m4_define(m4_wsdgit, https://github.com/cltl/svm_wsd.git)m4_dnl
-m4_define(m4_wsd_commitname, `2babeb40a81b3720274a0521ccc2a27c5eff28c9')m4_dnl
+m4_define(m4_wsd_commitname, `030043903b42f77cd20a9b2443de137e2efe8513')m4_dnl
+m4_dnl m4_define(m4_wsd_commitname, `2babeb40a81b3720274a0521ccc2a27c5eff28c9')m4_dnl
 m4_define(m4_wsddir, svm_wsd)m4_dnl
 m4_define(m4_wsdscript, wsd)m4_dnl
 m4_define(m4_wsd_snapball, svm_wsd.tgz)m4_dnl
@@ -194,16 +198,17 @@ m4_define(m4_ontotarball, vua-ontotagger-v1.0.tar.gz)m4_dnl  Subdir. of modules
 
 m4_dnl
 m4_dnl Heideltime
+m4_dnl
 m4_dnl m4_define(m4_heidelsrc, m4_lisanlproot/mods/HeidelTimeModule)m4_dnl  Subdir. of modules
-m4_dnl m4_define(m4_heideldir, HeidelTimeModule)m4_dnl  Subdir. of modules
+m4_dnl m4_define(m4_heideldir, HeidelTimeModule)m4_dnl 
 m4_dnl m4_define(m4_heidelscript, heideltime)m4_dnl
-m4_define(m4_heidelgit, https://github.com/cltl/NAF-HeidelTime.git)m4_dnl  Subdir. of modules
-m4_define(m4_heidel_commitname, 057c93ccc857a427145b9e2ff72fd645172d34df)m4_dnl
-m4_dnl m4_define(m4_heidelgit, `git@@github.com:PaulHuygen/NAF-HeidelTime.git' )m4_dnl  Subdir. of modules
-m4_define(m4_heideldir, NAF-HeidelTime)m4_dnl  Subdir. of modules
+m4_define(m4_heideldir, ixa-pipe-time)m4_dnl
+m4_define(m4_heidelgit, https://github.com/ixa-ehu/ixa-pipe-time.git)m4_dnl
+m4_define(m4_heidelhtml, https://github.com/ixa-ehu/ixa-pipe-time)m4_dnl
+m4_define(m4_heidel_commitname, da4604a7b33975e977017440cbc10f7d59917ddf)m4_dnl
 m4_define(m4_heidelscript, heideltime)m4_dnl
 m4_define(m4_heidelstandalonejar, de.unihd.dbs.heideltime.standalone.jar)m4_dnl
-m4_define(m4_replace_heidelstandalonejar, 201506postfix.`'m4_heidelstandalonejar)m4_dnl
+m4_define(m4_heidelantske, 20151123_antske_heideltime_stuff.tgz)m4_dnl
 m4_dnl
 m4_dnl New Heideltime
 m4_define(m4_heidelndir, ixa-pipe-time)m4_dnl
@@ -218,6 +223,8 @@ m4_define(m4_installtoprojectpy, install-to-project-repo.py)m4_dnl
 m4_define(m4_installtoprojectpyurl, https://github.com/carchrae/install-to-project-repo/blob/master/m4_installtoprojectpy)m4_dnl
 m4_define(m4_mappingsfile, eagles-to-treetager.csv)m4_dnl
 m4_define(m4_mappingsfileurl, http://ixa2.si.ehu.es/~jibalari/eagles-to-treetager.csv)m4_dnl
+m4_define(m4_heidel_mvn_localdir, `$HOME/.m2/repository/local/de.unihd.dbs.heideltime.standalone')m4_dnl
+m4_define(m4_jvntextpro_mvn_localdir, `$HOME/.m2/repository/local/jvntextpro-2.0')m4_dnl
 
 m4_dnl
 m4_dnl SRL
@@ -247,24 +254,19 @@ m4_define(m4_evcorefscript, evcoref)m4_dnl
 m4_define(m4_evcorefjar, EventCoreference-1.0-SNAPSHOT-jar-with-dependencies.jar)m4_dnl
 m4_dnl
 m4_dnl Ev. coref
-
 m4_dnl
 m4_dnl Opinion-miner
-m4_define(m4_opinisrc, /dev/null )m4_dnl  
-m4_define(m4_opinigit, https://github.com/cltl/opinion_miner_deluxe.git)m4_dnl
-m4_define(m4_opi_commitname, 3486ba98e4368c1d6119c6308bf7bef0bef8836b)m4_dnl
-m4_define(m4_opinidir, opinion_miner_deluxe)m4_dnl  
+m4_define(m4_opinigit, https://github.com/cltl/opinion_miner_deluxe.git )m4_dnl  
+m4_dnl m4_define(m4_opinidir, opinion_miner_de_luxe)m4_dnl  
 m4_define(m4_opiniscript, opinimin)m4_dnl
-m4_define(m4_opimodelsball, 20150730_opimin_final_models.tgz)m4_dnl
-m4_define(m4_opimodelsdir, final_models)m4_dnl
-m4_define(m4_opimodelsconffile, `nl/news_cfg1/config.cfg')m4_dnl
-
-m4_define(m4_subj_det_ball, 20150803_subjectivity_detector.tgz)m4_dnl
-m4_define(m4_subj_det_dir, subjectivity_detector)m4_dnl
-m4_dnl m4_define(m4_subj_pathfinderpath, m4_amoddir/m4_opinidir/m4_subj_det_dir/lib/path_finder.py)m4_dnl
-m4_define(m4_subj_pathfinderpath, m4_aenvdir/python/m4_subj_det_dir/lib/path_finder.py)m4_dnl
-
-
+m4_define(m4_opini_trained_models_ball, 20150730_opimin_final_models.tgz)m4_dnl
+m4_define(m4_opini_commitname, b559d303da0c2da17f97d3fa41960d7fa3e1595b)m4_dnl
+m4_define(m4_opini_nl_conf, opini_nl.cfg)m4_dnl
+m4_dnl
+m4_dnl Opinion-miner, temporary solution (20151013)
+m4_define(m4_opini_temp_ball, 20151012VUA-opinion-miner.tgz)m4_dnl
+m4_define(m4_opinidir, VUA-opinion-miner)m4_dnl
+m4_define(m4_opini_dutchmodel_subdir, final_models/nl/news_cfg1)m4_dnl
 m4_dnl
 m4_dnl lu2synset
 m4_define(m4_lu2synball, lu2synset.tgz)m4_dnl  
@@ -294,6 +296,7 @@ m4_dnl Utilities
 m4_dnl
 m4_dnl
 m4_dnl Alpino
+m4_dnl
 m4_define(m4_alpino_version, 20706)m4_dnl
 m4_define(m4_alpinosrc, Alpino-x86_64-linux-glibc2.5-`'m4_alpino_version`'-sicstus.tar.gz)
 m4_define(m4_alpinourl, http://www.let.rug.nl/vannoord/alp/Alpino/binary/versions/Old/m4_alpinosrc)m4_dnl  
@@ -322,10 +325,26 @@ m4_define(m4_kafnafversion, `feb 1, 2015')m4_dnl
 m4_define(m4_kafnafgit, https://github.com/cltl/KafNafParserPy.git)m4_dnl
 m4_define(m4_kafnafdir, python/KafNafParserPy)m4_dnl
 m4_dnl
-m4_dnl VUA_pylib
-m4_dnl m4_define(m4_kafnafversion, `feb 1, 2015')m4_dnl
-m4_define(m4_pylibgit, https://github.com/cltl/VUA_pylib.git)m4_dnl
-m4_define(m4_pylibdir, VUA_pylib)m4_dnl
+m4_dnl VUA-pylib
+m4_define(m4_vuapylibgit, https://github.com/cltl/VUA_pylib.git)m4_dnl
+m4_define(m4_vuapylibdir, python/VUA_pylib)m4_dnl
+m4_dnl
+m4_dnl SVMlight
+m4_define(m4_SVMlightsite, http://svmlight.joachims.org/)m4_dnl
+m4_define(m4_SVMlightball, svm_light.tar.gz)m4_dnl
+m4_define(m4_SVMlightball_url, http://download.joachims.org/svm_light/current/`'m4_SVMlightball)m4_dnl
+m4_define(m4_SVMlightdir, SVMlight)m4_dnl
+m4_dnl
+m4_dnl CRFsuite
+m4_define(m4_CRFsuitesite, http://www.chokkan.org/software/crfsuite)m4_dnl
+m4_define(m4_CRFsuiteball, crfsuite-0.12.tar.gz)m4_dnl
+m4_define(m4_CRFsuiteball_url, https://github.com/downloads/chokkan/crfsuite/`'m4_CRFsuiteball)m4_dnl
+m4_define(m4_CRFsuitedir, crfsuite-0.12)m4_dnl
+m4_define(m4_CRFsuitebinball, crfsuite-0.12-x86_64.tar.gz)m4_dnl
+m4_dnl
+m4_dnl liblblbfgs
+m4_define(m4_liblblbfgs_git, https://github.com/chokkan/liblbfgs.git)m4_dnl
+m4_define(m4_liblblbfgs_ball, )m4_dnl
 m4_dnl
 m4_dnl Treetagger
 m4_define(m4_treetag_base_url, `http://www.cis.uni-muenchen.de/%7Eschmid/tools/TreeTagger/data/')m4_dnl
@@ -346,6 +365,7 @@ m4_dnl
 m4_dnl Spotlight
 m4_dnl
 m4_define(m4_spotlightball, spotlightnl.tgz)m4_dnl
+m4_define(m4_spotlight_host, `localhost')m4_dnl
 m4_define(m4_spotlight_nl_port, 2060)m4_dnl
 m4_define(m4_aspotlightdir, m4_aenvdir/spotlight)m4_dnl
 m4_define(m4_spotlighturl, http://spotlight.sztaki.hu)m4_dnl
@@ -354,42 +374,19 @@ m4_define(m4_spotlightjarversion, 0.7)m4_dnl
 m4_define(m4_simple_spotlightjar, dbpedia-spotlight-`'m4_spotlightjarversion`'.jar)m4_dnl
 m4_define(m4_spotlightjar, dbpedia-spotlight-`'m4_spotlightjarversion`'-jar-with-dependencies-candidates.jar)m4_dnl
 m4_define(m4_spotlight_nl_model_ball, nl.tar.gz)m4_dnl
-m4_define(m4_spotlight_nl_port, 2060)m4_dnl
 m4_define(m4_spotlight_en_model_ball, en_2+2.tar.gz)m4_dnl
 m4_define(m4_spotlight_en_port, 2020)m4_dnl
-m4_dnl
-m4_dnl SVMLight
-m4_dnl
-m4_define(m4_SVM_download_url, http://download.joachims.org/svm_light/current/svm_light.tar.gz)m4_dnl
-m4_define(m4_SVMLight_url, http://svmlight.joachims.org)m4_dnl
-m4_define(m4_SVMLight_ball, svm_light.tar.gz)m4_dnl
-m4_define(m4_SVMLight_bin, svm_classify)m4_dnl
-m4_dnl
-m4_dnl CRFsuite
-m4_dnl
-m4_define(m4_CRF_url, http://www.chokkan.org/software/crfsuite/)m4_dnl
-m4_define(m4_CRF_download_url, https://github.com/downloads/chokkan/crfsuite/crfsuite-0.12.tar.gz)m4_dnl
-m4_define(m4_CRF_ball, crfsuite-0.12.tar.gz)m4_dnl
-m4_define(m4_CRF_dir, crfsuite-0.12)m4_dnl
-m4_dnl
-m4_dnl IBFGS
-m4_dnl
-m4_define(m4_IBFGS_download_url, https://github.com/downloads/chokkan/liblbfgs/liblbfgs-1.10.tar.gz)m4_dnl
-m4_define(m4_SVMLight_url, http://svmlight.joachims.org)m4_dnl
-m4_define(m4_IBFGS_ball, liblbfgs-1.10.tar.gz)m4_dnl
-m4_define(m4_IBFGS_dir, liblbfgs-1.10)m4_dnl
-m4_define(m4_IBFSG_url, http://www.chokkan.org/software/liblbfgs)m4_dnl
-
+m4_define(m4_spotlight_snapdir, spotlight)m4_dnl
+m4_define(m4_spotlight_dir, spotlight)m4_dnl
 m4_dnl
 m4_dnl Wikipedia db
 m4_dnl
 m4_define(m4_wikipediadb_tarball, wikipedia-db.v1.tar.gz)m4_dnl
-m4_define(m4_ixa_wikipediadb_download_url, http://ixa2.si.ehu.es/ixa-pipes/models)m4_dnl
+m4_define(m4_wikipediadb_url, http://ixa2.si.ehu.es/ixa-pipes/models/m4_wikipediadb_tarball)m4_dnl
+m4_define(m4_wikipediadb_tarball, wikipedia-db.v1.tar.gz)m4_dnl
 m4_dnl
 m4_dnl
 m4_dnl
-m4_define(m4_spotlight_snapdir, spotlight)m4_dnl
-m4_define(m4_spotlight_dir, spotlight)m4_dnl
 m4_dnl
 m4_dnl Locations of programs and system-dependent definitions
 m4_dnl

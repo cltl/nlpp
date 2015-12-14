@@ -25,5 +25,6 @@ nuweb/nlpp.w
 nuweb/m4_nlpp.w
 nuweb/w2html
 nuweb/.fuse*
+nuweb/nw000*
 test.*
 

@@ -87,7 +87,8 @@ Table~\ref{tab:modulelist}
                        & \dref{sec:nomcorefgraph}       & \href{m4_corefbasegit}{Github}      & m4_corefbase_commitname   & m4_ncorefscript   \\  
        \href{m4_evcorefscript}{Ev. coref}
                        & \dref{sec:eventcoref}                                & snapshot      &                           &  m4_evcorefscript  \\  
-       \href{m4_opiniscript}{Opinion miner}                 &  \href{m4_opinigit}{Github}     &  m4_opi_commitname  &  m4_opiniscript   & \\  
+       \hyperref[sec:vua-pylib]{Opinion miner}
+                       & \dref{sec:opinimin}   & \href{m4_opinigit}{Github} &           &  m4_opiniscript   & \\  
        \hyperref[sec:framesrl]{Framenet SRL} 
                        & \dref{sec:framesrl}                                  & snapshot      &                            &  m4_fsrlscript   \\  
        \hyperref[sec:dbpedia-ner]{Dbpedia\_ner} 
@@ -197,6 +198,7 @@ The directories have the follosing functions.
 @d directories to create @{m4_moddir @| @}
 @d directories to create @{m4_bindir m4_envbindir @| @}
 @d directories to create @{m4_envlibdir @| @}
+@d directories to create @{m4_envetcdir @| @}
 @%@d directories to create @{m4_envdir/python @| @}
 
 The following macro defines variable \verb|piperoot| and makes it to
@@ -230,18 +232,6 @@ Add the environment \verb|bin| directory to \verb|PATH|:
 export PATH=\$envbindir:$PATH
 @| PATH @}
 
-We will place libraries in the \texttt{env/lib} and place C include
-files in \texttt{env/include}. Therefore, set parameters to point to
-these directories.
-
-@d set variables that point to the directory-structure @{@%
-export CPPFLAGS="-I$envdir/include"
-export LD_LIBRARY_PATH=$envdir/lib:$LD_LIBRARY_PATH
-export LD_RUN_PATH=$envdir/lib:$LD_RUN_PATH
-@| CPPFLAGS LD_LIBRARY_PATH LD_RUN_PATH @}
-
-
-
 @% While setting variables, \emph{source} a scripts that sets variables
 @% for directories of which we do not yet know where they are, e.g.{}
 @% paths to Python and Java that we may have to set up dynamically.
@@ -255,6 +245,7 @@ Put the macro to set variables in a script that can later be sourced by the scri
 @o m4_envbindir/progenv @{@%
 #!/bin/bash
 @< set variables that point to the directory-structure @>
+export progenvset=0
 @| @}
 
 \section{How to obtain modules and other material}
@@ -421,7 +412,7 @@ while
 do
 @%   @< have an SSH key or die @>
   cd \$pipesocket
-  scp -i "m4_snapshotkeyfilename" m4_repo_user<!!>@@<!!>m4_repo_url:m4_repo_path/@1 .
+  scp -i "m4_snapshotkeyfile" m4_repo_user<!!>@@<!!>m4_repo_url:m4_repo_path/@1 .
   if
     [ $? -gt 0 ]
   then
@@ -477,25 +468,6 @@ done
 @%  exit 1
 @%fi
 @%@| @}
-
-\subsection{Installation from other sources}
-\label{sec:installation_other}
-
-Download modules or packages from other sources than Github or the
-snapshot when they are not already present in the ``socket'' with the
-folowing macro that accepts the http url and the name of the module or
-package as arguments.
-
-@d wget or have @{@%
-cd \$pipesocket
-if
-  [ ! -e @2 ]
-then
-  wget @1/@2
-fi
-
-@| @}
-
 
 
 
@@ -867,7 +839,6 @@ Install python packages:
 \begin{description}
 \item[lxml:]
 \item[pyyaml:] for coreference-graph
-\item[VUA\_pylib:] For the opinion-miner 
 \end{description}
 
 
@@ -875,19 +846,6 @@ Install python packages:
 pip install lxml
 pip install pyyaml
 @| lxml pyyaml @}
-
-@d install python packages @{@%
-cd $envdir/python
-if 
-  [ -d m4_pylibdir ]
-then
-  cd m4_pylibdir
-  git pull
-else
-   git clone m4_pylibgit
-fi
-@| @}
-
 
 
 
@@ -928,7 +886,11 @@ echo ... Treetagger
 echo ... Ticcutils and Timbl
 @< install the ticcutils utility @>
 @< install the timbl utility @>
-@< install other utilities @>
+echo ... VUA-pylib, SVMlight, CRFsuite
+@< install VUA-pylib @>
+@< install SVMLight @>
+@< install CRFsuite @>
+
 @| @}
 
 Next, install the modules:
@@ -948,8 +910,8 @@ echo ... WSD
 echo ... Ontotagger
 @< install the onto module @>
 echo ... Heideltime
-@% @< install the heideltime module @>
-@< install the new heideltime module @>
+@< install the heideltime module @>
+@% @< install the new heideltime module @>
 echo ... SRL
 @< install the srl module @>
 echo ... NED
@@ -962,9 +924,7 @@ echo ... dbpedia-ner
 @< install the dbpedia-ner module @>
 echo ... nominal event
 @< install the nomevent module @>
-echo ... post-SRL
 @< install the post-SRL module @>
-echo ... opinion-miner
 @< install the opinion-miner @>
 
 echo Final
@@ -1269,20 +1229,20 @@ We set 8Gb for the English server, but the Italian and Dutch Spotlight will requ
 \end{quotation}
 
 
-So, let's do that. 
+So, let us do that:
 
 @d install the Spotlight server @{@%
 @< get or have @(m4_spotlightball@) @>
-@< spotlight get or have @>
 @%mkdir -p m4_aspotlightdir
 cd \$envdir
 tar -xzf \$pipesocket/m4_spotlightball
 @% rm -rf \$pipesocket/m4_spotlightball
+cd \$envdir/spotlight
 @%cp m4_asnapshotroot/spotlight/m4_spotlightjar .
 @% wget m4_spotlight_download_url/m4_spotlightjar
-cd \$envdir/spotlight
-tar -xzf \$pipesocket/m4_spotlight_nl_model_ball
-@%rm m4_spotlight_nl_model_ball
+wget m4_spotlight_download_url/m4_spotlight_nl_model_ball
+tar -xzf m4_spotlight_nl_model_ball
+rm m4_spotlight_nl_model_ball
 @%wget m4_spotlight_download_url/m4_spotlight_en_model_ball
 @%tar -xzf m4_spotlight_en_model_ball
 @%rm m4_spotlight_en_model_ball
@@ -1305,94 +1265,233 @@ tar -xzf m4_wikipediadb_tarball
 rm  m4_wikipediadb_tarball
 @| @}
 
+Script \verb|bin/start-spotlight| starts spotlight if it is not
+already running. It does the following:
 
+\begin{enumerate}
+\item If variable \verb|spotlighthost| exists, it checks whether
+  Spotlight is already running on that host.
+\item If Spotlight does not run on that host or if If variable
+  \verb|spotlighthost| does not exist, it sets variable
+  \verb|spotlighthost| to localhost and then checks whether Spotlight
+  runs on localhost.
+\item If Spotlight has not yet been found, install spotlight on localhost.
+\item If a running spotlight has been found, set variable
+  \verb|spotlightrunning| to 0.
+\end{enumerate}
 
-@d spotlight get or have @{@%
-@< wget or have @(m4_spotlight_download_url@,m4_spotlight_nl_model_ball@) @>
-@< wget or have @(m4_spotlight_download_url@,m4_spotlightball@) @>
-@< wget or have @(m4_ixa_wikipediadb_download_url@,m4_wikipediadb_tarball@) @>
+@o m4_bindir/start-spotlight @{@%
+# NOTE: This script ought to be sourced.
+# Afterwards, on success, the following variables exist:
+# > spotlighthost
+# > spotlightrunning
+if 
+  [ ! $spotlightrunning ]
+then
+  [ $spotlighthost ] || export spotlighthost=m4_spotlight_host
+  @< try to obtain a running spotlightserver @>
+fi
 @| @}
 
+If variable \verb|spotlighthost| does not exist, set it to
+localhost. Test whether a Spotlightserver runs on
+\verb|spotlighthost|. If that fails and \verb|spotlighthost| did not
+point to localhost, try localhost. 
 
-@d start the Spotlight server @{@%
+If the previous attempts were not succesfull, start the
+spotlightserver on localhost. 
+
+If some spotlightserver has been contacted, set variable
+\verb|spotlightrunning|. Otherwise exit. At the end variable
+\verb|spotlighthost| ought to contain the address of the Spotlight-host.
+
+@d try to obtain a running spotlightserver @{@%
+@< test whether spotlighthost runs @($spotlighthost@) @>
+if 
+  [ ! $spotlightrunning ]
+then
+  if
+    [ "$spotlighthost" != "localhost" ]
+  then
+    export spotlighthost=localhost
+    @< test whether spotlighthost runs @($spotlighthost@) @>
+  fi
+fi
+if
+  [ ! $spotlightrunning ]
+then
+  @< start the Spotlight server on localhost @>
+  @< test whether spotlighthost runs @($spotlighthost@) @>
+fi
+if
+  [ ! $spotlightrunning ]
+then
+  echo "Cannot start spotlight"
+  exit 4
+fi
+@| @}
+
+Test whether the Spotlightserver runs on a given host. The
+``spotlight-test'' does not really test Spotlight, but it tests
+whether something is listening on the port and host where we expect
+Spotlight. I found the test-construction that is used here on
+\href{http://stackoverflow.com/questions/9609130/quick-way-to-find-if-a-port-is-open-on-linux}{Stackoverflow}.
+If the test is positive, set variable \verb|spotlightrunning| to
+0. Otherwise, unset that variable.
+
+
+@d test whether spotlighthost runs @{@%
+exec 6<>/dev/tcp/@1/m4_spotlight_nl_port
+if
+  [ $? -eq 0 ]
+then
+  export spotlightrunning=0
+else
+  spotlightrunning=
+fi
+exec 6<&-
+exec 6>&-
+@| @}
+
+@d start the Spotlight server on localhost @{@%
+[ $progenvset ] || source m4_aenvbindir/progenv
 cd m4_aspotlightdir
 @% java  -Xmx8g -jar m4_spotlightjar nl http://localhost:m4_spotlight_nl_port/rest
 java -jar -Xmx8g dbpedia-spotlight-0.7-jar-with-dependencies-candidates.jar nl http://localhost:2060/rest  &
 @% java -jar -Xmx8g dbpedia-spotlight-0.7-jar-with-dependencies-candidates.jar nl http://localhost:2060/rest  &
-@| @}
-
-We start the spotlight-server only in case it is not already running. Assume that Spotlight runs when something listens on port~m4_spotlight_nl_port of localhost:
-
-@d check/start the Spotlight server @{@%
-spottasks=`netstat -an | grep :m4_spotlight_nl_port | wc -l`
-if
-  [ $spottasks -eq 0 ]
-then
-  @< start the Spotlight server @>
-  sleep 60
-fi
+sleep 60
 @| @}
 
 
-\subsubsection{SVMLight and CRFsuite}
-\label{sec:SVMLight}
 
-\newcommand{\SVMLight}{\textsc{svml}ight}
-\newcommand{\CRFsuite}{\textsc{crf}suite}
-\newcommand{\libLBFGS}{lib\textsc{LFGFS}}
+Start the Spotlight if it is not already running. First find out what
+the host is on which we may expect to find a listening Spotlight.
 
-Install \href{m4_SVMLight_url}{\SVMLight} and \href{m4_CRF_url}{\CRFsuite} on behalf of the
-opinion-miner. Install \href{m4_IBFSG_url}{\libLBFGS} because
-\CRFsuite{} needs that.
+Variable \verb|spotlighthost| contains the address of the
+host where we expect to find Spotlight. If the expectation does not
+come true, and the Spotlighthost was not localhost, test whether
+Spotlight can be found on localhost. If the spotlight-server cannot be
+found, start it up on localhost.
+
+@% @d check/start the Spotlight server @{@%
+@% export spotlighthost=m4_spotlight_host
+@% @< test whether spotlighthost runs @($spotlighthost@) @>
+@% if
+@%   [ $spotlightrunning -ne 0 ]
+@% then
+@%   if
+@%     [ $spotlighthost != "localhost" ]
+@%   then
+@%     export spotlighthost="localhost"
+@%     @< test whether spotlighthost runs @($spotlighthost@) @>
+@%   fi
+@% fi
+@% @| @}
+@% 
+@% 
+@% 
+@% Start spotlight on localhost if we couldn't find one.
+@% 
+@% @d check/start the Spotlight server @{@%
+@% if
+@%   [ $spotlightrunning -ne 0 ]
+@% then
+@%   @< start the Spotlight server on localhost @>
+@% fi
+@% @| @}
+@% 
+@% 
+@%  If
+@% the expectation did not come true, start up Spotlight locally 
 
 
-The source-tarball for \SVMLight{} can be obtained from
-\url{m4_SVM_download_url}, but we have it in the
-snapshot. Installation is simple: unpack in a tempdir, make, move the
-new binary tom its place and remove the tempdir.
 
-@d install other utilities @{@%
-@< get or have @(m4_SVMLight_ball@) @>
-tempd=`mktemp -d -t svm.XXXXXX`
-cd $tempd
-tar -xzf \$pipesocket/m4_SVMLight_ball
-make
-cp m4_SVMLight_bin $envbindir/
-cd \$piperoot
-rm -rf $tempd
+\subsubsection{VUA-pylib}
+\label{sec:vua-pylib}
+
+Module VUA-pylib is needed for the opinion-miner. Install it in the Python library
+
+@d install VUA-pylib @{@%
+cd \$envdir/python
+git clone m4_vuapylibgit
 @| @}
 
 
-The sourcecode for libLBFGS has been obtained from
-\url{m4_IBFGS_download_url} and placed in the snapshot-repo. The ball
-contains an \texttt{INSTALL} text that we follow below:
+\subsubsection{SVMLight}
+\label{sec:svmlight}
 
-@d install other utilities @{@%
-@< get or have @(m4_IBFGS_ball@) @>
-tempd=`mktemp -d -t libibfsg.XXXXXX`
-cd \$tempd
-tar -xzf \$pipesocket/m4_IBFGS_ball
-cd m4_IBFGS_dir
-./configure --prefix=\$envdir
-make
-make install
-cd \$piperoot
-rm -rf \$tempd
+SVMlight supplies a Support Vector Machine. It is used by the
+opinion-miner. SVMlight can be obtained from 
+\href{m4_SVMlightsite}{the site} where it is documented.
+
+Installation goes like this:
+
+@d install SVMLight @{@%
+tempdir=`mktemp -d -t SVMlight.XXXXXX`
+cd $tempdir
+wget m4_SVMlightball_url
+tar -xzf m4_SVMlightball
+make all
+cp svm_classify m4_aenvbindir/
+cp svm_learn m4_aenvbindir/
+cd m4_aprojroot
+rm -rf \$tempdir
 @| @}
 
-@d install other utilities @{@%
-@< get or have @(m4_CRF_ball@) @>
-tempd=`mktemp -d -t crf.XXXXXX`
-cd $tempd
-tar -xzf \$pipesocket/crfsuite-0.12.tar.gz
-cd m4_CRF_dir
-./configure --prefix=\$envdir
-make
-make install
-cd \$piperoot
-rm -rf \$tempd
 
+\subsubsection{CRFsuite}
+\label{sec:crfsuite}
+
+\href{http://www.chokkan.org/software/crfsuite}{CRFsuite} is an
+implementation of Conditional Random Fields (\textsc{crf}). Module
+\href{https://github.com/cltl/opinion_miner_deluxe}{opinion-miner-de-luxe}
+needs it. It can be installed from it's sources, but I did not manage
+to this. Therefore, currently we use a pre-compiled ball. 
+
+@d install CRFsuite @{@%
+@< get or have @(m4_CRFsuitebinball@) @>
+tempdir=`mktemp -d -t crfsuite.XXXXXX`
+cd $tempdir
+tar -xzf \$pipesocket/m4_CRFsuitebinball
+cd crfsuite-0.12
+cp -r bin/crfsuite $envbindir/
+mkdir -p $envdir/include/
+cp -r include/* $envdir/include/
+mkdir -p $envdir/lib/
+cp -r lib/* $envdir/lib/
+cd m4_aprojdir
+rm -rf $tempdir
 @| @}
+
+
+
+@% @d install liblblbfgs @{@%
+@% tempdir=`mktemp -d -t liblblbfgs.XXXXXX`
+@% cd \$tempdir
+@% git clone m4_liblblbfgs_git
+@% cd liblblfgs
+@% ./autogen.sh
+@% ./configure --prefix=\$envdir
+@% make
+@% make install
+@% cd m4_aprojroot
+@% rm -rf \$tempdir
+@% @| @}
+@% 
+@% @d install CRFsuite @{@%
+@% @< install liblblbfgs @>
+@% tempdir=`mktemp -d -t crfsuite.XXXXXX`
+@% cd \$tempdir
+@% wget m4_CRFsuiteball_url
+@% tar -xzf m4_CRFsuiteball
+@% cd m4_CRFsuitedir
+@% ./configure --prefix=\$envdir
+@% make
+@% make install
+@% cd m4_aprojroot
+@% rm -rf \$tempdir
+@% @| @}
+
 
 
 
@@ -1513,16 +1612,45 @@ git checkout m4_morphpar_commitname
 \paragraph{Script}
 \label{sec:morphparserscript}
 
+The morpho-syntactic module parses the sentences with Alpino. Alpino
+takes a lot of time to handle long sentences. Therefore the
+morpho-syntactic module has an option \verb|-t| to set a time-out (in minutes) for sentence
+parsing. 
+
 @o m4_bindir/m4_morphparscript @{@%
 #!/bin/bash
 source m4_aenvbindir/progenv
 @% @< set variables that point to the directory-structure @>
 @% @< set up programming environment @>
+@< get the mor time-out parameter @>
 ROOT=\$piperoot
 MODDIR=\$modulesdir/<!!>m4_morphpardir<!!>
 @< set alpinohome @>
-cat | python \$MODDIR/core/morph_syn_parser.py
+cat | python \$MODDIR/core/morph_syn_parser.py $timeoutarg
 @| @}
+
+Use \href{http://mywiki.wooledge.org/BashFAQ/035#getopts}{getopts} to
+read the \verb|-t| option.
+
+@d get the mor time-out parameter @{@%
+OPTIND=1
+stimeout=
+timeoutarg=
+while getopts "t:" opt; do
+    case "$opt" in
+    t)  stimeout=$OPTARG
+        ;;
+    esac
+done
+shift $((OPTIND-1))
+if
+  [ $stimeout ]
+then
+  timeoutarg="-t $stimeout"
+fi
+@| @}
+
+
 
 @%@d make scripts executable @{@%
 @%chmod 775  m4_bindir/m4_morphparscript
@@ -1835,17 +1963,17 @@ echo LIBSVM installed correctly lib/libsvm
 This part has also been copied from \verb|install_naf.sh| in the \textsc{wsd} module.
 
 @d download svm models @{@%
-@< get or have @(m4_wsd_snapball@) @>
+#@< get or have @(m4_wsd_snapball@) @>
 cd \$modulesdir
-tar -xzf \$pipesocket/m4_wsd_snapball
+#tar -xzf \$pipesocket/m4_wsd_snapball
 @% rm \$pipesocket/m4_wsd_snapball
 @%cp -r m4_aprojroot/m4_snapshotdir/svm_wsd/models .
 @% echo 'Downloading models...(could take a while)'
-@% wget --user=cltl --password='.cltl.' kyoto.let.vu.nl/~izquierdo/models_wsd_svm_dsc.tgz 2> /dev/null
-@% echo 'Unzipping models...'
-@% tar xzf models_wsd_svm_dsc.tgz
-@% rm models_wsd_svm_dsc.tgz
-@% echo 'Models installed in folder models'
+wget --user=cltl --password='.cltl.' kyoto.let.vu.nl/~izquierdo/models_wsd_svm_dsc.tgz 2> /dev/null
+echo 'Unzipping models...'
+tar xzf models_wsd_svm_dsc.tgz
+rm models_wsd_svm_dsc.tgz
+echo 'Models installed in folder models'
 
 @| @}
 
@@ -1865,7 +1993,8 @@ source m4_aenvbindir/progenv
 @% @< set up programming environment @>
 WSDDIR=$modulesdir/m4_wsddir
 WSDSCRIPT=dsc_wsd_tagger.py
-cat | python $WSDDIR/$WSDSCRIPT --naf 
+@% cat | python $WSDDIR/$WSDSCRIPT --naf 
+cat | python $WSDDIR/$WSDSCRIPT --naf -ref odwnSY
 @| @}
 
 @%@d make scripts executable @{@%
@@ -2078,12 +2207,14 @@ repository. That is a different jar than the jar that we use to start Spotlight.
 
 @d put spotlight jar in the Maven repository @{@%
 echo Put Spotlight jar in the Maven repository.
-@< wget or have @(m4_spotlight_download_url@,m4_simple_spotlightjar@) @>
-@< wget or have @(m4_spotlight_download_url@,m4_spotlight_nl_model_ball@) @>
 tempdir=`mktemp -d -t simplespot.XXXXXX`
 cd $tempdir
-tar -xzf \$pipesocket/m4_spotlight_nl_model_ball
-MVN_SPOTLIGHT_OPTIONS="-Dfile=\$pipesocket/m4_simple_spotlightjar"
+wget m4_spotlight_download_url/m4_simple_spotlightjar
+wget m4_spotlight_download_url/m4_spotlight_nl_model_ball
+tar -xzf m4_spotlight_nl_model_ball
+@% wget m4_spotlight_download_url/m4_spotlight_en_model
+@% tar -xzf m4_spotlight_en_model
+MVN_SPOTLIGHT_OPTIONS="-Dfile=m4_simple_spotlightjar"
 MVN_SPOTLIGHT_OPTIONS="$MVN_SPOTLIGHT_OPTIONS -DgroupId=ixa"
 MVN_SPOTLIGHT_OPTIONS="$MVN_SPOTLIGHT_OPTIONS -DartifactId=dbpedia-spotlight"
 MVN_SPOTLIGHT_OPTIONS="$MVN_SPOTLIGHT_OPTIONS -Dversion=m4_spotlightjarversion"
@@ -2108,8 +2239,8 @@ source m4_aenvbindir/progenv
 @% @< set up programming environment @>
 ROOT=\$piperoot
 JARDIR=\$jarsdir
-@< check/start the Spotlight server @>
-cat | java -Xmx1000m -jar \$jarsdir/m4_nedjar  -p 2060 -e candidates -i \$envdir/spotlight/wikipedia-db -n nlEn
+[ $spotlightrunning ] || source m4_abindir/start-spotlight
+cat | java -Xmx1000m -jar \$jarsdir/m4_nedjar -H http://$spotlighthost -p m4_spotlight_nl_port -e candidates -i \$envdir/spotlight/wikipedia-db -n nlEn
 @% cat | java -jar \$jarsdir/m4_nedjar  -p 2060  -n nl
 @| @}
 
@@ -2133,9 +2264,8 @@ install from a snapshot (\verb|m4_ontotarball|).
 @< get or have @(m4_ontotarball@) @>
 @%cp -r m4_asnapshotroot/m4_ontodir \$modulesdir/
 cd \$modulesdir
-rm -rf m4_ontodir
 tar -xzf \$pipesocket/m4_ontotarball
-@%rm \$pipesocket/m4_ontotarball
+rm \$pipesocket/m4_ontotarball
 chmod -R o+r \$modulesdir/m4_ontodir
 @| @}
 
@@ -2263,12 +2393,102 @@ rm -rf \$TMPFIL
 \subsubsection{Heideltime}
 \label{sec:heideltime}
 
-@% \paragraph{Module}
-@% \label{sec:heideltimmodule}
-@% 
-@% Heideltime uses treetagger. It expects to find the location of
-@% treetagger in a variable \texttt{TreetaggerHome} in config-file
-@% \verb|config.props|.
+\paragraph{Module}
+\label{sec:heideltimmodule}
+
+The code for Heideltime can be found in
+\href{https://github.com/HeidelTime/heideltime}{Github}. However, we
+use a compiled Heideltime Jar, compiled by Antske Fokkens, because
+some bugs have been repaired in that version.
+
+Use Heideltime via a wrapper, \texttt{ixa-pipe-time}, obtained from
+\href{https://github.com/ixa-ehu/ixa-pipe-time}{Github}.
+
+Heideltime uses treetagger. It expects to find the location of
+treetagger in a variable \texttt{TreetaggerHome} in config-file
+\verb|config.props|.
+
+
+
+
+@d install the heideltime module @{@%
+moduledir=m4_amoddir/m4_heideldir
+@< clone the heideltime wrapper @>
+@< put Antske's material in the heideltime wrapper @>
+@< compile the heideltime wrapper @>
+@| @}
+
+
+@d clone the heideltime wrapper @{@%
+MODNAM=heideltime
+DIRN=m4_heideldir
+GITU=m4_heidelgit
+GITC=m4_heidel_commitname
+@< install from github @(m4_heidelndir@) @>
+mkdir $moduledir/lib
+@| @}
+
+In the wrapper we need the following extra material:
+\begin{itemize}
+\item A debugged version of the Heidelberg jar.
+\item A configuration file \texttt{config.props}, although it does not seem to be actually used.
+\item Another configuration file: \texttt{alpino-to-treetagger.csv}
+\end{itemize}
+The extra material has been provided by Antske Fokkens.
+
+
+@d put Antske's material in the heideltime wrapper @{@%
+@< get or have @(m4_heidelantske@) @>
+cd $modulesdir/$DIRN
+tar -xzf m4_asocket/m4_heidelantske
+mv antske_heideltime_stuff/m4_heidelstandalonejar lib/
+mv antske_heideltime_stuff/config.props .
+mv antske_heideltime_stuff/alpino-to-treetagger.csv .
+rm -rf antske_heideltime_stuff
+@| @}
+
+Compile the Heideltime wrapper according to the \href{m4_heidelhtml}{instruction} on Github.
+
+@d compile the heideltime wrapper @{@%
+@< get jvntextpro-2.0.jar @>
+@< activate the install-to-project-repo utility @>
+cd m4_amoddir/$DIRN
+mvn clean install
+@| @}
+
+@d get jvntextpro-2.0.jar @{@%
+cd  m4_amoddir/$DIRN/lib
+wget http://ixa2.si.ehu.es/%7Ejibalari/jvntextpro-2.0.jar
+@| @}
+
+
+Scipt \verb|install-to-project-repo.py| generates a library in
+subdirectory \verb|repo| and copies the jars that it finds in the
+\verb|lib| subdirectory in this repo in such a way that Maven finds it
+there. Somewhere in the \verb|install-to-project.py| \ldots \verb|mvn|
+process the jars are copied in your local repository (\verb|~/.m2|)
+too. As a result, only a Maven Guru understands precisely where Maven
+obtains its jar from and the best thing to do is to empty the
+\verb|repo| subdirectory and the local repository before (re-)
+applying \verb|install-to-project-repo.py|.
+
+
+@d activate the install-to-project-repo utility @{@%
+@< remove outdated heideltime jars @>
+cd m4_amoddir/$DIRN/
+git clone git@@github.com:carchrae/install-to-project-repo.git
+mv install-to-project-repo/install-to-project-repo.py .
+rm -rf install-to-project-repo
+python ./install-to-project-repo.py
+@| @}
+
+@d remove outdated heideltime jars @{@%
+rm -rf m4_amoddir/$DIRN/repo
+mkdir -p m4_amoddir/$DIRN/repo/local
+rm -rf m4_heidel_mvn_localdir
+rm -rf m4_jvntextpro_mvn_localdir
+@| @}
+
 @% 
 @% One of the elements of Heideltime (the jar
 @% \verb|de.unihd.dbs.heideltime.standalone.jar| in
@@ -2276,11 +2496,6 @@ rm -rf \$TMPFIL
 @% Github version is outdated. Therefore, get the latest version from the snapshot.
 @% 
 @% @d install the heideltime module @{@%
-@% MODNAM=heideltime
-@% DIRN=m4_heideldir
-@% GITU=m4_heidelgit
-@% GITC=m4_heidel_commitname
-@% @< install from github @>
 @% @< update the heideltime jar @>
 @% @< adapt heideltime's config.props @>
 @% @| @}
@@ -2312,94 +2527,94 @@ rm -rf \$TMPFIL
 @% @< adapt heideltime's config.props @>
 @% @| @}
 
-\paragraph{New module}
-\label{sec:heideltimenewmodule}
-
-Heideltime has been updated. In princple the Heideltim module ought to be installed as described in the follosing message from Itziar Aldabe:
-
-\begin{verbatim}
-
-I managed to get everything ready, except for the README in github. I'll update it next
-week but I think I can give you some simple steps that should be enough to correctly
-use the module 
-
-1.- Download the code: git clone https://github.com/ixa-ehu/ixa-pipe-time.git
-
-2.- In the ixa-pipe-time create the lib directory
-
-3.- Download the HeidelTimeStandalone jar file from https://code.google.com/p/heideltime/
-
-  If you download the heideltime-standalone-1.7 zip file, you will find two files that you need:
-  - de.unihd.dbs.heideltime.standalone.jar
-  - config.props => you will need this file to correctly execute the new time module
-
-  move the jar file to the lib directory
-
-4.- Download a copy of JVnTextPro from http://ixa2.si.ehu.es/~jibalari/jvntextpro-2.0.jar
-
-  move the jar file to the lib directory
-
-5.- Download the following script https://github.com/carchrae/install-to-project-repo/blob/master/install-to-project-repo.py
-
-6.- Execute the script within the ixa-pipe-time directory
-
-   => It will create the repo directory and two dependencies that you don't need to copy in the pom.xml file. It is necessary to run the scrip to correctly create the repo directory. Don't copy the anything in the pom file.
-
-7.- Download the mappings file: http://ixa2.si.ehu.es/~jibalari/eagles-to-treetager.csv
-
-8.- Create the jar file for the time module
-    mvn clean install
-
-9.- Test the module
-
-   cat pos.naf | java -jar ${dirToJAR}/ixa.pipe.time.jar -m ${dirToFile}/eagles-to-treetager.csv -c ${dirToFile}/config.props
-
-
-   I think everything needed is included in the list of steps. Let me know if something is not clear.
-
-
-Regards,
-Itziar
-
-
-\end{verbatim}
-
-Unfortunately, this procedure does not always seem to work. On the test-computer (Ubuntu Linux version 14.04) the instruction 
-\verb|mvn clean package| results in the following error message:
-
-\begin{verbatim}
-(venv)paul@@klipperaak:~/projecten/cltl/pipelines/nlpp/modules/ixa-pipe-time$ mvn clean package
-[INFO] Scanning for projects...
-[INFO]                                                                         
-[INFO] ------------------------------------------------------------------------
-[INFO] Building IXAPipeHeidelTime 1.0.1
-[INFO] ------------------------------------------------------------------------
-[WARNING] The POM for local:de.unihd.dbs.heideltime.standalone:jar:1.0 is missing, no dependency information available
-[INFO] ------------------------------------------------------------------------
-[INFO] BUILD FAILURE
-[INFO] ------------------------------------------------------------------------
-[INFO] Total time: 0.650s
-[INFO] Finished at: Wed Jul 15 09:40:39 CEST 2015
-[INFO] Final Memory: 7M/232M
-[INFO] ------------------------------------------------------------------------
-[ERROR] Failed to execute goal on project time: Could not resolve dependencies for project ixa.pipe:time:jar:1.0.1: Failure to find local:de.unihd.dbs.heideltime.standalone:jar:1.0 in file:///home/paul/projecten/cltl/pipelines/nlpp/modules/ixa-pipe-time/repo was cached in the local repository, resolution will not be reattempted until the update interval of heideltime-local-dependency-repo has elapsed or updates are forced -> [Help 1]
-[ERROR] 
-[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
-[ERROR] Re-run Maven using the -X switch to enable full debug logging.
-[ERROR] 
-[ERROR] For more information about the errors and possible solutions, please read the following articles:
-[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/DependencyResolutionException
-
-\end{verbatim}
-
-
-Therefore we have compiled the module in a computer where it worked and put the result in the snapshot.
-
-@d install the new heideltime module @{@%
-@< get or have @(m4_heidelnball@) @>
-cd \$modulesdir
-tar -xzf \$pipesocket/m4_heidelnball
-@| @}
+@% \paragraph{New module}
+@% \label{sec:heideltimenewmodule}
+@% 
+@% Heideltime has been updated. In princple the Heideltim module ought to be installed as described in the following message from Itziar Aldabe:
+@% 
+@% \begin{verbatim}
+@% 
+@% I managed to get everything ready, except for the README in github. I'll update it next
+@% week but I think I can give you some simple steps that should be enough to correctly
+@% use the module 
+@% 
+@% 1.- Download the code: git clone https://github.com/ixa-ehu/ixa-pipe-time.git
+@% 
+@% 2.- In the ixa-pipe-time create the lib directory
+@% 
+@% 3.- Download the HeidelTimeStandalone jar file from https://code.google.com/p/heideltime/
+@% 
+@%   If you download the heideltime-standalone-1.7 zip file, you will find two files that you need:
+@%   - de.unihd.dbs.heideltime.standalone.jar
+@%   - config.props => you will need this file to correctly execute the new time module
+@% 
+@%   move the jar file to the lib directory
+@% 
+@% 4.- Download a copy of JVnTextPro from http://ixa2.si.ehu.es/~jibalari/jvntextpro-2.0.jar
+@% 
+@%   move the jar file to the lib directory
+@% 
+@% 5.- Download the following script https://github.com/carchrae/install-to-project-repo/blob/master/install-to-project-repo.py
+@% 
+@% 6.- Execute the script within the ixa-pipe-time directory
+@% 
+@%    => It will create the repo directory and two dependencies that you don't need to copy in the pom.xml file. It is necessary to run the scrip to correctly create the repo directory. Don't copy the anything in the pom file.
+@% 
+@% 7.- Download the mappings file: http://ixa2.si.ehu.es/~jibalari/eagles-to-treetager.csv
+@% 
+@% 8.- Create the jar file for the time module
+@%     mvn clean install
+@% 
+@% 9.- Test the module
+@% 
+@%    cat pos.naf | java -jar ${dirToJAR}/ixa.pipe.time.jar -m ${dirToFile}/eagles-to-treetager.csv -c ${dirToFile}/config.props
+@% 
+@% 
+@%    I think everything needed is included in the list of steps. Let me know if something is not clear.
+@% 
+@% 
+@% Regards,
+@% Itziar
+@% 
+@% 
+@% \end{verbatim}
+@% 
+@% Unfortunately, this procedure does not always seem to work. On the test-computer (Ubuntu Linux version 14.04) the instruction 
+@% \verb|mvn clean package| results in the following error message:
+@% 
+@% \begin{verbatim}
+@% (venv)paul@@klipperaak:~/projecten/cltl/pipelines/nlpp/modules/ixa-pipe-time$ mvn clean package
+@% [INFO] Scanning for projects...
+@% [INFO]                                                                         
+@% [INFO] ------------------------------------------------------------------------
+@% [INFO] Building IXAPipeHeidelTime 1.0.1
+@% [INFO] ------------------------------------------------------------------------
+@% [WARNING] The POM for local:de.unihd.dbs.heideltime.standalone:jar:1.0 is missing, no dependency information available
+@% [INFO] ------------------------------------------------------------------------
+@% [INFO] BUILD FAILURE
+@% [INFO] ------------------------------------------------------------------------
+@% [INFO] Total time: 0.650s
+@% [INFO] Finished at: Wed Jul 15 09:40:39 CEST 2015
+@% [INFO] Final Memory: 7M/232M
+@% [INFO] ------------------------------------------------------------------------
+@% [ERROR] Failed to execute goal on project time: Could not resolve dependencies for project ixa.pipe:time:jar:1.0.1: Failure to find local:de.unihd.dbs.heideltime.standalone:jar:1.0 in file:///home/paul/projecten/cltl/pipelines/nlpp/modules/ixa-pipe-time/repo was cached in the local repository, resolution will not be reattempted until the update interval of heideltime-local-dependency-repo has elapsed or updates are forced -> [Help 1]
+@% [ERROR] 
+@% [ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+@% [ERROR] Re-run Maven using the -X switch to enable full debug logging.
+@% [ERROR] 
+@% [ERROR] For more information about the errors and possible solutions, please read the following articles:
+@% [ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/DependencyResolutionException
+@% 
+@% \end{verbatim}
+@% 
+@% 
+@% Therefore we have compiled the module in a computer where it worked and put the result in the snapshot.
+@% 
+@% @d install the new heideltime module @{@%
+@% @< get or have @(m4_heidelnball@) @>
+@% cd \$modulesdir
+@% tar -xzf \$pipesocket/m4_heidelnball
+@% @| @}
 
 
 
@@ -2453,28 +2668,12 @@ tar -xzf \$pipesocket/m4_heidelnball
 \paragraph{Script}
 \label{sec:heideltime-script}
 
-The script run the heideltime jar. 
-
 @o m4_bindir/m4_heidelscript @{@%
 #!/bin/bash
 source m4_aenvbindir/progenv
-HEIDELDIR=\$modulesdir/m4_heidelndir
+HEIDELDIR=\$modulesdir/m4_heideldir
 cd $HEIDELDIR
-iconv -t utf-8//IGNORE | java -jar target/ixa.pipe.time.jar -m alpino-to-treetagger.csv -c config.props
-@| @}
-
-Sometimes the Heideltime jar writes log to standard out. Therefore we will remove text preceeding the first xml tag in an extra pipeline-step.
-
-@o m4_bindir/remprol.awk @{@%
-#!/usr/bin/gawk -f
-BEGIN {prolog="y"}
-
-/^<?xml/ {prolog="n"}
-/^<NAF/ {prolog="n"}
-/^<?XML/ {prolog="n"}
-/^<naf/ {prolog="n"}
-
-prolog=="n" {print}
+iconv -t utf-8//IGNORE | java -Xmx1000m -jar target/ixa.pipe.time.jar -m alpino-to-treetagger.csv -c config.props
 @| @}
 
 @% @o m4_bindir/m4_heidelscript @{@%
@@ -2674,9 +2873,11 @@ Spotlight server.
 #!/bin/bash
 source m4_aenvbindir/progenv
 @% @< set variables that point to the directory-structure @>
-@< check/start the Spotlight server @>
+@% @< check/start the Spotlight server @>
+[ $spotlightrunning ] || source m4_abindir/start-spotlight
+
 MODDIR=\$modulesdir/<!!>m4_dbpnerdir<!!>
-cat | iconv -f ISO8859-1 -t UTF-8 | $MODDIR/dbpedia_ner.py -url http://localhost:2060/rest/candidates
+cat | iconv -f ISO8859-1 -t UTF-8 | $MODDIR/dbpedia_ner.py -url http://$spotlighthost:<!!>m4_spotlight_nl_port<!!>/rest/candidates
 @| @}
 
 
@@ -2695,7 +2896,6 @@ versions the jar from the ontotagger module can be used for this module.
 @d install the nomevent module @{@%
 @< get or have @(m4_nomeventball@) @>
 cd \$modulesdir
-rm -rf m4_nomeventdir
 unzip -q \$pipesocket/m4_nomeventball
 @| @}
 
@@ -2715,139 +2915,104 @@ JAVAMODULE=eu.kyotoproject.main.NominalEventCoreference
 cat | iconv -f ISO8859-1 -t UTF-8 | java -Xmx812m -cp $JAR $JAVAMODULE --framenet-lu $RESOURCESDIR/nl-luIndex.xml
 @| @}
 
-\subsubsection{Opinion-miner}
-\label{sec:openiminer}
 
-The opinion-miner can be obtained from
-\href{https://github.com/cltl/opinion_miner_deluxe}{Github}. However,
-in order to use it, the following must be done:
+\subsubsection{Opinion miner}
+\label{sec:opinimin}
+
+To run the opinion-miner, the following things are needed:
 
 \begin{itemize}
-\item The script \verb|classify_kaf_naf_file.py| contains absolute
-  paths that must be repaired.
-\item Models must be supplied. They are available in the snapshot and
-  they will be placed in subdirectory \verb|final_models|. 
-\item The file \verb|final_models/nl/news_cfg/config.cfg| contains
-  absolute paths that must be corrected.
-\item A ``subjectivity detector'' module must be supplied. This is in
-  the snapshot as well.
-\item The file \verb|subjectivity_detector/lib/path_finder.py|
-  contains absolute paths that must be corrected.
+\item SVMlight
+\item crfsuite
+\item vua-pylib
 \end{itemize}
 
-The installation works without problems, but the opinion-miner causes
-the test-file to shrink and therefore I do not really trust it yet.
+\paragraph{Module}
 
-Download the opinion-miner from Github and install the models
-in a subdirectory.
+The module can be cloned from Github. However, currently there are
+problems with the Github installation. Therefore we borrow the opinion
+miner from the English \textsc{nwr} pipeline.
 
 @d install the opinion-miner @{@%
-@< install the opinion-miner module @>
-@< install the opinion-miner models @>
-@< install the subjectivity-detector @>
+@< get or have @(m4_opini_temp_ball@) @>
+cd m4_amoddir
+tar -xzf m4_asocket/m4_opini_temp_ball
 @| @}
 
-@d install the opinion-miner module  @{@%
-MODNAM=m4_opinidir
-DIRN=m4_opinidir
-GITU=m4_opinigit
-GITC=m4_opi_commitname
-@< install from github @>
-@< repair paths in classify\_kaf\_naf\_file.py @>
+The opinion-miner needs a configuration file that is located in the
+directory where the model-data resides. In this pipeline we will use
+model-data derived from news-articles. An alternative model, derived
+from hotel evaluations can also be used. Put the configuration file in
+the \texttt{etc} subdir and copy it to its proper location during the
+installation of the opinion-miner.
+
+@o m4_envetcdir/m4_opini_nl_conf @{@%
+[general]
+output_folder = m4_amoddir/m4_opinidir/final_models/nl/news_cfg1
+
+[crfsuite]
+path_to_binary = m4_aenvbindir/crfsuite
+
+[svmlight]
+path_to_binary_learn = m4_aenvbindir/svm_learn
+path_to_binary_classify = m4_aenvbindir/svm_classify
+@| @}
+
+@d install the opinion-miner @{@%
+cd m4_opinidir
+cp m4_aenvetcdir/m4_opini_nl_conf \$modulesdir/m4_opinidir/m4_opini_dutchmodel_subdir/config.cfg
 @| @}
 
 
 
-@d repair paths in classify\_kaf\_naf\_file.py @{@%
-repascript=\$modulesdir/m4_opinidir/classify_kaf_naf_file.py
-oldpath='\/home\/izquierdo\/cltl_repos\/opinion_miner_deluxe'
-newpath=\$envdir/python
-newpathsed=`echo \$newpath | sed 's/\//\\\\\\//g'`
-tempdir=`mktemp -d -t temp.XXXXXX`
-cd \$tempdir
-mv \$repascript ./tempfil
-sed "s/\$oldpath/\$newpathsed/g" ./tempfil >\$repascript
-cd \$piperoot
-@% rm -rf \$tempdir 
-@| @}
-
-
-
-
-@d install the opinion-miner models @{@%
-@< get or have @(m4_opimodelsball@) @>
-cd \$modulesdir/m4_opinidir
-tar -xzf \$pipesocket/m4_opimodelsball
-@< repair opinion-miner-models config-file @>
-
-
-@| @}
-
-File \verb|m4_opimodelsdir/nl/news_cfg1/config.cfg| contains absolute
-paths that must be repaired for the following variables that are
-defined in the file:
-\begin{description}
-\item[path\_to\_binary:] Path of the \verb|crfsuite| binary.
-\item[path\_to\_binary\_classify:] Path to the \verb|SVMlight| classify binary 
-\end{description}
-
-
-
-@d repair opinion-miner-models config-file @{@%
-opinion_miner_models_config_file=\$modulesdir/m4_opinidir/m4_opimodelsdir/nl/news_cfg1/config.cfg 
-tempdir=`mktemp -d -t opconftemp.XXXXXX`
-cd $tempdir
-cat <<EOF >opocon.awk
-/^path_to_binary_classify/ { print "path_to_binary_classify = m4_aenvbindir/svm_classify"; next}
-/^path_to_binary / { print "path_to_binary = m4_aenvbindir/crfsuite"; next}
-{print}
-EOF
-mv \$opinion_miner_models_config_file ./old.config.cfg
-gawk -f opocon.awk ./old.config.cfg > \$opinion_miner_models_config_file
-cd \$piperoot
-rm -rf $tempdir
-@| @}
-
-@% @d install the subjectivity-detector @{@%
-@% @< get or have @(m4_subj_det_ball@) @>
-@% cd \$modulesdir/m4_opinidir
-@% tar -xzf \$pipesocket/m4_subj_det_ball
-@% @< repair subjectivity_detector pathfinder @>
+@% It must be completed with
+@%trained models and a configuration file that tells where things
+@%can be found.
+@%
+@%@d install the opinion-miner @{@%
+@%MODNAM=opiniminer
+@%DIRN=m4_opinidir
+@%GITU=m4_opinigit
+@%GITC=m4_opini_commitname
+@%@< install from github @>
+@%cd m4_amoddir/m4_opinidir
+@%@< get or have @(m4_opini_trained_models_ball@) @>
+@%tar -xzf m4_asocket/m4_opini_trained_models_ball
+@%
+@%@| @}
+@%
+@% @o m4_envetcdir/m4_opini_nl_conf @{@%
+@% [general]
+@% output_folder = m4_amoddir/m4_opinidir/final_models/nl/news_cfg1
+@% 
+@% 
+@% [crfsuite]
+@% path_to_binary = m4_aenvbindir/crfsuite
+@% 
+@% [svmlight]
+@% path_to_binary_learn = m4_aenvbindir/svm_learn
+@% path_to_binary_classify = m4_aenvbindir/svm_classify
 @% @| @}
-
-@d install the subjectivity-detector @{@%
-@< get or have @(m4_subj_det_ball@) @>
-cd \$envdir/python
-tar -xzf \$pipesocket/m4_subj_det_ball
-@< repair subjectivity\_detector pathfinder @>
-@| @}
-
-
-@d repair subjectivity\_detector pathfinder  @{@%
-pathfinder=m4_subj_pathfinderpath
-cat <<EOF  >\$pathfinder
-def find_svmlight_learn():
-    path = "\$envbindir/svm_learn"
-    return path
-
-def find_svmlight_classify():
-    path = "\$envbindir/svm_classify"
-    return path
-EOF
-@| @}
-
-
 
 \paragraph{Script}
 
 @o m4_bindir/m4_opiniscript @{@%
 #!/bin/bash
 source m4_aenvbindir/progenv
-MODDIR=\$modulesdir/m4_opinidir
-datamodel=\$MODDIR/final_models/nl/news_cfg1
-cat | python $MODDIR/classify_kaf_naf_file.py -m $datamodel
+rootDir=\$modulesdir/m4_opinidir
+cd $rootDir
+export PATH=$PATH:.
+python classify_kaf_naf_file.py -m \$rootDir/final_models/nl/news_cfg1
+
+
 @| @}
 
+@% @o m4_bindir/m4_opiniscript @{@%
+@% #!/bin/bash
+@% source m4_aenvbindir/progenv
+@% cd m4_amoddir/m4_opinidir
+@% python classify_kaf_naf_file.py m4_aenvetcdir/m4_opini_nl_conf
+@% @| @}
 
 
 \section{Utilities}
@@ -2866,22 +3031,22 @@ TESTDIR=$ROOT/test
 BIND=$ROOT/bin
 mkdir -p $TESTDIR
 cd $TESTDIR
-cat $ROOT/nuweb/testin.naf   | $BIND/tok                    > $TESTDIR/test.tok.naf
-cat test.tok.naf             | $BIND/mor                    > $TESTDIR/test.mor.naf
+[ $spotlightrunning ] || source m4_abindir/start-spotlight
+cat \$ROOT/nuweb/testin.naf    | \$BIND/tok                    > \$TESTDIR/test.tok.naf
+cat test.tok.naf              | \$BIND/mor                    > \$TESTDIR/test.mor.naf
 @% cat test.mor.naf | $BIND/nerc > $TESTDIR/test.nerc.naf
-cat test.mor.naf             | $BIND/m4_nerc_conll02_script > $TESTDIR/test.nerc.naf
-cat $TESTDIR/test.nerc.naf   | $BIND/wsd                    > $TESTDIR/test.wsd.naf
-cat $TESTDIR/test.wsd.naf    | $BIND/ned                    > $TESTDIR/test.ned.naf
-cat $TESTDIR/test.ned.naf    | $BIND/heideltime             > $TESTDIR/test.otimes.naf
-cat $TESTDIR/test.otimes.naf | gawk -f $BIND/remprol.awk    > $TESTDIR/test.times.naf
-cat $TESTDIR/test.times.naf  | $BIND/onto                   > $TESTDIR/test.onto.naf
-cat $TESTDIR/test.onto.naf   | $BIND/srl                    > $TESTDIR/test.srl.naf
-cat $TESTDIR/test.srl.naf    | $BIND/m4_evcorefscript       > $TESTDIR/test.ecrf.naf
-cat $TESTDIR/test.ecrf.naf   | $BIND/m4_framesrlscript      > $TESTDIR/test.fsrl.naf
-cat $TESTDIR/test.fsrl.naf   | $BIND/m4_dbpnerscript        > $TESTDIR/test.dbpner.naf
-cat $TESTDIR/test.dbpner.naf | $BIND/m4_nomeventscript      > $TESTDIR/test.nomev.naf
-cat $TESTDIR/test.nomev.naf  | $BIND/m4_postsrlscript       > $TESTDIR/test.psrl.naf
-cat $TESTDIR/test.psrl.naf   | $BIND/m4_opiniscript         > $TESTDIR/test.opi.naf
+cat test.mor.naf              | \$BIND/m4_nerc_conll02_script > \$TESTDIR/test.nerc.naf
+cat \$TESTDIR/test.nerc.naf    | \$BIND/wsd                    > \$TESTDIR/test.wsd.naf
+cat \$TESTDIR/test.wsd.naf     | \$BIND/ned                    > \$TESTDIR/test.ned.naf
+cat \$TESTDIR/test.ned.naf     | \$BIND/heideltime             > \$TESTDIR/test.times.naf
+cat \$TESTDIR/test.times.naf   | \$BIND/onto                   > \$TESTDIR/test.onto.naf
+cat \$TESTDIR/test.onto.naf    | \$BIND/srl                    > \$TESTDIR/test.srl.naf
+cat \$TESTDIR/test.srl.naf     | \$BIND/m4_evcorefscript       > \$TESTDIR/test.ecrf.naf
+cat \$TESTDIR/test.ecrf.naf    | \$BIND/m4_framesrlscript      > \$TESTDIR/test.fsrl.naf
+cat \$TESTDIR/test.fsrl.naf    | \$BIND/m4_dbpnerscript        > \$TESTDIR/test.dbpner.naf
+cat \$TESTDIR/test.dbpner.naf  | \$BIND/m4_nomeventscript      > \$TESTDIR/test.nomev.naf
+cat \$TESTDIR/test.nomev.naf   | \$BIND/postsrl                > \$TESTDIR/test.psrl.naf
+cat \$TESTDIR/test.psrl.naf    | \$BIND/m4_opiniscript         > \$TESTDIR/test.opin.naf
 @| @}
 
 @%@d make scripts executable @{@%
@@ -3815,8 +3980,8 @@ after a transplantation.
 #!/bin/bash
 LOGLEVEL=1
 @< set variables that point to the directory-structure @>
-@% @< set paths after transplantation @>
-@% @< re-install modules after the transplantation @>
+@< set paths after transplantation @>
+@< re-install modules after the transplantation @>
 
 @| @}
 
