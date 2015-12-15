@@ -1,4 +1,4 @@
-m4_define(m4_repoversion, `1.0.06')m4_dnl
+m4_define(m4_repoversion, `1.1.00')m4_dnl
 m4_dnl
 m4_dnl Titles
 m4_dnl
@@ -18,6 +18,8 @@ m4_define(m4_abindir, m4_aprojroot`/bin')m4_dnl     Binaries
 m4_define(m4_bindir, m4_projroot`/bin')m4_dnl     Binaries
 m4_define(m4_amoddir, m4_aprojroot`/modules')m4_dnl     Modules
 m4_define(m4_moddir, m4_projroot`/modules')m4_dnl     Modules
+m4_define(m4_modulelist, m4_aprojroot/installed_modules)m4_dnl
+
 m4_dnl m4_define(m4_lisanlproot, /home/phuijgen/nlp)m4_dnl
 m4_dnl
 m4_dnl HTML doc generation
@@ -61,10 +63,12 @@ m4_dnl snapshot
 m4_dnl
 m4_define(m4_repo_url, kyoto.let.vu.nl)m4_dnl
 m4_define(m4_repo_user, newsreader)m4_dnl
-m4_define(m4_repo_path, nlpp_resources)m4_dnl
 m4_define(m4_snapshotkeyfilename, nrkey)m4_dnl
 m4_define(m4_snapshotkeyfile, m4_asocket/nrkey)m4_dnl
-m4_define(m4_snapshotrootURL, kyoto.let.vu.nl~huygen/dutch_snapshots)m4_dnl
+m4_dnl m4_define(m4_snapshotrootURL, kyoto.let.vu.nl~huygen/dutch_snapshots)m4_dnl
+m4_define(m4_snapshotrootURL, newsreader@@kyoto.let.vu.nl)m4_dnl
+m4_define(m4_snapshotdirectory, t_nlpp_resources)m4_dnl
+m4_define(m4_snapshotsocket, m4_asocket)m4_dnl
 m4_define(m4_asnapshotroot, m4_aprojroot/snapshots)m4_dnl
 m4_define(m4_snapshotroot, m4_projroot/snapshots)m4_dnl
 m4_dnl

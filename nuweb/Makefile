@@ -80,8 +80,8 @@ $(htmltarget) : $(htmlmaterial) $(htmldir)
 clean:
 	rm -rf $pipesocket/server-jre-7u72-linux-x64.tar.gz
 	rm -rf ../env/apache-maven-3.0.5
-	rm -rf $pipesocket/Alpino-x86_64-linux-glibc2.5-20706-sicstus.tar.gz
-	rm -rf $pipesocket/20150706vua-srl-dutch-additional-roles.tgz 
+	rm -rf $snapshotsocket/snapshots/Alpino-x86_64-linux-glibc2.5-20706-sicstus.tar.gz
+	rm -rf $snapshotsocket/snapshots/20150706vua-srl-dutch-additional-roles.tgz 
 	rm -rf ../nuweb-1.58
 	
 
@@ -107,6 +107,7 @@ $(DIRS) :
 sources : nlpp.w $(DIRS) $(NUWEB)
 	$(NUWEB) nlpp.w
 	chmod 775  ../bin/install-modules
+	chmod 775 /home/huygen/projecten/pipelines/nlpp/bin/langdetect
 	chmod -R 775  ../bin/*
 	chmod -R 775  ../env/bin/*
 	
