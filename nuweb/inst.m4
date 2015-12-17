@@ -71,6 +71,12 @@ m4_define(m4_snapshotdirectory, t_nlpp_resources)m4_dnl
 m4_define(m4_snapshotsocket, m4_asocket)m4_dnl
 m4_define(m4_asnapshotroot, m4_aprojroot/snapshots)m4_dnl
 m4_define(m4_snapshotroot, m4_projroot/snapshots)m4_dnl
+m4_define(m4_enrepo_url, u017940.si.ehu.es)m4_dnl
+m4_define(m4_enrepo_port, 2223)m4_dnl
+m4_define(m4_enrepo_user, newsreader)m4_dnl
+m4_define(m4_enrepo_dir, components)m4_dnl
+
+
 m4_dnl
 m4_dnl Maven
 m4_dnl
@@ -123,6 +129,12 @@ m4_define(m4_tokenizerdir, ixa-pipe-tok)m4_dnl  Subdir. of modules
 m4_define(m4_tokenizerjar, ixa-pipe-tok-`'m4_tokenizerversion.jar)m4_dnl
 m4_define(m4_tokenizerscript, tok)m4_dnl
 m4_dnl
+m4_dnl Topic detection tool
+m4_define(m4_topictooldir, EHU-topic.v30)m4_dnl
+m4_dnl
+m4_dnl Pos tagger
+m4_define(m4_posdir, EHU-pos.v30)m4_dnl
+m4_dnl
 m4_dnl Morphosyntactic parser
 m4_define(m4_morphpargit, https://github.com/cltl/morphosyntactic_parser_nl.git)m4_dnl  Subdir. of modules
 m4_dnl m4_define(m4_morphpar_commitname, `c6cabea2cc37ac3098c5927f5ec5b180ac31246f')m4_dnl
@@ -136,12 +148,17 @@ m4_define(m4_alpinohackdir, alpinohack)m4_dnl
 m4_define(m4_alpinohackscript, alpinohack)m4_dnl
 m4_define(m4_alpinohackpythonscript, clean_hack.py)m4_dnl
 m4_dnl
+m4_dnl Constituent parser
+m4_define(m4_conspardir, EHU-parse.v30)m4_dnl
+
+m4_dnl
 m4_dnl NERC
 m4_dnl
 m4_define(m4_nercgit, https://github.com/ixa-ehu/ixa-pipe-nerc)m4_dnl
 m4_define(m4_nerc_commitname, 5cacac28fcaa6e91d5f2a4cc9b486b24ac163641)m4_dnl
-m4_dnl m4_define(m4_nercdir, EHU-nerc)m4_dnl  Subdir. of modules
-m4_define(m4_nercdir, nerc-models-nl)m4_dnl  Subdir. of modules
+m4_dnl m4_define(m4_nerc_commitname, ca02c931bc0b200ccdb8b5795a7552e4cc0d4802)m4_dnl (20151215)
+m4_define(m4_EHU_nercdir, EHU-nerc.v30)m4_dnl  Subdir. of modules
+m4_define(m4_nercdir, nerc-models)m4_dnl  Subdir. of modules
 m4_dnl m4_define(m4_nercversion, 1.3.3)m4_dnl
 m4_dnl m4_define(m4_nercversion, 1.3.6)m4_dnl
 m4_define(m4_nercversion, 1.5.2)m4_dnl
@@ -150,6 +167,7 @@ m4_define(m4_nercmodeldir, nerc-resources)m4_dnl
 m4_dnl m4_define(m4_nercmodel, nl-local-conll02-testa.bin)m4_dnl
 m4_define(m4_nercmodelconll02, nl-clusters-conll02.bin)m4_dnl
 m4_define(m4_nercmodelsonar, nl-clusters-sonar.bin)m4_dnl
+m4_define(m4_nercmodelen, en-newsreader-clusters-3-class-muc7-conll03-ontonotes-4.0.bin)m4_dnl
 m4_define(m4_nercscript, nerc)m4_dnl
 m4_define(m4_nerc_conll02_script, nerc_conll02)m4_dnl
 m4_define(m4_nerc_sonar_script, nerc_sonar)m4_dnl
@@ -168,9 +186,17 @@ m4_dnl
 m4_define(m4_lu2syndir, lexicalunitconvertor)m4_dnl
 m4_define(m4_lu2synsetscript, lu2synset)m4_dnl
 m4_dnl NED
-m4_define(m4_ned_version, 1.1.1)m4_dnl
+m4_dnl m4_define(m4_ned_version, 1.1.1)m4_dnl
+m4_dnl m4_define(m4_nedgit, https://github.com/ixa-ehu/ixa-pipe-ned.git)m4_dnl
+m4_dnl m4_define(m4_ned_commitname, d35d4df5cb71940bf642bb1a83e2b5b7584010df)m4_dnl  
+m4_dnl m4_define(m4_neddir, ixa-pipe-ned)m4_dnl  Subdir. of modules
+m4_dnl m4_dnl m4_define(m4_nedjar, ixa-pipe-ned-1.0.jar)m4_dnl
+m4_dnl m4_define(m4_nedjar, ixa-pipe-ned-`'m4_ned_version`'.jar)m4_dnl
+m4_dnl m4_define(m4_nedspotmodel_nl_tarball, nl.tar.gz)m4_dnl
+m4_dnl m4_define(m4_nedspotmodel_nl_url, http://spotlight.sztaki.hu/downloads/`'m4_nedspotmodel_nl_tarball)m4_dnl
+m4_define(m4_ned_version, 1.1.4)m4_dnl
 m4_define(m4_nedgit, https://github.com/ixa-ehu/ixa-pipe-ned.git)m4_dnl
-m4_define(m4_ned_commitname, d35d4df5cb71940bf642bb1a83e2b5b7584010df)m4_dnl  
+m4_define(m4_ned_commitname, a1787f2996ec90c6ef82356a971808c8b44227df)m4_dnl  
 m4_define(m4_neddir, ixa-pipe-ned)m4_dnl  Subdir. of modules
 m4_dnl m4_define(m4_nedjar, ixa-pipe-ned-1.0.jar)m4_dnl
 m4_define(m4_nedjar, ixa-pipe-ned-`'m4_ned_version`'.jar)m4_dnl

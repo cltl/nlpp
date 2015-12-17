@@ -35,11 +35,13 @@ m4_include(texinclusions.m4)m4_dnl
 \section{Introduction}
 \label{sec:Introduction}
 
-This document describes the current set-up of pipeline that annotates
+This document describes the current set-up of a pipeline that annotates
 texts in order to extract knowledge. The pipeline has been set
 up by the Computational Lexicology an Terminology Lab
 (\CLTL{}~\footnote{\url{http://wordpress.let.vupr.nl}}) as part
-of the newsreader~\footnote{http://www.newsreader-project.eu} project. 
+of the newsreader~\footnote{http://www.newsreader-project.eu}
+project. It accepts and produces texts in the \NAF{} (Newsreader
+Annotation Format) format. 
 
 Apart from describing the pipeline set-up, the document actually
 constructs the pipeline. Currently, the pipeline has been succesfully
@@ -50,6 +52,17 @@ computers running Ubuntu and Centos.
 The installation has been parameterised. The locations and names that
 you read (and that will be used to build the pipeline) have been read
 from variables in file \texttt{inst.m4} in the nuweb directory.  
+
+The pipeline is bi-lingual. It is capable to annotate Dutch and
+English texts. It recognizes the language from the ``lang'' attribute
+of the \verb|NAF| element of the document.
+
+The aim is, to install the pipeline from open-source modules that can
+e.g. be obtained from Github. However, that aim is only partially
+fulfilled. Some of the modules still contain elements that are not
+open-source ot data that are not freely available. Because of lack of
+time, the current version of the installer installs the English
+pipeline from a frozen repository of the Newsreader Project.
 
 
 \subsection{List of the modules to be installed}
@@ -437,7 +450,7 @@ Update the local snapshot repository.
 
 @d get the snapshot @{@%
 cd $snapshotsocket
-rsync -e "ssh -i \$pipesocket/m4_snapshotkeyfilename" -rL m4_snapshotrootURL:m4_snapshotdirectory .
+rsync -e "ssh -i \$HOME/m4_snapshotkeyfilename" -rLt m4_snapshotrootURL:m4_snapshotdirectory .
 @| @}
 
 
@@ -512,6 +525,16 @@ rsync -e "ssh -i \$pipesocket/m4_snapshotkeyfilename" -rL m4_snapshotrootURL:m4_
 @%@| @}
 
 
+\subsection{Installation from the Newsreader repository}
+\label{sec:newsreaderinstall}
+
+Copy the newsreader-repo in the snapshoitsocket
+
+@d get the newsreader-repo @{@%
+cd $snapshotsocket
+rsync -e "ssh -i $HOME/nrkey -p m4_enrepo_port" -zrLt m4_enrepo_user@@m4_enrepo_url:m4_enrepo_dir .
+@| @}
+
 
 \section{Java and Python environment}
 \label{sec:environment}
@@ -568,15 +591,10 @@ in a subdirectory of \texttt{envdir}.
 @%@| @}
 
 @d set up java @{@%
-if
-  [ ! $java_installed ]
-then
-@%   @< get or have @(m4_javatarball@) @>
+@< begin conditional install @(java_installed@) @>
   cd \$envdir/java
   tar -xzf \$snapshotsocket/m4_snapshotdirectory/m4_javatarball
-@%  rm \$pipesocket/m4_javatarball
-  echo "export java_installed=0" >> m4_modulelist
-fi
+@< end conditional install @(java_installed@) @>
 @| @}
 
 Remove the java-ball when cleaning up:
@@ -619,17 +637,6 @@ Some Java-based modules can best be compiled with
 
 @d directories to create @{m4_mavendir @| @}
 
-@d install maven if it hasn't been done @{@%
-if
-  [ ! $maven_installed ]
-then
-  @< install maven @>
-  export maven_installed=0
-  echo "export maven_installed=0" >> m4_modulelist
-fi
-@| @}
-
-
 @d install maven @{@%
 cd \$envdir
 wget m4_maventarballurl
@@ -662,19 +669,6 @@ ActivePython can be obtained from the snapshot.
 In order to be independent of the software on the host, we generate a
 virtual Python environment. In the virtual environment we will install KafNafParserPy and other
 Python packages that are needed.
-
-
-@d install python if it hasn't been done @{@%
-if
-  [ ! $python_installed ]
-then
-  @< set up python @>
-  export python_installed=0
-  echo "export python_installed=0" >> m4_modulelist
-else
-  @< activate the python environment @>
-fi
-@| @}
 
 
 @d set up python @{@%
@@ -925,18 +919,27 @@ pip install pyyaml
 This section describes how the modules are obtained from their
 (open-)source and installed. 
 
-\subsection{The installation script}
-\label{sec:installscript}
+\subsection{Conditional installation of the modules}
+\label{sec:conditional-install}
 
-The installation is performed by script
-\verb|m4_module_installer|. It maintains a list of the modules and
-utilitie that is has installed and installs only moldules and
-utilities that are not on the list. So in order to re-install a module
-that has already been installed, remove it from the list and then
-re-run the module-installer.
+Next section generates a script that installs everything. 
 
-The modulelist is in fact a script that sets Bash variables. It ought
-to be sourced.
+Installation is very time-intensive. To prevent that everything is
+re-installed every time that the module-installer is run, there is a
+list of variables, the \emph{modulelist}, that are set when a module has been installed. To
+re-install that module, remove the variable from the list and then
+re-run the installer. It maintains a list of the modules and
+utilitie that is has installed and installs only modules and utilities
+that are not on the list. So in order to re-install a module that has
+already been installed, remove it from the list and then re-run the
+module-installer.
+
+The modulelist is in fact a script named \verb|m4_modulelist| that
+sets Bash variables. It ought to be sourced if it is present. 
+
+Initially the list is not present. When a module or a utility has been
+installed, an instruction to set a variable is written in or appended
+to the list.
 
 @d read the list of installed modules @{@%
 if
@@ -947,6 +950,31 @@ fi
 @| @}
 
 
+@d begin conditional install @{@%
+if
+  [ ! \$@1 ]
+then
+@| @}
+
+@d else conditional install @{@%
+else
+@| @}
+
+
+@d end conditional install @{@%
+  echo "export @1=0" >> m4_modulelist
+fi
+@| @}
+
+
+
+\subsection{The installation script}
+\label{sec:installscript}
+
+The installation is performed by script
+\verb|m4_module_installer|. 
+
+
 The first part of the script installs the utilities:
 
 
@@ -955,30 +983,52 @@ The first part of the script installs the utilities:
 echo Set up environment
 @% @< create progenv script @>
 @< set variables that point to the directory-structure @>
-@< get the snapshot @>
 @< read the list of installed modules @>
+@< begin conditional install @(repo_installed@) @>
+  @< get the snapshot @>
+  @< get the newsreader-repo @>
+@< end conditional install @(repo_installed@) @>
 @< variables of m4_module_installer @>
 @< check this first @>
 @%@< unpack snapshots or die @>
 @< create javapython script @>
 echo ... Java
 @< set up java @>
-@< install maven if it hasn't been done @>
+@< begin conditional install @(maven_installed@) @>
+  @< install maven @>
+@< end conditional install @(maven_installed@) @>
 echo ... Python
-@< install python if it hasn't been done @>
+if
+  [ \$python_installed ]
+then
+  @< activate the python environment @>
+fi
+@< begin conditional install @(python_installed@) @>
+  @< set up python @>
+@< end conditional install @(python_installed@) @>
 echo ... Alpino
-@< install Alpino @>
+@< begin conditional install @(alpino_installed@) @>
+  @< install Alpino @>
+@< end conditional install @(alpino_installed@) @>
 echo ... Spotlight
-@< install the Spotlight server if it hasn't been done @>
+@< begin conditional install @(spotlight_installed@) @>
+  @< install the Spotlight server @>
+@< end conditional install @(spotlight_installed@) @>
 echo ... Treetagger
-@< install the treetagger if it hasn't been done @>
+@< begin conditional install @(treetagger_installed@) @>
+  @< install the treetagger utility @>
+@< end conditional install @(treetagger_installed@) @>
 echo ... Ticcutils and Timbl
-@< install the ticcutils utility @>
-@< install the timbl utility @>
+@< begin conditional install @(ticctimbl_installed@) @>
+  @< install the ticcutils utility @>
+  @< install the timbl utility @>
+@< end conditional install @(ticctimbl_installed@) @>
 echo ... VUA-pylib, SVMlight, CRFsuite
-@< install VUA-pylib @>
-@< install SVMLight @>
-@< install CRFsuite @>
+@< begin conditional install @(miscutils_installed@) @>
+  @< install VUA-pylib @>
+  @< install SVMLight @>
+  @< install CRFsuite @>
+@< end conditional install @(miscutils_installed@) @>
 
 @| @}
 
@@ -986,12 +1036,34 @@ Next, install the modules:
 
 @o m4_bindir/m4_module_installer @{@%
 echo Install modules
-echo ... Tokenizer
-@< install the tokenizer @>
-@% echo ... Morphosyntactic parser
-@% @< install the morphosyntactic parser @>
-@% echo ... NERC
-@% @< install the NERC module @>
+@< begin conditional install @(tokenizer_installed@) @>
+  echo ... Tokenizer
+  @< install the tokenizer @>
+@< end conditional install @(tokenizer_installed@) @>
+@< begin conditional install @(topic_installed@) @>
+  echo ... Topic detector
+  @< install the topic analyser @>
+@< end conditional install @(topic_installed@) @>
+@< begin conditional install @(morpar_installed@) @>
+  echo ... Morphosyntactic parser
+  @< install the morphosyntactic parser @>
+@< end conditional install @(morpar_installed@) @>
+@< begin conditional install @(pos_installed@) @>
+  echo "... Pos tagger (for english docs)"
+  @< install the pos tagger @>
+@< end conditional install @(pos_installed@) @>
+@< begin conditional install @(constparse_installed@) @>
+  echo "... Constituent parser (for english docs)"
+  @< install the constituents parser @>
+@< end conditional install @(constparse_installed@) @>
+@< begin conditional install @(nerc_installed@) @>
+  echo ... NERC
+  @< install the NERC module @>
+@< end conditional install @(nerc_installed@) @>
+@< begin conditional install @(ned_installed@) @>
+  echo ... NED
+  @< install the \NED{} module @>
+@< end conditional install @(ned_installed@) @>
 @% echo ... Coreference base
 @% @< install coreference-base @>
 @% echo ... WSD
@@ -1148,7 +1220,7 @@ export ALPINO_HOME=\$modulesdir/Alpino
 Remove the tarball when cleaning up:
 
 @d clean up @{@%
-rm -rf \$snapshotsocket/m4_snapshotdir/m4_alpinosrc
+rm -rf \$snapshotsocket/m4_snapshotdirectory/m4_alpinosrc
 @| @}
 
 
@@ -1164,19 +1236,6 @@ Installation of Treetagger goes as follows (See
   subdirectories \verb|bin|, \verb|cmd| and \verb|doc|
 \item Download and unpack the tagger-scripts tarball
 \end{enumerate}
-
-
-@d install the treetagger if it hasn't been done @{@%
-if
-  [ ! $treetagger_installed ]
-then
-  @< install the treetagger utility @>
-  export treetagger_installed=0
-  echo "export treetagger_installed=0" >> m4_modulelist
-fi
-
-@| @}
-
 
 The location where Treetagger comes from and the location where it is going to reside:
 
@@ -1336,7 +1395,6 @@ to be re-installed.
 
 Install Spotlight in the way that  Itziar Aldabe (\url{mailto:itziar.aldabe@@ehu.es}) described:
 
-\begin{quotation}
 The NED module works for English, Spanish, Dutch and Italian. The
 module returns multiple candidates and correspondences for all the
 languages. If you want to integrate it in your Dutch or Italian
@@ -1377,22 +1435,9 @@ java -jar -Xmx8g dbpedia-spotlight-0.7-jar-with-dependencies-candidates.jar nl h
 \end{verbatim}
 
 We set 8Gb for the English server, but the Italian and Dutch Spotlight will require less memory. 
-\end{quotation}
 
 
 So, let us do that:
-
-@d install the Spotlight server if it hasn't been done @{@%
-if
-  [ ! $spotlight_installed ]
-then
-  @< install the Spotlight server @>
-  export spotlight_installed=0
-  echo "export spotlight_installed=0" >> m4_modulelist
-fi
-
-@| @}
-
 
 @d install the Spotlight server @{@%
 cd \$envdir
@@ -1599,14 +1644,14 @@ to this. Therefore, currently we use a pre-compiled ball.
 @% @< get or have @(m4_CRFsuitebinball@) @>
 tempdir=`mktemp -d -t crfsuite.XXXXXX`
 cd $tempdir
-tar -xzf \$snapshotsocket/m4_snapshotdir/m4_CRFsuitebinball
+tar -xzf \$snapshotsocket/m4_snapshotdirectory/m4_CRFsuitebinball
 cd crfsuite-0.12
 cp -r bin/crfsuite $envbindir/
 mkdir -p $envdir/include/
 cp -r include/* $envdir/include/
 mkdir -p $envdir/lib/
 cp -r lib/* $envdir/lib/
-cd m4_aprojdir
+cd m4_aprojroot
 rm -rf $tempdir
 @| @}
 
@@ -1721,6 +1766,30 @@ java -Xmx1000m  -jar \$JARFILE tok -l \$naflang --inputkaf
 @%chmod 775  m4_bindir/m4_tokenizerscript
 @%@| @}
 
+\subsubsection{Topic analyser}
+\label{sec:topic-install}
+
+The English pipeline contains a topic analyser that seems not yet fit
+for Dutch. Get it from the Newsreader repo and update the config file.
+
+@d install the topic analyser @{@%
+cp -r \$snapshotsocket/components/m4_topictooldir \$modulesdir/
+cd \$modulesdir/m4_topictooldir
+mv conf.prop old.conf.prop
+gawk '{gsub("/home/newsreader/components", subs); print}' subs=$modulesdir old.conf.prop >conf.prop
+@| @}
+
+
+\paragraph{Script:}
+
+@o m4_bindir/topic @{@%
+#!/bin/bash
+source m4_aenvbindir/progenv
+@< abort when the language is not English or Dutch @>
+rootDir=\$modulesdir/EHU-topic.v30
+java -jar ${rootDir}/ixa-pipe-topic-1.0.1.jar -p ${rootDir}/conf.prop
+@| @}
+
 
 
 \subsubsection{Morphosyntactic parser}
@@ -1729,6 +1798,7 @@ java -Xmx1000m  -jar \$JARFILE tok -l \$naflang --inputkaf
 
 \paragraph{Module}
 \label{sec:install-morphosyntmodule}
+
 
 @d install the morphosyntactic parser @{@%
 MODNAM=morphsynparser
@@ -1796,6 +1866,57 @@ then
 fi
 @| @}
 
+
+\subsubsection{Pos tagger}
+\label{sec:postagger}
+
+In the Dutch pipeline the morpho-syntactic parser fulfills the role of
+Pos tagger. In the English pipeline we use the pos-tagger from \EHU{}.
+
+\paragraph{Module}
+\label{sec:install-posmodule}
+
+@d install the pos tagger @{@%
+cp -r \$snapshotsocket/components/m4_posdir \$modulesdir/
+@| @}
+
+\paragraph{Script}
+\label{sec:posmodule-script} 
+
+@o m4_bindir/pos @{@%
+#!/bin/bash
+source m4_aenvbindir/progenv
+export LC_ALL=en_US.UTF-8
+export LANG=en_US.UTF-8
+export LANGUAGE=en_US.UTF-8
+ROOT=\$piperoot
+MODDIR=\$modulesdir/<!!>m4_posdir<!!>
+java -jar ${MODDIR}/ixa-pipe-pos-1.4.3.jar tag -m ${MODDIR}/en-maxent-100-c5-baseline-dict-penn.bin
+@| @}
+
+
+\subsubsection{Constituent parser}
+\label{sec:constparser}
+
+\paragraph{Module}
+
+@d install the constituents parser @{@%
+cp -r \$snapshotsocket/components/m4_conspardir \$modulesdir/
+@| @}
+
+
+\paragraph{Script}
+
+@o m4_bindir/constpars @{@%
+#!/bin/bash
+source m4_aenvbindir/progenv
+export LC_ALL=en_US.UTF-8
+export LANG=en_US.UTF-8
+export LANGUAGE=en_US.UTF-8
+ROOT=\$piperoot
+MODDIR=\$modulesdir/<!!>m4_conspardir<!!>
+java -jar ${MODDIR}/ixa-pipe-parse-1.1.1.jar parse -g sem -m ${MODDIR}/en-parser-chunking.bin
+@| @}
 
 
 @%@d make scripts executable @{@%
@@ -1905,7 +2026,7 @@ available. Therefore, models have been put in the snapshot-tarball.
 @% @< get the nerc jar @>
 @< get the nerc models @>
 
-@% cp -r m4_asnapshotroot/m4_nercdir  \$modulesdir/
+@% cp -r m4_asnapshotroot/m4_nerc_nl_dir  \$modulesdir/
 @| @}
 
 @% The current version of nerc in Github (\texttt{m4_nercgit}, version
@@ -1935,8 +2056,6 @@ mv target/m4_nercjar \$jarsdir/
 cd \$nuwebdir
 rm -rf $TEMPDIR
 @| @}
-
-
 
 
 The current version of the pipeline uses the following models, that
@@ -1990,16 +2109,37 @@ http://ixa2.si.ehu.es/ragerri/dutch-nerc-models.tar.gz
 
 The tarball \verb|dutch-nerc-models.tar.gz| contains the models
 \verb|m4_nercmodelconll02| and \verb|m4_nercmodelsonar| Both models
-have been placed in subdirectory \verb|/m4_nercdir/m4_nercmodeldir/nl| of
+have been placed in subdirectory \verb|/m4_nerc_nl_dir/m4_nercmodeldir/nl| of
 the snapshot.
+
+The model for English can be found in the newsreader-repository.
+
+Choose a model dependent of the language.
+
+@d select language-dependent features @{@%
+if
+  [ "\$naflang" == "nl" ]
+then
+  export nercmodel=nl/m4_nercmodelconll02
+else
+  export nercmodel=en/m4_nercmodelen
+fi
+@| @}
+
 
 @d get the nerc models @{@%
 @% @< get or have @(m4_nercmodelsball@) @>
 mkdir -p \$modulesdir/m4_nercdir
 cd \$modulesdir/m4_nercdir
-tar -xzf \$snapshotsocket/m4_snapshotdir/m4_nercmodelsball
+tar -xzf \$snapshotsocket/m4_snapshotdirectory/m4_nercmodelsball
+en_nercmodel=m4_nercmodelen
+mkdir -p \$modulesdir/m4_nercdir/en
+cp \$snapshotsocket/m4_enrepo_dir/m4_EHU_nercdir/\$en_nercmodel \$modulesdir/m4_nercdir/en/
 @% rm \$pipesocket/m4_nercmodelsball
-@% cp -r m4_asnapshotroot/m4_nercdir/m4_nercmodeldir \$modulesdir/m4_nercdir/
+@% cp -r m4_asnapshotroot/m4_nerc_nl_dir/m4_nercmodeldir \$modulesdir/m4_nerc_nl_dir/
+@% chmod -R 775 \$modulesdir/m4_nercdir
+@% rm \$pipesocket/m4_nercmodelsball
+@% cp -r m4_asnapshotroot/m4_nerc_nl_dir/m4_nercmodeldir \$modulesdir/m4_nerc_nl_dir/
 chmod -R 775 \$modulesdir/m4_nercdir
 @| @}
 
@@ -2024,10 +2164,25 @@ Sonar model
 source m4_aenvbindir/progenv
 @% @< set variables that point to the directory-structure @>
 @% @< set up programming environment @>
-MODDIR=$modulesdir/m4_nercdir
+MODDIR=$modulesdir/m4_nerc_nl_dir
 JAR=$jarsdir/m4_nercjar
 MODEL=m4_nercmodelconll02
 cat | java -Xmx1000m -jar \$JAR tag -m $MODDIR/nl/$MODEL
+@| @}
+
+@o m4_bindir/nerc @{@%
+#!/bin/bash
+nercmodel=$1
+if
+  [ "$nercmodel" == "" ]
+then
+  echo "Please provide the name of a NERC model" >&2
+  exit 4
+fi
+source m4_aenvbindir/progenv
+MODDIR=$modulesdir/m4_nercdir
+JAR=$jarsdir/m4_nercjar
+java -jar \$JAR tag -m $MODDIR/\$nercmodel
 @| @}
 
 
@@ -2038,7 +2193,7 @@ cat | java -Xmx1000m -jar \$JAR tag -m $MODDIR/nl/$MODEL
 @% source m4_aenvbindir/progenv
 @% @% @< set variables that point to the directory-structure @>
 @% @% @< set up programming environment @>
-@% MODDIR=$modulesdir/m4_nercdir
+@% MODDIR=$modulesdir/m4_nerc_nl_dir
 @% JAR=$jarsdir/m4_nercjar
 @% MODEL=m4_nercmodelsonar
 @% cat | java -Xmx1000m -jar \$JAR tag -m $MODDIR/m4_nercmodeldir/nl/$MODEL --clearFeatures yes
@@ -2113,7 +2268,7 @@ This part has also been copied from \verb|install_naf.sh| in the \textsc{wsd} mo
 cd \$modulesdir
 #tar -xzf \$pipesocket/m4_wsd_snapball
 @% rm \$pipesocket/m4_wsd_snapball
-@%cp -r m4_aprojroot/m4_snapshotdir/svm_wsd/models .
+@%cp -r m4_aprojroot/m4_snapshotdirectory/svm_wsd/models .
 @% echo 'Downloading models...(could take a while)'
 wget --user=cltl --password='.cltl.' kyoto.let.vu.nl/~izquierdo/models_wsd_svm_dsc.tgz 2> /dev/null
 echo 'Unzipping models...'
@@ -2232,7 +2387,7 @@ module from the tarball.
 @d install the lu2synset converter @{@%
 @% @< get or have @(m4_lu2synball@) @>
 cd \$modulesdir
-tar -xzf \$snapshotsocket/m4_snapshotdir/m4_lu2synball
+tar -xzf \$snapshotsocket/m4_snapshotdirectory/m4_lu2synball
 @% rm \$pipesocket/m4_lu2synball
 @| @}
 
@@ -2378,6 +2533,10 @@ rm -rf $tempdir
 \paragraph{Script}
 \label{sec:nedscript}
 
+NED needs to contact a Spotlight-server. 
+
+
+
 @o m4_bindir/m4_nedscript @{@%
 #!/bin/bash
 source m4_aenvbindir/progenv
@@ -2385,6 +2544,13 @@ source m4_aenvbindir/progenv
 @% @< set up programming environment @>
 ROOT=\$piperoot
 JARDIR=\$jarsdir
+if
+  [ "$naflang" == "nl" ]
+then
+  spotlightport=m4_spotlight_nl_port
+else
+  spotlightport=m4_spotlight_en_port
+fi
 [ $spotlightrunning ] || source m4_abindir/start-spotlight
 cat | java -Xmx1000m -jar \$jarsdir/m4_nedjar -H http://$spotlighthost -p m4_spotlight_nl_port -e candidates -i \$envdir/spotlight/wikipedia-db -n nlEn
 @% cat | java -jar \$jarsdir/m4_nedjar  -p 2060  -n nl
@@ -2410,7 +2576,7 @@ install from a snapshot (\verb|m4_ontotarball|).
 @% @< get or have @(m4_ontotarball@) @>
 @%cp -r m4_asnapshotroot/m4_ontodir \$modulesdir/
 cd \$modulesdir
-tar -xzf \$snapshotsocket/m4_snapshotdir/m4_ontotarball
+tar -xzf \$snapshotsocket/m4_snapshotdirectory/m4_ontotarball
 rm \$pipesocket/m4_ontotarball
 chmod -R o+r \$modulesdir/m4_ontodir
 @| @}
@@ -3186,9 +3352,18 @@ mkdir -p $TESTDIR
 cd $TESTDIR
 [ $spotlightrunning ] || source m4_abindir/start-spotlight
 @< set the language variable @($TESTIN@)@>
-cat \$TESTIN    | \$BIND/tok                    > \$TESTDIR/test.tok.naf
-@% cat test.tok.naf              | \$BIND/mor                    > \$TESTDIR/test.mor.naf
-@% @% cat test.mor.naf | $BIND/nerc > $TESTDIR/test.nerc.naf
+@< select language-dependent features @>
+cat \$TESTIN    | \$BIND/tok > \$TESTDIR/test.tok.naf
+if
+ [ "\$naflang" == "nl" ]
+then
+  cat test.tok.naf | \$BIND/mor  >\$TESTDIR/test.p2.naf
+else
+  cat test.tok.naf  | \$BIND/topic  >\$TESTDIR/test.top.naf
+  cat test.top.naf  | \$BIND/pos    >\$TESTDIR/test.pos.naf
+  cat test.pos.naf | \$BIND/constpars  >\$TESTDIR/test.p2.naf
+fi
+cat test.p2.naf | $BIND/nerc \$nercmodel > $TESTDIR/test.nerc.naf
 @% cat test.mor.naf              | \$BIND/m4_nerc_conll02_script > \$TESTDIR/test.nerc.naf
 @% cat \$TESTDIR/test.nerc.naf    | \$BIND/wsd                    > \$TESTDIR/test.wsd.naf
 @% cat \$TESTDIR/test.wsd.naf     | \$BIND/ned                    > \$TESTDIR/test.ned.naf
