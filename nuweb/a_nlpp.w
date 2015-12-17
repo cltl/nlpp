@@ -1064,29 +1064,51 @@ echo Install modules
   echo ... NED
   @< install the \NED{} module @>
 @< end conditional install @(ned_installed@) @>
-@% echo ... Coreference base
-@% @< install coreference-base @>
-@% echo ... WSD
-@% @< install the WSD module @>
-@% echo ... Ontotagger
-@% @< install the onto module @>
-@% echo ... Heideltime
-@% @< install the heideltime module @>
-@% @% @< install the new heideltime module @>
-@% echo ... SRL
-@% @< install the srl module @>
-@% echo ... NED
-@% @< install the \NED{} module @>
-@% echo ... Event-coreference
-@% @< install the event-coreference module @>
-@% echo ... lu2synset
-@% @< install the lu2synset converter @>
-@% echo ... dbpedia-ner
-@% @< install the dbpedia-ner module @>
-@% echo ... nominal event
-@% @< install the nomevent module @>
-@% @< install the post-SRL module @>
-@% @< install the opinion-miner @>
+@< begin conditional install @(corefb_installed@) @>
+  echo ... Coreference base
+  @< install coreference-base @>
+@< end conditional install @(corefb_installed@) @>
+@< begin conditional install @(wsd_installed@) @>
+  echo ... WSD
+  @< install the WSD module @>
+@< end conditional install @(wsd_installed@) @>
+@< begin conditional install @(onto_installed@) @>
+  echo ... Ontotagger
+  @< install the onto module @>
+@< end conditional install @(onto_installed@) @>
+@< begin conditional install @(heidel_installed@) @>
+  echo ... Heideltime
+  @< install the heideltime module @>
+@% @< install the new heideltime module @>
+@< end conditional install @(heidel_installed@) @>
+@< begin conditional install @(SRL_installed@) @>
+   echo ... SRL
+   @< install the srl module @>
+@< end conditional install @(SRL_installed@) @>
+@< begin conditional install @(eventcoref_installed@) @>
+   echo ... Event-coreference
+   @< install the event-coreference module @>
+@< end conditional install @(eventcoref_installed@) @>
+@< begin conditional install @(lu2synset_installed@) @>
+   echo ... lu2synset
+   @< install the lu2synset converter @>
+@< end conditional install @(lu2synset_installed@) @>
+@< begin conditional install @(dbpner_installed@) @>
+  echo ... dbpedia-ner
+  @< install the dbpedia-ner module @>
+@< end conditional install @(dbpner_installed@) @>
+@< begin conditional install @(nomevent_installed@) @>
+   echo ... nominal event
+   @< install the nomevent module @>
+@< end conditional install @(nomevent_installed@) @>
+@< begin conditional install @(post-SRL_installed@) @>
+   echo ... post-SRL
+   @< install the post-SRL module @>
+@< end conditional install @(post-SRL_installed@) @>
+@< begin conditional install @(opimin_installed@) @>
+   echo ... opinion-miner
+   @< install the opinion-miner @>
+@< end conditional install @(opimin_installed@) @>
 
 echo Final
 @| @}
@@ -2265,7 +2287,7 @@ This part has also been copied from \verb|install_naf.sh| in the \textsc{wsd} mo
 
 @d download svm models @{@%
 @% @< get or have @(m4_wsd_snapball@) @>
-cd \$modulesdir
+cd \$modulesdir/m4_wsddir
 #tar -xzf \$pipesocket/m4_wsd_snapball
 @% rm \$pipesocket/m4_wsd_snapball
 @%cp -r m4_aprojroot/m4_snapshotdirectory/svm_wsd/models .
@@ -3364,18 +3386,21 @@ else
   cat test.pos.naf | \$BIND/constpars  >\$TESTDIR/test.p2.naf
 fi
 cat test.p2.naf | $BIND/nerc \$nercmodel > $TESTDIR/test.nerc.naf
-@% cat test.mor.naf              | \$BIND/m4_nerc_conll02_script > \$TESTDIR/test.nerc.naf
-@% cat \$TESTDIR/test.nerc.naf    | \$BIND/wsd                    > \$TESTDIR/test.wsd.naf
-@% cat \$TESTDIR/test.wsd.naf     | \$BIND/ned                    > \$TESTDIR/test.ned.naf
-@% cat \$TESTDIR/test.ned.naf     | \$BIND/heideltime             > \$TESTDIR/test.times.naf
-@% cat \$TESTDIR/test.times.naf   | \$BIND/onto                   > \$TESTDIR/test.onto.naf
-@% cat \$TESTDIR/test.onto.naf    | \$BIND/srl                    > \$TESTDIR/test.srl.naf
-@% cat \$TESTDIR/test.srl.naf     | \$BIND/m4_evcorefscript       > \$TESTDIR/test.ecrf.naf
-@% cat \$TESTDIR/test.ecrf.naf    | \$BIND/m4_framesrlscript      > \$TESTDIR/test.fsrl.naf
-@% cat \$TESTDIR/test.fsrl.naf    | \$BIND/m4_dbpnerscript        > \$TESTDIR/test.dbpner.naf
-@% cat \$TESTDIR/test.dbpner.naf  | \$BIND/m4_nomeventscript      > \$TESTDIR/test.nomev.naf
-@% cat \$TESTDIR/test.nomev.naf   | \$BIND/postsrl                > \$TESTDIR/test.psrl.naf
-@% cat \$TESTDIR/test.psrl.naf    | \$BIND/m4_opiniscript         > \$TESTDIR/test.opin.naf
+if
+ [ "\$naflang" == "nl" ]
+then
+  cat \$TESTDIR/test.nerc.naf    | \$BIND/wsd                    > \$TESTDIR/test.wsd.naf
+  cat \$TESTDIR/test.wsd.naf     | \$BIND/ned                    > \$TESTDIR/test.ned.naf
+  cat \$TESTDIR/test.ned.naf     | \$BIND/heideltime             > \$TESTDIR/test.times.naf
+  cat \$TESTDIR/test.times.naf   | \$BIND/onto                   > \$TESTDIR/test.onto.naf
+  cat \$TESTDIR/test.onto.naf    | \$BIND/srl                    > \$TESTDIR/test.srl.naf
+  cat \$TESTDIR/test.srl.naf     | \$BIND/m4_evcorefscript       > \$TESTDIR/test.ecrf.naf
+  cat \$TESTDIR/test.ecrf.naf    | \$BIND/m4_framesrlscript      > \$TESTDIR/test.fsrl.naf
+  cat \$TESTDIR/test.fsrl.naf    | \$BIND/m4_dbpnerscript        > \$TESTDIR/test.dbpner.naf
+  cat \$TESTDIR/test.dbpner.naf  | \$BIND/m4_nomeventscript      > \$TESTDIR/test.nomev.naf
+  cat \$TESTDIR/test.nomev.naf   | \$BIND/postsrl                > \$TESTDIR/test.psrl.naf
+  cat \$TESTDIR/test.psrl.naf    | \$BIND/m4_opiniscript         > \$TESTDIR/test.opin.naf
+fi
 @| @}
 
 @%@d make scripts executable @{@%
