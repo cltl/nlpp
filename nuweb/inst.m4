@@ -186,21 +186,21 @@ m4_dnl
 m4_define(m4_lu2syndir, lexicalunitconvertor)m4_dnl
 m4_define(m4_lu2synsetscript, lu2synset)m4_dnl
 m4_dnl NED
-m4_dnl m4_define(m4_ned_version, 1.1.1)m4_dnl
-m4_dnl m4_define(m4_nedgit, https://github.com/ixa-ehu/ixa-pipe-ned.git)m4_dnl
-m4_dnl m4_define(m4_ned_commitname, d35d4df5cb71940bf642bb1a83e2b5b7584010df)m4_dnl  
-m4_dnl m4_define(m4_neddir, ixa-pipe-ned)m4_dnl  Subdir. of modules
-m4_dnl m4_dnl m4_define(m4_nedjar, ixa-pipe-ned-1.0.jar)m4_dnl
-m4_dnl m4_define(m4_nedjar, ixa-pipe-ned-`'m4_ned_version`'.jar)m4_dnl
-m4_dnl m4_define(m4_nedspotmodel_nl_tarball, nl.tar.gz)m4_dnl
-m4_dnl m4_define(m4_nedspotmodel_nl_url, http://spotlight.sztaki.hu/downloads/`'m4_nedspotmodel_nl_tarball)m4_dnl
-m4_define(m4_ned_version, 1.1.4)m4_dnl
+m4_define(m4_ned_version, 1.1.1)m4_dnl
 m4_define(m4_nedgit, https://github.com/ixa-ehu/ixa-pipe-ned.git)m4_dnl
-m4_define(m4_ned_commitname, a1787f2996ec90c6ef82356a971808c8b44227df)m4_dnl  
+m4_define(m4_ned_commitname, d35d4df5cb71940bf642bb1a83e2b5b7584010df)m4_dnl  
 m4_define(m4_neddir, ixa-pipe-ned)m4_dnl  Subdir. of modules
 m4_dnl m4_define(m4_nedjar, ixa-pipe-ned-1.0.jar)m4_dnl
 m4_define(m4_nedjar, ixa-pipe-ned-`'m4_ned_version`'.jar)m4_dnl
 m4_define(m4_nedspotmodel_nl_tarball, nl.tar.gz)m4_dnl
+m4_dnl m4_define(m4_nedspotmodel_nl_url, http://spotlight.sztaki.hu/downloads/`'m4_nedspotmodel_nl_tarball)m4_dnl
+m4_dnl m4_define(m4_ned_version, 1.1.4)m4_dnl
+m4_dnl m4_define(m4_nedgit, https://github.com/ixa-ehu/ixa-pipe-ned.git)m4_dnl
+m4_dnl m4_define(m4_ned_commitname, a1787f2996ec90c6ef82356a971808c8b44227df)m4_dnl  
+m4_dnl m4_define(m4_neddir, ixa-pipe-ned)m4_dnl  Subdir. of modules
+m4_dnl m4_dnl m4_define(m4_nedjar, ixa-pipe-ned-1.0.jar)m4_dnl
+m4_dnl m4_define(m4_nedjar, ixa-pipe-ned-`'m4_ned_version`'.jar)m4_dnl
+m4_dnl m4_define(m4_nedspotmodel_nl_tarball, nl.tar.gz)m4_dnl
 m4_define(m4_nedspotmodel_nl_url, http://spotlight.sztaki.hu/downloads/`'m4_nedspotmodel_nl_tarball)m4_dnl
  
 m4_define(m4_nedscript, ned)m4_dnl
@@ -219,7 +219,8 @@ m4_dnl
 m4_dnl ONTO
 m4_define(m4_ontodir, vua-ontotagger-v1.0)m4_dnl  Subdir. of modules
 m4_define(m4_ontoscript, onto)m4_dnl
-m4_define(m4_ontotarball, 20150724_vua-ontotagger-v1.0.tar.gz)m4_dnl  Subdir. of modules
+m4_dnl m4_define(m4_ontotarball, 20150724_vua-ontotagger-v1.0.tar.gz)m4_dnl  Subdir. of modules
+m4_define(m4_ontotarball, 20151217_vua-ontotagger-v1.0.tgz)m4_dnl  Subdir. of modules
 m4_dnl
 m4_dnl Framenet SRL
 m4_define(m4_ontodir, vua-ontotagger-v1.0)m4_dnl  Subdir. of modules
@@ -267,10 +268,13 @@ m4_define(m4_srldir, vua-srl-nl)m4_dnl
 m4_define(m4_srlscript, srl)m4_dnl
 m4_dnl
 m4_dnl SRL post
-m4_define(m4_postsrldir, `vua-srl-dutch-additional-roles')m4_dnl  Subdir. of modules
+m4_define(m4_postsrlgit, `https://github.com/newsreader/vua-srl-postprocess.git')m4_dnl 
+m4_define(m4_postsrldir, `vua-srl-postprocess')m4_dnl  Subdir. of modules
+m4_dnl m4_define(m4_postsrldir, `vua-srl-dutch-additional-roles')m4_dnl  Subdir. of modules
 m4_define(m4_postsrlball, 20150706`'m4_postsrldir`'.tgz )m4_dnl  Subdir. of modules
 m4_define(m4_postsrlscript, postsrl)m4_dnl
-m4_define(m4_postsrlpy, vua-srl-dutch-additional-roles.py)m4_dnl
+m4_dnl m4_define(m4_postsrlpy, vua-srl-dutch-additional-roles.py)m4_dnl
+m4_define(m4_postsrlpy, main.py)m4_dnl
 m4_dnl
 m4_dnl Nom. coref
 m4_define(m4_ncorefsrc, /dev/null )m4_dnl
@@ -317,9 +321,11 @@ m4_dnl
 m4_dnl nomevents
 m4_dnl
 m4_dnl m4_define(m4_dbpnergit, https://github.com/rubenIzquierdo/dbpedia_ner.git)m4_dnl
-m4_define(m4_nomeventball, vua-postprocess-nl.zip)m4_dnl
+m4_dnl m4_define(m4_nomeventball, vua-postprocess-nl.zip)m4_dnl
+m4_define(m4_nomeventball, 20151217_vua-nominal-event-detection-nl.tgz)m4_dnl
 m4_dnl  m4_define(m4_dbpner_commitname, ab1dcbd860f0ff29bc979f646dc382122a101fc2)m4_dnl
-m4_define(m4_nomeventdir, vua-postprocess-nl)m4_dnl
+m4_dnl m4_define(m4_nomeventdir, vua-postprocess-nl)m4_dnl
+m4_define(m4_nomeventdir, vua-nominal-event-detection-nl)m4_dnl
 m4_define(m4_nomeventscript, nomevent)m4_dnl
 m4_dnl
 m4_dnl Utilities

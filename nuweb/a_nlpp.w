@@ -1101,10 +1101,10 @@ echo Install modules
    echo ... nominal event
    @< install the nomevent module @>
 @< end conditional install @(nomevent_installed@) @>
-@< begin conditional install @(post-SRL_installed@) @>
+@< begin conditional install @(post_SRL_installed@) @>
    echo ... post-SRL
    @< install the post-SRL module @>
-@< end conditional install @(post-SRL_installed@) @>
+@< end conditional install @(post_SRL_installed@) @>
 @< begin conditional install @(opimin_installed@) @>
    echo ... opinion-miner
    @< install the opinion-miner @>
@@ -2363,7 +2363,7 @@ cat | python $WSDDIR/$WSDSCRIPT --naf -ref odwnSY
 @% 
 @% @d install the WSD module @{@%
 @% @%cp -r m4_asnapshotroot/m4_wsddir \$modulesdir/
-@% cp -r m4_aprojroot/m4_snapshotdir/m4_wsddir \$modulesdir/
+@% cp -r m4_aprojroot/m4_snapshotdirectory/m4_wsddir \$modulesdir/
 @% @| @}
 @% 
 @% 
@@ -2599,7 +2599,7 @@ install from a snapshot (\verb|m4_ontotarball|).
 @%cp -r m4_asnapshotroot/m4_ontodir \$modulesdir/
 cd \$modulesdir
 tar -xzf \$snapshotsocket/m4_snapshotdirectory/m4_ontotarball
-rm \$pipesocket/m4_ontotarball
+@% rm \$pipesocket/m4_ontotarball
 chmod -R o+r \$modulesdir/m4_ontodir
 @| @}
 
@@ -3101,17 +3101,29 @@ In addition to the Semantic Role Labeling there is hack that finds additional se
 
 \paragraph{Module}
 
-Find the (Python) module in the snapshot and unpack it.
+
+Get the module from Github. Note that this module needs rdflib
+
+@d install python packages @{@%
+pip install rdflib
+@| rdflib @}
+
 
 @d install the post-SRL module @{@%
 @% @< get or have @(m4_postsrlball@) @>
 cd \$modulesdir
-tar -xzf \$snapshotsocket/m4_snapshotdir/m4_postsrlball
+if
+  [ -d m4_postsrldir ]
+then
+  cd m4_postsrldir
+  git pull
+else
+  git clone m4_postsrlgit
+  cd m4_postsrldir
+fi
+@% tar -xzf \$snapshotsocket/m4_snapshotdirectory/m4_postsrlball
 @| @}
 
-@d clean up @{@%
-rm -rf \$snapshotsocket/m4_snapshotdir/m4_postsrlball
-@| @}
 
 \paragraph{Script}
 
@@ -3120,7 +3132,13 @@ rm -rf \$snapshotsocket/m4_snapshotdir/m4_postsrlball
 source m4_aenvbindir/progenv
 @% @< set variables that point to the directory-structure @>
 MODDIR=\$modulesdir/<!!>m4_postsrldir
-cat | python \$MODDIR/m4_postsrlpy
+cd $MODDIR
+tempdir=`mktemp -d -t postsrl.XXXXX`
+@% cd $tempdir
+cat >$tempdir/infile
+python \$MODDIR/m4_postsrlpy -i $tempdir/infile -o $tempdir/outfile
+cat $tempdir/outfile
+rm -rf $tempdir
 @| @}
 
 
@@ -3140,7 +3158,7 @@ Install the module from the snapshot.
 @d install the event-coreference module @{@%
 @% @< get or have @(m4_evcoreftarball@) @>
 cd \$modulesdir
-tar -xzf \$snapshotsocket/m4_snapshotdir/m4_evcoreftarball
+tar -xzf \$snapshotsocket/m4_snapshotdirectory/m4_evcoreftarball
 cd m4_evcorefdir
 cp lib/m4_evcorefjar \$jarsdir
 @| @}
@@ -3230,7 +3248,7 @@ versions the jar from the ontotagger module can be used for this module.
 @d install the nomevent module @{@%
 @% @< get or have @(m4_nomeventball@) @>
 cd \$modulesdir
-unzip -q \$snapshotsocket/m4_snapshotdir/m4_nomeventball
+tar -xzf \$snapshotsocket/m4_snapshotdirectory/m4_nomeventball
 @| @}
 
 \paragraph{Script}
@@ -3248,6 +3266,8 @@ JAR=\$LIBDIR/ontotagger-1.0-jar-with-dependencies.jar
 JAVAMODULE=eu.kyotoproject.main.NominalEventCoreference
 cat | iconv -f ISO8859-1 -t UTF-8 | java -Xmx812m -cp $JAR $JAVAMODULE --framenet-lu $RESOURCESDIR/nl-luIndex.xml
 @| @}
+
+
 
 
 \subsubsection{Opinion miner}

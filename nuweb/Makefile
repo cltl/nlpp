@@ -81,7 +81,6 @@ clean:
 	rm -rf $pipesocket/server-jre-7u72-linux-x64.tar.gz
 	rm -rf ../env/apache-maven-3.0.5
 	rm -rf $snapshotsocket/t_nlpp_resources/Alpino-x86_64-linux-glibc2.5-20706-sicstus.tar.gz
-	rm -rf $snapshotsocket/snapshots/20150706vua-srl-dutch-additional-roles.tgz 
 	rm -rf ../nuweb-1.58
 	
 
