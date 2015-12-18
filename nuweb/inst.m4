@@ -155,15 +155,19 @@ m4_dnl
 m4_dnl NERC
 m4_dnl
 m4_define(m4_nercgit, https://github.com/ixa-ehu/ixa-pipe-nerc)m4_dnl
-m4_define(m4_nerc_commitname, 5cacac28fcaa6e91d5f2a4cc9b486b24ac163641)m4_dnl
-m4_dnl m4_define(m4_nerc_commitname, ca02c931bc0b200ccdb8b5795a7552e4cc0d4802)m4_dnl (20151215)
+m4_dnl m4_define(m4_nerc_commitname, 5cacac28fcaa6e91d5f2a4cc9b486b24ac163641)m4_dnl
+m4_define(m4_nerc_commitname, ca02c931bc0b200ccdb8b5795a7552e4cc0d4802)m4_dnl (20151215)
 m4_define(m4_EHU_nercdir, EHU-nerc.v30)m4_dnl  Subdir. of modules
 m4_define(m4_nercdir, nerc-models)m4_dnl  Subdir. of modules
 m4_dnl m4_define(m4_nercversion, 1.3.3)m4_dnl
 m4_dnl m4_define(m4_nercversion, 1.3.6)m4_dnl
-m4_define(m4_nercversion, 1.5.2)m4_dnl
+m4_define(m4_nercversion, 1.5.4)m4_dnl
 m4_define(m4_nercjar, ixa-pipe-nerc-`'m4_nercversion`'.jar)m4_dnl
-m4_define(m4_nercmodeldir, nerc-resources)m4_dnl
+m4_dnl m4_define(m4_nercmodeldir, nerc-resources)m4_dnl
+m4_define(m4_nercmodeldir, nerc_models)m4_dnl
+m4_define(m4_nercmodelsball, 20151217_nerc_models.tgz)m4_dnl
+m4_define(m4_nl_nercmodel, nl-6-class-clusters-sonar.bin)m4_dnl
+m4_define(m4_en_nercmodel, en-best-clusters-conll03.bin)m4_dnl
 m4_dnl m4_define(m4_nercmodel, nl-local-conll02-testa.bin)m4_dnl
 m4_define(m4_nercmodelconll02, nl-clusters-conll02.bin)m4_dnl
 m4_define(m4_nercmodelsonar, nl-clusters-sonar.bin)m4_dnl
@@ -283,7 +287,7 @@ m4_define(m4_ncorefscript, nomcoref)m4_dnl
 m4_dnl
 m4_dnl Ev. coref
 m4_define(m4_evcorefdir, `vua-eventcoreference_v2')m4_dnl
-m4_define(m4_evcoreftarball, 20150702-`'m4_evcorefdir`'.tgz)m4_dnl
+m4_define(m4_evcoreftarball, 20151217_`'m4_evcorefdir`'.tgz)m4_dnl
 m4_define(m4_evcorefscript, evcoref)m4_dnl
 m4_define(m4_evcorefjar, EventCoreference-1.0-SNAPSHOT-jar-with-dependencies.jar)m4_dnl
 m4_dnl

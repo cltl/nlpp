@@ -2081,53 +2081,8 @@ rm -rf $TEMPDIR
 
 
 The current version of the pipeline uses the following models, that
-have been made avaiable by Rodrigo Agerri on march 2, 2015. Rodrigo
-wrote:
+have been made available by Rodrigo Agerri on december 15, 2015.
 
-\begin{alltt}
-  I have recently trained new models for Dutch using both the CoNLL 2002
-and the Sonar corpora. These models are better than the one currently
-being used in the Dutch Newsreader pipeline. They are not yet in the
-resources of the ixa pipes (no public yet) but in the meantime they
-might be useful if you plan to do some processing in Dutch.
-
-\end{alltt}
-
-\begin{alltt}
-For CoNLL 2002, the new model obtains 83.46 F1, being the previously
-best published result 77.05 on that dataset.
-The Sonar model is trained on the full corpus, and evaluated using
-random 10 fold cross validation. The only previous result I know of
-obtains 80.71 F1 wrt to our model which obtains 87.84. However,
-because it is not evaluated on a separate test partition I do not take
-these results too seriously.
-
-\end{alltt}
-
-\begin{alltt}
-You will need to update the ixa-pipe-nerc module. The CoNLL 2002 model
-runs as before but to use the Sonar model you need to add the extra
-parameter --clearFeatures yes, like this:
-
-\end{alltt}
-
-\begin{alltt}
-Sonar model: cat file.pos.naf | java -jar ixa-pipe-nerc-1.3.6.jar tag
--m $nermodel --clearFeatures yes
-CoNLL model: cat file.pos.naf | java -jar ixa-pipe-nerc-1.3.6.jar tag
--m $nermodel
-
-http://www.lt3.ugent.be/en/publications/fine-grained-dutch-named-entity-recognition/
-
-\end{alltt}
-
-\begin{alltt}
-[..]
-In any case, here are the models.
-
-http://ixa2.si.ehu.es/ragerri/dutch-nerc-models.tar.gz
-
-\end{alltt}
 
 The tarball \verb|dutch-nerc-models.tar.gz| contains the models
 \verb|m4_nercmodelconll02| and \verb|m4_nercmodelsonar| Both models
@@ -2148,21 +2103,23 @@ else
 fi
 @| @}
 
+The tarball \verb|m4_nercmodelsball| contains in subdirectories
+\verb|nl| and \verb|en| a dutch resp. an english nerc-model. They have
+been randomly selected from a number of models that are available in
+\url{http://ixa2.si.ehu.es/ixa-pipes/models/nerc-models-1.5.4.tgz}.
 
 @d get the nerc models @{@%
 @% @< get or have @(m4_nercmodelsball@) @>
-mkdir -p \$modulesdir/m4_nercdir
-cd \$modulesdir/m4_nercdir
-tar -xzf \$snapshotsocket/m4_snapshotdirectory/m4_nercmodelsball
-en_nercmodel=m4_nercmodelen
-mkdir -p \$modulesdir/m4_nercdir/en
-cp \$snapshotsocket/m4_enrepo_dir/m4_EHU_nercdir/\$en_nercmodel \$modulesdir/m4_nercdir/en/
+cd $modulesdir
+tar -xzf m4_snapshotsocket/m4_snapshotdirectory/m4_nercmodelsball
+@% mkdir -p \$modulesdir/m4_nercdir/en
+@% cp \$snapshotsocket/m4_enrepo_dir/m4_EHU_nercdir/\$en_nercmodel \$modulesdir/m4_nercdir/en/
 @% rm \$pipesocket/m4_nercmodelsball
 @% cp -r m4_asnapshotroot/m4_nerc_nl_dir/m4_nercmodeldir \$modulesdir/m4_nerc_nl_dir/
 @% chmod -R 775 \$modulesdir/m4_nercdir
 @% rm \$pipesocket/m4_nercmodelsball
 @% cp -r m4_asnapshotroot/m4_nerc_nl_dir/m4_nercmodeldir \$modulesdir/m4_nerc_nl_dir/
-chmod -R 775 \$modulesdir/m4_nercdir
+@% chmod -R 775 \$modulesdir/m4_nercdir
 @| @}
 
 
@@ -2192,19 +2149,34 @@ MODEL=m4_nercmodelconll02
 cat | java -Xmx1000m -jar \$JAR tag -m $MODDIR/nl/$MODEL
 @| @}
 
+@% @o m4_bindir/nerc @{@%
+@% #!/bin/bash
+@% nercmodel=$1
+@% if
+@%   [ "$nercmodel" == "" ]
+@% then
+@%   echo "Please provide the name of a NERC model" >&2
+@%   exit 4
+@% fi
+@% source m4_aenvbindir/progenv
+@% MODDIR=$modulesdir/m4_nercdir
+@% JAR=$jarsdir/m4_nercjar
+@% java -jar \$JAR tag -m $MODDIR/\$nercmodel
+@% @| @}
+
 @o m4_bindir/nerc @{@%
 #!/bin/bash
-nercmodel=$1
-if
-  [ "$nercmodel" == "" ]
-then
-  echo "Please provide the name of a NERC model" >&2
-  exit 4
-fi
 source m4_aenvbindir/progenv
 MODDIR=$modulesdir/m4_nercdir
 JAR=$jarsdir/m4_nercjar
-java -jar \$JAR tag -m $MODDIR/\$nercmodel
+if
+  [ "$naflang" == "nl" ]
+then
+  nercmodel=\$modulesdir/m4_nercmodeldir/nl/m4_nl_nercmodel
+else
+  nercmodel=\$modulesdir/m4_nercmodeldir/en/m4_en_nercmodel
+fi
+java -jar \$JAR tag -m $nercmodel
 @| @}
 
 
@@ -3179,9 +3151,11 @@ JARFILE=\$jarsdir/m4_evcorefjar
 
 JAVAMODULE=eu.newsreader.eventcoreference.naf.EventCorefWordnetSim
 JAVAOPTIONS="--method leacock-chodorow"
-JAVAOPTIONS="$JAVAOPTIONS  --wn-lmf $RESOURCESDIR/cornetto2.1.lmf.xml"
+@% JAVAOPTIONS="$JAVAOPTIONS  --wn-lmf $RESOURCESDIR/cornetto2.1.lmf.xml"
+JAVAOPTIONS="$JAVAOPTIONS  --wn-lmf $RESOURCESDIR/wneng-30.lmf.xml.xpos"
 JAVAOPTIONS="$JAVAOPTIONS  --sim 2.0"
-JAVAOPTIONS="$JAVAOPTIONS  --relations XPOS_NEAR_SYNONYM#HAS_HYPERONYM#HAS_XPOS_HYPERONYM"
+@% JAVAOPTIONS="$JAVAOPTIONS  --relations XPOS_NEAR_SYNONYM#HAS_HYPERONYM#HAS_XPOS_HYPERONYM"
+JAVAOPTIONS="$JAVAOPTIONS  --relations has_hyperonym#event#has_hypernym"
 
 @% #### Within document event coreference wordnet sim
 @% #rootDir=/home/newsreader/components/VUA-eventcoref.v21/
@@ -3414,14 +3388,36 @@ then
   cat \$TESTDIR/test.ned.naf     | \$BIND/heideltime             > \$TESTDIR/test.times.naf
   cat \$TESTDIR/test.times.naf   | \$BIND/onto                   > \$TESTDIR/test.onto.naf
   cat \$TESTDIR/test.onto.naf    | \$BIND/srl                    > \$TESTDIR/test.srl.naf
-  cat \$TESTDIR/test.srl.naf     | \$BIND/m4_evcorefscript       > \$TESTDIR/test.ecrf.naf
-  cat \$TESTDIR/test.ecrf.naf    | \$BIND/m4_framesrlscript      > \$TESTDIR/test.fsrl.naf
-  cat \$TESTDIR/test.fsrl.naf    | \$BIND/m4_dbpnerscript        > \$TESTDIR/test.dbpner.naf
-  cat \$TESTDIR/test.dbpner.naf  | \$BIND/m4_nomeventscript      > \$TESTDIR/test.nomev.naf
+  cat \$TESTDIR/test.srl.naf     | \$BIND/m4_nomeventscript      > \$TESTDIR/test.nomev.naf
   cat \$TESTDIR/test.nomev.naf   | \$BIND/postsrl                > \$TESTDIR/test.psrl.naf
-  cat \$TESTDIR/test.psrl.naf    | \$BIND/m4_opiniscript         > \$TESTDIR/test.opin.naf
+  cat \$TESTDIR/test.psrl.naf    | \$BIND/m4_framesrlscript      > \$TESTDIR/test.fsrl.naf
+@%  cat \$TESTDIR/test.fsrl.naf    | \$BIND/m4_dbpnerscript        > \$TESTDIR/test.dbpner.naf
+  cat \$TESTDIR/test.fsrl.naf    | \$BIND/m4_opiniscript         > \$TESTDIR/test.opin.naf
+  cat \$TESTDIR/test.opin.naf     | \$BIND/m4_evcorefscript       > \$TESTDIR/test.ecrf.naf
 fi
 @| @}
+
+Correct sequence of the modules in the Dutch pipeline:
+
+\begin{itemize}
+\item tok
+\item mor
+\item nerc
+\item wsd
+\item ned
+\item heidel
+\item onto (\verb|predicate-matrix-tagger.sh| uit \verb|vua-ontotagger-v1.0|)
+\item srl
+\item Nominal event detectie
+\item vua-srl-extra
+\item framesrl (\verb|srl-framenet-tagger.sh| uit \verb|vua-ontotagger-v1.0|)
+\item opinion mining
+\item ecrf
+\end{itemize}
+
+\verb|dbpned| hoeft er waarschijnlijk niet in
+
+Nieuwe
 
 @%@d make scripts executable @{@%
 @%chmod 775  m4_bindir/test
