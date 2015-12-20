@@ -14,11 +14,15 @@ m4_sinclude(local.m4)m4_dnl
 \newcommand{\AWK}{\textsc{awk}}
 \newcommand{\CLTL}{\textsc{cltl}}
 \newcommand{\EHU}{\textsc{ehu}}
+\newcommand{\MOR}{\textsc{mor}}
 \newcommand{\NAF}{\textsc{naf}}
+\newcommand{\NERC}{\textsc{nerc}}
 \newcommand{\NED}{\textsc{ned}}
-\newcommand{\NER}{\textsc{ner}}
 \newcommand{\NLP}{\textsc{nlp}}
+\newcommand{\POS}{\textsc{pos}}
 \newcommand{\SRL}{\textsc{srl}}
+\newcommand{\UKB}{\textsc{ukb}}
+\newcommand{\WSD}{\textsc{wsd}}
 \def\CaptionTextFont{\small\slshape}
 \title{\thedoctitle}
 \author{\theauthor}
@@ -67,6 +71,62 @@ pipeline from a frozen repository of the Newsreader Project.
 
 \subsection{List of the modules to be installed}
 \label{sec:moduleslist}
+
+\begin{tabular}{llll}
+\textbf{Module}    &  \textbf{NL}         &  \textbf{EN}           &  \textbf{EN component} \\    
+  Tokenizer        & m4_tokenizertex  & m4_tokenizertex    &                           \\
+  Topic detection  &                  & m4_topictooltex    & \verb|m4_topictooldir|    \\
+  \POS{}/\MOR{}    & m4_morphpartex   & m4_postex          & \verb|m4_posdir|          \\
+  Constit. parser  &                  & m4_conspartex      & \verb|m4_conspardir|      \\
+  \NERC{}          & m4_nerctex       & m4_nerctex         &                           \\
+  \UKB{}           &                  & m4_ukbtex          & \verb|m4_ukbdir|          \\
+  \WSD{}           & m4_wsdtex        & m4_ewsdtex         & \verb|m4_ewsddir|         \\
+  \NED{}           & m4_nedtex        & m4_nedname         &                           \\
+  Heideltime       & m4_heideltex     &                    &                           \\
+  FBK-time         &                  & m4_fbktimetex      & \verb|m4_fbktimedir|      \\
+  FBK-temprel      &                  & m4_fbktempreltex   & \verb|m4_fbktempreldir|   \\
+  FBK-causalrel    &                  & m4_fbkcausalreltex & \verb|m4_fbkcausalreldir| \\
+  Onto-tagger      & m4_ontotex       &                    &                           \\
+  \textsc{srl}     & m4_nl_srltex     & m4_en_srltex       & \verb|m4_en_srldir|       \\
+  Nominal event det. & m4_nomeventtex &                    &                           \\
+  \NED{}-reranker  &                  & m4_nedrertex       & \verb|m4_nedrerdir|       \\
+  Wikify           &                  & m4_wikifyname      & \verb|m4_wikifydir|       \\
+  factuality       &                  &                    & \verb|m4_factualitydir|   \\
+  Corefgraph       &                  &                    & \verb|m4_corefdir|        \\
+
+  Opinion-miner    & m4_opinitex      & m4_opinitex        & \\
+  Eventcoref       & m4_evcoreftex    & m4_evcoreftex      & \\
+
+\end{tabular}
+
+\subsection{Notes}
+\label{sec:notes}
+
+\begin{itemize}
+\item The Onto-tagger is a Java program in a jar named
+  \verb|ontotagger-1.0-jar-with-dependencies.jar|. It uses a
+  predicate-matrix named \verb|PredicateMatrix.v1.3.txt.role.odwn|
+  that can be found in the \verb|resources| subdirectory of module
+  \verb|vua-ontotagger-v1.0| that can be obtained from the snapshot.
+\item The Nominal Event Detector is also a Java program in the jar
+  named  \verb|ontotagger-1.0-jar-with-dependencies.jar|. It uses a
+  resource named \verb|nl-luIndex.xml| that is located in the
+  \verb|resources| subdirectory of the module
+  \verb|vua-nominal-event-detection-nl| that can be obtained from the
+  snapshot. The Nominal Event Detector uses results from the Onto-tagger.
+\item The SRL postprocessor is a Python script in module
+  \verb|vua-srl-postprocess| that can be cloned from Github. It uses
+  results from the nominal event detector.
+\item Event coref Detector is a Java program inside Jar
+  \verb|EventCoreference-1.0-SNAPSHOT-jar-with-dependencies.jar| that
+  can be found in module \verb|vua-eventcoreference_v2| from the
+  snapshot. 
+\item The Onto-tagger for Framenet-SRL is a program in the jar named
+  \verb|ontotagger-1.0-jar-with-dependencies.jar|. It uses results
+  from the SRL postprocessor and the event coref detector.
+\item 
+\end{itemize}
+
 
 \newcommand{\dref}[1]{\hyperref[#1]{\ref{#1}}}
 
