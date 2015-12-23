@@ -42,6 +42,7 @@ m4_define(m4_aenvlibdir, m4_aenvdir`'/lib)m4_dnl     Program environment
 m4_define(m4_envlibdir, m4_envdir`'/lib)m4_dnl 
 m4_define(m4_aenvetcdir, m4_aenvdir`'/etc)m4_dnl 
 m4_define(m4_envetcdir, m4_envdir`'/etc)m4_dnl 
+m4_define(m4_apiddir, m4_aenvetcdir/pid)m4_dnl To store pid files for servers.
 m4_dnl     m4_define(m4_usrlocaldir, m4_envdir`/usrlocal')m4_dnl     
 m4_dnl     m4_define(m4_ausrlocaldir, m4_aenvdir`/usrlocal')m4_dnl
 m4_dnl     m4_define(m4_usrlocalbindir, m4_usrlocaldir/bin)m4_dnl
@@ -54,6 +55,8 @@ m4_define(m4_javatarball, server-jre-7u72-linux-x64.tar.gz)m4_dnl
 m4_define(m4_javatarballurl, http://www.oracle.com/technetwork/java/javase/downloads/server-jre7-downloads-1931105.html)m4_dnl
 m4_define(m4_javajdk, jdk1.7.0_72)m4_dnl
 m4_define(m4_ahackdir, m4_aenvdir`/hacks')m4_dnl
+m4_define(m4_java16name, jre1.6.0_45)m4_dnl
+m4_define(m4_java16ball, jre-6u45-linux-x64.bin)m4_dnl
 m4_define(m4_activepythonurl, http://www.activestate.com/activepython)m4_dnl
 m4_define(m4_activepythonball, ActivePython-2.7.8.10-linux-x86_64.tar.gz)m4_dnl
 m4_define(m4_apythonenvdir, m4_aenvdir/python)m4_dnl
@@ -153,6 +156,7 @@ m4_define(m4_alpinohackpythonscript, clean_hack.py)m4_dnl
 m4_dnl
 m4_dnl Constituent parser
 m4_define(m4_consparname, ixa-pipe-parse)m4_dnl
+m4_define(m4_consparversion, 1.1.1)m4_dnl
 m4_define(m4_conspartex, \verb|m4_consparname|)m4_dnl
 m4_define(m4_conspardir, EHU-parse.v30)m4_dnl
 
@@ -224,16 +228,19 @@ m4_dnl NED-reranker
 m4_define(m4_nedrername, domain_model)m4_dnl
 m4_define(m4_nedrertex, \verb|domain_model|)m4_dnl
 m4_define(m4_nedrerdir, VUA-popen-nedreranker.v30)m4_dnl
+m4_define(m4_nedrerball, 20151220_VUA-popen-nedreranker.v30.tgz)m4_dnl
 m4_dnl
 m4_dnl Wikify
 m4_define(m4_wikifyname, ixa-pipe-wikify)m4_dnl
 m4_define(m4_wikifytex, \verb|m4_wikifyname|)m4_dnl
-m4_define(m4_wikifydir, EHU-wikify.v3.0)m4_dnl
+m4_define(m4_wikifydir, EHU-wikify.v30)m4_dnl
+m4_define(m4_wikifyball, 20151220_EHU-wikify.v30.tgz)m4_dnl
 m4_dnl
 m4_dnl UKB
 m4_define(m4_ukbname, ukb)m4_dnl
 m4_define(m4_ukbtex, \textsc{ukb})m4_dnl
 m4_define(m4_ukbdir, EHU-ukb.v30)m4_dnl
+m4_define(m4_ukbball, 20151220_EHU-ukb.v30.tgz)m4_dnl
 m4_dnl
 m4_dnl WSD
 m4_dnl m4_define(m4_wsdsrc, m4_lisanlproot/mods/ukb)m4_dnl  Subdir. of modules
@@ -250,6 +257,32 @@ m4_dnl e-WSD
 m4_define(m4_ewsdname, ims-wsd)m4_dnl
 m4_define(m4_ewsdtex, \verb|m4_ewsdname|)m4_dnl
 m4_define(m4_ewsddir, VUA-ims-wsd.v30)m4_dnl
+m4_define(m4_ewsdball, 20151220_VUA-ims-wsd.v30)m4_dnl
+m4_dnl
+m4_dnl SRL-server
+m4_define(m4_srlservername, ims-wsd)m4_dnl
+m4_define(m4_srlservertex, \verb|m4_ewsdname|)m4_dnl
+m4_define(m4_srlserverdir, EHU-srl-server)m4_dnl
+m4_define(m4_srlserverball, 20151220_EHU-srl-server.tgz)m4_dnl
+m4_define(m4_srlserverport, 5005)m4_dnl
+m4_dnl
+m4_dnl FBK-time
+m4_define(m4_fbktimename, FBK-time.v30)m4_dnl
+m4_define(m4_fbktimetex, \verb|m4_fbktimename|)m4_dnl
+m4_define(m4_fbktimedir, FBK-time.v30)m4_dnl
+m4_define(m4_fbktimeball, 20151220_FBK-time.v30.tgz)m4_dnl
+m4_dnl
+m4_dnl FBK-temprel
+m4_define(m4_fbktemprelname, FBK-temprel.v30)m4_dnl
+m4_define(m4_fbktempreltex, \verb|m4_fbktemprelname|)m4_dnl
+m4_define(m4_fbktempreldir, FBK-temprel.v30)m4_dnl
+m4_define(m4_fbktemprelball, 20151220_FBK-temprel.v30.tgz)m4_dnl
+m4_dnl
+m4_dnl FBK-causalrel
+m4_define(m4_fbkcausalrelname, FBK-causalrel.v30)m4_dnl
+m4_define(m4_fbkcausalreltex, \verb|m4_fbkcausalrelname|)m4_dnl
+m4_define(m4_fbkcausalreldir, FBK-causalrel.v30)m4_dnl
+m4_define(m4_fbkcausalrelball, 20151220_FBK-causalrel.v30.tgz)m4_dnl
 m4_dnl
 m4_dnl ONTO
 m4_define(m4_ontoname, onto-tagger)m4_dnl
@@ -356,12 +389,14 @@ m4_dnl m4_define(m4_opinidir, opinion_miner_de_luxe)m4_dnl
 m4_define(m4_opiniscript, opinimin)m4_dnl
 m4_define(m4_opini_trained_models_ball, 20150730_opimin_final_models.tgz)m4_dnl
 m4_define(m4_opini_commitname, b559d303da0c2da17f97d3fa41960d7fa3e1595b)m4_dnl
-m4_define(m4_opini_nl_conf, opini_nl.cfg)m4_dnl
+m4_dnl m4_define(m4_opini_nl_conf, opini_nl.cfg)m4_dnl
+m4_define(m4_opini_conf, opini.cfg)m4_dnl
 m4_dnl
 m4_dnl Opinion-miner, temporary solution (20151013)
 m4_define(m4_opini_temp_ball, 20151012VUA-opinion-miner.tgz)m4_dnl
 m4_define(m4_opinidir, VUA-opinion-miner)m4_dnl
 m4_define(m4_opini_dutchmodel_subdir, final_models/nl/news_cfg1)m4_dnl
+m4_define(m4_opini_engmodel_subdir, final_models/en/news_cfg1)m4_dnl
 m4_dnl
 m4_dnl lu2synset
 m4_define(m4_lu2synball, lu2synset.tgz)m4_dnl  
@@ -383,6 +418,7 @@ m4_dnl Factuality
 m4_define(m4_factualityname, factuality)m4_dnl
 m4_define(m4_factualitytex, \verb|factuality|)m4_dnl
 m4_define(m4_factualitydir, VUA-factuality.v30)m4_dnl
+m4_define(m4_factualityball, 20151220_VUA-factuality.v30.tgz)m4_dnl
 m4_dnl
 m4_dnl Corefgraph
 m4_define(m4_corefgraphname, corefgraph)m4_dnl

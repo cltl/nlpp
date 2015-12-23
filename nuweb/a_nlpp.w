@@ -715,6 +715,26 @@ When the installation has been done, remove maven, because it is no longer neede
 rm -rf m4_mavendir
 @| @}
 
+\subsection{Java 1.6}
+\label{sec:Java-1.6}
+
+Java 1.7 is able to run nearly all the modules of the pipeline that
+are based on Java. However, there is one exception, i.e. the
+\verb|ims-wsd| module, that needs Java version 1.6. So, we have to
+install that version of Java as well. 
+
+@d install Java 1.6 @{@%
+cd \$envdir/java
+\$snapshotsocket/m4_snapshotdirectory/m4_java16ball
+@| @}
+
+Insert the following macro in scripts that need to run Java 1.6.
+
+@d set up Java 1.6 @{@%
+export JAVA_HOME=\$envdir/java/m4_java16name
+export PATH=$JAVA_HOME/bin:$PATH
+@| @}
+
 
 
 \subsection{Python}
@@ -1057,6 +1077,10 @@ echo ... Java
 @< begin conditional install @(maven_installed@) @>
   @< install maven @>
 @< end conditional install @(maven_installed@) @>
+@< begin conditional install @(java16_installed@) @>
+  @< install Java 1.6 @>
+@< end conditional install @(java16_installed@) @>
+
 echo ... Python
 if
   [ \$python_installed ]
@@ -1083,6 +1107,11 @@ echo ... Ticcutils and Timbl
   @< install the ticcutils utility @>
   @< install the timbl utility @>
 @< end conditional install @(ticctimbl_installed@) @>
+echo ... Boost
+@< begin conditional install @(boost_installed@) @>
+  @< install boost @>
+@< end conditional install @(boost_installed@) @>
+
 echo ... VUA-pylib, SVMlight, CRFsuite
 @< begin conditional install @(miscutils_installed@) @>
   @< install VUA-pylib @>
@@ -1124,6 +1153,44 @@ echo Install modules
   echo ... NED
   @< install the \NED{} module @>
 @< end conditional install @(ned_installed@) @>
+@< begin conditional install @(nedrer_installed@) @>
+  echo ...NED reranker
+  @< install the \NED-reranker module @>
+@< end conditional install @(nedrer_installed@) @>
+@< begin conditional install @(wikify_installed@) @>
+  echo ...WIKIfy module
+  @< install the wikify module @>
+@< end conditional install @(wikify_installed@) @>
+@< begin conditional install @(UKB_installed@) @>
+  echo ... UKB module
+ cd \$modulesdir
+ tar -xzf \$snapshotsocket/m4_snapshotdirectory/m4_ukbball
+@%  @< install the UKB module @>
+@< end conditional install @(UKB_installed@) @>
+@< begin conditional install @(ims-wsd_installed@) @>
+  echo ...ims-wsd module
+  @< install the ims-wsd module @>
+@< end conditional install @(ims-wsd_installed@) @>
+@< begin conditional install @(srl_server_installed@) @>
+  echo ...srl-server module
+  @< install the srl-server module @>
+@< end conditional install @(srl_server_installed@) @>
+@< begin conditional install @(FBK-time_installed@) @>
+  echo ... FBK-time module
+  @< install the FBK-time module @>
+@< end conditional install @(FBK-time_installed@) @>
+@< begin conditional install @(FBK-temprel_installed@) @>
+  echo ... FBK-temprel module
+  @< install the FBK-temprel module @>
+@< end conditional install @(FBK-temprel_installed@) @>
+@< begin conditional install @(FBK-causalrel_installed@) @>
+  echo ... FBK-causalrel module
+  @< install the FBK-causalrel module @>
+@< end conditional install @(FBK-causalrel_installed@) @>
+@< begin conditional install @(factuality_installed@) @>
+  echo ... factuality module
+  @< install the factuality module @>
+@< end conditional install @(factuality_installed@) @>
 @< begin conditional install @(corefb_installed@) @>
   echo ... Coreference base
   @< install coreference-base @>
@@ -1206,6 +1273,26 @@ fi
 \subsection{Install utilities and resources}
 \label{sec:utilitiesandresources}
 
+\subsubsection{Prefix of scripts that run modules}
+\label{sec:runprefix}
+
+Each module will be run by a Bash script located in subdirectory
+\verb|bin|. The start of these scrips will have similar
+content. Insert the following macro to include this similar content,
+with the name of the module-directory as argument:
+
+@d start of module-script @{@%
+#!/bin/bash
+source m4_aenvbindir/progenv
+export LC_ALL=en_US.UTF-8
+export LANG=en_US.UTF-8
+export LANGUAGE=en_US.UTF-8
+ROOT=\$piperoot
+MODDIR=\$modulesdir/<!!>@1<!!>
+@| @}
+
+
+
 \subsubsection{Language detection}
 \label{sec:detectlang}
 
@@ -1236,9 +1323,8 @@ print language
 @| @}
 
 @o m4_bindir/langdetect @{@%
-#!/bin/bash
-source m4_aenvbindir/progenv
-echo `cat | python m4_aenvbindir/langdetect.py`
+@< start of module-script @(m4_aenvbindir@) @>
+echo `cat | python $MODDIR/langdetect.py`
 @| @}
 
 @d make scripts executable @{@%
@@ -1467,6 +1553,23 @@ to be re-installed.
 @| @}
 
 
+\subsubsection{The Boost library}
+\label{sec:boost}
+
+@d install boost @{@%
+boostmp=`mktemp -d -t boost.XXXXXX`
+cd \$boostmp
+wget m4_boost_src_url
+tar -xzf ./download
+cd m4_boostname
+./bootstrap.sh
+cp project-config.jam old.project-config
+cat old.project-config.jam | sed "s|/usr/local|$envdir|g" >project-config.jam
+./b2
+./b2 install 
+cd \$piperoot
+@% rm -rf \$boostmp
+@| @}
 
 
 
@@ -1837,8 +1940,7 @@ rm -rf \$tempdir
 The script runs the tokenizerscript.
 
 @o m4_bindir/m4_tokenizerscript @{@%
-#!/bin/bash
-source m4_aenvbindir/progenv
+@< start of module-script @(\$jarsdir@)@>
 @< abort when the language is not English or Dutch @>
 JARFILE=\$jarsdir/m4_tokenizerjar
 java -Xmx1000m  -jar \$JARFILE tok -l \$naflang --inputkaf
@@ -1865,11 +1967,10 @@ gawk '{gsub("/home/newsreader/components", subs); print}' subs=$modulesdir old.c
 \paragraph{Script:}
 
 @o m4_bindir/topic @{@%
-#!/bin/bash
-source m4_aenvbindir/progenv
+@< start of module-script @(m4_topictooldir@) @>
 @< abort when the language is not English or Dutch @>
-rootDir=\$modulesdir/EHU-topic.v30
-java -jar ${rootDir}/ixa-pipe-topic-1.0.1.jar -p ${rootDir}/conf.prop
+@% rootDir=\$modulesdir/EHU-topic.v30
+java -jar $MODDIR/ixa-pipe-topic-1.0.1.jar -p $MODDIR/conf.prop
 @| @}
 
 
@@ -1916,13 +2017,8 @@ morpho-syntactic module has an option \verb|-t| to set a time-out (in minutes) f
 parsing. 
 
 @o m4_bindir/m4_morphparscript @{@%
-#!/bin/bash
-source m4_aenvbindir/progenv
-@% @< set variables that point to the directory-structure @>
-@% @< set up programming environment @>
+@< start of module-script @(m4_morphpardir@) @>
 @< get the mor time-out parameter @>
-ROOT=\$piperoot
-MODDIR=\$modulesdir/<!!>m4_morphpardir<!!>
 @< set alpinohome @>
 cat | python \$MODDIR/core/morph_syn_parser.py $timeoutarg
 @| @}
@@ -1966,13 +2062,7 @@ cp -r \$snapshotsocket/components/m4_posdir \$modulesdir/
 \label{sec:posmodule-script} 
 
 @o m4_bindir/pos @{@%
-#!/bin/bash
-source m4_aenvbindir/progenv
-export LC_ALL=en_US.UTF-8
-export LANG=en_US.UTF-8
-export LANGUAGE=en_US.UTF-8
-ROOT=\$piperoot
-MODDIR=\$modulesdir/<!!>m4_posdir<!!>
+@< start of module-script @(m4_posdir@) @>
 java -jar ${MODDIR}/ixa-pipe-pos-1.4.3.jar tag -m ${MODDIR}/en-maxent-100-c5-baseline-dict-penn.bin
 @| @}
 
@@ -1990,14 +2080,8 @@ cp -r \$snapshotsocket/components/m4_conspardir \$modulesdir/
 \paragraph{Script}
 
 @o m4_bindir/constpars @{@%
-#!/bin/bash
-source m4_aenvbindir/progenv
-export LC_ALL=en_US.UTF-8
-export LANG=en_US.UTF-8
-export LANGUAGE=en_US.UTF-8
-ROOT=\$piperoot
-MODDIR=\$modulesdir/<!!>m4_conspardir<!!>
-java -jar ${MODDIR}/ixa-pipe-parse-1.1.1.jar parse -g sem -m ${MODDIR}/en-parser-chunking.bin
+@< start of module-script @(m4_conspardir@) @>
+java -jar ${MODDIR}/m4_constparname-m4_constparversion.jar parse -g sem -m ${MODDIR}/en-parser-chunking.bin
 @| @}
 
 
@@ -2049,6 +2133,449 @@ java -jar ${MODDIR}/ixa-pipe-parse-1.1.1.jar parse -g sem -m ${MODDIR}/en-parser
 @%chmod 775  m4_bindir/m4_alpinohackscript
 @%@| @}
 
+\subsubsection{NED-reranker}
+\label{sec:nedrer}
+
+\paragraph{Module}
+
+@d install the \NED-reranker module @{@%
+cd \$modulesdir
+tar -xzf \$snapshotsocket/m4_snapshotdirectory/m4_nedrerball
+@| @}
+
+
+
+\paragraph{Script}
+
+@o m4_bindir/nedrer @{@%
+@< start of module-script @(m4_nedrerdir@) @>
+cd $MODDIR
+python $MODDIR/domain_model.py
+@| @}
+
+\subsubsection{Wikify module}
+\label{sec:wikify}
+
+\paragraph{Module}
+
+@d install the wikify module @{@%
+cd \$modulesdir
+tar -xzf \$snapshotsocket/m4_snapshotdirectory/m4_wikifyball
+@| @}
+
+\paragraph{Script}
+
+The Wikify module needs DBpedia to generate ``markables''. 
+
+@o m4_bindir/wikify @{@%
+@< start of module-script @(m4_wikifydir@) @>
+if
+  [ "$naflang" == "nl" ]
+then
+  spotlightport=m4_spotlight_nl_port
+else
+  spotlightport=m4_spotlight_en_port
+fi
+[ $spotlightrunning ] || source m4_abindir/start-spotlight
+
+cd $MODDIR
+java -jar ${MODDIR}/ixa-pipe-wikify-1.2.1.jar -s http://$spotlighthost -p $spotlightport 
+@| @}
+
+
+\subsubsection{UKB}
+\label{sec:ukb}
+
+UKB needs boost libraries and Perl version 5. For now, we consider them installed.
+
+
+\paragraph{Module}
+
+@d install the UKB module @{@%
+@% cd \$modulesdir
+@% tar -xzf \$snapshotsocket/m4_snapshotdirectory/m4_ukbball
+@| @}
+
+\paragraph{Script}
+
+@o m4_bindir/ukb @{@%
+@< start of module-script @(m4_ukbdir@) @>
+cd $MODDIR
+${MODDIR}/naf_ukb/naf_ukb.pl -x ${MODDIR}/ukb/bin/ukb_wsd -K ${MODDIR}/wn30-ili_lkb/wn30g.bin64 -D ${MODDIR}/wn30-ili_lkb/wn30.lex - -- --dict_weight --dgraph_dfs --dgraph_rank ppr
+
+@| @}
+
+\subsubsection{IMS-WSD}
+\label{sec:IMS-WSD}
+
+\paragraph{Module}
+
+The package itself supplies an installation script that seems
+usable. However, today I am in a hurry and just install the module as
+it comes from the EHU repository.
+
+Although the Hadoop implementation runs this module with Java 1.7, I
+could only run \verb|ims+wsd| Java 1.6. Using Java 1.7 causes run-time
+errors ``Platform not recognised'' and the resulting NAF's do not
+contain WordNet references. So, we had to install Java 1.6. 
+
+The scripts contain explicit paths that must be corrected:
+
+\begin{description}
+\item[\verb|ims/testPlain|:] Explicit path to Java binary.
+\item[\verb|path_to_ims.py|:] Set variable \verb|PATH_TO_IMS|. 
+\end{description}
+
+@d install the ims-wsd module @{@%
+cd \$modulesdir
+tar -xzf \$snapshotsocket/m4_snapshotdirectory/m4_ewsdball
+cd m4_ewsddir
+thisDir=`pwd`
+echo PATH_TO_IMS = "'"$thisDir/ims"'" > path_to_ims.py
+cd ims
+cp testPlain.bash old.testPlain.bash
+sedcommand='s|/usr/lib/jvm/java-1.6.0-openjdk-1.6.0.0.x86_64/jre/bin/java|java|g'
+cat old.testPlain.bash | sed $sedcommand >testPlain.bash
+@| @}
+
+\paragraph{Script}
+
+
+@o m4_bindir/ewsd @{@%
+@< start of module-script @(m4_ewsddir@) @>
+@< set up Java 1.6 @>
+#Setting the output to be ili-wn30 synsets instead of sensekeys
+$MODDIR/call_ims.py -ili30
+@| @}
+
+
+\subsubsection{SRL server}
+\label{sec:srlserver}
+
+The EHU SRL-module, that we use for Enghlish documents, has been set
+up as a server/client system. Hence, we have to start the server
+before we can process something.
+
+We don't know in advance whether we run the pipeline for a single text
+or from a whole bunch of text and hence we do not know whether it is
+advisable that the server keeps running, occupying precious
+memory. Therefore, currently we just start and stop the server every
+time that we use it.
+
+\paragraph{Module}
+
+@d install the srl-server module @{@%
+cd \$modulesdir
+tar -xzf \$snapshotsocket/m4_snapshotdirectory/m4_srlserverball
+cd m4_srlserverdir
+mkdir -p m4_apiddir
+@| @}
+
+
+\paragraph{Scripts}
+
+Generate three scripts: \verb|start_eSRL|, \verb|stop_esrl| and
+\verb|eSRL|, resp. to start the SRL server, to stop it and to process
+a \NAF{} file.
+
+@o m4_bindir/start_eSRL @{@%
+@< start of module-script @(m4_srlserverdir@) @>
+@< start EHU SRL server if it isn't running @>
+@| @}
+
+@o  m4_bindir/stop_eSRL @{@%
+@< start of module-script @(m4_srlserverdir@) @>
+@< stop EHU SRL server @>
+@| @}
+
+
+@o m4_bindir/eSRL @{@%
+@< start of module-script @(m4_srlserverdir@) @>
+m4_abindir/start_eSRL
+java -cp $MODDIR/IXA-EHU-srl-3.0.jar ixa.srl.SRLClient en
+@| @}
+
+
+@d start EHU SRL server if it isn't running @{@%
+pidFile=m4_apiddir/SRLServer.pid
+portInfo=$(nmap -p m4_srlserverport localhost | grep open)
+if [ -z "$portInfo" ]; then
+  >&2 echo "Starting srl-server as it is not runnning"
+  java -Xms2500m -cp $MODDIR/IXA-EHU-srl-3.0.jar ixa.srl.SRLServer en &> /dev/null &
+  pid=$!
+  echo $pid > $pidFile
+  sleep 60
+  >&2 echo "Server running: ${pid}"
+else
+ >&2 echo "Server already running.."
+fi
+@| @}
+
+@d stop EHU SRL server @{@%
+pidFile=m4_apiddir/SRLServer.pid
+if
+ [ -e "$pidFile" ]
+then
+ kill `echo $pidFile`
+ rm $pidFile
+fi
+@| @}
+
+\subsubsection{FBK-time module}
+\label{sec:fbktime}
+
+\paragraph{Module}
+
+@d install the FBK-time module @{@%
+cd \$modulesdir
+tar -xzf \$snapshotsocket/m4_snapshotdirectory/m4_fbktimeball
+@| @}
+
+
+\paragraph{Script}
+
+@o m4_bindir/FBK-time @{@%
+@< start of module-script @(m4_fbktimedir@) @>
+BEGINTIME=`date '+%Y-%m-%dT%H:%M:%S%z'`
+YAMCHA=$MODDIR/tools
+timdir=`mktemp -d -t time.XXXXXX`
+FILETXP=$timdir/TimePro.txp
+CHUNKIN=$timdir/TimePro.naf
+FILEOUT=$timdir/TimeProOUT.txp
+TIMEPRONORMIN=$timdir/TimeProNormIN.txp
+cd $MODDIR
+cat > $CHUNKIN
+
+JAVACLASSPATH="lib/jdom-2.0.5.jar:lib/kaflib-naf-1.1.9.jar:lib/NAFtoTXP_v11.jar"
+JAVAMODULE=eu.fbk.newsreader.naf.NAFtoTXP_v11
+cat $CHUNKIN | \
+ java -cp $JAVACLASSPATH $JAVAMODULE $FILETXP chunk+entity timex
+
+#echo "Saving... $FILETXP"
+tail -n +4 $FILETXP | awk -f resources/english-rules > $FILEOUT
+head -n +4 $FILETXP > $TIMEPRONORMIN
+
+cat $FILEOUT | \
+  $YAMCHA/yamcha-0.33/usr/local/bin/yamcha \
+    -m models/tempeval3_silver-data.model \
+  >> $TIMEPRONORMIN
+
+JAVACLASSPATH="lib/scala-library.jar:lib/timenorm-0.9.1-SNAPSHOT.jar"
+JAVACLASSPATH=$JAVACLASSPATH:"lib/threetenbp-0.8.1.jar:lib/TimeProNorm_v2.5.jar"
+JAVAMODULE=eu.fbk.timePro.TimeProNormApply
+cat $TIMEPRONORMIN | \
+  java -cp $JAVACLASSPATH $JAVAMODULE $FILETXP
+
+rm $FILEOUT
+rm $TIMEPRONORMIN
+
+JAVACLASSPATH="lib/jdom-2.0.5.jar:lib/kaflib-naf-1.1.9.jar:lib/NAFtoTXP_v11.jar"
+JAVAMODULE=eu.fbk.newsreader.naf.NAFtoTXP_v11
+cat $CHUNKIN | java -cp $JAVACLASSPATH $JAVAMODULE $FILEOUT chunk+morpho+timex+event eval
+
+JAVACP1="lib/TXPtoNAF_v5.jar:lib/jdom-2.0.5.jar:lib/kaflib-naf-1.1.9.jar"
+JAVAMOD1=eu.fbk.newsreader.naf.TXPtoNAF_v4
+JAVACP2="lib/kaflib-naf-1.1.9.jar:lib/jdom-2.0.5.jar:lib/TimeProEmptyTimex_v2.jar"
+JAVAMOD2=eu.fbk.timepro.TimeProEmptyTimex
+java  -Dfile.encoding=UTF8 -cp $JAVACP1 $JAVAMOD1 $CHUNKIN $FILETXP "$BEGINTIME" TIMEX3 | \
+ java -Dfile.encoding=UTF8 -cp $JAVACP2 $JAVAMOD2 $FILEOUT
+
+
+rm $FILETXP
+rm $CHUNKIN
+rm -rf $timdir
+@| @}
+
+\subsubsection{FBK-temprel module}
+\label{sec:FBK-temprel}
+
+\paragraph{Module}
+
+@d install the FBK-temprel module @{@%
+cd \$modulesdir
+tar -xzf \$snapshotsocket/m4_snapshotdirectory/m4_fbktemprelball
+@< repair FBK-*rel's run.sh.hadoop @(m4_fbktempreldir@) @>
+@| @}
+
+Script run.sh.hadoop seems to be obsolete in the original tarball:
+
+\begin{enumerate}
+\item The class-path argument in one of the Java statement refers to
+  an obsolete jar (\verb|kaflib-naf-1.1.8| instead of \verb|kaflib-naf-1.1.9|)
+\item Another class-path argument refers to
+  \verb|PredicateTimeAnchor_tlink.jar| instead of \verb|PredicateTimeAnchor.jar|.
+\item A ``sh'' statement is used. The problem is, that in Ubuntu \verb|/bin/sh|
+  points to \verb|bin/dash| and the script
+  (\verb|temprel-pipeline-per-file-NWR.sh|) does not seem to be
+  compatible with \verb|dash|.
+\end{enumerate}
+
+Therefore, we need to repair the script. We will need to repair the
+script in the \verb|FBK-causalrel| module in a similar way, and
+therefore provide the module-directory as argument.
+
+@d repair FBK-*rel's run.sh.hadoop @{@%
+cd \$modulesdir/@1
+mv run.sh.hadoop old.run.sh.hadoop
+cat old.run.sh.hadoop | \
+  sed s/kaflib-naf-1.1.8/kaflib-naf-1.1.9/g | \
+  sed s/TimeAnchor_tlink.jar/TimeAnchor.jar/g | \
+  sed s/sh temprel/bash temprel/g | \
+>run.sh.hadoop
+@| @}
+
+
+\paragraph{Script}
+
+The original run script seems to not only read the input naf from
+standard in, but also to obtain the input naf as a file that an
+argument points to. This constructions makes the pipeline complicated,
+therefore, we generate the naf file within the script.
+
+The original script generates temporary files in the \verb|temp|
+directory of the host-computer, and prefixes the names of the
+temporary files with a random number to prevent confusion between
+tempfiles of different instances of this module. We generate a
+temp-directory per instance. 
+
+@o m4_bindir/FBK-temprel @{@%
+@< start of module-script @(m4_fbktempreldir@) @>
+cd $MODDIR
+scratchDir=`mktemp -d -t temprel.XXXXXX`
+cat >$scratchDir/in.naf
+cat $scratchDir/in.naf | ./run.sh.hadoop $MODDIR $scratchDir $scratchDir/in.naf
+@% # $3 = xml input file
+@% scratchDir=`mktemp -d -t temprel.XXXXXX`
+@% @% xmlFile=$scratchDir/infile
+@% @% cat >$xmlfile
+@% cd "$MODDIR"
+@% RANDOMFIX="123"
+@% FILETXP=$scratchDir/Temprel
+@% NAF=$scratchDir/Temprel.naf
+@% cat > $NAF
+@% 
+@% BEGINTIME=`date '+%Y-%m-%dT%H:%M:%S%z'`
+@% 
+@% JAVACLASSPATH="lib/kaflib-naf-1.1.8.jar:lib/NAFtoTXP_v11.jar:lib/jdom-2.0.5.jar"
+@% JAVAMODULE=eu.fbk.newsreader.naf.NAFtoTXP_v11
+@% CHUNKPAIRARG="chunk+entity+event+timex+connectives"
+@% CHUNKPAIRARG=$CHUNKPAIRARG"+srl+dep+morpho+coevent"
+@% CHUNKPAIRARG=$CHUNKPAIRARG"+dct+main_verb+pairs"
+@% cat $NAF | /
+@%   java -cp $JAVACLASSPATH $JAVAMODULE \
+@%     $FILETXP $CHUNKPAIRARG eval
+@% 
+@% sh temprel-pipeline-per-file-NWR.sh \
+@%       $FILETXP $MODDIR/tools/ \
+@%       $scratchDir \
+@%       $RANDOMFIX \
+@%       1-step
+@% 
+@% CP1="lib/TXPtoNAF_v4.jar:lib/jdom-2.0.5.jar:lib/kaflib-naf-1.1.8.jar"
+@% CP2="tools/jython/jython.jar:lib/kaflib-naf-1.1.8.jar"
+@% CP2=$CP2":lib/jdom-2.0.5.jar:lib/PredicateTimeAnchor_tlink.jar"
+@% 
+@% java -Dfile.encoding=UTF8 \
+@%   -cp $CP1 \
+@%   eu.fbk.newsreader.naf.TXPtoNAF_v4 \
+@%   $NAF \
+@%   "$scratchDir"/"$RANDOMFIX".tlinks \
+@%   "$BEGINTIME" TLINK \
+@% | \
+@%   java \
+@%     -cp $CP2 \
+@%     eu.fbk.newsreader.TimeAnchor.PredicateTimeAnchor \
+@%     tlink timeA $FILETXP
+@% 
+@% rm $FILETXP
+@% rm "$scratchDir"/"$RANDOMFIX".tlinks
+@% rm $NAF
+
+@| @}
+
+\subsubsection{FBK-causalrel module}
+\label{sec:FBK-causalrel}
+
+\paragraph{Module}
+
+@d install the FBK-causalrel module @{@%
+cd \$modulesdir
+tar -xzf \$snapshotsocket/m4_snapshotdirectory/m4_fbkcausalrelball
+@< repair FBK-*rel's run.sh.hadoop @(m4_fbkcausalreldir@) @>
+@| @}
+
+Like in \verb|FBK-temprel|, script run.sh.hadoop seems not to work out
+of the box:
+
+\begin{enumerate}
+\item The class-path argument in one of the Java statement refers to
+  an obsolete jar (\verb|kaflib-naf-1.1.8| instead of \verb|kaflib-naf-1.1.9|)
+@% \item Another class-path argument refers to
+@%   \verb|PredicateTimeAnchor_tlink.jar| instead of \verb|PredicateTimeAnchor.jar|.
+\item A ``sh'' statement is used. The problem is, that in Ubuntu \verb|/bin/sh|
+   points to \verb|bin/dash| and the script
+   (\verb|temprel-pipeline-per-file-NWR.sh|) does not seem to be
+   compatible with \verb|dash|.
+\end{enumerate}
+
+Therefore, we need to repair that script like we did in \verb|FBK-temprel|.
+
+@d repair causalrel's run.sh.hadoop @{@%
+cd \$modulesdir/m4_fbkcausalreldir
+mv run.sh.hadoop old.run.sh.hadoop
+cat old.run.sh.hadoop | \
+  sed s/kaflib-naf-1.1.8/kaflib-naf-1.1.9/g | \
+  sed s/TimeAnchor_tlink.jar/TimeAnchor.jar/g | \
+  sed s/sh temprel/bash temprel/g | \
+>run.sh.hadoop
+@| @}
+
+
+\paragraph{Script}
+
+@o  m4_bindir/FBK-causalrel @{@%
+@< start of module-script @(m4_fbkcausalreldir@) @>
+cd $MODDIR
+scratchDir=`mktemp -d -t causalrel.XXXXXX`
+cat >$scratchDir/in.naf
+cat $scratchDir/in.naf | ./run.sh.hadoop $MODDIR $scratchDir $scratchDir/in.naf
+@| @}
+
+\subsubsection{Factuality module}
+\label{sec:factuality}
+
+\paragraph{Module}
+
+@d install the factuality module @{@%
+cd \$modulesdir
+tar -xzf \$snapshotsocket/m4_snapshotdirectory/m4_factualityball
+@| @}
+
+
+\paragraph{Script}
+
+
+@o m4_bindir/factuality @{@%
+@< start of module-script @(m4_factualitydir@) @>
+cd $MODDIR
+#local settings to prevent perl from complaining
+export LANGUAGE=en_US.UTF-8
+export LANG=en_US.UTF-8
+export LC_ALL=en_US.UTF-8
+
+rootDir=${MODDIR}
+tmpDir=$(mktemp -d -t factuality.XXXXXX)
+
+export PATH=$PATH:${rootDir}:.
+# export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:${rootDir}/../opt/lib/:${rootDir}/../opt/boost_1_54_0/stage/lib
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:m4_aenvdir/lib/
+
+#mkdir -p ${scratchDir}/test
+
+python ${rootDir}/vua_factuality_naf_wrapper.py -t m4_aenvbindir/timbl -p ${rootDir} ${tmpDir}/
+
+@| @}
+
 
 \subsubsection{Nominal coreference-base}
 \label{sec:nomcorefgraph}
@@ -2079,11 +2606,8 @@ pip install --upgrade  networkx
 \paragraph{Script}
 
 @o m4_bindir/m4_corefbasescript @{@%
-#!/bin/bash
-source m4_aenvbindir/progenv
-@% @< set variables that point to the directory-structure @>
-@% @< set up programming environment @>
-cd $modulesdir/m4_corefbasedir/core
+@< start of module-script @(m4_corefbasedir@) @>
+cd $MODDIR/core
 cat | python -m corefgraph.process.file --language nl --singleton --sieves NO
 @| @}
 
@@ -2199,11 +2723,7 @@ Sonar model
 
 
 @o m4_bindir/m4_nerc_conll02_script @{@%
-#!/bin/bash
-source m4_aenvbindir/progenv
-@% @< set variables that point to the directory-structure @>
-@% @< set up programming environment @>
-MODDIR=$modulesdir/m4_nerc_nl_dir
+@< start of module-script @(m4_nerc_nl_dir@) @>
 JAR=$jarsdir/m4_nercjar
 MODEL=m4_nercmodelconll02
 cat | java -Xmx1000m -jar \$JAR tag -m $MODDIR/nl/$MODEL
@@ -2225,9 +2745,7 @@ cat | java -Xmx1000m -jar \$JAR tag -m $MODDIR/nl/$MODEL
 @% @| @}
 
 @o m4_bindir/nerc @{@%
-#!/bin/bash
-source m4_aenvbindir/progenv
-MODDIR=$modulesdir/m4_nercdir
+@< start of module-script @(m4_nercdir@) @>
 JAR=$jarsdir/m4_nercjar
 if
   [ "$naflang" == "nl" ]
@@ -2339,17 +2857,10 @@ echo 'Models installed in folder models'
 \label{sec:wsdscript}
 
 @o m4_bindir/m4_wsdscript @{@%
-#!/bin/bash
-# WSD -- wrapper for word-sense disambiguation
-# 8 Jan 2014 Ruben Izquierdo
-# 16 sep 2014 Paul Huygen
-source m4_aenvbindir/progenv
-@% @< set variables that point to the directory-structure @>
-@% @< set up programming environment @>
-WSDDIR=$modulesdir/m4_wsddir
+@< start of module-script @(m4_wsddir@) @>
 WSDSCRIPT=dsc_wsd_tagger.py
 @% cat | python $WSDDIR/$WSDSCRIPT --naf 
-cat | python $WSDDIR/$WSDSCRIPT --naf -ref odwnSY
+cat | python $MODDIR/$WSDSCRIPT --naf -ref odwnSY
 @| @}
 
 @%@d make scripts executable @{@%
@@ -2449,12 +2960,9 @@ tar -xzf \$snapshotsocket/m4_snapshotdirectory/m4_lu2synball
 \label{sec:lu2synsetscript}
 
 @o m4_bindir/m4_lu2synsetscript  @{@%
-#!/bin/bash
-@% @< set variables that point to the directory-structure @>
-source m4_aenvbindir/progenv
-ROOT=\$piperoot
-JAVALIBDIR=\$modulesdir/m4_lu2syndir/lib
-RESOURCESDIR=\$modulesdir/m4_lu2syndir/resources
+@< start of module-script @(m4_lu2syndir@) @>
+JAVALIBDIR=\$MODDIR/lib
+RESOURCESDIR=\$MODDIR/resources
 JARFILE=WordnetTools-1.0-jar-with-dependencies.jar
 java -Xmx812m -cp  $JAVALIBDIR/$JARFILE vu.wntools.util.NafLexicalUnitToSynsetReferences \
    --wn-lmf "\$RESOURCESDIR/cornetto2.1.lmf.xml" --format naf 
@@ -2592,6 +3100,7 @@ NED needs to contact a Spotlight-server.
 
 
 @o m4_bindir/m4_nedscript @{@%
+@< start of module-script @(@) @>
 #!/bin/bash
 source m4_aenvbindir/progenv
 @% @< set variables that point to the directory-structure @>
@@ -2606,7 +3115,7 @@ else
   spotlightport=m4_spotlight_en_port
 fi
 [ $spotlightrunning ] || source m4_abindir/start-spotlight
-cat | java -Xmx1000m -jar \$jarsdir/m4_nedjar -H http://$spotlighthost -p m4_spotlight_nl_port -e candidates -i \$envdir/spotlight/wikipedia-db -n nlEn
+cat | java -Xmx1000m -jar \$jarsdir/m4_nedjar -H http://$spotlighthost -p $spotlightport -e candidates -i \$envdir/spotlight/wikipedia-db -n nlEn
 @% cat | java -jar \$jarsdir/m4_nedjar  -p 2060  -n nl
 @| @}
 
@@ -2640,15 +3149,9 @@ chmod -R o+r \$modulesdir/m4_ontodir
 \label{sec:ontoscript}
 
 @o m4_bindir/m4_ontoscript @{@%
-#!/bin/bash
-source m4_aenvbindir/progenv
-@% @< set variables that point to the directory-structure @>
-@% @< set up programming environment @>
-ROOT=\$piperoot
-ONTODIR=$modulesdir/m4_ontodir
-JARDIR=\$ONTODIR/lib
-RESOURCESDIR=\$ONTODIR/resources
-@% PREDICATEMATRIX="\$RESOURCESDIR/PredicateMatrix.v1.1/PredicateMatrix.v1.1.role.nl-1.merged"
+@< start of module-script @(m4_ontodir@) @>
+JARDIR=\$MODDIR/lib
+RESOURCESDIR=\$MODDIR/resources
 PREDICATEMATRIX="\$RESOURCESDIR/PredicateMatrix_nl_lu_withESO.v0.2.role.txt"
 GRAMMATICALWORDS="\$RESOURCESDIR/grammaticals/Grammatical-words.nl"
 TMPFIL=`mktemp -t stap6.XXXXXX`
@@ -2656,11 +3159,6 @@ cat >$TMPFIL
 
 CLASSPATH=\$JARDIR/ontotagger-1.0-jar-with-dependencies.jar
 JAVASCRIPT=eu.kyotoproject.main.KafPredicateMatrixTagger
-
-@% JAVA_ARGS="-Xmx1812m"
-@% JAVA_ARGS=\$JAVA_ARGS " -cp \$jarsdir/ontotagger-1.0-jar-with-dependencies.jar"
-@% JAVA_ARGS=\$JAVA_ARGS " eu.kyotoproject.main.KafPredicateMatrixTagger"
-@% JAVA_ARGS="--mappings \"fn;pb;nb\" "
 MAPPINGS="fn;mcr;ili;eso"
 JAVA_ARGS="--mappings $MAPPINGS"
 JAVA_ARGS="\$JAVA_ARGS  --key odwn-eq"
@@ -2669,41 +3167,9 @@ JAVA_ARGS="\$JAVA_ARGS  --predicate-matrix \$PREDICATEMATRIX"
 JAVA_ARGS="\$JAVA_ARGS  --grammatical-words \$GRAMMATICALWORDS"
 JAVA_ARGS="\$JAVA_ARGS  --naf-file \$TMPFIL"
 java -Xmx1812m -cp \$CLASSPATH \$JAVASCRIPT \$JAVA_ARGS
-@% java -Xmx812m -cp ../lib/ontotagger-1.0-jar-with-dependencies.jar eu.kyotoproject.main.KafPredicateMatrixTagger --mappings "fn;mcr;ili;eso" --key odwn-eq --version 1.1 --predicate-matrix "../resources/PredicateMatrix_nl_lu_withESO.v0.2.role.txt" --grammatical-words "../resources/grammaticals/Grammatical-words.nl" --naf-file "../example/test.srl.lexicalunits.naf" > "../example/test.srl.lexicalunits.pm.naf"
-@% @< onto javacommand @>
-@% java \$JAVA_ARGS
-@% java -Xmx1812m -cp $jarsdir/ontotagger-1.0-jar-with-dependencies.jar \
-@%      eu.kyotoproject.main.KafPredicateMatrixTagger \
-@%      --mappings "fn;pb;nb" --key odwn-eq --version 1.1 \
-@%      --predicate-matrix \
-@%        "\$RESOURCESDIR/PredicateMatrix.v1.1/PredicateMatrix.v1.1.role.nl-1.merged" \ 
-@%        --grammatical-words \
-@%      "\$RESOURCESDIR/grammaticals/Grammatical-words.nl" \
-@%       --naf-file $TMPFIL 
 rm -rf \$TMPFIL
 
 @| @}
-
-
-@% The Java command for the onto-tagger is very long. I tried to make it
-@% more readable and could only come up with the following method:
-@% 
-@% @d onto javacommand @{java -Xmx1812m @| @}
-@% @d onto javacommand @{-cp \$CLASSPATH @| @}
-@% @d onto javacommand @{\$JAVASCRIPT  @| @}
-@% @d onto javacommand @{--mappings "fn;pb;nb" @| @}
-@% @d onto javacommand @{ --key odwn-eq @| @}
-@% @d onto javacommand @{--version 1.1 @| @}
-@% @d onto javacommand @{--predicate-matrix \$PREDICATEMATRIX @| @}
-@% @d onto javacommand @{ --grammatical-words "\$GRAMMATICALWORDS" @| @}
-@% @d onto javacommand @{--naf-file $TMPFIL
-@% @| @}
-
-
-
-@%@d make scripts executable @{@%
-@%chmod 775  m4_bindir/m4_ontoscript
-@%@| @}
 
 
 \subsubsection{Framenet SRL}
@@ -2720,13 +3186,10 @@ spurious lines containining ``frameMap.size()=...''. A \textsc{gawk}
 script removes these lines.
 
 @o m4_bindir/m4_framesrlscript @{@%
-#!/bin/bash
-source m4_aenvbindir/progenv
-@% @< set variables that point to the directory-structure @>
-@% @< set up programming environment @>
+@< start of module-script @(m4_ontodir@) @>
 ONTODIR=$modulesdir/m4_ontodir
-JARDIR=\$ONTODIR/lib
-RESOURCESDIR=\$ONTODIR/resources
+JARDIR=\$MODDIR/lib
+RESOURCESDIR=\$MODDIR/resources
 @% PREDICATEMATRIX="\$RESOURCESDIR/PredicateMatrix.v1.1/PredicateMatrix.v1.1.role.nl-1.merged"
 PREDICATEMATRIX="\$RESOURCESDIR/PredicateMatrix_nl_lu_withESO.v0.2.role.txt"
 GRAMMATICALWORDS="\$RESOURCESDIR/grammaticals/Grammatical-words.nl"
@@ -2749,12 +3212,6 @@ java -Xmx1812m -cp \$CLASSPATH \$JAVASCRIPT \$JAVA_ARGS  | gawk '/^frameMap.size
 rm -rf \$TMPFIL
 
 @| @}
-
-
-@%@d make scripts executable @{@%
-@%chmod 775  m4_bindir/m4_framesrlscript
-@%@| @}
-
 
 \subsubsection{Heideltime}
 \label{sec:heideltime}
@@ -3035,10 +3492,9 @@ rm -rf m4_jvntextpro_mvn_localdir
 \label{sec:heideltime-script}
 
 @o m4_bindir/m4_heidelscript @{@%
-#!/bin/bash
-source m4_aenvbindir/progenv
-HEIDELDIR=\$modulesdir/m4_heideldir
-cd $HEIDELDIR
+@< start of module-script @(m4_heideldir@) @>
+MODDIR=\$modulesdir/m4_heideldir
+cd $MODDIR
 iconv -t utf-8//IGNORE | java -Xmx1000m -jar target/ixa.pipe.time.jar -m alpino-to-treetagger.csv -c config.props
 @| @}
 
@@ -3087,15 +3543,10 @@ First:
 \end{enumerate}
 
 @o m4_bindir/m4_srlscript @{@%
-#!/bin/bash
-source m4_aenvbindir/progenv
-@% @< set variables that point to the directory-structure @>
-ROOT=$piperoot
-SRLDIR=\$modulesdir/m4_srldir
+@< start of module-script @(m4_srldir@) @>
+MODDIR=\$modulesdir/m4_srldir
 TEMPDIR=`mktemp -d -t SRLTMP.XXXXXX`
-cd \$SRLDIR
-@% @< set local bin directory @>
-@% @< activate the python environment @>
+cd \$MODDIR
 INPUTFILE=$TEMPDIR/inputfile
 FEATUREVECTOR=$TEMPDIR/csvfile
 TIMBLOUTPUTFILE=$TEMPDIR/timblpredictions
@@ -3160,10 +3611,8 @@ fi
 \paragraph{Script}
 
 @o m4_bindir/m4_postsrlscript @{@%
-#!/bin/bash
-source m4_aenvbindir/progenv
+@< start of module-script @(m4_postsrldir@) @>
 @% @< set variables that point to the directory-structure @>
-MODDIR=\$modulesdir/<!!>m4_postsrldir
 cd $MODDIR
 tempdir=`mktemp -d -t postsrl.XXXXX`
 @% cd $tempdir
@@ -3181,6 +3630,10 @@ rm -rf $tempdir
 
 \subsubsection{Event coreference}
 \label{sec:eventcoref}
+
+The event-coreference module is language-independent. Although the
+version in the \EHU{}-repo is 3.0, the version 2.0 used in this
+pipeline seems to be more recent, so we will use that.
 
 \paragraph{Module}
 \label{sec:event-coref-module}
@@ -3201,12 +3654,8 @@ cp lib/m4_evcorefjar \$jarsdir
 \label{sec:evcorefscript}
 
 @o m4_bindir/m4_evcorefscript @{@%
-#!/bin/bash
-source m4_aenvbindir/progenv
-@% @< set variables that point to the directory-structure @>
-@% @< set up programming environment @>
-MODROOT=$modulesdir/m4_evcorefdir
-RESOURCESDIR=$MODROOT/resources
+@< start of module-script @(m4_evcorefdir@) @>
+RESOURCESDIR=$MODDIR/resources
 JARFILE=\$jarsdir/m4_evcorefjar
 
 JAVAMODULE=eu.newsreader.eventcoreference.naf.EventCorefWordnetSim
@@ -3225,6 +3674,12 @@ java -Xmx812m -cp \$JARFILE \$JAVAMODULE  $JAVAOPTIONS
 
 @% java -Xmx812m -cp "$rootDir/lib/m4_evcorefjar" \$JAVAMODULE  --method leacock-chodorow --wn-lmf "$rootDir/resources/cornetto2.1.lmf.xml" --sim 2.0 —relations XPOS_NEAR_SYNONYM#HAS_HYPERONYM#HAS_XPOS_HYPERONYM
 @| @}
+
+@% #### Within document event coreference wordnet sim
+@% 
+@% rootDir=/home/newsreader/components/VUA-eventcoref.v30/
+@% java -Xmx2000m -cp "$rootDir/lib/EventCoreference-1.0-SNAPSHOT-jar-with-dependencies.jar" eu.newsreader.eventcoreference.naf.EventCorefWordnetSim --method leacock-chodorow --wn-lmf "$rootDir/resources/wneng-30.lmf.xml.xpos" --sim 2.5 --sim-ont 0.6 --wsd 0.8 --wn-prefix eng --relations has_hyperonym#event#has_hypernym  --source-frames "$rootDir/resources/source.txt" --distance 4
+@% 
 
 @%@d make scripts executable @{@%
 @%chmod 775  m4_bindir/m4_evcorefscript
@@ -3256,13 +3711,7 @@ can be applied. One of the options is about the \textsc{url} of the
 Spotlight server.
 
 @o m4_bindir/m4_dbpnerscript @{@%
-#!/bin/bash
-source m4_aenvbindir/progenv
-@% @< set variables that point to the directory-structure @>
-@% @< check/start the Spotlight server @>
-[ $spotlightrunning ] || source m4_abindir/start-spotlight
-
-MODDIR=\$modulesdir/<!!>m4_dbpnerdir<!!>
+@< start of module-script @(m4_dbpnerdir@) @>
 cat | iconv -f ISO8859-1 -t UTF-8 | $MODDIR/dbpedia_ner.py -url http://$spotlighthost:<!!>m4_spotlight_nl_port<!!>/rest/candidates
 @| @}
 
@@ -3289,10 +3738,7 @@ tar -xzf \$snapshotsocket/m4_snapshotdirectory/m4_nomeventball
 \label{par:nomeventscript}
 
 @o m4_bindir/m4_nomeventscript @{@%
-#!/bin/bash
-source m4_aenvbindir/progenv
-@% @< set variables that point to the directory-structure @>
-MODDIR=\$modulesdir/<!!>m4_nomeventdir<!!>
+@< start of module-script @(m4_nomeventdir@) @>
 LIBDIR=\$MODDIR/lib
 RESOURCESDIR=\$MODDIR/resources
 
@@ -3334,9 +3780,9 @@ from hotel evaluations can also be used. Put the configuration file in
 the \texttt{etc} subdir and copy it to its proper location during the
 installation of the opinion-miner.
 
-@o m4_envetcdir/m4_opini_nl_conf @{@%
+@o m4_envetcdir/m4_opini_conf @{@%
 [general]
-output_folder = m4_amoddir/m4_opinidir/final_models/nl/news_cfg1
+output_folder = m4_amoddir/m4_opinidir/final_models/ennl/news_cfg1
 
 [crfsuite]
 path_to_binary = m4_aenvbindir/crfsuite
@@ -3348,7 +3794,10 @@ path_to_binary_classify = m4_aenvbindir/svm_classify
 
 @d install the opinion-miner @{@%
 cd m4_opinidir
-cp m4_aenvetcdir/m4_opini_nl_conf \$modulesdir/m4_opinidir/m4_opini_dutchmodel_subdir/config.cfg
+cat m4_aenvetcdir/m4_opini_conf | \
+  sed s/ennl/nl/g > \$modulesdir/m4_opinidir/m4_opini_dutchmodel_subdir/config.cfg
+cat m4_aenvetcdir/m4_opini_conf | \
+  sed s/ennl/en/g > \$modulesdir/m4_opinidir/m4_opini_engmodel_subdir/config.cfg
 @| @}
 
 
@@ -3385,14 +3834,17 @@ cp m4_aenvetcdir/m4_opini_nl_conf \$modulesdir/m4_opinidir/m4_opini_dutchmodel_s
 \paragraph{Script}
 
 @o m4_bindir/m4_opiniscript @{@%
-#!/bin/bash
-source m4_aenvbindir/progenv
-rootDir=\$modulesdir/m4_opinidir
-cd $rootDir
+@< start of module-script @(m4_opinidir@) @>
+cd $MODDIR
 export PATH=$PATH:.
-python classify_kaf_naf_file.py -m \$rootDir/final_models/nl/news_cfg1
-
-
+if
+ [ "\$naflang" == "nl" ]
+then
+ modelconf=\$MODDIR/final_models/nl/news_cfg1
+else
+ modelconf=\$MODDIR/final_models/en/news_cfg1
+fi
+python classify_kaf_naf_file.py -m $modelconf
 @| @}
 
 @% @o m4_bindir/m4_opiniscript @{@%
@@ -3443,17 +3895,29 @@ cat test.p2.naf | $BIND/nerc \$nercmodel > $TESTDIR/test.nerc.naf
 if
  [ "\$naflang" == "nl" ]
 then
-  cat \$TESTDIR/test.nerc.naf    | \$BIND/wsd                    > \$TESTDIR/test.wsd.naf
-  cat \$TESTDIR/test.wsd.naf     | \$BIND/ned                    > \$TESTDIR/test.ned.naf
-  cat \$TESTDIR/test.ned.naf     | \$BIND/heideltime             > \$TESTDIR/test.times.naf
-  cat \$TESTDIR/test.times.naf   | \$BIND/onto                   > \$TESTDIR/test.onto.naf
-  cat \$TESTDIR/test.onto.naf    | \$BIND/srl                    > \$TESTDIR/test.srl.naf
-  cat \$TESTDIR/test.srl.naf     | \$BIND/m4_nomeventscript      > \$TESTDIR/test.nomev.naf
-  cat \$TESTDIR/test.nomev.naf   | \$BIND/postsrl                > \$TESTDIR/test.psrl.naf
-  cat \$TESTDIR/test.psrl.naf    | \$BIND/m4_framesrlscript      > \$TESTDIR/test.fsrl.naf
-@%  cat \$TESTDIR/test.fsrl.naf    | \$BIND/m4_dbpnerscript        > \$TESTDIR/test.dbpner.naf
-  cat \$TESTDIR/test.fsrl.naf    | \$BIND/m4_opiniscript         > \$TESTDIR/test.opin.naf
-  cat \$TESTDIR/test.opin.naf     | \$BIND/m4_evcorefscript       > \$TESTDIR/test.ecrf.naf
+  cat test.nerc.naf    | \$BIND/wsd                    > test.wsd.naf
+  cat test.wsd.naf     | \$BIND/ned                    > test.ned.naf
+  cat test.ned.naf     | \$BIND/heideltime             > test.times.naf
+  cat test.times.naf   | \$BIND/onto                   > test.onto.naf
+  cat test.onto.naf    | \$BIND/srl                    > test.srl.naf
+  cat test.srl.naf     | \$BIND/m4_nomeventscript      > test.nomev.naf
+  cat test.nomev.naf   | \$BIND/postsrl                > test.psrl.naf
+  cat test.psrl.naf    | \$BIND/m4_framesrlscript      > test.fsrl.naf
+@%  cat test.fsrl.naf    | \$BIND/m4_dbpnerscript        > test.dbpner.naf
+  cat test.fsrl.naf    | \$BIND/m4_opiniscript         > test.opin.naf
+  cat test.opin.naf     | \$BIND/m4_evcorefscript      > test.ecrf.naf
+else
+  cat test.nerc.naf    | \$BIND/nedrer                 > test.nedr.naf
+  cat test.nedr.naf    | \$BIND/wikify                 > test.wikif.naf
+  cat test.wikif.naf   | \$BIND/ukb                    > test.ukb.naf
+  cat test.ukb.naf    | \$BIND/ewsd                    > test.ewsd.naf
+  cat test.ewsd.naf   | \$BIND/eSRL                    > test.esrl.naf
+  cat test.esrl.naf   | \$BIND/FBK-time                > test.time.naf
+  cat test.time.naf   | \$BIND/FBK-temprel             > test.trel.naf
+  cat test.trel.naf   | \$BIND/FBK-causalrel           > test.crel.naf
+  cat test.crel.naf   | \$BIND/evcoref                 > test.ecrf.naf
+  cat test.ecrf.naf   | \$BIND/factuality              > test.fact.naf
+
 fi
 @| @}
 
