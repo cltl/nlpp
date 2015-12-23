@@ -1296,7 +1296,7 @@ MODDIR=\$modulesdir/<!!>@1<!!>
 \subsubsection{Language detection}
 \label{sec:detectlang}
 
-The followiing script \verb|m4_envbindir/langdetect.py| discerns the language of a
+The following script \verb|m4_envbindir/langdetect.py| discerns the language of a
 \NAF{} document. If it cannot find that attribute it
 prints \verb|unknown|.
  The macro \verb|set the language variable| uses this
@@ -1323,8 +1323,8 @@ print language
 @| @}
 
 @o m4_bindir/langdetect @{@%
-@< start of module-script @(m4_aenvbindir@) @>
-echo `cat | python $MODDIR/langdetect.py`
+@< start of module-script @(@) @>
+echo `cat | python $envbindir/langdetect.py`
 @| @}
 
 @d make scripts executable @{@%
@@ -2081,7 +2081,7 @@ cp -r \$snapshotsocket/components/m4_conspardir \$modulesdir/
 
 @o m4_bindir/constpars @{@%
 @< start of module-script @(m4_conspardir@) @>
-java -jar ${MODDIR}/m4_constparname-m4_constparversion.jar parse -g sem -m ${MODDIR}/en-parser-chunking.bin
+java -jar ${MODDIR}/m4_consparname-m4_consparversion.jar parse -g sem -m ${MODDIR}/en-parser-chunking.bin
 @| @}
 
 
@@ -3881,43 +3881,25 @@ cd $TESTDIR
 [ $spotlightrunning ] || source m4_abindir/start-spotlight
 @< set the language variable @($TESTIN@)@>
 @< select language-dependent features @>
-cat \$TESTIN    | \$BIND/tok > \$TESTDIR/test.tok.naf
 if
  [ "\$naflang" == "nl" ]
 then
-  cat test.tok.naf | \$BIND/mor  >\$TESTDIR/test.p2.naf
+@%    @< annotate dutch document @>
+  cat \$TESTIN    | \$BIND/tok                    > tok.naf
+  cat tok.naf     | \$BIND/mor                    > mor.naf
+  cat mor.naf     | $BIND/nerc                    > nerc.naf
+  cat nerc.naf    | \$BIND/wsd                    > wsd.naf
+  cat wsd.naf     | \$BIND/ned                    > ned.naf
+  cat ned.naf     | \$BIND/heideltime             > times.naf
+  cat times.naf   | \$BIND/onto                   > onto.naf
+  cat onto.naf    | \$BIND/srl                    > srl.naf
+  cat srl.naf     | \$BIND/m4_nomeventscript      > nomev.naf
+  cat nomev.naf   | \$BIND/postsrl                > psrl.naf
+  cat psrl.naf    | \$BIND/m4_framesrlscript      > fsrl.naf
+  cat fsrl.naf    | \$BIND/m4_opiniscript         > opin.naf
+  cat opin.naf    | \$BIND/m4_evcorefscript       > out.naf
 else
-  cat test.tok.naf  | \$BIND/topic  >\$TESTDIR/test.top.naf
-  cat test.top.naf  | \$BIND/pos    >\$TESTDIR/test.pos.naf
-  cat test.pos.naf | \$BIND/constpars  >\$TESTDIR/test.p2.naf
-fi
-cat test.p2.naf | $BIND/nerc \$nercmodel > $TESTDIR/test.nerc.naf
-if
- [ "\$naflang" == "nl" ]
-then
-  cat test.nerc.naf    | \$BIND/wsd                    > test.wsd.naf
-  cat test.wsd.naf     | \$BIND/ned                    > test.ned.naf
-  cat test.ned.naf     | \$BIND/heideltime             > test.times.naf
-  cat test.times.naf   | \$BIND/onto                   > test.onto.naf
-  cat test.onto.naf    | \$BIND/srl                    > test.srl.naf
-  cat test.srl.naf     | \$BIND/m4_nomeventscript      > test.nomev.naf
-  cat test.nomev.naf   | \$BIND/postsrl                > test.psrl.naf
-  cat test.psrl.naf    | \$BIND/m4_framesrlscript      > test.fsrl.naf
-@%  cat test.fsrl.naf    | \$BIND/m4_dbpnerscript        > test.dbpner.naf
-  cat test.fsrl.naf    | \$BIND/m4_opiniscript         > test.opin.naf
-  cat test.opin.naf     | \$BIND/m4_evcorefscript      > test.ecrf.naf
-else
-  cat test.nerc.naf    | \$BIND/nedrer                 > test.nedr.naf
-  cat test.nedr.naf    | \$BIND/wikify                 > test.wikif.naf
-  cat test.wikif.naf   | \$BIND/ukb                    > test.ukb.naf
-  cat test.ukb.naf    | \$BIND/ewsd                    > test.ewsd.naf
-  cat test.ewsd.naf   | \$BIND/eSRL                    > test.esrl.naf
-  cat test.esrl.naf   | \$BIND/FBK-time                > test.time.naf
-  cat test.time.naf   | \$BIND/FBK-temprel             > test.trel.naf
-  cat test.trel.naf   | \$BIND/FBK-causalrel           > test.crel.naf
-  cat test.crel.naf   | \$BIND/evcoref                 > test.ecrf.naf
-  cat test.ecrf.naf   | \$BIND/factuality              > test.fact.naf
-
+  @< annotate english document @>
 fi
 @| @}
 
@@ -3939,19 +3921,41 @@ Correct sequence of the modules in the Dutch pipeline:
 \item ecrf
 \end{itemize}
 
-\verb|dbpned| hoeft er waarschijnlijk niet in
 
-Nieuwe
+@d annotate dutch document @{@%
+cat \$TESTIN    | \$BIND/tok                    > tok.naf
+cat tok.naf     | \$BIND/mor                    > mor.naf
+cat mor.naf     | $BIND/nerc                    > nerc.naf
+cat nerc.naf    | \$BIND/wsd                    > wsd.naf
+cat wsd.naf     | \$BIND/ned                    > ned.naf
+cat ned.naf     | \$BIND/heideltime             > times.naf
+cat times.naf   | \$BIND/onto                   > onto.naf
+cat onto.naf    | \$BIND/srl                    > srl.naf
+cat srl.naf     | \$BIND/m4_nomeventscript      > nomev.naf
+cat nomev.naf   | \$BIND/postsrl                > psrl.naf
+cat psrl.naf    | \$BIND/m4_framesrlscript      > fsrl.naf
+cat fsrl.naf    | \$BIND/m4_opiniscript         > opin.naf
+cat opin.naf    | \$BIND/m4_evcorefscript       > out.naf
+@| @}
 
-@%@d make scripts executable @{@%
-@%chmod 775  m4_bindir/test
-@%@| @}
-
-
-
-
-
-
+@d annotate english document @{@%
+  cat \$TESTIN    | \$BIND/tok                    > tok.naf
+  cat tok.naf     | \$BIND/topic                  > top.naf
+  cat top.naf     | \$BIND/pos                    > pos.naf
+  cat pos.naf     | \$BIND/constpars              > consp.naf
+  cat consp.naf   | \$BIND/nerc                   > nerc.naf
+  cat nerc.naf    | \$BIND/nedrer                 > nedr.naf
+  cat nedr.naf    | \$BIND/wikify                 > wikif.naf
+  cat wikif.naf   | \$BIND/ukb                    > ukb.naf
+  cat ukb.naf     | \$BIND/ewsd                   > ewsd.naf
+  cat ewsd.naf    | \$BIND/eSRL                   > esrl.naf
+  cat esrl.naf    | \$BIND/FBK-time               > time.naf
+  cat time.naf    | \$BIND/FBK-temprel            > trel.naf
+  cat trel.naf    | \$BIND/FBK-causalrel          > crel.naf
+  cat crel.naf    | \$BIND/evcoref                > ecrf.naf
+  cat ecrf.naf    | \$BIND/factuality             > fact.naf
+  cat fact.naf    | \$BIND/m4_opiniscript         > out.naf
+@| @}
 
 \subsection{Logging}
 \label{sec:logging}
