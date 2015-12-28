@@ -257,7 +257,7 @@ m4_dnl e-WSD
 m4_define(m4_ewsdname, ims-wsd)m4_dnl
 m4_define(m4_ewsdtex, \verb|m4_ewsdname|)m4_dnl
 m4_define(m4_ewsddir, VUA-ims-wsd.v30)m4_dnl
-m4_define(m4_ewsdball, 20151220_VUA-ims-wsd.v30)m4_dnl
+m4_define(m4_ewsdball, 20151220_VUA-ims-wsd.v30.tgz)m4_dnl
 m4_dnl
 m4_dnl SRL-server
 m4_define(m4_srlservername, ims-wsd)m4_dnl

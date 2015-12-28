@@ -1167,26 +1167,26 @@ echo Install modules
  tar -xzf \$snapshotsocket/m4_snapshotdirectory/m4_ukbball
 @%  @< install the UKB module @>
 @< end conditional install @(UKB_installed@) @>
-@< begin conditional install @(ims-wsd_installed@) @>
+@< begin conditional install @(ims_wsd_installed@) @>
   echo ...ims-wsd module
   @< install the ims-wsd module @>
-@< end conditional install @(ims-wsd_installed@) @>
+@< end conditional install @(ims_wsd_installed@) @>
 @< begin conditional install @(srl_server_installed@) @>
   echo ...srl-server module
   @< install the srl-server module @>
 @< end conditional install @(srl_server_installed@) @>
-@< begin conditional install @(FBK-time_installed@) @>
+@< begin conditional install @(FBK_time_installed@) @>
   echo ... FBK-time module
   @< install the FBK-time module @>
-@< end conditional install @(FBK-time_installed@) @>
-@< begin conditional install @(FBK-temprel_installed@) @>
+@< end conditional install @(FBK_time_installed@) @>
+@< begin conditional install @(FBK_temprel_installed@) @>
   echo ... FBK-temprel module
   @< install the FBK-temprel module @>
-@< end conditional install @(FBK-temprel_installed@) @>
-@< begin conditional install @(FBK-causalrel_installed@) @>
+@< end conditional install @(FBK_temprel_installed@) @>
+@< begin conditional install @(FBK_causalrel_installed@) @>
   echo ... FBK-causalrel module
   @< install the FBK-causalrel module @>
-@< end conditional install @(FBK-causalrel_installed@) @>
+@< end conditional install @(FBK_causalrel_installed@) @>
 @< begin conditional install @(factuality_installed@) @>
   echo ... factuality module
   @< install the factuality module @>
@@ -2420,8 +2420,9 @@ mv run.sh.hadoop old.run.sh.hadoop
 cat old.run.sh.hadoop | \
   sed s/kaflib-naf-1.1.8/kaflib-naf-1.1.9/g | \
   sed s/TimeAnchor_tlink.jar/TimeAnchor.jar/g | \
-  sed s/sh temprel/bash temprel/g | \
+  sed "s/sh temprel/bash temprel/g"  \
 >run.sh.hadoop
+chmod 775 run.sh.hadoop
 @| @}
 
 
@@ -2444,6 +2445,7 @@ cd $MODDIR
 scratchDir=`mktemp -d -t temprel.XXXXXX`
 cat >$scratchDir/in.naf
 cat $scratchDir/in.naf | ./run.sh.hadoop $MODDIR $scratchDir $scratchDir/in.naf
+rm -rf $scratchDir
 @% # $3 = xml input file
 @% scratchDir=`mktemp -d -t temprel.XXXXXX`
 @% @% xmlFile=$scratchDir/infile
@@ -2528,6 +2530,7 @@ cat old.run.sh.hadoop | \
   sed s/TimeAnchor_tlink.jar/TimeAnchor.jar/g | \
   sed s/sh temprel/bash temprel/g | \
 >run.sh.hadoop
+chmod 775 run.sh.hadoop
 @| @}
 
 
@@ -2539,6 +2542,7 @@ cd $MODDIR
 scratchDir=`mktemp -d -t causalrel.XXXXXX`
 cat >$scratchDir/in.naf
 cat $scratchDir/in.naf | ./run.sh.hadoop $MODDIR $scratchDir $scratchDir/in.naf
+rm -rf $scratchDir
 @| @}
 
 \subsubsection{Factuality module}
