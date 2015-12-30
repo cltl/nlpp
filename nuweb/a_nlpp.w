@@ -31,8 +31,8 @@ m4_include(texinclusions.m4)m4_dnl
 \begin{document}
 \maketitle
 \begin{abstract}
-  This is a description and documentation of the installation of the current \NLP{}
-  modules on Lisa, so that they can be used in pipelines.
+  This is a description and documentation of the installation of an
+  instrument to annotate Dutch or English documents with \NLP{} tags.
 \end{abstract}
 \tableofcontents
 
@@ -48,10 +48,11 @@ project. It accepts and produces texts in the \NAF{} (Newsreader
 Annotation Format) format. 
 
 Apart from describing the pipeline set-up, the document actually
-constructs the pipeline. Currently, the pipeline has been succesfully
-implemented on a specific supercomputer (Lisa, Surfsara,
-Amsterdam~\footnote{https://surfsara.nl/systems/lisa}) and on
-computers running Ubuntu and Centos. 
+constructs the pipeline. The pipeline has been installed on a (Ubuntu) Linux computer.
+@% Currently, the pipeline has been succesfully
+@% implemented on a specific supercomputer (Lisa, Surfsara,
+@% Amsterdam~\footnote{https://surfsara.nl/systems/lisa}) and on
+@% computers running Ubuntu and Centos. 
 
 The installation has been parameterised. The locations and names that
 you read (and that will be used to build the pipeline) have been read
@@ -71,61 +72,75 @@ pipeline from a frozen repository of the Newsreader Project.
 
 \subsection{List of the modules to be installed}
 \label{sec:moduleslist}
+Table~\ref{tab:installed_modules}%
+\begin{table}[hbtp]
+  \centering
+  \begin{small}
+    \begin{tabular}{llll}
+      \textbf{Module}    &  \textbf{NL}         &  \textbf{EN} &  \textbf{EN component} \\    
+      Tokenizer        & m4_tokenizertex  & m4_tokenizertex    &                           \\
+      Topic detection  &                  & m4_topictooltex    & \verb|m4_topictooldir|    \\
+      \POS{}/\MOR{}    & m4_morphpartex   & m4_postex          & \verb|m4_posdir|          \\
+      Constit. parser  &                  & m4_conspartex      & \verb|m4_conspardir|      \\
+      \NERC{}          & m4_nerctex       & m4_nerctex         &                           \\
+      \UKB{}           &                  & m4_ukbtex          & \verb|m4_ukbdir|          \\
+      \WSD{}           & m4_wsdtex        & m4_ewsdtex         & \verb|m4_ewsddir|         \\
+      \NED{}           & m4_nedtex        & m4_nedname         &                           \\
+      Heideltime       & m4_heideltex     &                    &                           \\
+      FBK-time         &                  & m4_fbktimetex      & \verb|m4_fbktimedir|      \\
+      FBK-temprel      &                  & m4_fbktempreltex   & \verb|m4_fbktempreldir|   \\
+      FBK-causalrel    &                  & m4_fbkcausalreltex & \verb|m4_fbkcausalreldir| \\
+      Onto-tagger      & m4_ontotex       &                    &                           \\
+      \textsc{srl}     & m4_nl_srltex     & m4_en_srltex       & \verb|m4_en_srldir|       \\
+      Nominal event det. & m4_nomeventtex &                    &                           \\
+      \NED{}-reranker  &                  & m4_nedrertex       & \verb|m4_nedrerdir|       \\
+      Wikify           &                  & m4_wikifyname      & \verb|m4_wikifydir|       \\
+      factuality       &                  &                    & \verb|m4_factualitydir|   \\
+      Corefgraph       &                  &                    & \verb|m4_corefdir|        \\
+      Opinion-miner    & m4_opinitex      & m4_opinitex        & \\
+      Eventcoref       & m4_evcoreftex    & m4_evcoreftex      & \\
+    \end{tabular}
+  \end{small}
+  \caption{List of modules to be installed.
+           \textbf{Module}: functional name of the module;
+           \textbf{NL}:     modules used in Dutch pipeline}; 
+           \textbf{EN}: modules used in English pipeline;
+           \textbf{EN components} Name of the module in the \textsc{ehu} repository.
+  \label{tab:installed_modules}
+\end{table}
+lists the modules that are installed. Some of the modules are used for
+both languages (Dutch and English), some for only one of them.
 
-\begin{tabular}{llll}
-\textbf{Module}    &  \textbf{NL}         &  \textbf{EN}           &  \textbf{EN component} \\    
-  Tokenizer        & m4_tokenizertex  & m4_tokenizertex    &                           \\
-  Topic detection  &                  & m4_topictooltex    & \verb|m4_topictooldir|    \\
-  \POS{}/\MOR{}    & m4_morphpartex   & m4_postex          & \verb|m4_posdir|          \\
-  Constit. parser  &                  & m4_conspartex      & \verb|m4_conspardir|      \\
-  \NERC{}          & m4_nerctex       & m4_nerctex         &                           \\
-  \UKB{}           &                  & m4_ukbtex          & \verb|m4_ukbdir|          \\
-  \WSD{}           & m4_wsdtex        & m4_ewsdtex         & \verb|m4_ewsddir|         \\
-  \NED{}           & m4_nedtex        & m4_nedname         &                           \\
-  Heideltime       & m4_heideltex     &                    &                           \\
-  FBK-time         &                  & m4_fbktimetex      & \verb|m4_fbktimedir|      \\
-  FBK-temprel      &                  & m4_fbktempreltex   & \verb|m4_fbktempreldir|   \\
-  FBK-causalrel    &                  & m4_fbkcausalreltex & \verb|m4_fbkcausalreldir| \\
-  Onto-tagger      & m4_ontotex       &                    &                           \\
-  \textsc{srl}     & m4_nl_srltex     & m4_en_srltex       & \verb|m4_en_srldir|       \\
-  Nominal event det. & m4_nomeventtex &                    &                           \\
-  \NED{}-reranker  &                  & m4_nedrertex       & \verb|m4_nedrerdir|       \\
-  Wikify           &                  & m4_wikifyname      & \verb|m4_wikifydir|       \\
-  factuality       &                  &                    & \verb|m4_factualitydir|   \\
-  Corefgraph       &                  &                    & \verb|m4_corefdir|        \\
 
-  Opinion-miner    & m4_opinitex      & m4_opinitex        & \\
-  Eventcoref       & m4_evcoreftex    & m4_evcoreftex      & \\
 
-\end{tabular}
 
-\subsection{Notes}
-\label{sec:notes}
-
-\begin{itemize}
-\item The Onto-tagger is a Java program in a jar named
-  \verb|ontotagger-1.0-jar-with-dependencies.jar|. It uses a
-  predicate-matrix named \verb|PredicateMatrix.v1.3.txt.role.odwn|
-  that can be found in the \verb|resources| subdirectory of module
-  \verb|vua-ontotagger-v1.0| that can be obtained from the snapshot.
-\item The Nominal Event Detector is also a Java program in the jar
-  named  \verb|ontotagger-1.0-jar-with-dependencies.jar|. It uses a
-  resource named \verb|nl-luIndex.xml| that is located in the
-  \verb|resources| subdirectory of the module
-  \verb|vua-nominal-event-detection-nl| that can be obtained from the
-  snapshot. The Nominal Event Detector uses results from the Onto-tagger.
-\item The SRL postprocessor is a Python script in module
-  \verb|vua-srl-postprocess| that can be cloned from Github. It uses
-  results from the nominal event detector.
-\item Event coref Detector is a Java program inside Jar
-  \verb|EventCoreference-1.0-SNAPSHOT-jar-with-dependencies.jar| that
-  can be found in module \verb|vua-eventcoreference_v2| from the
-  snapshot. 
-\item The Onto-tagger for Framenet-SRL is a program in the jar named
-  \verb|ontotagger-1.0-jar-with-dependencies.jar|. It uses results
-  from the SRL postprocessor and the event coref detector.
-\item 
-\end{itemize}
+@% \subsection{Notes}
+@% \label{sec:notes}
+@% 
+@% \begin{itemize}
+@% \item The Onto-tagger is a Java program in a jar named
+@%   \verb|ontotagger-1.0-jar-with-dependencies.jar|. It uses a
+@%   predicate-matrix named \verb|PredicateMatrix.v1.3.txt.role.odwn|
+@%   that can be found in the \verb|resources| subdirectory of module
+@%   \verb|vua-ontotagger-v1.0| that can be obtained from the snapshot.
+@% \item The Nominal Event Detector is also a Java program in the jar
+@%   named  \verb|ontotagger-1.0-jar-with-dependencies.jar|. It uses a
+@%   resource named \verb|nl-luIndex.xml| that is located in the
+@%   \verb|resources| subdirectory of the module
+@%   \verb|vua-nominal-event-detection-nl| that can be obtained from the
+@%   snapshot. The Nominal Event Detector uses results from the Onto-tagger.
+@% \item The SRL postprocessor is a Python script in module
+@%   \verb|vua-srl-postprocess| that can be cloned from Github. It uses
+@%   results from the nominal event detector.
+@% \item Event coref Detector is a Java program inside Jar
+@%   \verb|EventCoreference-1.0-SNAPSHOT-jar-with-dependencies.jar| that
+@%   can be found in module \verb|vua-eventcoreference_v2| from the
+@%   snapshot. 
+@% \item The Onto-tagger for Framenet-SRL is a program in the jar named
+@%   \verb|ontotagger-1.0-jar-with-dependencies.jar|. It uses results
+@%   from the SRL postprocessor and the event coref detector.
+@% \item 
+@% \end{itemize}
 
 
 \newcommand{\dref}[1]{\hyperref[#1]{\ref{#1}}}
@@ -1123,6 +1138,7 @@ echo ... VUA-pylib, SVMlight, CRFsuite
 
 Next, install the modules:
 
+
 @o m4_bindir/m4_module_installer @{@%
 echo Install modules
 @< begin conditional install @(tokenizer_installed@) @>
@@ -1141,6 +1157,9 @@ echo Install modules
   echo "... Pos tagger (for english docs)"
   @< install the pos tagger @>
 @< end conditional install @(pos_installed@) @>
+@| @}
+
+@o m4_bindir/m4_module_installer @{@%
 @< begin conditional install @(constparse_installed@) @>
   echo "... Constituent parser (for english docs)"
   @< install the constituents parser @>
@@ -1161,6 +1180,8 @@ echo Install modules
   echo ...WIKIfy module
   @< install the wikify module @>
 @< end conditional install @(wikify_installed@) @>
+@| @}
+@o m4_bindir/m4_module_installer @{@%
 @< begin conditional install @(UKB_installed@) @>
   echo ... UKB module
  cd \$modulesdir
@@ -1175,6 +1196,8 @@ echo Install modules
   echo ...srl-server module
   @< install the srl-server module @>
 @< end conditional install @(srl_server_installed@) @>
+@| @}
+@o m4_bindir/m4_module_installer @{@%
 @< begin conditional install @(FBK_time_installed@) @>
   echo ... FBK-time module
   @< install the FBK-time module @>
@@ -1191,6 +1214,8 @@ echo Install modules
   echo ... factuality module
   @< install the factuality module @>
 @< end conditional install @(factuality_installed@) @>
+@| @}
+@o m4_bindir/m4_module_installer @{@%
 @< begin conditional install @(corefb_installed@) @>
   echo ... Coreference base
   @< install coreference-base @>
@@ -1203,6 +1228,8 @@ echo Install modules
   echo ... Ontotagger
   @< install the onto module @>
 @< end conditional install @(onto_installed@) @>
+@| @}
+@o m4_bindir/m4_module_installer @{@%
 @< begin conditional install @(heidel_installed@) @>
   echo ... Heideltime
   @< install the heideltime module @>
@@ -1220,6 +1247,8 @@ echo Install modules
    echo ... lu2synset
    @< install the lu2synset converter @>
 @< end conditional install @(lu2synset_installed@) @>
+@| @}
+@o m4_bindir/m4_module_installer @{@%
 @< begin conditional install @(dbpner_installed@) @>
   echo ... dbpedia-ner
   @< install the dbpedia-ner module @>
@@ -1232,6 +1261,8 @@ echo Install modules
    echo ... post-SRL
    @< install the post-SRL module @>
 @< end conditional install @(post_SRL_installed@) @>
+@| @}
+@o m4_bindir/m4_module_installer @{@%
 @< begin conditional install @(opimin_installed@) @>
    echo ... opinion-miner
    @< install the opinion-miner @>
@@ -2222,8 +2253,8 @@ contain WordNet references. So, we had to install Java 1.6.
 The scripts contain explicit paths that must be corrected:
 
 \begin{description}
-\item[\verb|ims/testPlain|:] Explicit path to Java binary.
-\item[\verb|path_to_ims.py|:] Set variable \verb|PATH_TO_IMS|. 
+\item[\texttt{ims/testPlain}:] Explicit path to Java binary.
+\item[\texttt{path\_to\_ims.py}:] Set variable \verb|PATH_TO_IMS|. 
 \end{description}
 
 @d install the ims-wsd module @{@%

@@ -3,7 +3,7 @@ m4_dnl
 m4_dnl Titles
 m4_dnl
 m4_define(m4_progname, `nlpp')m4_dnl
-m4_define(m4_doctitle, `Standardised Dutch NLP pipeline')m4_dnl
+m4_define(m4_doctitle, `Bilingual NLP pipeline')m4_dnl
 m4_define(m4_docdate, `\today \\ m4_time_of_day~h.')m4_dnl
 m4_define(m4_author, `Paul Huygen <paul.huygen@@huygen.nl>')m4_dnl
 m4_define(m4_subject, `Standardised Dutch pipeline')m4_dnl
