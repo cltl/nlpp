@@ -1988,7 +1988,9 @@ The English pipeline contains a topic analyser that seems not yet fit
 for Dutch. Get it from the Newsreader repo and update the config file.
 
 @d install the topic analyser @{@%
-cp -r \$snapshotsocket/components/m4_topictooldir \$modulesdir/
+@% cp -r \$snapshotsocket/components/m4_topictooldir \$modulesdir/
+cd $modulesdir
+tar -xzf \$snapshotsocket/m4_snapshotdirectory/m4_topictoolball
 cd \$modulesdir/m4_topictooldir
 mv conf.prop old.conf.prop
 gawk '{gsub("/home/newsreader/components", subs); print}' subs=$modulesdir old.conf.prop >conf.prop
@@ -2086,7 +2088,10 @@ Pos tagger. In the English pipeline we use the pos-tagger from \EHU{}.
 \label{sec:install-posmodule}
 
 @d install the pos tagger @{@%
-cp -r \$snapshotsocket/components/m4_posdir \$modulesdir/
+@% cp -r \$snapshotsocket/components/m4_posdir \$modulesdir/
+cd $modulesdir
+tar -xzf \$snapshotsocket/m4_snapshotdirectory/m4_posball
+cd \$modulesdir/m4_topictooldir
 @| @}
 
 \paragraph{Script}
@@ -2104,7 +2109,10 @@ java -jar ${MODDIR}/ixa-pipe-pos-1.4.3.jar tag -m ${MODDIR}/en-maxent-100-c5-bas
 \paragraph{Module}
 
 @d install the constituents parser @{@%
-cp -r \$snapshotsocket/components/m4_conspardir \$modulesdir/
+@% cp -r \$snapshotsocket/components/m4_conspardir \$modulesdir/
+cd $modulesdir
+tar -xzf \$snapshotsocket/m4_snapshotdirectory/m4_consparball
+@% cd \$modulesdir/conspardir
 @| @}
 
 
@@ -2171,7 +2179,7 @@ java -jar ${MODDIR}/m4_consparname-m4_consparversion.jar parse -g sem -m ${MODDI
 
 @d install the \NED-reranker module @{@%
 cd \$modulesdir
-tar -xzf \$snapshotsocket/m4_snapshotdirectory/m4_nedrerball
+tar -xzf \$snapshotsocket/m4_snapshotdirectory/m4_topictoolball
 @| @}
 
 
@@ -3298,7 +3306,7 @@ The extra material has been provided by Antske Fokkens.
 @d put Antske's material in the heideltime wrapper @{@%
 @% @< get or have @(m4_heidelantske@) @>
 cd $modulesdir/$DIRN
-tar -xzf m4_asocket/m4_heidelantske
+tar -xzf \$snapshotsocket/m4_snapshotdirectory/m4_heidelantske
 mv antske_heideltime_stuff/m4_heidelstandalonejar lib/
 mv antske_heideltime_stuff/config.props .
 mv antske_heideltime_stuff/alpino-to-treetagger.csv .
@@ -3805,7 +3813,7 @@ miner from the English \textsc{nwr} pipeline.
 @d install the opinion-miner @{@%
 @% @< get or have @(m4_opini_temp_ball@) @>
 cd m4_amoddir
-tar -xzf m4_asocket/m4_opini_temp_ball
+tar -xzf m4_asocket/m4_snapshotdirectory/m4_opini_temp_ball
 @| @}
 
 The opinion-miner needs a configuration file that is located in the

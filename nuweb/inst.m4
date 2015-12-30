@@ -133,11 +133,13 @@ m4_dnl Topic detection tool
 m4_define(m4_topictoolname, ixa-pipe-topic)m4_dnl
 m4_define(m4_topictooltex, \verb|m4_topictoolname|)m4_dnl
 m4_define(m4_topictooldir, EHU-topic.v30)m4_dnl
+m4_define(m4_topictoolball, 20151220_EHU-topic.v30.tgz)m4_dnl
 m4_dnl
 m4_dnl Pos tagger
 m4_define(m4_posname, EHU-pos.v30)m4_dnl
 m4_define(m4_postex, \verb|m4_posname|)m4_dnl
 m4_define(m4_posdir, EHU-pos.v30)m4_dnl
+m4_define(m4_posball,20151220_EHU-pos.v30.tgz)m4_dnl
 m4_dnl
 m4_dnl Morphosyntactic parser
 m4_define(m4_morphparname, morphosyntactic_parser_nl)m4_dnl
@@ -159,6 +161,7 @@ m4_define(m4_consparname, ixa-pipe-parse)m4_dnl
 m4_define(m4_consparversion, 1.1.1)m4_dnl
 m4_define(m4_conspartex, \verb|m4_consparname|)m4_dnl
 m4_define(m4_conspardir, EHU-parse.v30)m4_dnl
+m4_define(m4_consparball, 20151220_EHU-parse.v30.tgz)m4_dnl
 
 m4_dnl
 m4_dnl NERC
