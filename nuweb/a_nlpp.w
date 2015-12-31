@@ -600,15 +600,15 @@ rsync -e "ssh -i \$HOME/m4_snapshotkeyfilename" -rLt m4_snapshotrootURL:m4_snaps
 @%@| @}
 
 
-\subsection{Installation from the Newsreader repository}
-\label{sec:newsreaderinstall}
-
-Copy the newsreader-repo in the snapshoitsocket
-
-@d get the newsreader-repo @{@%
-cd $snapshotsocket
-rsync -e "ssh -i $HOME/nrkey -p m4_enrepo_port" -zrLt m4_enrepo_user@@m4_enrepo_url:m4_enrepo_dir .
-@| @}
+@% \subsection{Installation from the Newsreader repository}
+@% \label{sec:newsreaderinstall}
+@% 
+@% Copy the newsreader-repo in the snapshotsocket
+@% 
+@% @d get the newsreader-repo @{@%
+@% cd $snapshotsocket
+@% rsync -e "ssh -i $HOME/nrkey -p m4_enrepo_port" -zrLt m4_enrepo_user@@m4_enrepo_url:m4_enrepo_dir .
+@% @| @}
 
 
 \section{Java and Python environment}
@@ -1079,12 +1079,12 @@ echo Set up environment
 @% @< create progenv script @>
 @< set variables that point to the directory-structure @>
 @< read the list of installed modules @>
+@< check this first @>
 @< begin conditional install @(repo_installed@) @>
   @< get the snapshot @>
-  @< get the newsreader-repo @>
+@%   @< get the newsreader-repo @>
 @< end conditional install @(repo_installed@) @>
 @< variables of m4_module_installer @>
-@< check this first @>
 @%@< unpack snapshots or die @>
 @< create javapython script @>
 echo ... Java
@@ -1196,7 +1196,12 @@ echo Install modules
   echo ...srl-server module
   @< install the srl-server module @>
 @< end conditional install @(srl_server_installed@) @>
+@< begin conditional install @(srl_dutch_nominals_installed@) @>
+  echo ...srl-dutch-nominal module
+  @< install the srl-dutch-nominals module @>
+@< end conditional install @(srl_dutch_nominals_installed@) @>
 @| @}
+
 @o m4_bindir/m4_module_installer @{@%
 @< begin conditional install @(FBK_time_installed@) @>
   echo ... FBK-time module
@@ -1587,25 +1592,36 @@ to be re-installed.
 \subsubsection{The Boost library}
 \label{sec:boost}
 
+The tarball with boost in it could be downloaded from
+\url{m4_boost_src_url}. However, it seems that this download is not
+reproducable. One time I received as gzipped tar with the name
+\texttt{download}, but another time I received the expected
+file. Therefore, get the boost from the snapshot.
+
 @d install boost @{@%
 boostmp=`mktemp -d -t boost.XXXXXX`
 cd \$boostmp
-wget m4_boost_src_url
-tar -xzf ./download
+@% wget m4_boost_src_url
+@% tar -xzf ./download
+tar -xjf \$snapshotsocket/m4_snapshotdirectory/m4_boostsnaptarball
 cd m4_boostname
 ./bootstrap.sh
-cp project-config.jam old.project-config
+cp project-config.jam old.project-config.jam
 cat old.project-config.jam | sed "s|/usr/local|$envdir|g" >project-config.jam
 ./b2
 ./b2 install 
 cd \$piperoot
-@% rm -rf \$boostmp
+rm -rf \$boostmp
 @| @}
 
 
 
 \subsubsection{Spotlight}
 \label{sec:spotlight}
+
+A Spotlight server occupies a lot of memory and we need two of them,
+one for each language. We may be lucky and have a spotlight server
+running somewhere. Otherwise we have to install the server ourselves.
 
 @% Install Spotlight as described on the readme of \texttt{ixa-pipe-ned}.
 
@@ -2179,7 +2195,7 @@ java -jar ${MODDIR}/m4_consparname-m4_consparversion.jar parse -g sem -m ${MODDI
 
 @d install the \NED-reranker module @{@%
 cd \$modulesdir
-tar -xzf \$snapshotsocket/m4_snapshotdirectory/m4_topictoolball
+tar -xzf \$snapshotsocket/m4_snapshotdirectory/m4_nedrerball
 @| @}
 
 
@@ -2359,6 +2375,31 @@ then
  rm $pidFile
 fi
 @| @}
+
+
+\subsubsection{SRL Dutch nominals}
+\label{sec:srl-dn}
+
+\paragraph{Module}
+
+
+@d install the srl-dutch-nominals module @{@%
+MODNAM=m4_srl_dn_name
+DIRN=m4_srl_dn_dir
+GITU=m4_srl_dn_git
+GITC=m4_srl_dn_commitname
+@< install from github @>
+cd \$modulesdir/m4_srl_dn_dir
+@| @}
+
+\paragraph{Script}
+
+@o m4_bindir/m4_srl_dn_script @{@%
+@< start of module-script @(m4_srl_dn_dir@) @>
+cd $MODDIR
+cat | $MODDIR/vua-srl-dutch-additional-roles.py
+@| @}
+
 
 \subsubsection{FBK-time module}
 \label{sec:fbktime}
@@ -3195,7 +3236,7 @@ chmod -R o+r \$modulesdir/m4_ontodir
 @< start of module-script @(m4_ontodir@) @>
 JARDIR=\$MODDIR/lib
 RESOURCESDIR=\$MODDIR/resources
-PREDICATEMATRIX="\$RESOURCESDIR/PredicateMatrix_nl_lu_withESO.v0.2.role.txt"
+PREDICATEMATRIX="\$RESOURCESDIR/PredicateMatrix.v1.3.txt.role.odwn"
 GRAMMATICALWORDS="\$RESOURCESDIR/grammaticals/Grammatical-words.nl"
 TMPFIL=`mktemp -t stap6.XXXXXX`
 cat >$TMPFIL
@@ -3205,7 +3246,7 @@ JAVASCRIPT=eu.kyotoproject.main.KafPredicateMatrixTagger
 MAPPINGS="fn;mcr;ili;eso"
 JAVA_ARGS="--mappings $MAPPINGS"
 JAVA_ARGS="\$JAVA_ARGS  --key odwn-eq"
-JAVA_ARGS="\$JAVA_ARGS  --version 1.1"
+JAVA_ARGS="\$JAVA_ARGS  --version 1.2"
 JAVA_ARGS="\$JAVA_ARGS  --predicate-matrix \$PREDICATEMATRIX"
 JAVA_ARGS="\$JAVA_ARGS  --grammatical-words \$GRAMMATICALWORDS"
 JAVA_ARGS="\$JAVA_ARGS  --naf-file \$TMPFIL"
@@ -3937,7 +3978,7 @@ then
   cat times.naf   | \$BIND/onto                   > onto.naf
   cat onto.naf    | \$BIND/srl                    > srl.naf
   cat srl.naf     | \$BIND/m4_nomeventscript      > nomev.naf
-  cat nomev.naf   | \$BIND/postsrl                > psrl.naf
+  cat nomev.naf   | \$BIND/srl-dutch-nominals     > psrl.naf
   cat psrl.naf    | \$BIND/m4_framesrlscript      > fsrl.naf
   cat fsrl.naf    | \$BIND/m4_opiniscript         > opin.naf
   cat opin.naf    | \$BIND/m4_evcorefscript       > out.naf

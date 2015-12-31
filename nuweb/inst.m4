@@ -95,6 +95,7 @@ m4_define(m4_maven_javaversion, 1.7)m4_dnl
 m4_dnl boost libs
 m4_define(m4_boostname, boost_1_54_0)m4_dnl
 m4_define(m4_boosttarball, m4_boostname.tar.bz2)m4_dnl
+m4_define(m4_boostsnaptarball, 20151231_`'m4_boosttarball)m4_dnl
 m4_define(m4_boost_src_url, http://downloads.sourceforge.net/project/boost/boost/1.54.0/`'m4_boosttarball)m4_dnl
 m4_define(m4_pythonmoddir, m4_amoddir/python)m4_dnl
 m4_dnl
@@ -179,7 +180,7 @@ m4_define(m4_nercversion, 1.5.4)m4_dnl
 m4_define(m4_nercjar, ixa-pipe-nerc-`'m4_nercversion`'.jar)m4_dnl
 m4_dnl m4_define(m4_nercmodeldir, nerc-resources)m4_dnl
 m4_define(m4_nercmodeldir, nerc_models)m4_dnl
-m4_define(m4_nercmodelsball, 20151217_nerc_models.tgz)m4_dnl
+m4_define(m4_nercmodelsball, 20151230_nerc_models.tgz)m4_dnl
 m4_define(m4_nl_nercmodel, nl-6-class-clusters-sonar.bin)m4_dnl
 m4_define(m4_en_nercmodel, en-best-clusters-conll03.bin)m4_dnl
 m4_dnl m4_define(m4_nercmodel, nl-local-conll02-testa.bin)m4_dnl
@@ -361,6 +362,14 @@ m4_dnl m4_define(m4_srldir, srlModuleForBN)m4_dnl
 m4_define(m4_srldir, vua-srl-nl)m4_dnl
 m4_define(m4_srlscript, srl)m4_dnl
 m4_dnl
+m4_dnl SRL dutch nominals
+m4_define(m4_srl_dn_name, srl-dutch-nominals)m4_dnl
+m4_define(m4_srl_dn_git, https://github.com/newsreader/vua-srl-dutch-nominal-events)m4_dnl
+m4_define(m4_srl_dn_commitname, 6115b3168978acf809916cd2da512295d109d8fb)m4_dnl
+m4_define(m4_srl_dn_dir, vua-srl-dutch-nominal-events)m4_dnl
+m4_define(m4_srl_dn_script, srl-dutch-nominals)m4_dnl
+
+m4_dnl
 m4_dnl SRL post
 m4_define(m4_postsrlgit, `https://github.com/newsreader/vua-srl-postprocess.git')m4_dnl 
 m4_define(m4_postsrldir, `vua-srl-postprocess')m4_dnl  Subdir. of modules
@@ -434,7 +443,8 @@ m4_define(m4_nomeventname, nominal-event-detection)m4_dnl
 m4_define(m4_nomeventtex, \verb|m4_nomeventname|)m4_dnl
 m4_dnl m4_define(m4_dbpnergit, https://github.com/rubenIzquierdo/dbpedia_ner.git)m4_dnl
 m4_dnl m4_define(m4_nomeventball, vua-postprocess-nl.zip)m4_dnl
-m4_define(m4_nomeventball, 20151217_vua-nominal-event-detection-nl.tgz)m4_dnl
+m4_dnl m4_define(m4_nomeventball, 20151217_vua-nominal-event-detection-nl.tgz)m4_dnl
+m4_define(m4_nomeventball, 20151231_vua-nominal-event-detection-nl.tgz)m4_dnl
 m4_dnl  m4_define(m4_dbpner_commitname, ab1dcbd860f0ff29bc979f646dc382122a101fc2)m4_dnl
 m4_dnl m4_define(m4_nomeventdir, vua-postprocess-nl)m4_dnl
 m4_define(m4_nomeventdir, vua-nominal-event-detection-nl)m4_dnl
