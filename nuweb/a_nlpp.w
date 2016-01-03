@@ -1592,27 +1592,39 @@ to be re-installed.
 \subsubsection{The Boost library}
 \label{sec:boost}
 
-The tarball with boost in it could be downloaded from
-\url{m4_boost_src_url}. However, it seems that this download is not
-reproducable. One time I received as gzipped tar with the name
-\texttt{download}, but another time I received the expected
-file. Therefore, get the boost from the snapshot.
+Theoretically, it is possible to download a tarball with boost from
+\href{m4_boost_src_url}{it's repository} and then install it. However,
+I did not succeed in doing this. Therefore, I ripped the installed
+boost from Surfsara's Hadoop installation and put it in the
+\texttt{env} dir. 
 
 @d install boost @{@%
-boostmp=`mktemp -d -t boost.XXXXXX`
-cd \$boostmp
-@% wget m4_boost_src_url
-@% tar -xzf ./download
-tar -xjf \$snapshotsocket/m4_snapshotdirectory/m4_boostsnaptarball
-cd m4_boostname
-./bootstrap.sh
-cp project-config.jam old.project-config.jam
-cat old.project-config.jam | sed "s|/usr/local|$envdir|g" >project-config.jam
-./b2
-./b2 install 
-cd \$piperoot
-rm -rf \$boostmp
+cd \$envdir
+tar -xzf \$snapshotsocket/m4_snapshotdirectory/m4_ripped_boostball
 @| @}
+
+
+@% The tarball with boost in it could be downloaded from
+@% \url{m4_boost_src_url}. However, it seems that this download is not
+@% reproducible. One time I received as gzipped tar with the name
+@% \texttt{download}, but another time I received the expected
+@% file. Therefore, get the boost from the snapshot.
+@% 
+@% @d install boost @{@%
+@% boostmp=`mktemp -d -t boost.XXXXXX`
+@% cd \$boostmp
+@% @% wget m4_boost_src_url
+@% @% tar -xzf ./download
+@% tar -xjf \$snapshotsocket/m4_snapshotdirectory/m4_boostsnaptarball
+@% cd m4_boostname
+@% ./bootstrap.sh
+@% cp project-config.jam old.project-config.jam
+@% cat old.project-config.jam | sed "s|/usr/local|$envdir|g" >project-config.jam
+@% ./b2
+@% ./b2 install 
+@% cd \$piperoot
+@% rm -rf \$boostmp
+@% @| @}
 
 
 
@@ -2253,9 +2265,13 @@ UKB needs boost libraries and Perl version 5. For now, we consider them installe
 
 \paragraph{Script}
 
+Put the path to the boost libraries in the \verb|LD_LIBRARY_PATH|
+variable and then run \textsc{ukb}.
+
 @o m4_bindir/ukb @{@%
 @< start of module-script @(m4_ukbdir@) @>
 cd $MODDIR
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$envdir/lib:$envdir/boost_1_54_0/stage/lib
 ${MODDIR}/naf_ukb/naf_ukb.pl -x ${MODDIR}/ukb/bin/ukb_wsd -K ${MODDIR}/wn30-ili_lkb/wn30g.bin64 -D ${MODDIR}/wn30-ili_lkb/wn30.lex - -- --dict_weight --dgraph_dfs --dgraph_rank ppr
 
 @| @}

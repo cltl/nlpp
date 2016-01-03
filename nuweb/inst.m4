@@ -97,6 +97,7 @@ m4_define(m4_boostname, boost_1_54_0)m4_dnl
 m4_define(m4_boosttarball, m4_boostname.tar.bz2)m4_dnl
 m4_define(m4_boostsnaptarball, 20151231_`'m4_boosttarball)m4_dnl
 m4_define(m4_boost_src_url, http://downloads.sourceforge.net/project/boost/boost/1.54.0/`'m4_boosttarball)m4_dnl
+m4_define(m4_ripped_boostball, 20160103_boost_1_54_bin.tgz)m4_dnl
 m4_define(m4_pythonmoddir, m4_amoddir/python)m4_dnl
 m4_dnl
 m4_dnl Module installer
