@@ -2406,6 +2406,7 @@ GITU=m4_srl_dn_git
 GITC=m4_srl_dn_commitname
 @< install from github @>
 cd \$modulesdir/m4_srl_dn_dir
+chmod 775 m4_srl_dn_binary
 @| @}
 
 \paragraph{Script}
@@ -2413,7 +2414,7 @@ cd \$modulesdir/m4_srl_dn_dir
 @o m4_bindir/m4_srl_dn_script @{@%
 @< start of module-script @(m4_srl_dn_dir@) @>
 cd $MODDIR
-cat | $MODDIR/vua-srl-dutch-additional-roles.py
+cat | $MODDIR/m4_srl_dn_binary
 @| @}
 
 

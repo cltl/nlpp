@@ -369,6 +369,7 @@ m4_define(m4_srl_dn_git, https://github.com/newsreader/vua-srl-dutch-nominal-eve
 m4_define(m4_srl_dn_commitname, 6115b3168978acf809916cd2da512295d109d8fb)m4_dnl
 m4_define(m4_srl_dn_dir, vua-srl-dutch-nominal-events)m4_dnl
 m4_define(m4_srl_dn_script, srl-dutch-nominals)m4_dnl
+m4_define(m4_srl_dn_binary, vua-srl-dutch-additional-roles.py)m4_dnl
 
 m4_dnl
 m4_dnl SRL post
