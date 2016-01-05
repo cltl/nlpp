@@ -181,7 +181,7 @@ m4_define(m4_nercversion, 1.5.4)m4_dnl
 m4_define(m4_nercjar, ixa-pipe-nerc-`'m4_nercversion`'.jar)m4_dnl
 m4_dnl m4_define(m4_nercmodeldir, nerc-resources)m4_dnl
 m4_define(m4_nercmodeldir, nerc_models)m4_dnl
-m4_define(m4_nercmodelsball, 20151230_nerc_models.tgz)m4_dnl
+m4_define(m4_nercmodelsball, 20160105_nerc_models.tgz)m4_dnl
 m4_define(m4_nl_nercmodel, nl-6-class-clusters-sonar.bin)m4_dnl
 m4_define(m4_en_nercmodel, en-best-clusters-conll03.bin)m4_dnl
 m4_dnl m4_define(m4_nercmodel, nl-local-conll02-testa.bin)m4_dnl

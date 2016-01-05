@@ -719,7 +719,7 @@ tar -xzf m4_maventarball
 rm m4_maventarball
 @| @}
 
-@d install maven @{@%
+@d set variables that point to the directory-structure @{@%
 export MAVEN_HOME=\$envdir/m4_mavensubdir
 export PATH=${MAVEN_HOME}/bin:${PATH}
 @| @}
@@ -728,7 +728,9 @@ When the installation has been done, remove maven, because it is no longer neede
 
 @d clean up @{@%
 rm -rf m4_mavendir
+@< remove installed-variable @(maven_installed@) @>
 @| @}
+
 
 \subsection{Java 1.6}
 \label{sec:Java-1.6}
@@ -1061,6 +1063,14 @@ else
 fi
 @| @}
 
+Remove a variable from the list of installed modules, e.g. after a
+clean-up.
+
+@d remove installed-variable @{@%
+cd \$piperoot
+mv m4_modulelist old.modulelist
+cat old.modulelist | gawk '/@1/ {next}; {print}' >m4_modulelist
+@| @}
 
 
 \subsection{The installation script}
@@ -1957,6 +1967,7 @@ To install the tokenizer, we proceed as follows:
 \item remove the tempdir with the sourcecode.
 \end{enumerate}
 
+
 @d install the tokenizer @{@%
 @% @< install from github t @(tokenizer@,m4_tokenizerdir@,m4_tokenizergit@) @>
 tempdir=`mktemp -d -t tok.XXXXXX`
@@ -2140,7 +2151,9 @@ java -jar ${MODDIR}/ixa-pipe-pos-1.4.3.jar tag -m ${MODDIR}/en-maxent-100-c5-bas
 @% cp -r \$snapshotsocket/components/m4_conspardir \$modulesdir/
 cd $modulesdir
 tar -xzf \$snapshotsocket/m4_snapshotdirectory/m4_consparball
-@% cd \$modulesdir/conspardir
+cd \$modulesdir/conspardir
+chmod 775 *.jar
+chmod 775 *.bin
 @| @}
 
 
@@ -3386,7 +3399,7 @@ wget http://ixa2.si.ehu.es/%7Ejibalari/jvntextpro-2.0.jar
 @| @}
 
 
-Scipt \verb|install-to-project-repo.py| generates a library in
+Script \verb|install-to-project-repo.py| generates a library in
 subdirectory \verb|repo| and copies the jars that it finds in the
 \verb|lib| subdirectory in this repo in such a way that Maven finds it
 there. Somewhere in the \verb|install-to-project.py| \ldots \verb|mvn|
