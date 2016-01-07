@@ -1965,7 +1965,7 @@ else
   spotresource="en_2+2"
 fi
 cd m4_aspotlightdir
-sematree acquire spotlock -1
+\$envbindir/sematree acquire spotlock -1
 @< check listener on host, port @($spotlighthost@,$spotlightport@) @>
 if
  [ ! \$spotlightrunning -eq 0 ]
@@ -1973,7 +1973,7 @@ then
   java -jar -Xmx8g dbpedia-spotlight-0.7-jar-with-dependencies-candidates.jar $spotresource http://localhost:$spotlightport/rest  &
   @< wait until the spotlight server is up  @>
 fi
-sematree release spotlock
+\$envbindir/sematree release spotlock
 @% [ $progenvset ] || source m4_aenvbindir/progenv
 @% cd m4_aspotlightdir
 @% @% java  -Xmx8g -jar m4_spotlightjar nl http://localhost:m4_spotlight_nl_port/rest
