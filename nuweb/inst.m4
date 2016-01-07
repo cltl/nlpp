@@ -19,7 +19,6 @@ m4_define(m4_bindir, m4_projroot`/bin')m4_dnl     Binaries
 m4_define(m4_amoddir, m4_aprojroot`/modules')m4_dnl     Modules
 m4_define(m4_moddir, m4_projroot`/modules')m4_dnl     Modules
 m4_define(m4_modulelist, m4_aprojroot/installed_modules)m4_dnl
-
 m4_dnl m4_define(m4_lisanlproot, /home/phuijgen/nlp)m4_dnl
 m4_dnl
 m4_dnl HTML doc generation
@@ -42,7 +41,8 @@ m4_define(m4_aenvlibdir, m4_aenvdir`'/lib)m4_dnl     Program environment
 m4_define(m4_envlibdir, m4_envdir`'/lib)m4_dnl 
 m4_define(m4_aenvetcdir, m4_aenvdir`'/etc)m4_dnl 
 m4_define(m4_envetcdir, m4_envdir`'/etc)m4_dnl 
-m4_define(m4_apiddir, m4_aenvetcdir/pid)m4_dnl To store pid files for servers.
+m4_define(m4_apiddir, m4_aenvetcdir/pid)m4_dnl To store lockfiles for sematree.
+m4_define(m4_asematreedir, m4_aenvetcdir/sematree)m4_dnl To store pid files for servers.
 m4_dnl     m4_define(m4_usrlocaldir, m4_envdir`/usrlocal')m4_dnl     
 m4_dnl     m4_define(m4_ausrlocaldir, m4_aenvdir`/usrlocal')m4_dnl
 m4_dnl     m4_define(m4_usrlocalbindir, m4_usrlocaldir/bin)m4_dnl
@@ -78,8 +78,6 @@ m4_define(m4_enrepo_url, u017940.si.ehu.es)m4_dnl
 m4_define(m4_enrepo_port, 2223)m4_dnl
 m4_define(m4_enrepo_user, newsreader)m4_dnl
 m4_define(m4_enrepo_dir, components)m4_dnl
-
-
 m4_dnl
 m4_dnl Maven
 m4_dnl
@@ -91,7 +89,6 @@ m4_define(m4_amavendir, m4_aenvdir/m4_mavensubdir)m4_dnl
 m4_define(m4_maventarball, apache-maven-`'m4_mavenversion`'-bin.tar.gz)m4_dnl
 m4_define(m4_maventarballurl, http://apache.rediris.es/maven/maven-3/`'m4_mavenversion`'/binaries/`'m4_maventarball)m4_dnl
 m4_define(m4_maven_javaversion, 1.7)m4_dnl
-
 m4_dnl boost libs
 m4_define(m4_boostname, boost_1_54_0)m4_dnl
 m4_define(m4_boosttarball, m4_boostname.tar.bz2)m4_dnl
@@ -116,7 +113,6 @@ m4_define(m4_ehu_rep_url, u017940.si.ehu.es)m4_dnl
 m4_define(m4_ehu_rep_port, 2223)m4_dnl
 m4_define(m4_ehu_modules_directory, components)m4_dnl
 m4_define(m4_ehu_user, newsreader)m4_dnl
-
 m4_dnl Modules
 m4_dnl
 m4_dnl Tokenizer
@@ -164,7 +160,6 @@ m4_define(m4_consparversion, 1.1.1)m4_dnl
 m4_define(m4_conspartex, \verb|m4_consparname|)m4_dnl
 m4_define(m4_conspardir, EHU-parse.v30)m4_dnl
 m4_define(m4_consparball, 20151220_EHU-parse.v30.tgz)m4_dnl
-
 m4_dnl
 m4_dnl NERC
 m4_dnl
@@ -224,7 +219,6 @@ m4_dnl m4_dnl m4_define(m4_nedjar, ixa-pipe-ned-1.0.jar)m4_dnl
 m4_dnl m4_define(m4_nedjar, ixa-pipe-ned-`'m4_ned_version`'.jar)m4_dnl
 m4_dnl m4_define(m4_nedspotmodel_nl_tarball, nl.tar.gz)m4_dnl
 m4_define(m4_nedspotmodel_nl_url, http://spotlight.sztaki.hu/downloads/`'m4_nedspotmodel_nl_tarball)m4_dnl
- 
 m4_define(m4_nedscript, ned)m4_dnl
 m4_define(m4_wikipediadbmodule, wikipedia-db)m4_dnl
 m4_define(m4_wikipediadbmodule_url, http://ixa2.si.ehu.es/ixa-pipes/models/`'wikipediamodule`'.v1.tar.gz)m4_dnl
@@ -301,7 +295,6 @@ m4_dnl Framenet SRL
 m4_define(m4_ontodir, vua-ontotagger-v1.0)m4_dnl  Subdir. of modules
 m4_define(m4_framesrlscript, framesrl)m4_dnl
 m4_define(m4_ontotarball, vua-ontotagger-v1.0.tar.gz)m4_dnl  Subdir. of modules
-
 m4_dnl
 m4_dnl Heideltime
 m4_dnl
@@ -370,7 +363,6 @@ m4_define(m4_srl_dn_commitname, 6115b3168978acf809916cd2da512295d109d8fb)m4_dnl
 m4_define(m4_srl_dn_dir, vua-srl-dutch-nominal-events)m4_dnl
 m4_define(m4_srl_dn_script, srl-dutch-nominals)m4_dnl
 m4_define(m4_srl_dn_binary, vua-srl-dutch-additional-roles.py)m4_dnl
-
 m4_dnl
 m4_dnl SRL post
 m4_define(m4_postsrlgit, `https://github.com/newsreader/vua-srl-postprocess.git')m4_dnl 
@@ -397,7 +389,6 @@ m4_dnl
 m4_dnl Opinion-miner
 m4_define(m4_opininame, opinion-miner)m4_dnl
 m4_define(m4_opinitex, opinion-miner)m4_dnl
-
 m4_define(m4_opinigit, https://github.com/cltl/opinion_miner_deluxe.git )m4_dnl  
 m4_dnl m4_define(m4_opinidir, opinion_miner_de_luxe)m4_dnl  
 m4_define(m4_opiniscript, opinimin)m4_dnl
@@ -455,6 +446,11 @@ m4_dnl
 m4_dnl Utilities
 m4_dnl
 m4_dnl
+m4_dnl
+m4_dnl Sematree
+m4_define(m4_sematree_website, `http://www.pixelbeat.org/scripts/sematree/')m4_dnl
+m4_define(m4_sematree_script, `sematree')m4_dnl
+
 m4_dnl Alpino
 m4_dnl
 m4_define(m4_alpino_version, 20706)m4_dnl
@@ -516,8 +512,6 @@ m4_define(m4_treetag_dutch_tagset, dutch-tagset.txt)m4_dnl
 m4_define(m4_treetagger_scripts, tagger-scripts.tar.gz)m4_dnl
 m4_define(m4_treetagger_installscript, install-tagger.sh)m4_dnl
 m4_define(m4_treetagger-main-webpage, `http://www.cis.uni-muenchen.de/~schmid/tools/TreeTagger/')m4_dnl
-
-
 m4_define(m4_treetagurl, `http://www.cis.uni-muenchen.de/%7Eschmid/tools/TreeTagger/data/m4_treetagsrc')m4_dnl
 m4_define(m4_treetag_dutchabburl, http://www.cis.uni-muenchen.de/~schmid/tools/TreeTagger/data/dutch-par-linux-3.2-utf8.bin.gz)m4_dnl
 m4_define(m4_treetagdir, treetagger)m4_dnl
@@ -566,9 +560,6 @@ m4_dnl
 m4_dnl    miscellaneous
 m4_dnl
 m4_define(m4_walltime, 30:00)m4_dnl   Max duration of a job
-
-
-
 m4_dnl
 m4_dnl internal URL's and their templates
 m4_dnl 
@@ -598,7 +589,7 @@ m4_dnl
 m4_dnl (style) things that probably do not have to be modified
 m4_dnl
 m4_changequote(`<!',`!>')m4_dnl
-m4_define(m4_header, <!m4_esyscmd(date +'%Y%m%d at %H%Mh'| tr -d '\012'): Generated by nuweb from a_!>m4_progname<!.w!>)
+m4_define(m4_header, <!m4_esyscmd(date +'%Y%m%d at %H%Mh'| tr -d '\012'): Generated by nuweb from a_!>m4_progname<!.w!>)m4_dnl
 m4_define(m4_time_of_day, <!m4_esyscmd(date +'%H:%M'| tr -d '\012')!>)m4_dnl
 m4_define(m4_index4ht, <!tex '\def\filename{{!>m4_progname<!}{idx}{4dx}{ind}} \input idxmake.4ht'!>)m4_dnl
 m4_define(m4_nuwebbindir, <!m4_projroot!>/nuweb/bin)m4_dnl

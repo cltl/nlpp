@@ -1,5 +1,6 @@
 m4_include(inst.m4)m4_dnl
-m4_sinclude(local.m4)m4_dnl
+m4_dnl m4_sinclude(`../../local.m4')m4_dnl
+m4_sinclude(../../local.m4)m4_dnl
 \documentclass[twoside,oldtoc]{artikel3}
 @% \documentclass[twoside]{article}
 \pagestyle{headings}
@@ -1115,6 +1116,9 @@ fi
 @< begin conditional install @(python_installed@) @>
   @< set up python @>
 @< end conditional install @(python_installed@) @>
+@< begin conditional install @(sematree_installed@) @>
+  @< install sematree @>
+@< end conditional install @(sematree_installed@) @>
 echo ... Alpino
 @< begin conditional install @(alpino_installed@) @>
   @< install Alpino @>
@@ -1319,6 +1323,37 @@ fi
 \subsection{Install utilities and resources}
 \label{sec:utilitiesandresources}
 
+\subsubsection{Process synchronisation}
+\label{sec:syncronisation}
+
+We will see that we sometimes have to install
+server-applications. However, it is possible that multiple processes
+are running pipeline modules in parallel, and then it may occur that
+two instances of a module try to install the same
+server-application. Therefore, we must make sure that only one
+application at a time is able to start the server.
+
+The program \verb|sematree|, found at \url{m4_sematree_website}
+enables to do this. When invoked with argument ``acquire'', the name
+of a ``lockfile''  and a time
+to wait (-1 means ``wait an indefinite time''), it checks whether the
+lockfile exists. If that is the case, it either waits or
+fails. When the lockfile is not (or no longer) present, sematree
+creates the lockfile.
+
+When installing Sematree, set the default directory for lock-files. We
+set this as a subdirectory of the \verb|env| tree. However, in some
+cases, notably when running in a node in Lisa, we need a directory on
+the filesystem of the node itself.
+
+@d install sematree @{@%
+cat \$snapshotsocket/m4_snapshotdirectory/m4_sematree_script | \
+  sed "s|/var/run|<!!>m4_asematreedir<!!>|g" \
+> \$envbindir/sematree
+@| @}
+
+
+
 \subsubsection{Prefix of scripts that run modules}
 \label{sec:runprefix}
 
@@ -1380,7 +1415,7 @@ chmod 775 m4_abindir/langdetect
 @d set the language variable @{@%
 naflang=`cat @1 | m4_abindir/langdetect`
 export naflang
-@| lang @}
+@| naflang @}
 
 
 Currently, the pipeline understands only English and Dutch. The
@@ -1693,14 +1728,32 @@ We set 8Gb for the English server, but the Italian and Dutch Spotlight will requ
 
 So, let us do that:
 
+@% @d select language-dependent features @{@%
+@% if
+@%   [ "\$naflang" == "nl" ]
+@% then
+@%   export spotlightport=m4_spotlight_nl_port
+@% else
+@%   export spotlightport=m4_spotlight_en_port
+@% fi
+@% @| @}
+
+
 @d install the Spotlight server @{@%
 cd \$envdir
 tar -xzf \$snapshotsocket/m4_snapshotdirectory/m4_spotlightball
 cd \$envdir/spotlight
-wget m4_spotlight_download_url/m4_spotlight_nl_model_ball
-tar -xzf m4_spotlight_nl_model_ball
-rm m4_spotlight_nl_model_ball
+@< get spotlight model ball @(m4_spotlight_nl_model_ball@) @>
+@< get spotlight model ball @(m4_spotlight_en_model_ball@) @>
 @| @}
+
+@d get spotlight model ball @{@%
+wget m4_spotlight_download_url/@1
+tar -xzf @1
+rm @1
+@| @}
+
+
 
 We choose to put the Wikipedia database in the spotlight directory.
 
@@ -1711,33 +1764,125 @@ tar -xzf m4_wikipediadb_tarball
 rm  m4_wikipediadb_tarball
 @| @}
 
-Script \verb|bin/start-spotlight| starts spotlight if it is not
-already running. It does the following:
+The macro \verb|check/start spotlight| does the following:
 
 \begin{enumerate}
-\item If variable \verb|spotlighthost| exists, it checks whether
-  Spotlight is already running on that host.
-\item If Spotlight does not run on that host or if If variable
-  \verb|spotlighthost| does not exist, it sets variable
-  \verb|spotlighthost| to localhost and then checks whether Spotlight
-  runs on localhost.
-\item If Spotlight has not yet been found, install spotlight on localhost.
-\item If a running spotlight has been found, set variable
-  \verb|spotlightrunning| to 0.
+\item Check whether spotlight runs on the default spotlighthost.
+\item If that is not the case, and the defaulthost is not
+  \verb|localhost|, check whether Spotlight runs on localhost.
+\item If a running spotlightserver is still not found, start a
+  spotlightserver on localhost.
+@% \item If variable \verb|spotlighthost| exists, it checks whether
+@%   Spotlight is already running on that host.
+@% \item If Spotlight does not run on that host or if If variable
+@%   \verb|spotlighthost| does not exist, it sets variable
+@%   \verb|spotlighthost| to localhost and then checks whether Spotlight
+@%   runs on localhost.
+@% \item If Spotlight has not yet been found, install spotlight on localhost.
+@% \item If a running spotlight has been found, set variable
+@%   \verb|spotlightrunning| to 0.
 \end{enumerate}
 
-@o m4_bindir/start-spotlight @{@%
-# NOTE: This script ought to be sourced.
-# Afterwards, on success, the following variables exist:
-# > spotlighthost
-# > spotlightrunning
-if 
-  [ ! $spotlightrunning ]
+@d function to check/start spotlight @{@%
+function check_start_spotlight {
+  language=$1
+  @< get spotlight language parameters @>
+  spotlighthost=m4_spotlight_host
+  @< check listener on host, port @($spotlighthost@,$spotlightport@) @>
+  if
+    [ \$spotlightrunning -ne 0 ]
+  then
+    if 
+      [ ! "$spotlighthost" == "localhost" ]
+    then
+      export spotlighthost="localhost"
+      @< check listener on host, port @($spotlighthost@,$spotlightport@) @>
+    fi
+  fi
+  if
+    [ \$spotlightrunning -ne 0 ]
+  then
+    @< start the Spotlight server on localhost @>
+  fi
+  export spotlighthost
+  export spotlightrunning
+}
+@| @}
+
+
+@% @o m4_bindir/start_spotlight @{@%
+@% #!/bin/bash
+@% # start_spotlight -- Check whether we can connect to a Spotlight server
+@% #                    Start Spotlight server on localhost if this is not the case.
+@% # Argument 1: "en" or "nl"
+@% @< get spotlight language parameters @>
+@% spotlight_host=
+@% @| @}
+
+
+Set the port-number and the language resource for Spotlight, dependent
+of the language that the user gave as argument.
+
+@d get spotlight language parameters @{@%
+if
+  [ "$language" == "nl" ]
 then
-  [ $spotlighthost ] || export spotlighthost=m4_spotlight_host
-  @< try to obtain a running spotlightserver @>
+   spotlightport=m4_spotlight_nl_port
+@%   spotlightresource="nl"
+else
+  spotlightport=m4_spotlight_en_port
+@%   spotlightresource="en_2+2"
 fi
 @| @}
+
+
+
+@% @d check/start spotlight @{@%
+@% if
+@%  [ "$naflang" == "nl" ]
+@% then
+@%   export spotlightport=m4_spotlight_nl_port
+@% else
+@%   export spotlightport=m4_spotlight_en_port
+@% fi
+@% export spotlighthost=m4_spotlight_host
+@% @< check listener on host, port @($spotlighthost@,$spotlightport@) @>
+@% if
+@%   [ \$spotlightrunning -ne 0 ]
+@% then
+@%   if 
+@%     [ ! "$spotlighthost" == "localhost" ]
+@%   then
+@%     export spotlighthost="localhost"
+@%     @< check listener on host, port @($spotlighthost@,$spotlightport@) @>
+@%   fi
+@% fi
+@% if
+@%   [ \$spotlightrunning -ne 0 ]
+@% then
+@%   @< start the Spotlight server on localhost @>
+@%   @< check listener on host, port @($spotlighthost@,$spotlightport@) @>
+@% fi
+@% @% if 
+@% @%   [ ! $spotlightrunning ]
+@% @% then
+@% @%   [ $spotlighthost ] || export spotlighthost=m4_spotlight_host
+@% @%   @< try to obtain a running spotlightserver @>
+@% @% fi
+@% @| @}
+
+The following macro has a hostname and a port-number as arguments. It
+checks whether something in the host listens on the port and sets
+variable \verb|success| accordingly:
+
+@d check listener on host, port @{@%
+exec 6<>/dev/tcp/@1/@2
+spotlightrunning=\$?
+exec 6<&-
+exec 6>&-
+@| @}
+
+
 
 If variable \verb|spotlighthost| does not exist, set it to
 localhost. Test whether a Spotlightserver runs on
@@ -1799,15 +1944,52 @@ exec 6<&-
 exec 6>&-
 @| @}
 
+When trying to start the Spotlight-server on localhost, take care that
+only one process does this. So we do this:
+
+\begin{enumerate}
+\item Acquire a lock.
+\item Check that in the mean time Spotlight has not been started by
+  another process.
+\item Run the Spotlight java program if Spotlight does still not run.
+\item release the lock
+\end{enumerate}
+
+
 @d start the Spotlight server on localhost @{@%
-[ $progenvset ] || source m4_aenvbindir/progenv
+if
+  [ "$naflang" == "nl" ]
+then
+  spotresource="nl"
+else
+  spotresource="en_2+2"
+fi
 cd m4_aspotlightdir
-@% java  -Xmx8g -jar m4_spotlightjar nl http://localhost:m4_spotlight_nl_port/rest
-java -jar -Xmx8g dbpedia-spotlight-0.7-jar-with-dependencies-candidates.jar nl http://localhost:2060/rest  &
+sematree acquire spotlock -1
+@< check listener on host, port @($spotlighthost@,$spotlightport@) @>
+if
+ [ ! \$spotlightrunning -eq 0 ]
+then
+  java -jar -Xmx8g dbpedia-spotlight-0.7-jar-with-dependencies-candidates.jar $spotresource http://localhost:$spotlightport/rest  &
+  @< wait until the spotlight server is up  @>
+fi
+sematree release spotlock
+@% [ $progenvset ] || source m4_aenvbindir/progenv
+@% cd m4_aspotlightdir
+@% @% java  -Xmx8g -jar m4_spotlightjar nl http://localhost:m4_spotlight_nl_port/rest
 @% java -jar -Xmx8g dbpedia-spotlight-0.7-jar-with-dependencies-candidates.jar nl http://localhost:2060/rest  &
-sleep 60
+@% @% java -jar -Xmx8g dbpedia-spotlight-0.7-jar-with-dependencies-candidates.jar nl http://localhost:2060/rest  &
+@% sleep 60
 @| @}
 
+@d wait until the spotlight server is up @{@%
+while
+  @< check listener on host, port @($spotlighthost@,$spotlightport@) @>
+  [ $spotlightrunning -ne 0 ]
+do
+  sleep 10
+done
+@| @}
 
 
 Start the Spotlight if it is not already running. First find out what
@@ -2444,6 +2626,12 @@ tar -xzf \$snapshotsocket/m4_snapshotdirectory/m4_fbktimeball
 
 \paragraph{Script}
 
+The script is rather complicated. I just copied it from the orignal
+makers, with one exception: Originally at the end of the script there
+was a pipe consisting of two Java programs. However, that didn't seem
+to work in one of the computers that we use, therefore we have split
+the pipe using \verb|mytemp| as temporary storage. 
+
 @o m4_bindir/FBK-time @{@%
 @< start of module-script @(m4_fbktimedir@) @>
 BEGINTIME=`date '+%Y-%m-%dT%H:%M:%S%z'`
@@ -2452,7 +2640,8 @@ timdir=`mktemp -d -t time.XXXXXX`
 FILETXP=$timdir/TimePro.txp
 CHUNKIN=$timdir/TimePro.naf
 FILEOUT=$timdir/TimeProOUT.txp
-TIMEPRONORMIN=$timdir/TimeProNormIN.txp
+TIMEPRONORMIN=\$timdir/TimeProNormIN.txp
+mytemp=\$timdir/mytemp
 cd $MODDIR
 cat > $CHUNKIN
 
@@ -2487,8 +2676,10 @@ JAVACP1="lib/TXPtoNAF_v5.jar:lib/jdom-2.0.5.jar:lib/kaflib-naf-1.1.9.jar"
 JAVAMOD1=eu.fbk.newsreader.naf.TXPtoNAF_v4
 JAVACP2="lib/kaflib-naf-1.1.9.jar:lib/jdom-2.0.5.jar:lib/TimeProEmptyTimex_v2.jar"
 JAVAMOD2=eu.fbk.timepro.TimeProEmptyTimex
-java  -Dfile.encoding=UTF8 -cp $JAVACP1 $JAVAMOD1 $CHUNKIN $FILETXP "$BEGINTIME" TIMEX3 | \
- java -Dfile.encoding=UTF8 -cp $JAVACP2 $JAVAMOD2 $FILEOUT
+@% java  -Dfile.encoding=UTF8 -cp $JAVACP1 $JAVAMOD1 $CHUNKIN $FILETXP "$BEGINTIME" TIMEX3 | \
+@%  java -Dfile.encoding=UTF8 -cp $JAVACP2 $JAVAMOD2 $FILEOUT
+java  -Dfile.encoding=UTF8 -cp $JAVACP1 $JAVAMOD1 $CHUNKIN $FILETXP "$BEGINTIME" TIMEX3 > $mytemp
+cat $mytemp | java -Dfile.encoding=UTF8 -cp $JAVACP2 $JAVAMOD2 $FILEOUT
 
 
 rm $FILETXP
@@ -2530,7 +2721,8 @@ mv run.sh.hadoop old.run.sh.hadoop
 cat old.run.sh.hadoop | \
   sed s/kaflib-naf-1.1.8/kaflib-naf-1.1.9/g | \
   sed s/TimeAnchor_tlink.jar/TimeAnchor.jar/g | \
-  sed "s/sh temprel/bash temprel/g"  \
+  sed "s/sh temprel/bash temprel/g" | \
+  sed "s/java /java -Xmx2g /g"  \
 >run.sh.hadoop
 chmod 775 run.sh.hadoop
 @| @}
@@ -3983,6 +4175,7 @@ the pipeline.
 #!/bin/bash
 ROOT=m4_aprojroot
 TESTDIR=$ROOT/test
+@< function to check/start spotlight @>
 TESTIN=\$ROOT/nuweb/test.nl.in.naf
 if 
   [ "$1" == "en" ]
@@ -3992,9 +4185,9 @@ fi
 BIND=$ROOT/bin
 mkdir -p $TESTDIR
 cd $TESTDIR
-[ $spotlightrunning ] || source m4_abindir/start-spotlight
 @< set the language variable @($TESTIN@)@>
 @< select language-dependent features @>
+check_start_spotlight $naflang
 if
  [ "\$naflang" == "nl" ]
 then
