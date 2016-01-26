@@ -2641,6 +2641,7 @@ FILETXP=$timdir/TimePro.txp
 CHUNKIN=$timdir/TimePro.naf
 FILEOUT=$timdir/TimeProOUT.txp
 TIMEPRONORMIN=\$timdir/TimeProNormIN.txp
+JAVAMAXHEAP=2g
 mytemp=\$timdir/mytemp
 cd $MODDIR
 cat > $CHUNKIN
@@ -2648,7 +2649,7 @@ cat > $CHUNKIN
 JAVACLASSPATH="lib/jdom-2.0.5.jar:lib/kaflib-naf-1.1.9.jar:lib/NAFtoTXP_v11.jar"
 JAVAMODULE=eu.fbk.newsreader.naf.NAFtoTXP_v11
 cat $CHUNKIN | \
- java -cp $JAVACLASSPATH $JAVAMODULE $FILETXP chunk+entity timex
+ java -Xmx$JAVAMAXHEAP -cp $JAVACLASSPATH $JAVAMODULE $FILETXP chunk+entity timex
 
 #echo "Saving... $FILETXP"
 tail -n +4 $FILETXP | awk -f resources/english-rules > $FILEOUT
@@ -2663,14 +2664,14 @@ JAVACLASSPATH="lib/scala-library.jar:lib/timenorm-0.9.1-SNAPSHOT.jar"
 JAVACLASSPATH=$JAVACLASSPATH:"lib/threetenbp-0.8.1.jar:lib/TimeProNorm_v2.5.jar"
 JAVAMODULE=eu.fbk.timePro.TimeProNormApply
 cat $TIMEPRONORMIN | \
-  java -cp $JAVACLASSPATH $JAVAMODULE $FILETXP
+  java -Xmx$JAVAMAXHEAP -cp $JAVACLASSPATH $JAVAMODULE $FILETXP
 
 rm $FILEOUT
 rm $TIMEPRONORMIN
 
 JAVACLASSPATH="lib/jdom-2.0.5.jar:lib/kaflib-naf-1.1.9.jar:lib/NAFtoTXP_v11.jar"
 JAVAMODULE=eu.fbk.newsreader.naf.NAFtoTXP_v11
-cat $CHUNKIN | java -cp $JAVACLASSPATH $JAVAMODULE $FILEOUT chunk+morpho+timex+event eval
+cat $CHUNKIN | java -Xmx$JAVAMAXHEAP -cp $JAVACLASSPATH $JAVAMODULE $FILEOUT chunk+morpho+timex+event eval
 
 JAVACP1="lib/TXPtoNAF_v5.jar:lib/jdom-2.0.5.jar:lib/kaflib-naf-1.1.9.jar"
 JAVAMOD1=eu.fbk.newsreader.naf.TXPtoNAF_v4
@@ -2678,8 +2679,8 @@ JAVACP2="lib/kaflib-naf-1.1.9.jar:lib/jdom-2.0.5.jar:lib/TimeProEmptyTimex_v2.ja
 JAVAMOD2=eu.fbk.timepro.TimeProEmptyTimex
 @% java  -Dfile.encoding=UTF8 -cp $JAVACP1 $JAVAMOD1 $CHUNKIN $FILETXP "$BEGINTIME" TIMEX3 | \
 @%  java -Dfile.encoding=UTF8 -cp $JAVACP2 $JAVAMOD2 $FILEOUT
-java  -Dfile.encoding=UTF8 -cp $JAVACP1 $JAVAMOD1 $CHUNKIN $FILETXP "$BEGINTIME" TIMEX3 > $mytemp
-cat $mytemp | java -Dfile.encoding=UTF8 -cp $JAVACP2 $JAVAMOD2 $FILEOUT
+java -Xmx$JAVAMAXHEAP  -Dfile.encoding=UTF8 -cp $JAVACP1 $JAVAMOD1 $CHUNKIN $FILETXP "$BEGINTIME" TIMEX3 > $mytemp
+cat $mytemp | java  -Dfile.encoding=UTF8 -cp $JAVACP2 $JAVAMOD2 $FILEOUT
 
 
 rm $FILETXP
@@ -3964,13 +3965,22 @@ cp lib/m4_evcorefjar \$jarsdir
 RESOURCESDIR=$MODDIR/resources
 JARFILE=\$jarsdir/m4_evcorefjar
 
+if
+  [  "$naflang" == 'nl' ] 
+then
+  lang_resource="odwn_orbn_gwg-LMF_1.3.xml"
+else
+  lang_resource="wneng-30.lmf.xml.pos"
+fi
+
 JAVAMODULE=eu.newsreader.eventcoreference.naf.EventCorefWordnetSim
 JAVAOPTIONS="--method leacock-chodorow"
 @% JAVAOPTIONS="$JAVAOPTIONS  --wn-lmf $RESOURCESDIR/cornetto2.1.lmf.xml"
-JAVAOPTIONS="$JAVAOPTIONS  --wn-lmf $RESOURCESDIR/wneng-30.lmf.xml.xpos"
+JAVAOPTIONS="$JAVAOPTIONS  --wn-lmf $RESOURCESDIR/$lang_resource"
 JAVAOPTIONS="$JAVAOPTIONS  --sim 2.0"
-@% JAVAOPTIONS="$JAVAOPTIONS  --relations XPOS_NEAR_SYNONYM#HAS_HYPERONYM#HAS_XPOS_HYPERONYM"
-JAVAOPTIONS="$JAVAOPTIONS  --relations has_hyperonym#event#has_hypernym"
+JAVAOPTIONS="$JAVAOPTIONS  --wsd 0.8"
+JAVAOPTIONS="$JAVAOPTIONS  --relations XPOS_NEAR_SYNONYM#HAS_HYPERONYM#HAS_XPOS_HYPERONYM#event"
+@%JAVAOPTIONS="$JAVAOPTIONS  --relations has_hyperonym#event#has_hypernym"
 
 @% #### Within document event coreference wordnet sim
 @% #rootDir=/home/newsreader/components/VUA-eventcoref.v21/
@@ -4050,7 +4060,8 @@ RESOURCESDIR=\$MODDIR/resources
 
 JAR=\$LIBDIR/ontotagger-1.0-jar-with-dependencies.jar
 JAVAMODULE=eu.kyotoproject.main.NominalEventCoreference
-cat | iconv -f ISO8859-1 -t UTF-8 | java -Xmx812m -cp $JAR $JAVAMODULE --framenet-lu $RESOURCESDIR/nl-luIndex.xml
+@% cat | iconv -f ISO8859-1 -t UTF-8 | java -Xmx812m -cp $JAR $JAVAMODULE --framenet-lu $RESOURCESDIR/nl-luIndex.xml
+cat | java -Xmx812m -cp $JAR $JAVAMODULE --framenet-lu $RESOURCESDIR/nl-luIndex.xml
 @| @}
 
 

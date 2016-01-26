@@ -289,7 +289,8 @@ m4_define(m4_ontotex, onto-tagger)m4_dnl
 m4_define(m4_ontodir, vua-ontotagger-v1.0)m4_dnl  Subdir. of modules
 m4_define(m4_ontoscript, onto)m4_dnl
 m4_dnl m4_define(m4_ontotarball, 20150724_vua-ontotagger-v1.0.tar.gz)m4_dnl  Subdir. of modules
-m4_define(m4_ontotarball, 20151217_vua-ontotagger-v1.0.tgz)m4_dnl  Subdir. of modules
+m4_dnl m4_define(m4_ontotarball, 20151217_vua-ontotagger-v1.0.tgz)m4_dnl  Subdir. of modules
+m4_define(m4_ontotarball, 20160126_vua-ontotagger-v1.0.tgz)m4_dnl  Subdir. of modules
 m4_dnl
 m4_dnl Framenet SRL
 m4_define(m4_ontodir, vua-ontotagger-v1.0)m4_dnl  Subdir. of modules
@@ -437,7 +438,8 @@ m4_define(m4_nomeventtex, \verb|m4_nomeventname|)m4_dnl
 m4_dnl m4_define(m4_dbpnergit, https://github.com/rubenIzquierdo/dbpedia_ner.git)m4_dnl
 m4_dnl m4_define(m4_nomeventball, vua-postprocess-nl.zip)m4_dnl
 m4_dnl m4_define(m4_nomeventball, 20151217_vua-nominal-event-detection-nl.tgz)m4_dnl
-m4_define(m4_nomeventball, 20151231_vua-nominal-event-detection-nl.tgz)m4_dnl
+m4_dnl m4_define(m4_nomeventball, 20151231_vua-nominal-event-detection-nl.tgz)m4_dnl
+m4_define(m4_nomeventball, 20160126_vua-nominal-event-detection-nl.tgz)m4_dnl
 m4_dnl  m4_define(m4_dbpner_commitname, ab1dcbd860f0ff29bc979f646dc382122a101fc2)m4_dnl
 m4_dnl m4_define(m4_nomeventdir, vua-postprocess-nl)m4_dnl
 m4_define(m4_nomeventdir, vua-nominal-event-detection-nl)m4_dnl
