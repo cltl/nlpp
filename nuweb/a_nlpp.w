@@ -773,6 +773,7 @@ Python packages that are needed.
 @< check/install the correct version of python @>
 @< create a virtual environment for Python @>
 @< activate the python environment @>
+@< update pip @>
 @< install kafnafparserpy @>
 @< install python packages @>
 @| @}
@@ -930,6 +931,14 @@ packages are:
 echo export 'PYTHONPATH=\$envdir/python:\$PYTHONPATH' >> m4_aenvbindir/javapython
 export PYTHONPATH=\$envdir/python:\$PYTHONPATH
 @|PYTHONPATH @}
+
+Update pip in the virtual environment, because otherwise it keeps
+complaining about outdated versions
+
+@d update pip @{@%
+pip install --upgrade pip
+@| @}
+
 
 \subsubsection{Transplant the virtual environment}
 \label{sec:transplant_virt_env}
@@ -1785,7 +1794,7 @@ The macro \verb|check/start spotlight| does the following:
 
 @d function to check/start spotlight @{@%
 function check_start_spotlight {
-  language=$1
+  naflang=$1
   @< get spotlight language parameters @>
   spotlighthost=m4_spotlight_host
   @< check listener on host, port @($spotlighthost@,$spotlightport@) @>
@@ -1825,7 +1834,7 @@ of the language that the user gave as argument.
 
 @d get spotlight language parameters @{@%
 if
-  [ "$language" == "nl" ]
+  [ "$naflang" == "nl" ]
 then
    spotlightport=m4_spotlight_nl_port
 @%   spotlightresource="nl"
@@ -2747,7 +2756,8 @@ temp-directory per instance.
 cd $MODDIR
 scratchDir=`mktemp -d -t temprel.XXXXXX`
 cat >$scratchDir/in.naf
-cat $scratchDir/in.naf | ./run.sh.hadoop $MODDIR $scratchDir $scratchDir/in.naf
+@%cat $scratchDir/in.naf | ./run.sh.hadoop $MODDIR $scratchDir $scratchDir/in.naf
+./run.sh.hadoop $MODDIR $scratchDir $scratchDir/in.naf
 rm -rf $scratchDir
 @% # $3 = xml input file
 @% scratchDir=`mktemp -d -t temprel.XXXXXX`
@@ -2844,7 +2854,8 @@ chmod 775 run.sh.hadoop
 cd $MODDIR
 scratchDir=`mktemp -d -t causalrel.XXXXXX`
 cat >$scratchDir/in.naf
-cat $scratchDir/in.naf | ./run.sh.hadoop $MODDIR $scratchDir $scratchDir/in.naf
+@%cat $scratchDir/in.naf | ./run.sh.hadoop $MODDIR $scratchDir $scratchDir/in.naf
+./run.sh.hadoop $MODDIR $scratchDir $scratchDir/in.naf
 rm -rf $scratchDir
 @| @}
 
@@ -3970,7 +3981,7 @@ if
 then
   lang_resource="odwn_orbn_gwg-LMF_1.3.xml"
 else
-  lang_resource="wneng-30.lmf.xml.pos"
+  lang_resource="wneng-30.lmf.xml.xpos"
 fi
 
 JAVAMODULE=eu.newsreader.eventcoreference.naf.EventCorefWordnetSim
