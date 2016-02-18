@@ -2233,7 +2233,7 @@ gawk '{gsub("/home/newsreader/components", subs); print}' subs=$modulesdir old.c
 @< start of module-script @(m4_topictooldir@) @>
 @< abort when the language is not English or Dutch @>
 @% rootDir=\$modulesdir/EHU-topic.v30
-java -jar $MODDIR/ixa-pipe-topic-1.0.1.jar -p $MODDIR/conf.prop
+java -Xmx1000m -jar $MODDIR/ixa-pipe-topic-1.0.1.jar -p $MODDIR/conf.prop
 @| @}
 
 
@@ -2329,7 +2329,7 @@ cd \$modulesdir/m4_topictooldir
 
 @o m4_bindir/pos @{@%
 @< start of module-script @(m4_posdir@) @>
-java -jar ${MODDIR}/ixa-pipe-pos-1.4.3.jar tag -m ${MODDIR}/en-maxent-100-c5-baseline-dict-penn.bin
+java -Xmx1000m -jar ${MODDIR}/ixa-pipe-pos-1.4.3.jar tag -m ${MODDIR}/en-maxent-100-c5-baseline-dict-penn.bin
 @| @}
 
 
@@ -2352,7 +2352,7 @@ chmod 775 *.bin
 
 @o m4_bindir/constpars @{@%
 @< start of module-script @(m4_conspardir@) @>
-java -jar ${MODDIR}/m4_consparname-m4_consparversion.jar parse -g sem -m ${MODDIR}/en-parser-chunking.bin
+java -Xmx1000m -jar ${MODDIR}/m4_consparname-m4_consparversion.jar parse -g sem -m ${MODDIR}/en-parser-chunking.bin
 @| @}
 
 
@@ -2450,7 +2450,7 @@ fi
 [ $spotlightrunning ] || source m4_abindir/start-spotlight
 
 cd $MODDIR
-java -jar ${MODDIR}/ixa-pipe-wikify-1.2.1.jar -s http://$spotlighthost -p $spotlightport 
+java -Xmx1000m -jar ${MODDIR}/ixa-pipe-wikify-1.2.1.jar -s http://$spotlighthost -p $spotlightport 
 @| @}
 
 
@@ -2567,7 +2567,7 @@ a \NAF{} file.
 @o m4_bindir/eSRL @{@%
 @< start of module-script @(m4_srlserverdir@) @>
 m4_abindir/start_eSRL
-java -cp $MODDIR/IXA-EHU-srl-3.0.jar ixa.srl.SRLClient en
+java -Xmx1000m -cp $MODDIR/IXA-EHU-srl-3.0.jar ixa.srl.SRLClient en
 @| @}
 
 
