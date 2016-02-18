@@ -1794,6 +1794,7 @@ The macro \verb|check/start spotlight| does the following:
 
 @d function to check/start spotlight @{@%
 function check_start_spotlight {
+  local oldd=`pwd`
   naflang=$1
   @< get spotlight language parameters @>
   spotlighthost=m4_spotlight_host
@@ -1815,6 +1816,7 @@ function check_start_spotlight {
   fi
   export spotlighthost
   export spotlightrunning
+  cd $oldd
 }
 @| @}
 
@@ -1973,6 +1975,7 @@ then
 else
   spotresource="en_2+2"
 fi
+local oldd=`pwd`
 cd m4_aspotlightdir
 \$envbindir/sematree acquire spotlock -1
 @< check listener on host, port @($spotlighthost@,$spotlightport@) @>
@@ -2689,7 +2692,7 @@ JAVAMOD2=eu.fbk.timepro.TimeProEmptyTimex
 @% java  -Dfile.encoding=UTF8 -cp $JAVACP1 $JAVAMOD1 $CHUNKIN $FILETXP "$BEGINTIME" TIMEX3 | \
 @%  java -Dfile.encoding=UTF8 -cp $JAVACP2 $JAVAMOD2 $FILEOUT
 java -Xmx$JAVAMAXHEAP  -Dfile.encoding=UTF8 -cp $JAVACP1 $JAVAMOD1 $CHUNKIN $FILETXP "$BEGINTIME" TIMEX3 > $mytemp
-cat $mytemp | java  -Dfile.encoding=UTF8 -cp $JAVACP2 $JAVAMOD2 $FILEOUT
+cat $mytemp | java -Xmx$JAVAMAXHEAP -Dfile.encoding=UTF8 -cp $JAVACP2 $JAVAMOD2 $FILEOUT
 
 
 rm $FILETXP
@@ -3072,7 +3075,7 @@ then
 else
   nercmodel=\$modulesdir/m4_nercmodeldir/en/m4_en_nercmodel
 fi
-java -jar \$JAR tag -m $nercmodel
+java -Xmx1500m -jar \$JAR tag -m $nercmodel
 @| @}
 
 

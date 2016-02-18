@@ -209,16 +209,12 @@ m4_define(m4_ned_commitname, d35d4df5cb71940bf642bb1a83e2b5b7584010df)m4_dnl
 m4_define(m4_neddir, ixa-pipe-ned)m4_dnl  Subdir. of modules
 m4_dnl m4_define(m4_nedjar, ixa-pipe-ned-1.0.jar)m4_dnl
 m4_define(m4_nedjar, ixa-pipe-ned-`'m4_ned_version`'.jar)m4_dnl
-m4_define(m4_nedspotmodel_nl_tarball, nl.tar.gz)m4_dnl
-m4_dnl m4_define(m4_nedspotmodel_nl_url, http://spotlight.sztaki.hu/downloads/`'m4_nedspotmodel_nl_tarball)m4_dnl
 m4_dnl m4_define(m4_ned_version, 1.1.4)m4_dnl
 m4_dnl m4_define(m4_nedgit, https://github.com/ixa-ehu/ixa-pipe-ned.git)m4_dnl
 m4_dnl m4_define(m4_ned_commitname, a1787f2996ec90c6ef82356a971808c8b44227df)m4_dnl  
 m4_dnl m4_define(m4_neddir, ixa-pipe-ned)m4_dnl  Subdir. of modules
 m4_dnl m4_dnl m4_define(m4_nedjar, ixa-pipe-ned-1.0.jar)m4_dnl
 m4_dnl m4_define(m4_nedjar, ixa-pipe-ned-`'m4_ned_version`'.jar)m4_dnl
-m4_dnl m4_define(m4_nedspotmodel_nl_tarball, nl.tar.gz)m4_dnl
-m4_define(m4_nedspotmodel_nl_url, http://spotlight.sztaki.hu/downloads/`'m4_nedspotmodel_nl_tarball)m4_dnl
 m4_define(m4_nedscript, ned)m4_dnl
 m4_define(m4_wikipediadbmodule, wikipedia-db)m4_dnl
 m4_define(m4_wikipediadbmodule_url, http://ixa2.si.ehu.es/ixa-pipes/models/`'wikipediamodule`'.v1.tar.gz)m4_dnl
@@ -520,12 +516,13 @@ m4_define(m4_treetagdir, treetagger)m4_dnl
 m4_dnl
 m4_dnl Spotlight
 m4_dnl
+m4_define(m4_spotlighturl, http://spotlight.sztaki.hu)m4_dnl
+m4_dnl m4_define(m4_nedspotmodel_nl_url, m4_spotlighturl`'/downloads/archive/2014/`'m4_spotlight_nl_tarball)m4_dnl
 m4_define(m4_spotlightball, spotlightnl.tgz)m4_dnl
 m4_define(m4_spotlight_host, `localhost')m4_dnl
 m4_define(m4_spotlight_nl_port, 2060)m4_dnl
 m4_define(m4_aspotlightdir, m4_aenvdir/spotlight)m4_dnl
-m4_define(m4_spotlighturl, http://spotlight.sztaki.hu)m4_dnl
-m4_define(m4_spotlight_download_url, m4_spotlighturl/downloads)m4_dnl
+m4_define(m4_spotlight_download_url, m4_spotlighturl/downloads/archive/2014)m4_dnl
 m4_define(m4_spotlightjarversion, 0.7)m4_dnl
 m4_define(m4_simple_spotlightjar, dbpedia-spotlight-`'m4_spotlightjarversion`'.jar)m4_dnl
 m4_define(m4_spotlightjar, dbpedia-spotlight-`'m4_spotlightjarversion`'-jar-with-dependencies-candidates.jar)m4_dnl
