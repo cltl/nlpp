@@ -4201,6 +4201,7 @@ the pipeline.
 ROOT=m4_aprojroot
 TESTDIR=$ROOT/test
 @< function to check/start spotlight @>
+@< function to run a module in the test @>
 TESTIN=\$ROOT/nuweb/test.nl.in.naf
 if 
   [ "$1" == "en" ]
@@ -4217,23 +4218,59 @@ if
  [ "\$naflang" == "nl" ]
 then
 @%    @< annotate dutch document @>
-  cat \$TESTIN    | \$BIND/tok                    > tok.naf
-  cat tok.naf     | \$BIND/mor                    > mor.naf
-  cat mor.naf     | $BIND/nerc                    > nerc.naf
-  cat nerc.naf    | \$BIND/wsd                    > wsd.naf
-  cat wsd.naf     | \$BIND/ned                    > ned.naf
-  cat ned.naf     | \$BIND/heideltime             > times.naf
-  cat times.naf   | \$BIND/onto                   > onto.naf
-  cat onto.naf    | \$BIND/srl                    > srl.naf
-  cat srl.naf     | \$BIND/m4_nomeventscript      > nomev.naf
-  cat nomev.naf   | \$BIND/srl-dutch-nominals     > psrl.naf
-  cat psrl.naf    | \$BIND/m4_framesrlscript      > fsrl.naf
-  cat fsrl.naf    | \$BIND/m4_opiniscript         > opin.naf
-  cat opin.naf    | \$BIND/m4_evcorefscript       > out.naf
+@%   cat \$TESTIN    | \$BIND/tok                    > tok.naf
+runmodule \$TESTIN    tok                     tok.naf
+runmodule tok.naf     mor                     mor.naf
+runmodule mor.naf     nerc                    nerc.naf
+runmodule nerc.naf    wsd                     wsd.naf
+runmodule wsd.naf     ned                     ned.naf
+runmodule ned.naf     heideltime              times.naf
+runmodule times.naf   onto                    onto.naf
+runmodule onto.naf    srl                     srl.naf
+runmodule srl.naf     m4_nomeventscript       nomev.naf
+runmodule nomev.naf   srl-dutch-nominals      psrl.naf
+runmodule psrl.naf    m4_framesrlscript       fsrl.naf
+runmodule fsrl.naf    m4_opiniscript          opin.naf
+runmodule opin.naf    m4_evcorefscript        out.naf
 else
   @< annotate english document @>
 fi
 @| @}
+
+The following function, runmodule, applies a module on a naf
+file. When the module results in error, the function  exits the script
+with the error code of the failing module. 
+
+@d function to run a module in the test @{@%
+function runmodule {
+  local infile=$1
+  local modulecommand=\$BIND/$2
+  local outfile=$3
+  if
+    [ $moduleresult -eq 0 ]
+  then
+    cat $infile | $modulecommand > $outfile
+    moduleresult=$?
+    if
+      [ $moduleresult -gt 0 ]
+    then
+      failmodule=$modulecommand
+       echo "Failed: module $modulecommand; result $moduleresult" >&2
+       exit $moduleresult
+    else
+       echo "Completed: module $modulecommand; result $moduleresult" >&2
+    fi
+  fi  
+}
+@| @}
+
+Initialize the variable \verb|moduleresult|:
+
+@d function to run a module in the test @{@%
+export moduleresult=0
+@| moduleresult @}
+
+
 
 Correct sequence of the modules in the Dutch pipeline:
 
@@ -4255,38 +4292,38 @@ Correct sequence of the modules in the Dutch pipeline:
 
 
 @d annotate dutch document @{@%
-cat \$TESTIN    | \$BIND/tok                    > tok.naf
-cat tok.naf     | \$BIND/mor                    > mor.naf
-cat mor.naf     | $BIND/nerc                    > nerc.naf
-cat nerc.naf    | \$BIND/wsd                    > wsd.naf
-cat wsd.naf     | \$BIND/ned                    > ned.naf
-cat ned.naf     | \$BIND/heideltime             > times.naf
-cat times.naf   | \$BIND/onto                   > onto.naf
-cat onto.naf    | \$BIND/srl                    > srl.naf
-cat srl.naf     | \$BIND/m4_nomeventscript      > nomev.naf
-cat nomev.naf   | \$BIND/postsrl                > psrl.naf
-cat psrl.naf    | \$BIND/m4_framesrlscript      > fsrl.naf
-cat fsrl.naf    | \$BIND/m4_opiniscript         > opin.naf
-cat opin.naf    | \$BIND/m4_evcorefscript       > out.naf
+runmodule \$TESTIN    tok                     tok.naf
+runmodule tok.naf     mor                     mor.naf
+runmodule mor.naf     nerc                    nerc.naf
+runmodule nerc.naf    wsd                     wsd.naf
+runmodule wsd.naf     ned                     ned.naf
+runmodule ned.naf     heideltime              times.naf
+runmodule times.naf   onto                    onto.naf
+runmodule onto.naf    srl                     srl.naf
+runmodule srl.naf     m4_nomeventscript       nomev.naf
+runmodule nomev.naf   srl-dutch-nominals      psrl.naf
+runmodule psrl.naf    m4_framesrlscript       fsrl.naf
+runmodule fsrl.naf    m4_opiniscript          opin.naf
+runmodule opin.naf    m4_evcorefscript        out.naf
 @| @}
 
 @d annotate english document @{@%
-  cat \$TESTIN    | \$BIND/tok                    > tok.naf
-  cat tok.naf     | \$BIND/topic                  > top.naf
-  cat top.naf     | \$BIND/pos                    > pos.naf
-  cat pos.naf     | \$BIND/constpars              > consp.naf
-  cat consp.naf   | \$BIND/nerc                   > nerc.naf
-  cat nerc.naf    | \$BIND/nedrer                 > nedr.naf
-  cat nedr.naf    | \$BIND/wikify                 > wikif.naf
-  cat wikif.naf   | \$BIND/ukb                    > ukb.naf
-  cat ukb.naf     | \$BIND/ewsd                   > ewsd.naf
-  cat ewsd.naf    | \$BIND/eSRL                   > esrl.naf
-  cat esrl.naf    | \$BIND/FBK-time               > time.naf
-  cat time.naf    | \$BIND/FBK-temprel            > trel.naf
-  cat trel.naf    | \$BIND/FBK-causalrel          > crel.naf
-  cat crel.naf    | \$BIND/evcoref                > ecrf.naf
-  cat ecrf.naf    | \$BIND/factuality             > fact.naf
-  cat fact.naf    | \$BIND/m4_opiniscript         > out.naf
+  runmodule \$TESTIN    tok                     tok.naf
+  runmodule tok.naf     topic                   top.naf
+  runmodule top.naf     pos                     pos.naf
+  runmodule pos.naf     constpars               consp.naf
+  runmodule consp.naf   nerc                    nerc.naf
+  runmodule nerc.naf    nedrer                  nedr.naf
+  runmodule nedr.naf    wikify                  wikif.naf
+  runmodule wikif.naf   ukb                     ukb.naf
+  runmodule ukb.naf     ewsd                    ewsd.naf
+  runmodule ewsd.naf    eSRL                    esrl.naf
+  runmodule esrl.naf    FBK-time                time.naf
+  runmodule time.naf    FBK-temprel             trel.naf
+  runmodule trel.naf    FBK-causalrel           crel.naf
+  runmodule crel.naf    evcoref                 ecrf.naf
+  runmodule ecrf.naf    factuality              fact.naf
+  runmodule fact.naf    m4_opiniscript          out.naf
 @| @}
 
 \subsection{Logging}
