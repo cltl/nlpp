@@ -4412,7 +4412,6 @@ the pipeline.
 #!/bin/bash
 ROOT=m4_aprojroot
 TESTDIR=$ROOT/test
-@< function to check/start spotlight @>
 @< function to run a module in the test @>
 TESTIN=\$ROOT/nuweb/test.nl.in.naf
 if 
