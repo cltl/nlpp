@@ -111,6 +111,7 @@ sources : nlpp.w $(DIRS) $(NUWEB)
 	$(NUWEB) nlpp.w
 	chmod 775  ../bin/install-modules
 	chmod 775 /mnt/sdb1/nlpp/bin/langdetect
+	chmod 775  ../bin/check_start_spotlight
 	chmod -R 775  ../bin/*
 	chmod -R 775  ../env/bin/*
 	
