@@ -110,10 +110,9 @@ $(DIRS) :
 sources : nlpp.w $(DIRS) $(NUWEB)
 	$(NUWEB) nlpp.w
 	chmod 775  ../bin/install-modules
-	chmod 775 /home/phuijgen/nlp/nlpp/bin/langdetect
 	chmod -R 775  ../bin/*
 	chmod -R 775  ../env/bin/*
-	
+
 
 transplant :
 	touch a_nlpp.w

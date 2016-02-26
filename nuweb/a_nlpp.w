@@ -24,6 +24,7 @@ m4_sinclude(../../local.m4)m4_dnl
 \newcommand{\SRL}{\textsc{srl}}
 \newcommand{\UKB}{\textsc{ukb}}
 \newcommand{\WSD}{\textsc{wsd}}
+\newcommand{\XML}{\textsc{xml}}
 \def\CaptionTextFont{\small\slshape}
 \title{\thedoctitle}
 \author{\theauthor}
@@ -97,7 +98,7 @@ Table~\ref{tab:installed_modules}%
       \NED{}-reranker  &                  & m4_nedrertex       & \verb|m4_nedrerdir|       \\
       Wikify           &                  & m4_wikifyname      & \verb|m4_wikifydir|       \\
       factuality       &                  &                    & \verb|m4_factualitydir|   \\
-      Corefgraph       &                  &                    & \verb|m4_corefdir|        \\
+@%      Corefgraph       &                  &                    & \verb|m4_corefdir|        \\
       Opinion-miner    & m4_opinitex      & m4_opinitex        & \\
       Eventcoref       & m4_evcoreftex    & m4_evcoreftex      & \\
     \end{tabular}
@@ -1016,6 +1017,7 @@ Install python packages:
 @d install python packages @{@%
 pip install lxml
 pip install pyyaml
+pip install --upgrade m4_pynaf_gitpip_url
 @| lxml pyyaml @}
 
 
@@ -1326,6 +1328,59 @@ then
 fi
 @|hg @}
 
+\subsection{Parameters in module-scripts}
+\label{sec:modulescriptparameters}
+
+Some modules need parameters. All modules need a language
+specification. The language can be passed as exported variable
+\verb|naflang|, but it can also be passed as argument
+\verb|-l|. Furthermore, some modules need contact with a Spotlight
+server. With the arguments \verb|-h| and \verb|-b| the host and port
+of a running Spotlight-server can be passed.
+
+The code to obtain command-line arguments in Bash has been obtained
+from
+\href{http://stackoverflow.com/questions/192249/how-do-i-parse-command-line-arguments-in-bash}{Stackoverflow}. The
+following fragment reads the arguments \verb|-l language|, 
+\verb|-h spotlighthost| and \verb|-p spotlightport|:
+
+
+
+@d get commandline-arguments @{@%
+while [[ $# > 1 ]]
+do
+  key="$1"
+
+  case $key in
+    -l|--language)
+      naflang="$2"
+      shift # past argument
+    ;;
+    -h|--spothost)
+      spotlighthost="$2"
+      shift # past argument
+    ;;
+    -p|--spotport)
+    spotlightport="$2"
+    shift # past argument
+    ;;
+    *)
+            # unknown option
+    ;;
+  esac
+  shift # past argument or value
+done
+@| @}
+
+Nearly every modulescript needs to know the language. It would be
+possible to extract the language from the \XML{} code, but that is
+complicated and time-consuming. Therefore, if the language is not
+present as exported variable or as argument, abort execution.
+
+@d get commandline-arguments @{@%
+@< abort when the language is not English or Dutch @>
+@| @}
+
 
 
 
@@ -1378,6 +1433,7 @@ export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
 export LANGUAGE=en_US.UTF-8
 ROOT=\$piperoot
+@< check/set naflang variable @>
 MODDIR=\$modulesdir/<!!>@1<!!>
 @| @}
 
@@ -1412,23 +1468,33 @@ for k in root.attrib:
 print language
 @| @}
 
-@o m4_bindir/langdetect @{@%
-@< start of module-script @(@) @>
-echo `cat | python $envbindir/langdetect.py`
-@| @}
-
-@d make scripts executable @{@%
-chmod 775 m4_abindir/langdetect
-@| @}
-
 @d set the language variable @{@%
 naflang=`cat @1 | m4_abindir/langdetect`
 export naflang
 @| naflang @}
 
+@d check/set naflang variable @{@%
+if
+  [ "\$naflang" == "" ]
+then
+  @< set the language variable @>
+fi
+@| @}
+
+
+@% @o m4_bindir/langdetect @{@%
+@% @< start of module-script @(@) @>
+@% echo `cat | python $envbindir/langdetect.py`
+@% @| @}
+@% 
+@% @d make scripts executable @{@%
+@% chmod 775 m4_abindir/langdetect
+@% @| @}
+
+
 
 Currently, the pipeline understands only English and Dutch. The
-follosing macro aborts pipeline processing when the language is not
+following macro aborts pipeline processing when the language is not
 English or Dutch.
 
 @d abort when the language is not English or Dutch @{@%
@@ -1436,7 +1502,8 @@ if
   [ ! "$naflang" == 'nl' ] && [ ! "$naflang" == "en" ]
 then
   echo Language of NAF document not set. >&2
-  echo Set variable "naflang" to "en" of "nl" and try again. >&2
+  echo Either set variable "naflang" to "en" of "nl" and try again, >&2
+  echo or start with argument "-l <lang>" , >&2
   echo Aborting ':-(' >&2
   exit 4
 fi
@@ -1773,6 +1840,8 @@ tar -xzf m4_wikipediadb_tarball
 rm  m4_wikipediadb_tarball
 @| @}
 
+
+
 The macro \verb|check/start spotlight| does the following:
 
 \begin{enumerate}
@@ -1792,33 +1861,152 @@ The macro \verb|check/start spotlight| does the following:
 @%   \verb|spotlightrunning| to 0.
 \end{enumerate}
 
-@d function to check/start spotlight @{@%
-function check_start_spotlight {
-  local oldd=`pwd`
-  naflang=$1
-  @< get spotlight language parameters @>
-  spotlighthost=m4_spotlight_host
-  @< check listener on host, port @($spotlighthost@,$spotlightport@) @>
-  if
-    [ \$spotlightrunning -ne 0 ]
-  then
-    if 
-      [ ! "$spotlighthost" == "localhost" ]
-    then
-      export spotlighthost="localhost"
-      @< check listener on host, port @($spotlighthost@,$spotlightport@) @>
-    fi
-  fi
-  if
-    [ \$spotlightrunning -ne 0 ]
-  then
-    @< start the Spotlight server on localhost @>
-  fi
-  export spotlighthost
-  export spotlightrunning
-  cd $oldd
-}
+Start Spotlight if it doesn't run already. Spotlight ought to run on
+localhost unless variable \verb|spotlighthost| exists. In that case,
+check whether a Spotlight server can be contacted on that
+host. Otherwise, change \verb|spotlighthost| to \verb|localhost| and
+check whether a Spotlight server runs there. If that is not the case,
+start up a Spotlight server on localhost.  
+
+The following script, \verb|check_start_spotlight|, has the following three
+optional arguments:
+
+\begin{description}
+\item[language:] Default is exported variable \verb|naflang| if it
+  exists, or \verb|en|.
+\item[spotlighthost:] Name of a host that probably runs a
+  Spotlightserver. Default: exported variable \verb|spotlighthost| if
+  it exists, or \verb|localhost|.
+\item[spotlightport:] Default: exported variable \verb|spotlightport|
+  if it exists or either m4_spotlight_en_port or m4_spotlight_nl_port for English resp. Dutch.
+\end{description}
+
+@o m4_bindir/check_start_spotlight @{@%
+#!/bin/bash
+source m4_aenvbindir/progenv
+@< get commandline-arguments @>
+@< set default arguments for Spotlight @>
 @| @}
+
+Fill in default values when they cannot be found in exported
+variables nor in command-line arguments.
+
+@d set default arguments for Spotlight @{@%
+if
+  [ "$spotlighthost" == "" ]
+then
+  spotlighthost=m4_spotlight_host
+fi
+if
+  [ "$spotlightport" == "" ]
+then
+  if
+    [ "$naflang" == "nl" ]
+  then
+      spotlightport=m4_spotlight_nl_port
+  else
+      spotlightport=m4_spotlight_en_port
+  fi
+fi
+@| @}
+
+
+@% @d set variables for check\_start\_spotlight @{@%
+@% @< set local variable @(language@,1@,naflang@,en @>
+@% @< set local variable @(spothost@,2@) @>
+@% 
+@% @| @}
+@% 
+@% @d set variable as argument or as default @{@%
+@% local @1=@4
+@% if
+@%   [ ! "\$@3" == "" ]
+@% then
+@%   @1=\$@3
+@% fi
+@% if
+@%   [ ! "\$@2" == "" ]
+@% then
+@%   @1=\$@2
+@% fi
+@% @| @}
+
+
+
+@o m4_bindir/check_start_spotlight @{@%
+@< check listener on host, port @($spotlighthost@,$spotlightport@) @>
+if
+  [ \$spotlightrunning -ne 0 ]
+then
+  if 
+    [ ! "$spotlighthost" == "localhost" ]
+  then
+    export spotlighthost="localhost"
+    @< check listener on host, port @($spotlighthost@,$spotlightport@) @>
+  fi
+fi
+if
+  [ \$spotlightrunning -ne 0 ]
+then
+  @< start the Spotlight server on localhost @>
+fi
+echo $spotlighthost:$spotlightport
+@| @}
+
+@d make scripts executable @{@%
+chmod 775  m4_bindir/check_start_spotlight
+@| @}
+
+Use function \verb|check_start_spotlight| to find and exploit a
+running Spotlight-server or to die (with exit code 5) if no server can be found or
+created. The macro uses implicitly the exported variables
+\verb|spotlighthost| and \verb|spotlightport| if they exist. 
+
+@d find a spotlightserver or exit @{@%
+spothostport=`m4_abindir/check_start_spotlight -l \$naflang`
+export spotlighthost=`echo \$spothostport | gawk -F ":" '{print $1}'`
+export spotlightport=`echo \$spothostport | gawk -F":" '{print $2}'`
+echo "Spotlight server found on $spothostport." >&2 
+if
+  [ "\$spotlighthost" == "none" ]
+then
+  echo "No Spotlight-server found."
+  exit 5
+fi
+@| @}
+
+
+
+
+@% @d function to check/start spotlight @{@%
+@% function check_start_spotlight {
+@%   local oldd=`pwd`
+@%   @< set variables for check\_start\_spotlight @>
+@% 
+@%   naflang=$1
+@%   @< get spotlight language parameters @>
+@%   spotlighthost=m4_spotlight_host
+@%   @< check listener on host, port @($spotlighthost@,$spotlightport@) @>
+@%   if
+@%     [ \$spotlightrunning -ne 0 ]
+@%   then
+@%     if 
+@%       [ ! "$spotlighthost" == "localhost" ]
+@%     then
+@%       export spotlighthost="localhost"
+@%       @< check listener on host, port @($spotlighthost@,$spotlightport@) @>
+@%     fi
+@%   fi
+@%   if
+@%     [ \$spotlightrunning -ne 0 ]
+@%   then
+@%     @< start the Spotlight server on localhost @>
+@%   fi
+@%   export spotlighthost
+@%   export spotlightrunning
+@%   cd $oldd
+@% }
+@% @| @}
 
 
 @% @o m4_bindir/start_spotlight @{@%
@@ -1887,7 +2075,7 @@ checks whether something in the host listens on the port and sets
 variable \verb|success| accordingly:
 
 @d check listener on host, port @{@%
-exec 6<>/dev/tcp/@1/@2
+exec 6<>/dev/tcp/@1/@2 2>/dev/null
 spotlightrunning=\$?
 exec 6<&-
 exec 6>&-
@@ -1959,13 +2147,14 @@ When trying to start the Spotlight-server on localhost, take care that
 only one process does this. So we do this:
 
 \begin{enumerate}
-\item Acquire a lock.
-\item Check that in the mean time Spotlight has not been started by
-  another process.
-\item Run the Spotlight java program if Spotlight does still not run.
-\item release the lock
+\item Try to acquire a lock without waiting for it.
+\item If we got the lock, run the Spotlight java program in background.
+\item If we got the lock, release it.
+\item If we did not get the lock, wait for the lock to be released by
+  the process that started the spotlight-server.
 \end{enumerate}
 
+But first, we specify the resources for the Spotlight-server.
 
 @d start the Spotlight server on localhost @{@%
 if
@@ -1975,17 +2164,26 @@ then
 else
   spotresource="en_2+2"
 fi
+spotlightjar=dbpedia-spotlight-0.7-jar-with-dependencies-candidates.jar 
+@| @}
+
+
+@d start the Spotlight server on localhost @{@%
 local oldd=`pwd`
 cd m4_aspotlightdir
-\$envbindir/sematree acquire spotlock -1
-@< check listener on host, port @($spotlighthost@,$spotlightport@) @>
+\$envbindir/sematree acquire spotlock 0
+gotit=\$?
 if
- [ ! \$spotlightrunning -eq 0 ]
+  [ \$gotit == 0 ]
 then
-  java -jar -Xmx8g dbpedia-spotlight-0.7-jar-with-dependencies-candidates.jar $spotresource http://localhost:$spotlightport/rest  &
-  @< wait until the spotlight server is up  @>
+  java -jar -Xmx8g \$spotlightjar $spotresource \
+       http://localhost:$spotlightport/rest  &
+  @< wait until the spotlight server is up or faulty  @>
+  \$envbindir/sematree release spotlock
+else
+  @< wait until the spotlight server is up or faulty  @>
 fi
-\$envbindir/sematree release spotlock
+cd \$oldd
 @% [ $progenvset ] || source m4_aenvbindir/progenv
 @% cd m4_aspotlightdir
 @% @% java  -Xmx8g -jar m4_spotlightjar nl http://localhost:m4_spotlight_nl_port/rest
@@ -1994,13 +2192,37 @@ fi
 @% sleep 60
 @| @}
 
-@d wait until the spotlight server is up @{@%
+@% @d wait until the spotlight server is up @{@%
+@% while
+@%   @< check listener on host, port @($spotlighthost@,$spotlightport@) @>
+@%   [ $spotlightrunning -ne 0 ]
+@% do
+@%   sleep 10
+@% done
+@% @| @}
+
+
+When the Sportlight server has been started, it takes op to a minute
+until it really listens on its port. When there is something wrong, it
+will never listen, of course. Therefore, we give it three minutes. If
+after that time still nothing listens, we set \verb|spotlighthost| to
+\verb|none|, indicating that something has gone wrong. 
+
+@d wait until the spotlight server is up or faulty @{@%
+trial=0
+maxtrials=12
 while
+  trial=$((trial+1))
   @< check listener on host, port @($spotlighthost@,$spotlightport@) @>
-  [ $spotlightrunning -ne 0 ]
+  [ $spotlightrunning -ne 0 ] && [ $trial -le $maxtrials ] 
 do
   sleep 10
 done
+if
+  [ spotlightrunning -ne 0 ]
+then
+ export spotlighthost="none"
+fi
 @| @}
 
 
@@ -2443,15 +2665,15 @@ The Wikify module needs DBpedia to generate ``markables''.
 
 @o m4_bindir/wikify @{@%
 @< start of module-script @(m4_wikifydir@) @>
-if
-  [ "$naflang" == "nl" ]
-then
-  spotlightport=m4_spotlight_nl_port
-else
-  spotlightport=m4_spotlight_en_port
-fi
-[ $spotlightrunning ] || source m4_abindir/start-spotlight
-
+@% if
+@%   [ "$naflang" == "nl" ]
+@% then
+@%   spotlightport=m4_spotlight_nl_port
+@% else
+@%   spotlightport=m4_spotlight_en_port
+@% fi
+@% [ $spotlightrunning ] || source m4_abindir/start-spotlight
+@< find a spotlightserver or exit @>
 cd $MODDIR
 java -Xmx1000m -jar ${MODDIR}/ixa-pipe-wikify-1.2.1.jar -s http://$spotlighthost -p $spotlightport 
 @| @}
@@ -2901,26 +3123,29 @@ python ${rootDir}/vua_factuality_naf_wrapper.py -t m4_aenvbindir/timbl -p ${root
 \subsubsection{Nominal coreference-base}
 \label{sec:nomcorefgraph}
 
-Get this thing from Github
-(\url{https://github.com/opener-project/coreference-base/}) and apply
-the instruction of
-\url{https://github.com/opener-project/coreference-base/blob/master/core/README.md}. We
-implement it, but it does not work yet, because it is too picky on the
-structure of the ~NAF~ format.
-
+The source of this module in Github (\url{m4_corefbasegit}) does not seem to work well with
+\NAF{}. Therefore, we use the version from the official English
+pipeline, that we find in the snapshot.
+ 
 
 \paragraph{Module}
 
+@% @d install coreference-base @{@%
+@% MODNAM=coreference-base
+@% DIRN=m4_corefbasedir
+@% GITU=m4_corefbasegit
+@% GITC=m4_corefbase_commitname
+@% @< install from github @>
+@% @% pip install --upgrade --user hg+https://bitbucket.org/Josu/pykaf#egg=pykaf
+@% @% pip install --upgrade --user networkx
+@% pip install --upgrade  hg+https://bitbucket.org/Josu/pykaf#egg=pykaf
+@% pip install --upgrade  networkx
+@% @| @}
+
+
 @d install coreference-base @{@%
-MODNAM=coreference-base
-DIRN=m4_corefbasedir
-GITU=m4_corefbasegit
-GITC=m4_corefbase_commitname
-@< install from github @>
-@% pip install --upgrade --user hg+https://bitbucket.org/Josu/pykaf#egg=pykaf
-@% pip install --upgrade --user networkx
-pip install --upgrade  hg+https://bitbucket.org/Josu/pykaf#egg=pykaf
-pip install --upgrade  networkx
+cd \$modulesdir
+tar -xzf m4_snapshotsocket/m4_snapshotdirectory/m4_corefbase_ball
 @| @}
 
 
@@ -2928,8 +3153,9 @@ pip install --upgrade  networkx
 
 @o m4_bindir/m4_corefbasescript @{@%
 @< start of module-script @(m4_corefbasedir@) @>
-cd $MODDIR/core
-cat | python -m corefgraph.process.file --language nl --singleton --sieves NO
+cd $MODDIR/corefgraph
+cat | python -m corefgraph.process.file --reader NAF --writer NAF
+
 @| @}
 
 @%@d make scripts executable @{@%
@@ -3422,20 +3648,17 @@ NED needs to contact a Spotlight-server.
 
 @o m4_bindir/m4_nedscript @{@%
 @< start of module-script @(@) @>
-#!/bin/bash
-source m4_aenvbindir/progenv
-@% @< set variables that point to the directory-structure @>
-@% @< set up programming environment @>
 ROOT=\$piperoot
 JARDIR=\$jarsdir
-if
-  [ "$naflang" == "nl" ]
-then
-  spotlightport=m4_spotlight_nl_port
-else
-  spotlightport=m4_spotlight_en_port
-fi
-[ $spotlightrunning ] || source m4_abindir/start-spotlight
+@% if
+@%   [ "$naflang" == "nl" ]
+@% then
+@%   spotlightport=m4_spotlight_nl_port
+@% else
+@%   spotlightport=m4_spotlight_en_port
+@% fi
+@% [ $spotlightrunning ] || source m4_abindir/start-spotlight
+@< find a spotlightserver or exit @>
 cat | java -Xmx1000m -jar \$jarsdir/m4_nedjar -H http://$spotlighthost -p $spotlightport -e candidates -i \$envdir/spotlight/wikipedia-db -n nlEn
 @% cat | java -jar \$jarsdir/m4_nedjar  -p 2060  -n nl
 @| @}
@@ -4200,7 +4423,6 @@ the pipeline.
 #!/bin/bash
 ROOT=m4_aprojroot
 TESTDIR=$ROOT/test
-@< function to check/start spotlight @>
 @< function to run a module in the test @>
 TESTIN=\$ROOT/nuweb/test.nl.in.naf
 if 
@@ -4213,7 +4435,7 @@ mkdir -p $TESTDIR
 cd $TESTDIR
 @< set the language variable @($TESTIN@)@>
 @< select language-dependent features @>
-check_start_spotlight $naflang
+@< find a spotlightserver or exit @>
 if
  [ "\$naflang" == "nl" ]
 then
@@ -4313,11 +4535,13 @@ runmodule opin.naf    m4_evcorefscript        out.naf
   runmodule top.naf     pos                     pos.naf
   runmodule pos.naf     constpars               consp.naf
   runmodule consp.naf   nerc                    nerc.naf
+  runmodule nerc.naf    ned                     ned.naf
   runmodule nerc.naf    nedrer                  nedr.naf
   runmodule nedr.naf    wikify                  wikif.naf
   runmodule wikif.naf   ukb                     ukb.naf
   runmodule ukb.naf     ewsd                    ewsd.naf
-  runmodule ewsd.naf    eSRL                    esrl.naf
+  runmodule ewsd.naf    coreference-base        coref.naf
+  runmodule coref.naf   eSRL                    esrl.naf
   runmodule esrl.naf    FBK-time                time.naf
   runmodule time.naf    FBK-temprel             trel.naf
   runmodule trel.naf    FBK-causalrel           crel.naf

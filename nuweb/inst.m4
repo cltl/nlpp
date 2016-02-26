@@ -189,13 +189,6 @@ m4_define(m4_nerc_sonar_script, nerc_sonar)m4_dnl
 m4_dnl m4_define(m4_nercmodelsball, EHU-nerc.tgz)m4_dnl
 m4_define(m4_nercmodelsball, nerc-models-nl.tgz)m4_dnl
 m4_dnl
-m4_dnl Coreference-base
-m4_dnl
-m4_define(m4_corefbasedir, coreference-base)m4_dnl  Subdir. of modules
-m4_define(m4_corefbasescript, coreference-base)m4_dnl
-m4_define(m4_corefbasegit, https://github.com/opener-project/coreference-base.git)m4_dnl
-m4_define(m4_corefbase_commitname, `bfa5aec0fa498e57fe14dd4d2c51365dd09a0757')m4_dnl
-m4_dnl
 m4_dnl LU2SYN
 m4_dnl
 m4_define(m4_lu2syndir, lexicalunitconvertor)m4_dnl
@@ -421,11 +414,19 @@ m4_define(m4_factualityname, factuality)m4_dnl
 m4_define(m4_factualitytex, \verb|factuality|)m4_dnl
 m4_define(m4_factualitydir, VUA-factuality.v30)m4_dnl
 m4_define(m4_factualityball, 20151220_VUA-factuality.v30.tgz)m4_dnl
+m4_dnl m4_dnl
+m4_dnl m4_dnl Corefgraph (=coreference-base)
+m4_dnl m4_define(m4_corefgraphname, corefgraph)m4_dnl
+m4_dnl m4_define(m4_coreftex, \verb|corefgraph|)m4_dnl
+m4_dnl m4_define(m4_corefdir, EHU-corefgraph.v30)m4_dnl
 m4_dnl
-m4_dnl Corefgraph
-m4_define(m4_corefgraphname, corefgraph)m4_dnl
-m4_define(m4_coreftex, \verb|corefgraph|)m4_dnl
-m4_define(m4_corefdir, EHU-corefgraph.v30)m4_dnl
+m4_dnl Coreference-base
+m4_dnl
+m4_define(m4_corefbasedir, EHU-corefgraph.v30)m4_dnl  Subdir. of modules
+m4_define(m4_corefbasescript, coreference-base)m4_dnl
+m4_define(m4_corefbasegit, https://github.com/opener-project/coreference-base.git)m4_dnl
+m4_define(m4_corefbase_ball, 20151220_EHU-corefgraph.v30.tgz)m4_dnl
+m4_define(m4_corefbase_commitname, `bfa5aec0fa498e57fe14dd4d2c51365dd09a0757')m4_dnl
 m4_dnl
 m4_dnl nomevents
 m4_dnl
@@ -478,6 +479,9 @@ m4_dnl KafNafParserPy
 m4_define(m4_kafnafversion, `feb 1, 2015')m4_dnl
 m4_define(m4_kafnafgit, https://github.com/cltl/KafNafParserPy.git)m4_dnl
 m4_define(m4_kafnafdir, python/KafNafParserPy)m4_dnl
+m4_dnl
+m4_dnl Pynaf
+m4_define(m4_pynaf_gitpip_url, `git+https://github.com/ixa-ehu/pynaf.git')m4_dnl
 m4_dnl
 m4_dnl VUA-pylib
 m4_define(m4_vuapylibgit, https://github.com/cltl/VUA_pylib.git)m4_dnl
