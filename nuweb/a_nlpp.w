@@ -1433,6 +1433,7 @@ export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
 export LANGUAGE=en_US.UTF-8
 ROOT=\$piperoot
+@< check/set naflang variable @>
 MODDIR=\$modulesdir/<!!>@1<!!>
 @| @}
 
@@ -1467,19 +1468,29 @@ for k in root.attrib:
 print language
 @| @}
 
-@o m4_bindir/langdetect @{@%
-@< start of module-script @(@) @>
-echo `cat | python $envbindir/langdetect.py`
-@| @}
-
-@d make scripts executable @{@%
-chmod 775 m4_abindir/langdetect
-@| @}
-
 @d set the language variable @{@%
 naflang=`cat @1 | m4_abindir/langdetect`
 export naflang
 @| naflang @}
+
+@d check/set naflang variable @{@%
+if
+  [ "\$naflang" == "" ]
+then
+  @< set the language variable @>
+fi
+@| @}
+
+
+@% @o m4_bindir/langdetect @{@%
+@% @< start of module-script @(@) @>
+@% echo `cat | python $envbindir/langdetect.py`
+@% @| @}
+@% 
+@% @d make scripts executable @{@%
+@% chmod 775 m4_abindir/langdetect
+@% @| @}
+
 
 
 Currently, the pipeline understands only English and Dutch. The
