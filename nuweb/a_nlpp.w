@@ -1372,14 +1372,14 @@ do
 done
 @| @}
 
-Nearly every modulescript needs to know the language. It would be
-possible to extract the language from the \XML{} code, but that is
-complicated and time-consuming. Therefore, if the language is not
-present as exported variable or as argument, abort execution.
-
-@d get commandline-arguments @{@%
-@< abort when the language is not English or Dutch @>
-@| @}
+@% Nearly every modulescript needs to know the language. It would be
+@% possible to extract the language from the \XML{} code, but that is
+@% complicated and time-consuming. Therefore, if the language is not
+@% present as exported variable or as argument, abort execution.
+@% 
+@% @d get commandline-arguments @{@%
+@% @< abort when the language is not English or Dutch @>
+@% @| @}
 
 
 
@@ -1428,14 +1428,25 @@ with the name of the module-directory as argument:
 
 @d start of module-script @{@%
 #!/bin/bash
+@< get the path to the module-script @>
 source m4_aenvbindir/progenv
 export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
 export LANGUAGE=en_US.UTF-8
 ROOT=\$piperoot
-@< check/set naflang variable @>
 MODDIR=\$modulesdir/<!!>@1<!!>
+@< run in subshell when naflang is not known @>
+@< run only if language is English or Dutch @>
 @| @}
+
+Set variable \verb|scriptpath| to the full path of the script that is
+running, order to be able to re-run it. 
+
+@d get the path to the module-script @{@%
+scriptdir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+scriptname=${0##*/}
+scriptpath=$scriptdir/$scriptname
+@|scriptpath @}
 
 
 
@@ -1445,8 +1456,8 @@ MODDIR=\$modulesdir/<!!>@1<!!>
 The following script \verb|m4_envbindir/langdetect.py| discerns the language of a
 \NAF{} document. If it cannot find that attribute it
 prints \verb|unknown|.
- The macro \verb|set the language variable| uses this
-script to set variable \verb|lang|. All pipeline modules expect that
+The macro \verb|set the language variable| uses this
+script to set variable \verb|naflang|. All pipeline modules expect that
 this veriable has been set.
 
 
@@ -1473,13 +1484,49 @@ naflang=`cat @1 | m4_abindir/langdetect`
 export naflang
 @| naflang @}
 
-@d check/set naflang variable @{@%
+The module-scripts depend on the existence of variable \verb|naflang|.
+In most cases this is not a problem because the scripts run in a
+surrounding script that sets \verb|naflang|. However, a users may
+occasionally run a module-script stand-alone e.g. to debug. In that case, we can
+read the language from the \NAF{}, set variable \verb|naflang|, and
+then run the module-script in a subshell. We assume that variable
+\verb|scriptpath| contains the pathe of the script itself. 
+
+The macro does the following if \verb|naflang| has not been set:
+
+\begin{enumerate}
+\item Save the content of standard in to a temporary file.
+\item Run \verb|langdetect| with the temporary file as input and set
+  the \verb|naflang| variable.
+\item Run the script \verb|\$scriptpath| (i.e. itself) with the
+  temporary file as input.
+\item Remove the temporary file.
+\item Exit itself with the errorcode of the sub-script that it has run.
+\end{enumerate}
+
+@d run in subshell when naflang is not known @{@%
 if
   [ "\$naflang" == "" ]
 then
-  @< set the language variable @>
+  naffile=`mktemp -t naf.XXXXXX`
+  cat >$naffile
+  naflang=`cat $naffile | python $envbindir/langdetect.py` 
+  export naflang
+  cat $naffile | $scriptpath
+  result=$?
+  rm $naffile
+  exit $result
 fi
 @| @}
+
+@d run only if language is English or Dutch @{@%
+if
+  [ ! "$naflang" == "nl" ] && [ ! "$naflang" == "en" ]
+then
+  exit m4_err_ill_language
+fi
+@| @}
+
 
 
 @% @o m4_bindir/langdetect @{@%
@@ -1493,21 +1540,21 @@ fi
 
 
 
-Currently, the pipeline understands only English and Dutch. The
-following macro aborts pipeline processing when the language is not
-English or Dutch.
-
-@d abort when the language is not English or Dutch @{@%
-if
-  [ ! "$naflang" == 'nl' ] && [ ! "$naflang" == "en" ]
-then
-  echo Language of NAF document not set. >&2
-  echo Either set variable "naflang" to "en" of "nl" and try again, >&2
-  echo or start with argument "-l <lang>" , >&2
-  echo Aborting ':-(' >&2
-  exit 4
-fi
-@| @}
+@% Currently, the pipeline understands only English and Dutch. The
+@% following macro aborts pipeline processing when the language is not
+@% English or Dutch.
+@% 
+@% @d abort when the language is not English or Dutch @{@%
+@% if
+@%   [ ! "$naflang" == 'nl' ] && [ ! "$naflang" == "en" ]
+@% then
+@%   echo Language of NAF document not set. >&2
+@%   echo Either set variable "naflang" to "en" of "nl" and try again, >&2
+@%   echo or start with argument "-l <lang>" , >&2
+@%   echo Aborting ':-(' >&2
+@%   exit 4
+@% fi
+@% @| @}
  
 
 
@@ -2427,7 +2474,7 @@ The script runs the tokenizerscript.
 
 @o m4_bindir/m4_tokenizerscript @{@%
 @< start of module-script @(\$jarsdir@)@>
-@< abort when the language is not English or Dutch @>
+@% @< abort when the language is not English or Dutch @>
 JARFILE=\$jarsdir/m4_tokenizerjar
 java -Xmx1000m  -jar \$JARFILE tok -l \$naflang --inputkaf
 @| @}
@@ -2456,7 +2503,7 @@ gawk '{gsub("/home/newsreader/components", subs); print}' subs=$modulesdir old.c
 
 @o m4_bindir/topic @{@%
 @< start of module-script @(m4_topictooldir@) @>
-@< abort when the language is not English or Dutch @>
+@% @< abort when the language is not English or Dutch @>
 @% rootDir=\$modulesdir/EHU-topic.v30
 java -Xmx1000m -jar $MODDIR/ixa-pipe-topic-1.0.1.jar -p $MODDIR/conf.prop
 @| @}
@@ -4307,52 +4354,94 @@ cat | java -Xmx812m -cp $JAR $JAVAMODULE --framenet-lu $RESOURCESDIR/nl-luIndex.
 \subsubsection{Opinion miner}
 \label{sec:opinimin}
 
-To run the opinion-miner, the following things are needed:
+Get \verb|opinion-miner_deluxePP| from Github. 
 
-\begin{itemize}
-\item SVMlight
-\item crfsuite
-\item vua-pylib
-\end{itemize}
+@% To run the opinion-miner, the following things are needed:
+@% 
+@% \begin{itemize}
+@% \item SVMlight
+@% \item crfsuite
+@% \item vua-pylib
+@% \end{itemize}
 
 \paragraph{Module}
 
-The module can be cloned from Github. However, currently there are
-problems with the Github installation. Therefore we borrow the opinion
-miner from the English \textsc{nwr} pipeline.
+Install the module from Github.
 
 @d install the opinion-miner @{@%
-@% @< get or have @(m4_opini_temp_ball@) @>
-cd m4_amoddir
-tar -xzf m4_asocket/m4_snapshotdirectory/m4_opini_temp_ball
+MODNAM=m4_opininame
+DIRN=m4_opininame
+GITU=m4_opinigit
+GITC=m4_opini_commitname
+@< install from github @>
 @| @}
 
-The opinion-miner needs a configuration file that is located in the
-directory where the model-data resides. In this pipeline we will use
-model-data derived from news-articles. An alternative model, derived
-from hotel evaluations can also be used. Put the configuration file in
-the \texttt{etc} subdir and copy it to its proper location during the
-installation of the opinion-miner.
+The module contains a script \verb|install_me.sh| that we will follow
+here. First install the CRF module that comes with the opinion-miner:
 
-@o m4_envetcdir/m4_opini_conf @{@%
-[general]
-output_folder = m4_amoddir/m4_opinidir/final_models/ennl/news_cfg1
-
-[crfsuite]
-path_to_binary = m4_aenvbindir/crfsuite
-
-[svmlight]
-path_to_binary_learn = m4_aenvbindir/svm_learn
-path_to_binary_classify = m4_aenvbindir/svm_classify
-@| @}
 
 @d install the opinion-miner @{@%
-cd m4_opinidir
-cat m4_aenvetcdir/m4_opini_conf | \
-  sed s/ennl/nl/g > \$modulesdir/m4_opinidir/m4_opini_dutchmodel_subdir/config.cfg
-cat m4_aenvetcdir/m4_opini_conf | \
-  sed s/ennl/en/g > \$modulesdir/m4_opinidir/m4_opini_engmodel_subdir/config.cfg
+moduledir=$modulesdir/m4_opinidir
+#Install CRF++
+crfdir=`mktemp -d -t crf.XXXXXX`
+cd $crfdir
+@% tar xvzf CRF++-0.58.tar.gz
+tar xzf $moduledir/crf_lib/CRF++-0.58.tar.gz
+cd CRF++-0.58
+./configure --prefix=$envdir
+make
+make install
+echo "PATH_TO_CRF_TEST='$envbindir/crf_test'" > $moduledir/path_crf.py
+cd $moduledir
+rm -rf $crfdir
 @| @}
+
+
+Next, download the trained models. 
+
+@d install the opinion-miner @{@%
+##Download the models
+echo Downloading the trained models.
+tar -xzf \$snapshotsocket/m4_snapshotdirectory/m4_opimodelball
+@| @}
+
+
+@% The module can be cloned from Github. However, currently there are
+@% problems with the Github installation. Therefore we borrow the opinion
+@% miner from the English \textsc{nwr} pipeline.
+@% 
+@% @d install the opinion-miner @{@%
+@% @% @< get or have @(m4_opini_temp_ball@) @>
+@% cd m4_amoddir
+@% tar -xzf m4_asocket/m4_snapshotdirectory/m4_opini_temp_ball
+@% @| @}
+@% 
+@% The opinion-miner needs a configuration file that is located in the
+@% directory where the model-data resides. In this pipeline we will use
+@% model-data derived from news-articles. An alternative model, derived
+@% from hotel evaluations can also be used. Put the configuration file in
+@% the \texttt{etc} subdir and copy it to its proper location during the
+@% installation of the opinion-miner.
+@% 
+@% @o m4_envetcdir/m4_opini_conf @{@%
+@% [general]
+@% output_folder = m4_amoddir/m4_opinidir/final_models/ennl/news_cfg1
+@% 
+@% [crfsuite]
+@% path_to_binary = m4_aenvbindir/crfsuite
+@% 
+@% [svmlight]
+@% path_to_binary_learn = m4_aenvbindir/svm_learn
+@% path_to_binary_classify = m4_aenvbindir/svm_classify
+@% @| @}
+@% 
+@% @d install the opinion-miner @{@%
+@% cd m4_opinidir
+@% cat m4_aenvetcdir/m4_opini_conf | \
+@%   sed s/ennl/nl/g > \$modulesdir/m4_opinidir/m4_opini_dutchmodel_subdir/config.cfg
+@% cat m4_aenvetcdir/m4_opini_conf | \
+@%   sed s/ennl/en/g > \$modulesdir/m4_opinidir/m4_opini_engmodel_subdir/config.cfg
+@% @| @}
 
 
 
@@ -4390,16 +4479,23 @@ cat m4_aenvetcdir/m4_opini_conf | \
 @o m4_bindir/m4_opiniscript @{@%
 @< start of module-script @(m4_opinidir@) @>
 cd $MODDIR
-export PATH=$PATH:.
-if
- [ "\$naflang" == "nl" ]
-then
- modelconf=\$MODDIR/final_models/nl/news_cfg1
-else
- modelconf=\$MODDIR/final_models/en/news_cfg1
-fi
-python classify_kaf_naf_file.py -m $modelconf
+python tag_file.py -d hotel
 @| @}
+
+
+@% @o m4_bindir/m4_opiniscript @{@%
+@% @< start of module-script @(m4_opinidir@) @>
+@% cd $MODDIR
+@% export PATH=$PATH:.
+@% if
+@%  [ "\$naflang" == "nl" ]
+@% then
+@%  modelconf=\$MODDIR/final_models/nl/news_cfg1
+@% else
+@%  modelconf=\$MODDIR/final_models/en/news_cfg1
+@% fi
+@% python classify_kaf_naf_file.py -m $modelconf
+@% @| @}
 
 @% @o m4_bindir/m4_opiniscript @{@%
 @% #!/bin/bash
