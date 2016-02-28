@@ -1011,6 +1011,9 @@ Install python packages:
 \begin{description}
 \item[lxml:]
 \item[pyyaml:] for coreference-graph
+\item[pynaf:]
+\item[requests:] for networkx
+\item[networkx:] for corefbase. 
 \end{description}
 
 
@@ -1018,7 +1021,9 @@ Install python packages:
 pip install lxml
 pip install pyyaml
 pip install --upgrade m4_pynaf_gitpip_url
-@| lxml pyyaml @}
+pip install --upgrade requests
+pip install --upgrade networkx
+@| lxml pyyaml networkx@}
 
 
 
@@ -1480,7 +1485,7 @@ print language
 @| @}
 
 @d set the language variable @{@%
-naflang=`cat @1 | m4_abindir/langdetect`
+naflang=`cat @1 | m4_aenvbindir/langdetect.py`
 export naflang
 @| naflang @}
 
@@ -1490,7 +1495,7 @@ surrounding script that sets \verb|naflang|. However, a users may
 occasionally run a module-script stand-alone e.g. to debug. In that case, we can
 read the language from the \NAF{}, set variable \verb|naflang|, and
 then run the module-script in a subshell. We assume that variable
-\verb|scriptpath| contains the pathe of the script itself. 
+\verb|scriptpath| contains the path of the script itself. 
 
 The macro does the following if \verb|naflang| has not been set:
 
