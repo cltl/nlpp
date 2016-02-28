@@ -21,6 +21,9 @@ m4_define(m4_moddir, m4_projroot`/modules')m4_dnl     Modules
 m4_define(m4_modulelist, m4_aprojroot/installed_modules)m4_dnl
 m4_dnl m4_define(m4_lisanlproot, /home/phuijgen/nlp)m4_dnl
 m4_dnl
+m4_dnl Error-codes
+m4_define(m4_err_ill_language, 6)m4_dnl
+m4_dnl
 m4_dnl HTML doc generation
 m4_define(m4_htmldocdir, m4_projroot/nuweb/html)m4_dnl . You can change this in a local m4 file.
 m4_define(m4_ahtmldocdir, m4_aprojroot/nuweb/html)m4_dnl
@@ -377,19 +380,22 @@ m4_define(m4_evcorefscript, evcoref)m4_dnl
 m4_define(m4_evcorefjar, EventCoreference-1.0-SNAPSHOT-jar-with-dependencies.jar)m4_dnl
 m4_dnl
 m4_dnl Opinion-miner
-m4_define(m4_opininame, opinion-miner)m4_dnl
+m4_define(m4_opininame, opinion_miner_deluxePP)m4_dnl
+m4_define(m4_opinidir, opinion_miner_deluxePP)m4_dnl
 m4_define(m4_opinitex, opinion-miner)m4_dnl
-m4_define(m4_opinigit, https://github.com/cltl/opinion_miner_deluxe.git )m4_dnl  
-m4_dnl m4_define(m4_opinidir, opinion_miner_de_luxe)m4_dnl  
+m4_define(m4_opinigit, https://github.com/rubenIzquierdo/opinion_miner_deluxePP)m4_dnl
 m4_define(m4_opiniscript, opinimin)m4_dnl
 m4_define(m4_opini_trained_models_ball, 20150730_opimin_final_models.tgz)m4_dnl
-m4_define(m4_opini_commitname, b559d303da0c2da17f97d3fa41960d7fa3e1595b)m4_dnl
+m4_define(m4_opini_commitname, 818e96394126123c8c8a31375811aee60e766ab6)m4_dnl
 m4_dnl m4_define(m4_opini_nl_conf, opini_nl.cfg)m4_dnl
 m4_define(m4_opini_conf, opini.cfg)m4_dnl
+m4_dnl m4_define(m4_opinigit, https://github.com/cltl/opinion_miner_deluxe.git )m4_dnl  
+m4_dnl m4_define(m4_opinidir, opinion_miner_de_luxe)m4_dnl  
 m4_dnl
 m4_dnl Opinion-miner, temporary solution (20151013)
-m4_define(m4_opini_temp_ball, 20151012VUA-opinion-miner.tgz)m4_dnl
-m4_define(m4_opinidir, VUA-opinion-miner)m4_dnl
+m4_dnl m4_define(m4_opini_temp_ball, 20151012VUA-opinion-miner.tgz)m4_dnl
+m4_dnl m4_define(m4_opinidir, VUA-opinion-miner)m4_dnl
+m4_define(m4_opimodelball, models_opinion_miner_deluxePP.tgz)m4_dnl
 m4_define(m4_opini_dutchmodel_subdir, final_models/nl/news_cfg1)m4_dnl
 m4_define(m4_opini_engmodel_subdir, final_models/en/news_cfg1)m4_dnl
 m4_dnl
