@@ -3295,10 +3295,10 @@ been randomly selected from a number of models that are available in
 @d get the nerc models @{@%
 @% @< get or have @(m4_nercmodelsball@) @>
 cd $modulesdir
-tar -xzf m4_snapshotsocket/m4_snapshotdirectory/m4_nercmodelsball
-chmod g+rwxs nerc_models
-chmod o+rx nerc_models
-chmod o+rx nerc_models/nl
+tar -p -xzf m4_snapshotsocket/m4_snapshotdirectory/m4_nercmodelsball
+@% chmod g+rwxs nerc_models
+@% chmod o+rx nerc_models
+@% chmod o+rx nerc_models/nl
 @% mkdir -p \$modulesdir/m4_nercdir/en
 @% cp \$snapshotsocket/m4_enrepo_dir/m4_EHU_nercdir/\$en_nercmodel \$modulesdir/m4_nercdir/en/
 @% rm \$pipesocket/m4_nercmodelsball

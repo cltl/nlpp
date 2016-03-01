@@ -179,7 +179,8 @@ m4_define(m4_nercversion, 1.5.4)m4_dnl
 m4_define(m4_nercjar, ixa-pipe-nerc-`'m4_nercversion`'.jar)m4_dnl
 m4_dnl m4_define(m4_nercmodeldir, nerc-resources)m4_dnl
 m4_define(m4_nercmodeldir, nerc_models)m4_dnl
-m4_define(m4_nercmodelsball, 20160105_nerc_models.tgz)m4_dnl
+m4_dnl m4_define(m4_nercmodelsball, 20160105_nerc_models.tgz)m4_dnl
+m4_define(m4_nercmodelsball, 20160301_nerc_models.tgz)m4_dnl
 m4_define(m4_nl_nercmodel, nl-6-class-clusters-sonar.bin)m4_dnl
 m4_define(m4_en_nercmodel, en-best-clusters-conll03.bin)m4_dnl
 m4_dnl m4_define(m4_nercmodel, nl-local-conll02-testa.bin)m4_dnl
@@ -383,7 +384,8 @@ m4_dnl Opinion-miner
 m4_define(m4_opininame, opinion_miner_deluxePP)m4_dnl
 m4_define(m4_opinidir, opinion_miner_deluxePP)m4_dnl
 m4_define(m4_opinitex, opinion-miner)m4_dnl
-m4_define(m4_opinigit, https://github.com/rubenIzquierdo/opinion_miner_deluxePP)m4_dnl
+m4_dnl m4_define(m4_opinigit, https://github.com/rubenIzquierdo/opinion_miner_deluxePP)m4_dnl
+m4_define(m4_opinigit, https://github.com/PaulHuygen/opinion_miner_deluxePP)m4_dnl
 m4_define(m4_opiniscript, opinimin)m4_dnl
 m4_define(m4_opini_trained_models_ball, 20150730_opimin_final_models.tgz)m4_dnl
 m4_define(m4_opini_commitname, 818e96394126123c8c8a31375811aee60e766ab6)m4_dnl
