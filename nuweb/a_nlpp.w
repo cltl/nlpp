@@ -1720,6 +1720,7 @@ ticbeldir=`mktemp -t -d tickbel.XXXXXX`
 cd \$ticbeldir
 tar -xzf \$snapshotsocket/m4_snapshotdirectory/\$TARB
 cd \$DIR
+sh ./bootstrap.sh
 ./configure --prefix=\$envdir
 make 
 make install
@@ -3295,6 +3296,9 @@ been randomly selected from a number of models that are available in
 @% @< get or have @(m4_nercmodelsball@) @>
 cd $modulesdir
 tar -xzf m4_snapshotsocket/m4_snapshotdirectory/m4_nercmodelsball
+chmod g+rwxs nerc_models
+chmod o+rx nerc_models
+chmod o+rx nerc_models/nl
 @% mkdir -p \$modulesdir/m4_nercdir/en
 @% cp \$snapshotsocket/m4_enrepo_dir/m4_EHU_nercdir/\$en_nercmodel \$modulesdir/m4_nercdir/en/
 @% rm \$pipesocket/m4_nercmodelsball
@@ -4517,22 +4521,41 @@ python tag_file.py -d hotel
 \label{sec:testscript}
 
 
-The following script pushes a test-document through the modules of
-the pipeline.
+The following script, \verb|test|, pushes a test-document through the modules of
+the pipeline. if provided with an argument ``nl'' or ``en'', it
+obtains a standard test-document in the appropriate language and puts
+it in \verb|test/test.in.naf| (Let us call this file \verb|TESTIN|). Otherwise, it expects to find file
+\verb|test/test.in.naf|.
+
+@d get a testfile or die @{@%
+if 
+  [ "$1" == "en" ]
+then
+  cp \$ROOT/nuweb/test.en.in.naf \$TESTIN
+else
+  if
+    [ "\$1" == "nl" ]
+  then
+    cp \$ROOT/nuweb/test.nl.in.naf \$TESTIN
+  fi
+fi
+if
+  [ ! -e \$TESTIN ]
+then
+  echo "Please supply test-file \$TESTIN or specify language"
+  exit 4
+fi
+@| @}
 
 @o m4_bindir/test @{@%
 #!/bin/bash
 ROOT=m4_aprojroot
-TESTDIR=$ROOT/test
-@< function to run a module in the test @>
-TESTIN=\$ROOT/nuweb/test.nl.in.naf
-if 
-  [ "$1" == "en" ]
-then
-  TESTIN=\$ROOT/nuweb/test.en.in.naf
-fi
 BIND=$ROOT/bin
+TESTDIR=$ROOT/test
+TESTIN=$ROOT/test/test.in.naf
 mkdir -p $TESTDIR
+@< function to run a module in the test @>
+@< get a testfile or die @>
 cd $TESTDIR
 @< set the language variable @($TESTIN@)@>
 @< select language-dependent features @>
@@ -4559,6 +4582,8 @@ else
   @< annotate english document @>
 fi
 @| @}
+
+
 
 The following function, runmodule, applies a module on a naf
 file. When the module results in error, the function  exits the script
