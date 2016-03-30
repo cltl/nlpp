@@ -277,10 +277,15 @@ m4_define(m4_fbkcausalreldir, FBK-causalrel.v30)m4_dnl
 m4_define(m4_fbkcausalrelball, 20151220_FBK-causalrel.v30.tgz)m4_dnl
 m4_dnl
 m4_dnl ONTO
-m4_define(m4_ontoname, onto-tagger)m4_dnl
+m4_define(m4_ontoname, OntoTagger)m4_dnl
 m4_define(m4_ontotex, onto-tagger)m4_dnl
-m4_define(m4_ontodir, vua-ontotagger-v1.0)m4_dnl  Subdir. of modules
+m4_define(m4_ontodir, m4_ontoname)m4_dnl  Subdir. of modules
+m4_define(m4_ontogit, `https://github.com/cltl/OntoTagger.git')m4_dnl  Subdir. of modules
+m4_define(m4_ontojar, ontotagger-1.0-jar-with-dependencies.jar)m4_dnl
+m4_dnl m4_define(m4_ontocommitname, `1fe96e99105249b87296d911e36a8f08f2780116')m4_dnl
+m4_define(m4_ontocommitname, `a251dbc2c30bfc77f258fdd5e9c58eb89c198ae7')m4_dnl
 m4_define(m4_ontoscript, onto)m4_dnl
+m4_define(m4_onto_subscript, predicate-matrixtagger.sh)m4_dnl
 m4_dnl m4_define(m4_ontotarball, 20150724_vua-ontotagger-v1.0.tar.gz)m4_dnl  Subdir. of modules
 m4_dnl m4_define(m4_ontotarball, 20151217_vua-ontotagger-v1.0.tgz)m4_dnl  Subdir. of modules
 m4_define(m4_ontotarball, 20160126_vua-ontotagger-v1.0.tgz)m4_dnl  Subdir. of modules
@@ -288,6 +293,7 @@ m4_dnl
 m4_dnl Framenet SRL
 m4_define(m4_ontodir, vua-ontotagger-v1.0)m4_dnl  Subdir. of modules
 m4_define(m4_framesrlscript, framesrl)m4_dnl
+m4_define(m4_framesrl_subscript, srl-framenet-tagger)m4_dnl
 m4_define(m4_ontotarball, vua-ontotagger-v1.0.tar.gz)m4_dnl  Subdir. of modules
 m4_dnl
 m4_dnl Heideltime
@@ -389,7 +395,8 @@ m4_dnl m4_define(m4_opinigit, https://github.com/PaulHuygen/opinion_miner_deluxe
 m4_define(m4_opiniscript, opinimin)m4_dnl
 m4_define(m4_opini_trained_models_ball, 20150730_opimin_final_models.tgz)m4_dnl
 m4_dnl m4_define(m4_opini_commitname, 818e96394126123c8c8a31375811aee60e766ab6)m4_dnl
-m4_define(m4_opini_commitname, 00fdcec05c441daad7a09a8f8bee50ddda7466b5)m4_dnl
+m4_dnl m4_define(m4_opini_commitname, 00fdcec05c441daad7a09a8f8bee50ddda7466b5)m4_dnl
+m4_define(m4_opini_commitname, 5f46af89f139080ae030abe70a540f693ac4676b)m4_dnl
 m4_dnl m4_define(m4_opini_nl_conf, opini_nl.cfg)m4_dnl
 m4_define(m4_opini_conf, opini.cfg)m4_dnl
 m4_dnl m4_define(m4_opinigit, https://github.com/cltl/opinion_miner_deluxe.git )m4_dnl  
@@ -454,11 +461,14 @@ m4_dnl
 m4_dnl Utilities
 m4_dnl
 m4_dnl
+m4_dnl VUA-resources
+m4_define(m4_vua_resources_git, `https://github.com/cltl/vua-resources.git')m4_dnl
+m4_dnl
 m4_dnl
 m4_dnl Sematree
 m4_define(m4_sematree_website, `http://www.pixelbeat.org/scripts/sematree/')m4_dnl
 m4_define(m4_sematree_script, `sematree')m4_dnl
-
+m4_dnl
 m4_dnl Alpino
 m4_dnl
 m4_define(m4_alpino_version, 20706)m4_dnl

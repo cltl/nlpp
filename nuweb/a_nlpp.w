@@ -2919,6 +2919,8 @@ was a pipe consisting of two Java programs. However, that didn't seem
 to work in one of the computers that we use, therefore we have split
 the pipe using \verb|mytemp| as temporary storage. 
 
+
+
 @o m4_bindir/FBK-time @{@%
 @< start of module-script @(m4_fbktimedir@) @>
 BEGINTIME=`date '+%Y-%m-%dT%H:%M:%S%z'`
@@ -2930,6 +2932,7 @@ FILEOUT=$timdir/TimeProOUT.txp
 TIMEPRONORMIN=\$timdir/TimeProNormIN.txp
 JAVAMAXHEAP=2g
 mytemp=\$timdir/mytemp
+result=0
 cd $MODDIR
 cat > $CHUNKIN
 
@@ -2937,7 +2940,7 @@ JAVACLASSPATH="lib/jdom-2.0.5.jar:lib/kaflib-naf-1.1.9.jar:lib/NAFtoTXP_v11.jar"
 JAVAMODULE=eu.fbk.newsreader.naf.NAFtoTXP_v11
 cat $CHUNKIN | \
  java -Xmx$JAVAMAXHEAP -cp $JAVACLASSPATH $JAVAMODULE $FILETXP chunk+entity timex
-
+@< stop on error @(Java: $JAVACLASSPATH:$JAVAMODULE@) @>
 #echo "Saving... $FILETXP"
 tail -n +4 $FILETXP | awk -f resources/english-rules > $FILEOUT
 head -n +4 $FILETXP > $TIMEPRONORMIN
@@ -2946,20 +2949,20 @@ cat $FILEOUT | \
   $YAMCHA/yamcha-0.33/usr/local/bin/yamcha \
     -m models/tempeval3_silver-data.model \
   >> $TIMEPRONORMIN
-
+@< stop on error @(yamcha@) @>
 JAVACLASSPATH="lib/scala-library.jar:lib/timenorm-0.9.1-SNAPSHOT.jar"
 JAVACLASSPATH=$JAVACLASSPATH:"lib/threetenbp-0.8.1.jar:lib/TimeProNorm_v2.5.jar"
 JAVAMODULE=eu.fbk.timePro.TimeProNormApply
 cat $TIMEPRONORMIN | \
   java -Xmx$JAVAMAXHEAP -cp $JAVACLASSPATH $JAVAMODULE $FILETXP
-
+@< stop on error @(Java: $JAVACLASSPATH:$JAVAMODULE@) @>
 rm $FILEOUT
 rm $TIMEPRONORMIN
 
 JAVACLASSPATH="lib/jdom-2.0.5.jar:lib/kaflib-naf-1.1.9.jar:lib/NAFtoTXP_v11.jar"
 JAVAMODULE=eu.fbk.newsreader.naf.NAFtoTXP_v11
 cat $CHUNKIN | java -Xmx$JAVAMAXHEAP -cp $JAVACLASSPATH $JAVAMODULE $FILEOUT chunk+morpho+timex+event eval
-
+@< stop on error @(Java: $JAVACLASSPATH:$JAVAMODULE@)@>
 JAVACP1="lib/TXPtoNAF_v5.jar:lib/jdom-2.0.5.jar:lib/kaflib-naf-1.1.9.jar"
 JAVAMOD1=eu.fbk.newsreader.naf.TXPtoNAF_v4
 JAVACP2="lib/kaflib-naf-1.1.9.jar:lib/jdom-2.0.5.jar:lib/TimeProEmptyTimex_v2.jar"
@@ -2967,13 +2970,32 @@ JAVAMOD2=eu.fbk.timepro.TimeProEmptyTimex
 @% java  -Dfile.encoding=UTF8 -cp $JAVACP1 $JAVAMOD1 $CHUNKIN $FILETXP "$BEGINTIME" TIMEX3 | \
 @%  java -Dfile.encoding=UTF8 -cp $JAVACP2 $JAVAMOD2 $FILEOUT
 java -Xmx$JAVAMAXHEAP  -Dfile.encoding=UTF8 -cp $JAVACP1 $JAVAMOD1 $CHUNKIN $FILETXP "$BEGINTIME" TIMEX3 > $mytemp
+@% @< stop on error @(Java: $JAVACLASSPATH:$JAVAMODULE@)@>
 cat $mytemp | java -Xmx$JAVAMAXHEAP -Dfile.encoding=UTF8 -cp $JAVACP2 $JAVAMOD2 $FILEOUT
-
-
+@< stop on error @(Java: $JAVACLASSPATH:$JAVAMODULE@)@>
 rm $FILETXP
 rm $CHUNKIN
 rm -rf $timdir
 @| @}
+
+When one of the programs in the script fail, stop processing. Pass the
+error-code and write a message to locate the failing program. Remove
+the temporary directory. However, there is a problem. One of the java
+programs always results with result-code 1.  
+
+@d stop on error @{@%
+result=$?
+if
+  [ $result -ne 0 ]
+then
+  cd $MODDIR
+  echo Error: @1 >&2
+  rm -rf $timdir
+  exit $result
+fi
+@| @}
+
+
 
 \subsubsection{FBK-temprel module}
 \label{sec:FBK-temprel}
@@ -3729,20 +3751,66 @@ cat | java -Xmx1000m -jar \$jarsdir/m4_nedjar -H http://$spotlighthost -p $spotl
 \subsubsection{Ontotagger}
 \label{sec:onto}
 
-We do not yet have a source-repository of the Ontotagger module. Therefore,
-install from a snapshot (\verb|m4_ontotarball|).
+@% We do not yet have a source-repository of the Ontotagger module. Therefore,
+@% install from a snapshot (\verb|m4_ontotarball|).
+
 
 \paragraph{Module}
 \label{sec:ontotagger-module}
 
-@d install the onto module @{@%
-@% @< get or have @(m4_ontotarball@) @>
-@%cp -r m4_asnapshotroot/m4_ontodir \$modulesdir/
-cd \$modulesdir
-tar -xzf \$snapshotsocket/m4_snapshotdirectory/m4_ontotarball
-@% rm \$pipesocket/m4_ontotarball
-chmod -R o+r \$modulesdir/m4_ontodir
+To install the onto-module, do the following:
+
+\begin{enumerate}
+\item Create a jar with the Java-code of the program.
+\item Create a module-directory that contains the resources for the onto-tagger.
+\item Create a script that executes the ontotagger on a naf.
+\end{enumerate}
+
+Create the ontotagger jar if that hasn't been done already:
+
+@d install the onto-jar @{@%
+@< begin conditional install @(ontojar_installed@) @>
+  obdir=`mktemp -d -t ontobuild.XXXXXX`
+  cd $obdir
+  git clone m4_ontogit
+  cd m4_ontoname
+  git checkout m4_ontocommitname
+  mvn install
+  mv target/m4_ontojar $jarsdir/
+  cd $piperoot
+  rm -rf $obdir
+@< end conditional install @(ontojar_installed@) @>
 @| @}
+
+@d install the vua-resources @{@%
+@< begin conditional install @(vua_resources_installed@) @>
+cd $modulesdir
+git clone m4_vua_resources_git
+cd $piperoot
+@< end conditional install @(vua_resources_installed@) @>
+@| @}
+
+
+Install the onto-module from its Github source.
+
+@d install the onto module @{@%
+@< install the onto-jar @>
+@< install the vua-resources @>
+@% 
+@% cd \$modulesdir
+@% tar -xzf \$snapshotsocket/m4_snapshotdirectory/m4_ontotarball
+@% @% rm \$pipesocket/m4_ontotarball
+@% chmod -R o+r \$modulesdir/m4_ontodir
+@| @}
+
+@% @d install the onto module @{@%
+@% @% @< get or have @(m4_ontotarball@) @>
+@% @%cp -r m4_asnapshotroot/m4_ontodir \$modulesdir/
+@% cd \$modulesdir
+@% tar -xzf \$snapshotsocket/m4_snapshotdirectory/m4_ontotarball
+@% @% rm \$pipesocket/m4_ontotarball
+@% chmod -R o+r \$modulesdir/m4_ontodir
+@% @| @}
 
 
 \paragraph{Script}
@@ -3750,24 +3818,26 @@ chmod -R o+r \$modulesdir/m4_ontodir
 
 @o m4_bindir/m4_ontoscript @{@%
 @< start of module-script @(m4_ontodir@) @>
-JARDIR=\$MODDIR/lib
-RESOURCESDIR=\$MODDIR/resources
-PREDICATEMATRIX="\$RESOURCESDIR/PredicateMatrix.v1.3.txt.role.odwn"
-GRAMMATICALWORDS="\$RESOURCESDIR/grammaticals/Grammatical-words.nl"
-TMPFIL=`mktemp -t stap6.XXXXXX`
-cat >$TMPFIL
-
-CLASSPATH=\$JARDIR/ontotagger-1.0-jar-with-dependencies.jar
-JAVASCRIPT=eu.kyotoproject.main.KafPredicateMatrixTagger
-MAPPINGS="fn;mcr;ili;eso"
-JAVA_ARGS="--mappings $MAPPINGS"
-JAVA_ARGS="\$JAVA_ARGS  --key odwn-eq"
-JAVA_ARGS="\$JAVA_ARGS  --version 1.2"
-JAVA_ARGS="\$JAVA_ARGS  --predicate-matrix \$PREDICATEMATRIX"
-JAVA_ARGS="\$JAVA_ARGS  --grammatical-words \$GRAMMATICALWORDS"
-JAVA_ARGS="\$JAVA_ARGS  --naf-file \$TMPFIL"
-java -Xmx1812m -cp \$CLASSPATH \$JAVASCRIPT \$JAVA_ARGS
-rm -rf \$TMPFIL
+cd \$MODDIR/scripts
+cat | \$MODDIR/scripts/m4_onto_subscript
+@% JARDIR=\$MODDIR/lib
+@% RESOURCESDIR=\$MODDIR/resources
+@% PREDICATEMATRIX="\$RESOURCESDIR/PredicateMatrix.v1.3.txt.role.odwn"
+@% GRAMMATICALWORDS="\$RESOURCESDIR/grammaticals/Grammatical-words.nl"
+@% TMPFIL=`mktemp -t stap6.XXXXXX`
+@% cat >$TMPFIL
+@% 
+@% CLASSPATH=\$JARDIR/ontotagger-1.0-jar-with-dependencies.jar
+@% JAVASCRIPT=eu.kyotoproject.main.KafPredicateMatrixTagger
+@% MAPPINGS="fn;mcr;ili;eso"
+@% JAVA_ARGS="--mappings $MAPPINGS"
+@% JAVA_ARGS="\$JAVA_ARGS  --key odwn-eq"
+@% JAVA_ARGS="\$JAVA_ARGS  --version 1.2"
+@% JAVA_ARGS="\$JAVA_ARGS  --predicate-matrix \$PREDICATEMATRIX"
+@% JAVA_ARGS="\$JAVA_ARGS  --grammatical-words \$GRAMMATICALWORDS"
+@% JAVA_ARGS="\$JAVA_ARGS  --naf-file \$TMPFIL"
+@% java -Xmx1812m -cp \$CLASSPATH \$JAVASCRIPT \$JAVA_ARGS
+@% rm -rf \$TMPFIL
 
 @| @}
 
@@ -3787,29 +3857,31 @@ script removes these lines.
 
 @o m4_bindir/m4_framesrlscript @{@%
 @< start of module-script @(m4_ontodir@) @>
-ONTODIR=$modulesdir/m4_ontodir
-JARDIR=\$MODDIR/lib
-RESOURCESDIR=\$MODDIR/resources
-@% PREDICATEMATRIX="\$RESOURCESDIR/PredicateMatrix.v1.1/PredicateMatrix.v1.1.role.nl-1.merged"
-PREDICATEMATRIX="\$RESOURCESDIR/PredicateMatrix_nl_lu_withESO.v0.2.role.txt"
-GRAMMATICALWORDS="\$RESOURCESDIR/grammaticals/Grammatical-words.nl"
-TMPFIL=`mktemp -t framesrl.XXXXXX`
-cat >$TMPFIL
-
-CLASSPATH=\$JARDIR/ontotagger-1.0-jar-with-dependencies.jar
-JAVASCRIPT=eu.kyotoproject.main.SrlFrameNetTagger
-
-JAVA_ARGS="--naf-file \$TMPFIL"
-JAVA_ARGS="\$JAVA_ARGS  --format naf"
-JAVA_ARGS="\$JAVA_ARGS  --frame-ns fn:"
-JAVA_ARGS="\$JAVA_ARGS   --role-ns fn-role:;pb-role:;fn-pb-role:;eso-role:"
-JAVA_ARGS="\$JAVA_ARGS   --ili-ns mcr:ili"
-JAVA_ARGS="\$JAVA_ARGS   --sense-conf 0.25"
-JAVA_ARGS="\$JAVA_ARGS   --frame-conf 70"
-
-java -Xmx1812m -cp \$CLASSPATH \$JAVASCRIPT \$JAVA_ARGS  | gawk '/^frameMap.size()/ {next}; {print}'
+cd \$MODDIR/scripts
+cat | \$MODDIR/scripts/m4_framesrl_subscript | gawk '/^frameMap.size()/ {next}; {print}'
+@% ONTODIR=$modulesdir/m4_ontodir
+@% JARDIR=\$MODDIR/lib
+@% RESOURCESDIR=\$MODDIR/resources
+@% @% PREDICATEMATRIX="\$RESOURCESDIR/PredicateMatrix.v1.1/PredicateMatrix.v1.1.role.nl-1.merged"
+@% PREDICATEMATRIX="\$RESOURCESDIR/PredicateMatrix_nl_lu_withESO.v0.2.role.txt"
+@% GRAMMATICALWORDS="\$RESOURCESDIR/grammaticals/Grammatical-words.nl"
+@% TMPFIL=`mktemp -t framesrl.XXXXXX`
+@% cat >$TMPFIL
+@% 
+@% CLASSPATH=\$JARDIR/ontotagger-1.0-jar-with-dependencies.jar
+@% JAVASCRIPT=eu.kyotoproject.main.SrlFrameNetTagger
+@% 
+@% JAVA_ARGS="--naf-file \$TMPFIL"
+@% JAVA_ARGS="\$JAVA_ARGS  --format naf"
+@% JAVA_ARGS="\$JAVA_ARGS  --frame-ns fn:"
+@% JAVA_ARGS="\$JAVA_ARGS   --role-ns fn-role:;pb-role:;fn-pb-role:;eso-role:"
+@% JAVA_ARGS="\$JAVA_ARGS   --ili-ns mcr:ili"
+@% JAVA_ARGS="\$JAVA_ARGS   --sense-conf 0.25"
+@% JAVA_ARGS="\$JAVA_ARGS   --frame-conf 70"
+@% 
+@% java -Xmx1812m -cp \$CLASSPATH \$JAVASCRIPT \$JAVA_ARGS  | gawk '/^frameMap.size()/ {next}; {print}'
 @% java -Xmx1812m -cp ../lib/ontotagger-1.0-jar-with-dependencies.jar eu.kyotoproject.main.SrlFrameNetTagger --naf-file "../example/test.srl.lexicalunits.pm.naf" --format naf --frame-ns "fn:" --role-ns "fn-role:;pb-role:;fn-pb-role:;eso-role:" --ili-ns "mcr:ili" --sense-conf 0.25 --frame-conf 70 > "../example/test.srl.lexicalunits.pm.fn.naf"
-rm -rf \$TMPFIL
+@% rm -rf \$TMPFIL
 
 @| @}
 
@@ -4337,24 +4409,31 @@ versions the jar from the ontotagger module can be used for this module.
 \paragraph{Module}
 \label{sec:nemeventmodule}
 
-@d install the nomevent module @{@%
-@% @< get or have @(m4_nomeventball@) @>
-cd \$modulesdir
-tar -xzf \$snapshotsocket/m4_snapshotdirectory/m4_nomeventball
-@| @}
+The nomevent-module uses the ontotagger jar en the resources from
+\verb|vua-resources| that both have been installed already.
+
+
+
+@% @d install the nomevent module @{@%
+@% @% @< get or have @(m4_nomeventball@) @>
+@% cd \$modulesdir
+@% tar -xzf \$snapshotsocket/m4_snapshotdirectory/m4_nomeventball
+@% @| @}
 
 \paragraph{Script}
 \label{par:nomeventscript}
 
 @o m4_bindir/m4_nomeventscript @{@%
-@< start of module-script @(m4_nomeventdir@) @>
-LIBDIR=\$MODDIR/lib
-RESOURCESDIR=\$MODDIR/resources
-
-JAR=\$LIBDIR/ontotagger-1.0-jar-with-dependencies.jar
-JAVAMODULE=eu.kyotoproject.main.NominalEventCoreference
-@% cat | iconv -f ISO8859-1 -t UTF-8 | java -Xmx812m -cp $JAR $JAVAMODULE --framenet-lu $RESOURCESDIR/nl-luIndex.xml
-cat | java -Xmx812m -cp $JAR $JAVAMODULE --framenet-lu $RESOURCESDIR/nl-luIndex.xml
+@< start of module-script @(m4_ontodir@) @>
+cd \$MODDIR/scripts
+cat | \$MODDIR/scripts/m4_nomevent_subscript
+@% LIBDIR=\$MODDIR/lib
+@% RESOURCESDIR=\$MODDIR/resources
+@% 
+@% JAR=\$LIBDIR/ontotagger-1.0-jar-with-dependencies.jar
+@% JAVAMODULE=eu.kyotoproject.main.NominalEventCoreference
+@% @% cat | iconv -f ISO8859-1 -t UTF-8 | java -Xmx812m -cp $JAR $JAVAMODULE --framenet-lu $RESOURCESDIR/nl-luIndex.xml
+@% cat | java -Xmx812m -cp $JAR $JAVAMODULE --framenet-lu $RESOURCESDIR/nl-luIndex.xml
 @| @}
 
 
