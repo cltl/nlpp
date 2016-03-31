@@ -981,26 +981,33 @@ rm -rf $transdir
 @% @| @}
 
 A cornerstone Pythonmodule for the pipeline is
-\href{https://github.com/cltl/KafNafParserPy}{KafNafParserPy}. It is a
-feature of this module that you cannot install it with \textsc{pip}, but that
-you can add it to your \texttt{PYTHONPATH}.
+\href{https://github.com/cltl/KafNafParserPy}{KafNafParserPy}. Currently
+it is extremely easy installed:
+@% It is a
+@% feature of this module that you cannot install it with \textsc{pip}, but that
+@% you can add it to your \texttt{PYTHONPATH}.
 
 
 @d install kafnafparserpy @{@%
-@% cd m4_pythonmoddir
-cd \$envdir/python
-DIRN=KafNafParserPy
-@< move module @($DIRN@) @>
-git clone m4_kafnafgit
-if
-  [ $? -gt 0 ]
-then
-  @< logmess @(Cannot install current $DIRN version@) @>
-  @< re-instate old module @(\$DIRN@) @>
-else
-  @< remove old module @(\$DIRN@) @>
-fi
+pip install KafNafParserPy
 @| @}
+
+@% @d install kafnafparserpy @{@%
+@% @% cd m4_pythonmoddir
+@% cd \$envdir/python
+@% DIRN=KafNafParserPy
+@% @< move module @($DIRN@) @>
+@% git clone m4_kafnafgit
+@% if
+@%   [ $? -gt 0 ]
+@% then
+@%   @< logmess @(Cannot install current $DIRN version@) @>
+@%   @< re-instate old module @(\$DIRN@) @>
+@% else
+@%   @< remove old module @(\$DIRN@) @>
+@% fi
+@% @| @}
+
 
 \subsubsection{Python packages}
 \label{sec:pypacks}
