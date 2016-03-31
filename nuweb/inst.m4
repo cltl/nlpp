@@ -277,24 +277,28 @@ m4_define(m4_fbkcausalreldir, FBK-causalrel.v30)m4_dnl
 m4_define(m4_fbkcausalrelball, 20151220_FBK-causalrel.v30.tgz)m4_dnl
 m4_dnl
 m4_dnl ONTO
-m4_define(m4_ontoname, OntoTagger)m4_dnl
+m4_define(m4_ontoname, `OntoTagger')m4_dnl
 m4_define(m4_ontotex, onto-tagger)m4_dnl
 m4_define(m4_ontodir, m4_ontoname)m4_dnl  Subdir. of modules
-m4_define(m4_ontogit, `https://github.com/cltl/OntoTagger.git')m4_dnl  Subdir. of modules
+m4_define(m4_ontogit, `https://github.com/PaulHuygen/OntoTagger.git')m4_dnl  Subdir. of modules
 m4_define(m4_ontojar, ontotagger-1.0-jar-with-dependencies.jar)m4_dnl
 m4_dnl m4_define(m4_ontocommitname, `1fe96e99105249b87296d911e36a8f08f2780116')m4_dnl
-m4_define(m4_ontocommitname, `a251dbc2c30bfc77f258fdd5e9c58eb89c198ae7')m4_dnl
+m4_dnl m4_define(m4_ontocommitname, `631ae0ac363860fef1edfcc9e58a2d306ab6a161')m4_dnl
+m4_define(m4_ontocommitname, `9ea03d73eef1c9f4c85a0f05bc8137149e51335c')m4_dnl
 m4_define(m4_ontoscript, onto)m4_dnl
-m4_define(m4_onto_subscript, predicate-matrixtagger.sh)m4_dnl
+m4_define(m4_onto_subscript, predicate-matrix-tagger.sh)m4_dnl
 m4_dnl m4_define(m4_ontotarball, 20150724_vua-ontotagger-v1.0.tar.gz)m4_dnl  Subdir. of modules
 m4_dnl m4_define(m4_ontotarball, 20151217_vua-ontotagger-v1.0.tgz)m4_dnl  Subdir. of modules
 m4_define(m4_ontotarball, 20160126_vua-ontotagger-v1.0.tgz)m4_dnl  Subdir. of modules
 m4_dnl
 m4_dnl Framenet SRL
-m4_define(m4_ontodir, vua-ontotagger-v1.0)m4_dnl  Subdir. of modules
 m4_define(m4_framesrlscript, framesrl)m4_dnl
-m4_define(m4_framesrl_subscript, srl-framenet-tagger)m4_dnl
-m4_define(m4_ontotarball, vua-ontotagger-v1.0.tar.gz)m4_dnl  Subdir. of modules
+m4_define(m4_framesrl_subscript, srl-framenet-tagger.sh)m4_dnl
+m4_dnl
+m4_dnl Nom. coref
+m4_define(m4_ncorefsrc, /dev/null )m4_dnl
+m4_define(m4_ncorefdir, nomcoref)m4_dnl
+m4_define(m4_ncorefscript, nomcoref)m4_dnl
 m4_dnl
 m4_dnl Heideltime
 m4_dnl
@@ -372,11 +376,6 @@ m4_define(m4_postsrlball, 20150706`'m4_postsrldir`'.tgz )m4_dnl  Subdir. of modu
 m4_define(m4_postsrlscript, postsrl)m4_dnl
 m4_dnl m4_define(m4_postsrlpy, vua-srl-dutch-additional-roles.py)m4_dnl
 m4_define(m4_postsrlpy, main.py)m4_dnl
-m4_dnl
-m4_dnl Nom. coref
-m4_define(m4_ncorefsrc, /dev/null )m4_dnl
-m4_define(m4_ncorefdir, nomcoref)m4_dnl
-m4_define(m4_ncorefscript, nomcoref)m4_dnl
 m4_dnl
 m4_dnl Ev. coref
 m4_define(m4_evcorefname, `vua-eventcoreference_v2')m4_dnl
@@ -457,6 +456,7 @@ m4_dnl  m4_define(m4_dbpner_commitname, ab1dcbd860f0ff29bc979f646dc382122a101fc2
 m4_dnl m4_define(m4_nomeventdir, vua-postprocess-nl)m4_dnl
 m4_define(m4_nomeventdir, vua-nominal-event-detection-nl)m4_dnl
 m4_define(m4_nomeventscript, nomevent)m4_dnl
+m4_define(m4_nomevent_subscript, nominal-events.sh)m4_dnl
 m4_dnl
 m4_dnl Utilities
 m4_dnl

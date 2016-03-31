@@ -37,7 +37,6 @@ m4_include(texinclusions.m4)m4_dnl
   instrument to annotate Dutch or English documents with \NLP{} tags.
 \end{abstract}
 \tableofcontents
-
 \section{Introduction}
 \label{sec:Introduction}
 
@@ -1259,10 +1258,10 @@ echo Install modules
   echo ... WSD
   @< install the WSD module @>
 @< end conditional install @(wsd_installed@) @>
-@< begin conditional install @(onto_installed@) @>
+@< begin conditional install @(ontojar_installed@) @>
   echo ... Ontotagger
-  @< install the onto module @>
-@< end conditional install @(onto_installed@) @>
+  @< install the ontotagger repository @>
+@< end conditional install @(ontojar_installed@) @>
 @| @}
 @o m4_bindir/m4_module_installer @{@%
 @< begin conditional install @(heidel_installed@) @>
@@ -1288,10 +1287,10 @@ echo Install modules
   echo ... dbpedia-ner
   @< install the dbpedia-ner module @>
 @< end conditional install @(dbpner_installed@) @>
-@< begin conditional install @(nomevent_installed@) @>
-   echo ... nominal event
-   @< install the nomevent module @>
-@< end conditional install @(nomevent_installed@) @>
+@% @< begin conditional install @(nomevent_installed@) @>
+@%    echo ... nominal event
+@%    @< install the nomevent module @>
+@% @< end conditional install @(nomevent_installed@) @>
 @< begin conditional install @(post_SRL_installed@) @>
    echo ... post-SRL
    @< install the post-SRL module @>
@@ -3746,75 +3745,49 @@ cat | java -Xmx1000m -jar \$jarsdir/m4_nedjar -H http://$spotlighthost -p $spotl
 @%chmod 775  m4_bindir/m4_nedscript
 @%@| @}
 
-
-
-\subsubsection{Ontotagger}
+\subsubsection{Ontotagger, Framenet-SRL and nominal events}
 \label{sec:onto}
 
-@% We do not yet have a source-repository of the Ontotagger module. Therefore,
-@% install from a snapshot (\verb|m4_ontotarball|).
-
-
-\paragraph{Module}
-\label{sec:ontotagger-module}
-
-To install the onto-module, do the following:
+The three modules ontotagger (aka ``predicatematrix''),
+Framenet-\textsc{srl} and nominal event detection are based on the
+same software packages and resources. The three modules need the same
+jar \verb|m4_ontojar|, they need resources from the
+\verb|cltl/vua_resources| Github repository and they are going to
+execute a script that resides in the scripts directory of the
+\verb|cltl/OntoTagger| repository. So, what we have to do is:
 
 \begin{enumerate}
-\item Create a jar with the Java-code of the program.
-\item Create a module-directory that contains the resources for the onto-tagger.
-\item Create a script that executes the ontotagger on a naf.
+\item Install from the \verb|cltl/OntoTagger| repository.
+\item Create the jar and put it in an appropriate place. 
+\item install from the \verb|cltl\vua-resources| repository.
+\item generate a script fot each of the modules.
 \end{enumerate}
 
-Create the ontotagger jar if that hasn't been done already:
+In fact, items~2 and~3 are performed by script \verb|install.sh| from
+the OntoTagger repository.
 
-@d install the onto-jar @{@%
-@< begin conditional install @(ontojar_installed@) @>
-  obdir=`mktemp -d -t ontobuild.XXXXXX`
-  cd $obdir
-  git clone m4_ontogit
-  cd m4_ontoname
-  git checkout m4_ontocommitname
-  mvn install
-  mv target/m4_ontojar $jarsdir/
-  cd $piperoot
-  rm -rf $obdir
-@< end conditional install @(ontojar_installed@) @>
-@| @}
 
-@d install the vua-resources @{@%
-@< begin conditional install @(vua_resources_installed@) @>
-cd $modulesdir
-git clone m4_vua_resources_git
+\paragraph{Modules}
+\label{sec:ontotagger-module}
+
+@d install the ontotagger repository @{@%
+@%   obdir=`mktemp -d -t ontobuild.XXXXXX`
+@%   cd $obdir
+cd \$modulesdir
+git clone m4_ontogit
+cd m4_ontoname
+git checkout m4_ontocommitname
+chmod 775 ./install.sh
+./install.sh
 cd $piperoot
-@< end conditional install @(vua_resources_installed@) @>
 @| @}
 
 
-Install the onto-module from its Github source.
 
-@d install the onto module @{@%
-@< install the onto-jar @>
-@< install the vua-resources @>
-@% 
-@% cd \$modulesdir
-@% tar -xzf \$snapshotsocket/m4_snapshotdirectory/m4_ontotarball
-@% @% rm \$pipesocket/m4_ontotarball
-@% chmod -R o+r \$modulesdir/m4_ontodir
-@| @}
-
-@% @d install the onto module @{@%
-@% @% @< get or have @(m4_ontotarball@) @>
-@% @%cp -r m4_asnapshotroot/m4_ontodir \$modulesdir/
-@% cd \$modulesdir
-@% tar -xzf \$snapshotsocket/m4_snapshotdirectory/m4_ontotarball
-@% @% rm \$pipesocket/m4_ontotarball
-@% chmod -R o+r \$modulesdir/m4_ontodir
-@% @| @}
-
-
-\paragraph{Script}
+\paragraph{Scripts}
 \label{sec:ontoscript}
+
+The ``onto'' (predicatematrix) script:
 
 @o m4_bindir/m4_ontoscript @{@%
 @< start of module-script @(m4_ontodir@) @>
@@ -3841,15 +3814,17 @@ cat | \$MODDIR/scripts/m4_onto_subscript
 
 @| @}
 
-
-\subsubsection{Framenet SRL}
-\label{sec:framesrl}
-
-The framenet \SRL{} is part of the package that contains the ontotagger. We only need a different script.
+The ``Framenet SRL'' script:
 
 
-\paragraph{Script}
-\label{sec:framesrlscript}
+@% \subsubsection{Framenet SRL}
+@% \label{sec:framesrl}
+@% 
+@% The framenet \SRL{} is part of the package that contains the ontotagger. We only need a different script.
+@% 
+@% 
+@% \paragraph{Script}
+@% \label{sec:framesrlscript}
 
 The script contains a hack, because the framesrl script produces
 spurious lines containining ``frameMap.size()=...''. A \textsc{gawk}
@@ -3884,6 +3859,26 @@ cat | \$MODDIR/scripts/m4_framesrl_subscript | gawk '/^frameMap.size()/ {next}; 
 @% rm -rf \$TMPFIL
 
 @| @}
+
+The ``nomevent'' script:
+
+@o m4_bindir/m4_nomeventscript @{@%
+@< start of module-script @(m4_ontodir@) @>
+cd \$MODDIR/scripts
+cat | \$MODDIR/scripts/m4_nomevent_subscript
+@% LIBDIR=\$MODDIR/lib
+@% RESOURCESDIR=\$MODDIR/resources
+@% 
+@% JAR=\$LIBDIR/ontotagger-1.0-jar-with-dependencies.jar
+@% JAVAMODULE=eu.kyotoproject.main.NominalEventCoreference
+@% @% cat | iconv -f ISO8859-1 -t UTF-8 | java -Xmx812m -cp $JAR $JAVAMODULE --framenet-lu $RESOURCESDIR/nl-luIndex.xml
+@% cat | java -Xmx812m -cp $JAR $JAVAMODULE --framenet-lu $RESOURCESDIR/nl-luIndex.xml
+@| @}
+
+
+
+
+
 
 \subsubsection{Heideltime}
 \label{sec:heideltime}
@@ -4395,48 +4390,6 @@ Spotlight server.
 @< start of module-script @(m4_dbpnerdir@) @>
 cat | iconv -f ISO8859-1 -t UTF-8 | $MODDIR/dbpedia_ner.py -url http://$spotlighthost:<!!>m4_spotlight_nl_port<!!>/rest/candidates
 @| @}
-
-
-\subsubsection{Nominal events}
-\label{sec:nomevents}
-
-The module ``postprocessing-nl'' adds nominal events to the srl
-annotations. It has been obtained directly from the author (Piek
-Vossen). It is not yet available in a public repo. Probably in future
-versions the jar from the ontotagger module can be used for this module.
-
-
-\paragraph{Module}
-\label{sec:nemeventmodule}
-
-The nomevent-module uses the ontotagger jar en the resources from
-\verb|vua-resources| that both have been installed already.
-
-
-
-@% @d install the nomevent module @{@%
-@% @% @< get or have @(m4_nomeventball@) @>
-@% cd \$modulesdir
-@% tar -xzf \$snapshotsocket/m4_snapshotdirectory/m4_nomeventball
-@% @| @}
-
-\paragraph{Script}
-\label{par:nomeventscript}
-
-@o m4_bindir/m4_nomeventscript @{@%
-@< start of module-script @(m4_ontodir@) @>
-cd \$MODDIR/scripts
-cat | \$MODDIR/scripts/m4_nomevent_subscript
-@% LIBDIR=\$MODDIR/lib
-@% RESOURCESDIR=\$MODDIR/resources
-@% 
-@% JAR=\$LIBDIR/ontotagger-1.0-jar-with-dependencies.jar
-@% JAVAMODULE=eu.kyotoproject.main.NominalEventCoreference
-@% @% cat | iconv -f ISO8859-1 -t UTF-8 | java -Xmx812m -cp $JAR $JAVAMODULE --framenet-lu $RESOURCESDIR/nl-luIndex.xml
-@% cat | java -Xmx812m -cp $JAR $JAVAMODULE --framenet-lu $RESOURCESDIR/nl-luIndex.xml
-@| @}
-
-
 
 
 \subsubsection{Opinion miner}
