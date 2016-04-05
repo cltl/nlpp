@@ -2887,7 +2887,7 @@ a \NAF{} file.
 @| @}
 
 
-@o m4_bindir/esrlscript @{@%
+@o m4_bindir/m4_esrlscript @{@%
 @< start of module-script @(m4_srlserverdir@) @>
 m4_abindir/start_eSRL
 java -Xmx1000m -cp $MODDIR/IXA-EHU-srl-3.0.jar ixa.srl.SRLClient en
