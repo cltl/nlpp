@@ -152,7 +152,7 @@ m4_define(m4_morphpartex, \verb|m4_morphparname|)m4_dnl
 m4_define(m4_morphpargit, https://github.com/cltl/morphosyntactic_parser_nl.git)m4_dnl  Subdir. of modules
 m4_dnl m4_define(m4_morphpar_commitname, `c6cabea2cc37ac3098c5927f5ec5b180ac31246f')m4_dnl
 m4_dnl m4_define(m4_morphpar_commitname, `807e938ce4ebb71afd9d7c7f42d9d9ac5f98a184')m4_dnl
-m4_define(m4_morphpar_commitname, `0ae4041fe8515c6e78947527cec7df78036fe836')m4_dnl
+m4_define(m4_morphpar_commitname, `d5f002605d7c06545f24c84386342b79e5cb9c86')m4_dnl
 m4_define(m4_morphpardir, morphosyntactic_parser_nl)m4_dnl  Subdir. of modules
 m4_define(m4_morphparscript, mor)m4_dnl
 m4_dnl
