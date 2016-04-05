@@ -81,8 +81,8 @@ clean:
 	rm -rf $pipesocket/server-jre-7u72-linux-x64.tar.gz
 	rm -rf ../env/apache-maven-3.0.5
 	cd $piperoot
-	mv /mnt/sdb1/nlpp/installed_modules old.modulelist
-	cat old.modulelist | gawk '/maven_installed/ {next}; {print}' >/mnt/sdb1/nlpp/installed_modules
+	mv /home/paul/projecten/nlpp/installed_modules old.modulelist
+	cat old.modulelist | gawk '/maven_installed/ {next}; {print}' >/home/paul/projecten/nlpp/installed_modules
 	
 	rm -rf $snapshotsocket/t_nlpp_resources/Alpino-x86_64-linux-glibc2.5-20706-sicstus.tar.gz
 	rm -rf ../nuweb-1.58

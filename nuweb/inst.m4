@@ -135,19 +135,24 @@ m4_define(m4_topictoolname, ixa-pipe-topic)m4_dnl
 m4_define(m4_topictooltex, \verb|m4_topictoolname|)m4_dnl
 m4_define(m4_topictooldir, EHU-topic.v30)m4_dnl
 m4_define(m4_topictoolball, 20151220_EHU-topic.v30.tgz)m4_dnl
+m4_define(m4_topictoolgit, https://github.com/ialdabe/ixa-pipe-topic.git)m4_dnl
+m4_define(m4_topicscript, topic)m4_dnl
 m4_dnl
 m4_dnl Pos tagger
 m4_define(m4_posname, EHU-pos.v30)m4_dnl
 m4_define(m4_postex, \verb|m4_posname|)m4_dnl
 m4_define(m4_posdir, EHU-pos.v30)m4_dnl
+m4_define(m4_posgit, `https://github.com/ixa-ehu/ixa-pipe-pos.git')m4_dnl
 m4_define(m4_posball,20151220_EHU-pos.v30.tgz)m4_dnl
+m4_define(m4_postagscript, pos)m4_dnl
 m4_dnl
 m4_dnl Morphosyntactic parser
 m4_define(m4_morphparname, morphosyntactic_parser_nl)m4_dnl
 m4_define(m4_morphpartex, \verb|m4_morphparname|)m4_dnl
 m4_define(m4_morphpargit, https://github.com/cltl/morphosyntactic_parser_nl.git)m4_dnl  Subdir. of modules
 m4_dnl m4_define(m4_morphpar_commitname, `c6cabea2cc37ac3098c5927f5ec5b180ac31246f')m4_dnl
-m4_define(m4_morphpar_commitname, `807e938ce4ebb71afd9d7c7f42d9d9ac5f98a184')m4_dnl
+m4_dnl m4_define(m4_morphpar_commitname, `807e938ce4ebb71afd9d7c7f42d9d9ac5f98a184')m4_dnl
+m4_define(m4_morphpar_commitname, `0ae4041fe8515c6e78947527cec7df78036fe836')m4_dnl
 m4_define(m4_morphpardir, morphosyntactic_parser_nl)m4_dnl  Subdir. of modules
 m4_define(m4_morphparscript, mor)m4_dnl
 m4_dnl
@@ -163,6 +168,8 @@ m4_define(m4_consparversion, 1.1.1)m4_dnl
 m4_define(m4_conspartex, \verb|m4_consparname|)m4_dnl
 m4_define(m4_conspardir, EHU-parse.v30)m4_dnl
 m4_define(m4_consparball, 20151220_EHU-parse.v30.tgz)m4_dnl
+m4_define(m4_conspargit, `https://github.com/ixa-ehu/ixa-pipe-parse.git')m4_dnl
+m4_define(m4_consparscript, constpars)m4_dnl
 m4_dnl
 m4_dnl NERC
 m4_dnl
@@ -221,18 +228,21 @@ m4_define(m4_nedrername, domain_model)m4_dnl
 m4_define(m4_nedrertex, \verb|domain_model|)m4_dnl
 m4_define(m4_nedrerdir, VUA-popen-nedreranker.v30)m4_dnl
 m4_define(m4_nedrerball, 20151220_VUA-popen-nedreranker.v30.tgz)m4_dnl
+m4_define(m4_nedrerscript, nedrer)m4_dnl
 m4_dnl
 m4_dnl Wikify
 m4_define(m4_wikifyname, ixa-pipe-wikify)m4_dnl
 m4_define(m4_wikifytex, \verb|m4_wikifyname|)m4_dnl
 m4_define(m4_wikifydir, EHU-wikify.v30)m4_dnl
 m4_define(m4_wikifyball, 20151220_EHU-wikify.v30.tgz)m4_dnl
+m4_define(m4_wikifyscript, wikify)m4_dnl
 m4_dnl
 m4_dnl UKB
 m4_define(m4_ukbname, ukb)m4_dnl
 m4_define(m4_ukbtex, \textsc{ukb})m4_dnl
 m4_define(m4_ukbdir, EHU-ukb.v30)m4_dnl
 m4_define(m4_ukbball, 20151220_EHU-ukb.v30.tgz)m4_dnl
+m4_define(m4_ukbscript, ukb)m4_dnl
 m4_dnl
 m4_dnl WSD
 m4_dnl m4_define(m4_wsdsrc, m4_lisanlproot/mods/ukb)m4_dnl  Subdir. of modules
@@ -280,7 +290,8 @@ m4_dnl ONTO
 m4_define(m4_ontoname, `OntoTagger')m4_dnl
 m4_define(m4_ontotex, onto-tagger)m4_dnl
 m4_define(m4_ontodir, m4_ontoname)m4_dnl  Subdir. of modules
-m4_define(m4_ontogit, `https://github.com/PaulHuygen/OntoTagger.git')m4_dnl  Subdir. of modules
+m4_dnl m4_define(m4_ontogit, `https://github.com/PaulHuygen/OntoTagger.git')m4_dnl  Subdir. of modules
+m4_define(m4_ontogit, `https://github.com/cltl/OntoTagger.git')m4_dnl  Subdir. of modules
 m4_define(m4_ontojar, ontotagger-1.0-jar-with-dependencies.jar)m4_dnl
 m4_dnl m4_define(m4_ontocommitname, `1fe96e99105249b87296d911e36a8f08f2780116')m4_dnl
 m4_dnl m4_define(m4_ontocommitname, `631ae0ac363860fef1edfcc9e58a2d306ab6a161')m4_dnl
@@ -335,16 +346,19 @@ m4_dnl FBK-time
 m4_define(m4_fbktimename, FBK-time)m4_dnl
 m4_define(m4_fbktimetex, \textsc{fbk}-time)m4_dnl
 m4_define(m4_fbktimedir, FBK-time.v30)m4_dnl
+m4_define(m4_fbktimescript, FBK-time)m4_dnl
 m4_dnl
 m4_dnl FBK-temprel
 m4_define(m4_fbktemprelname, FBK-temprel)m4_dnl
 m4_define(m4_fbktempreltex, \textsc{fbk}-temprel)m4_dnl
 m4_define(m4_fbktempreldir, FBK-temprel.v30)m4_dnl
+m4_define(m4_fbktemprelscript, FBK-temprel)m4_dnl
 m4_dnl
 m4_dnl FBK-causalrel
 m4_define(m4_fbkcausalrelname, FBK-causalrel)m4_dnl
 m4_define(m4_fbkcausalreltex, \textsc{fbk}-causalrel)m4_dnl
 m4_define(m4_fbkcausalreldir, FBK-causalrel.v30)m4_dnl
+m4_define(m4_fbkcausalrelscript, FBK-causalrel)m4_dnl
 m4_dnl
 m4_dnl SRL
 m4_define(m4_nl_srlname, vua-srl-nl)m4_dnl
@@ -359,6 +373,9 @@ m4_define(m4_srlsrc, m4_asnapshotroot/srlModuleForBN)m4_dnl
 m4_dnl m4_define(m4_srldir, srlModuleForBN)m4_dnl
 m4_define(m4_srldir, vua-srl-nl)m4_dnl
 m4_define(m4_srlscript, srl)m4_dnl
+m4_dnl
+m4_dnl eSRL
+m4_define(m4_esrlscript, eSRL)m4_dnl
 m4_dnl
 m4_dnl SRL dutch nominals
 m4_define(m4_srl_dn_name, srl-dutch-nominals)m4_dnl
@@ -429,6 +446,7 @@ m4_define(m4_factualityname, factuality)m4_dnl
 m4_define(m4_factualitytex, \verb|factuality|)m4_dnl
 m4_define(m4_factualitydir, VUA-factuality.v30)m4_dnl
 m4_define(m4_factualityball, 20151220_VUA-factuality.v30.tgz)m4_dnl
+m4_define(m4_factualityscript, factuality)m4_dnl
 m4_dnl m4_dnl
 m4_dnl m4_dnl Corefgraph (=coreference-base)
 m4_dnl m4_define(m4_corefgraphname, corefgraph)m4_dnl

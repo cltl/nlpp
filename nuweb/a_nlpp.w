@@ -150,50 +150,89 @@ Table~\ref{tab:modulelist}
 \begin{table}[hbtp]
   \centering
   \begin{footnotesize}
-    \begin{tabular}{llllll}
-     \textbf{Module}   & \textbf{Section}     & \textbf{Source} &  \textbf{Commit} & \textbf{Script} \\
-       \href{m4_tokenizergit}{Tokenizer}          
-                       & \dref{sec:installtokenizer}         & \href{m4_tokenizergit}{Github} & m4_tokenizer_commitname & \texttt{m4_tokenizerscript}  \\
-@%       \href{m4_tokenizergit}{Tokenizer}          
-@%                       & \dref{sec:installtokenizer}           &  snapshot          & m4_tokenizer_commitname & \texttt{m4_tokenizerscript}  \\
-       \href{m4_morphpargit}{morphosyntactic parser} 
-                       & \dref{sec:install-morphsynt-parser} & \href{m4_morphpargit}{Github}  & m4_morphpar_commitname  & \verb|m4_morphparscript|     \\
-       \href{m4_nercgit}{\textsc{nerc}} 
-                       & \dref{sec:nerc}                     & \href{m4_nercgit}{Gith.}/snap      & m4_nerc_commitname   & m4_nercscript      \\
-       \href{m4_wsdgit}{\textsc{wsd}}
-                       & \dref{sec:wsd}                       & \href{m4_wsdgit}{Gith.}/snap      & m4_wsd_commitname   & m4_wsdscript       \\
-       \hyperref[sec:onto]{Onto-tagger}
-                       & \dref{sec:onto}                                     & snapshot       &                      & m4_ontoscript      \\
-       \href{m4_heidelgit}{Heideltime}
-                       & \dref{sec:heideltime}              & \href{m4_heidelgit}{Gith.}/snap.     & m4_heidel_commitname  & m4_heidelscript   \\
-       \href{m4_srlgit}{\textsc{srl}}
-                       & \dref{sec:SRL}                        & \href{m4_srlgit}{Github}     & m4_srl_commitname   & m4_srlscript       \\
-       \href{m4_srlgit}{\textsc{srl-post}}
-                       & \dref{sec:srlpost}                                  & snapshot        &                    & m4_postsrlscript       \\
-       \href{m4_nedgit}{\textsc{ned}}
-                       & \dref{sec:ned}                        & \href{m4_nedgit}{Github}     & m4_ned_commitname   & m4_nedscript       \\
-       \href{m4_corefbasegit}{Nom. coref}
-                       & \dref{sec:nomcorefgraph}       & \href{m4_corefbasegit}{Github}      & m4_corefbase_commitname   & m4_ncorefscript   \\  
-       \href{m4_evcorefscript}{Ev. coref}
-                       & \dref{sec:eventcoref}                                & snapshot      &                           &  m4_evcorefscript  \\  
-       \hyperref[sec:vua-pylib]{Opinion miner}
-                       & \dref{sec:opinimin}   & \href{m4_opinigit}{Github} &           &  m4_opiniscript   & \\  
-       \hyperref[sec:framesrl]{Framenet SRL} 
-                       & \dref{sec:framesrl}                                  & snapshot      &                            &  m4_fsrlscript   \\  
-       \hyperref[sec:dbpedia-ner]{Dbpedia\_ner} 
-                       & \dref{sec:dbpedia-ner}                                  &  \href{m4_dbpnergit}{Github}       &  m4_dbpner_commitname                          &  m4_dbpnerscript   \\  
-@%     \hyperref[sec:install-alpino]{Alpino             & \verb|m4_alpinodir|    & \textsc{rug} & m4_Alpinoscript  & \\
-@%     \hyperref[]{Ticcutils          & \verb|m4_ticcdir|      & \textsc{ilk} & & \\
-@%     \hyperref[]{Timbl              & \verb|m4_timbldir|     & \textsc{ilk} & & \\
-@%     \hyperref[]{Treetagger         &                        &              & & \\
+    \begin{tabular}{lllllll}
+     \textbf{Module}              & \textbf{Source}        & \textbf{Section}                     & \textbf{Commit}         & \textbf{Script}              & \textbf{language} \\
+        Tokenizer                 & \url{m4_tokenizergit}  & \dref{sec:installtokenizer}          & m4_tokenizer_commitname & \texttt{m4_tokenizerscript}  & en/nl  \\
+        Topic detection           & snapshot               & \dref{sec:topic-install}             &  \ldots                 & \verb|m4_topicscript|        & en     \\
+        Morpho-syntactic parser   & \url{m4_morphpargit}   & \dref{sec:install-morphsynt-parser}  & m4_morphpar_commitname  & \verb|m4_morphparscript|     & nl     \\
+        \textsc{pos}-tagger       & snapshot               & \dref{sec:postagger}                 &  \ldots                 & \verb|m4_postagscript|       & en     \\
+        Named-entity rec/class    & \url{m4_nercgit}       & \dref{sec:nerc}                      & m4_nerc_commitname      & \verb|m4_nercscript|         & en/nl  \\
+        Constituent parser        & snapshot               & \dref{sec:constparser}               &  \ldots                 & \verb|m4_consparscript|      & en     \\
+        Word-sense disamb. nl     & \url{m4_wsdgit}        & \dref{sec:wsd}                       & m4_wsd_commitname       & \verb|wsd|                   & nl     \\
+        Word-sense disamb. en     & snapshot               & \dref{sec:IMS-WSD}                   &  \ldots                 & \verb|ewsd|                  & en     \\
+        Named entity/DBP          & snapshot               & \dref{sec:ned-module}                &  \ldots                 & \verb|ned|                   & en/nl  \\
+        NED reranker              & snapshot               & \dref{sec:nedrer}                    &  \ldots                 & \verb|nedrerscript|          & en     \\
+        Wikify                    & snapshot               & \dref{sec:wikify}                    &  \ldots                 & \verb|m4_wikify|             & en     \\
+        \UKB{}                    & snapshot               & \dref{sec:ukb}                       &  \ldots                 & \verb|m4_ukbscript|          & en     \\
+        Coreference-base          & snapshot               & \dref{sec:nomcorefgraph}             &  \ldots                 & \verb|m4_corefbasescript|    & en     \\
+        Heideltime                & \url{m4_heidelgit}     & \dref{sec:heideltime}                & m4_heidel_commitname    & \verb|m4_heidelscript|       & nl     \\
+        Onto-tagger               & \url{m4_ontogit}       & \dref{sec:onto}                      & m4_ontocommitname      & \verb|m4_ontoscript|         & nl     \\
+        Semantic Role labeling nl & \url{m4_srlgit}        & \dref{sec:SRL-module}                & m4_srl_commitname       & \verb|m4_srlcript|           & nl     \\
+        Semantic Role labeling en & snapshot               & \dref{sec:srlserver}                 &  \ldots                 & \verb|m4_esrlcript|          & en     \\
+        Nominal Event ann.        & \url{m4_ontogit}       & \dref{sec:onto}                      & m4_ontocommitname      & \verb|m4_nomeventscript|     & nl     \\
+        SRL dutch nominals        & \url{m4_srl_dn_git}    & \dref{sec:srl-dn}                    & m4_srl_dn_commitname    & \verb|m4_srl_dn_script|      & nl     \\
+        Framenet-SRL              & \url{m4_ontogit}       & \dref{sec:onto}                      & m4_ontocommitname      & \verb|m4_framesrlscript|     & nl     \\
+        FBK-time                  & snapshot               & \dref{sec:fbktime}                   & \ldots                  & \verb|m4_fbktimescript|      & en     \\
+        FBK-temprel               & snapshot               & \dref{sec:FBK-temprel}               & \ldots                  & \verb|m4_fbktimerelscript|   & en     \\
+        FBK-causalrel             & snapshot               & \dref{sec:FBK-causalrel}             & \ldots                  & \verb|m4_fbkcausalrelscript| & en     \\
+        Opinion-miner             & \url{m4_opinigit}      & \dref{sec:opinimin}                  & m4_opini_commitname     & \verb|m4_opiniscript|        & en/nl  \\
+        Event-coref               & snapshot               & \dref{sec:event-coref-module}        & \ldots                  & \verb|m4_evcorefscript|      & en/nl  \\
+        Factuality tagger         & snapshot               & \dref{sec:factuality}                & \ldots                  & \verb|m4_factualityscript|   & en     \\
     \end{tabular}
   \end{footnotesize}
-  \caption{List of the modules to be installed. Column description:
-    \textbf{directory:} Name of the subdirectory below subdirectory \texttt{modules} in
-    which it is installed; \textbf{source:} From where the module has
-    been obtained; \textbf{commit:} Commit-name or version-tag \textbf{script:} Script to be included in a pipeline. \textbf{Note:} The tokenizer module has been temporarily obtained from the snapshot, because the commit that we used has disappeared from the Github repository.}
-  \label{tab:modulelist}
+   \caption{List of the modules to be installed. Column description:
+     \textbf{directory:} Name of the subdirectory below subdirectory \texttt{modules} in
+     which it is installed; \textbf{source:} From where the module has
+     been obtained; \textbf{commit:} Commit-name or version-tag \textbf{script:} Script to be included in a pipeline. \textbf{Note:} The tokenizer module has been temporarily obtained from the snapshot, because the commit that we used has disappeared from the Github repository.}
+   \label{tab:modulelist}
 \end{table}
+@% \begin{table}[hbtp]
+@%   \centering
+@%   \begin{footnotesize}
+@%     \begin{tabular}{llllll}
+@%      \textbf{Module}   & \textbf{Section}     & \textbf{Source} &  \textbf{Commit} & \textbf{Script} \\
+@%        \href{m4_tokenizergit}{Tokenizer}          
+@%                        & \dref{sec:installtokenizer}         & \href{m4_tokenizergit}{Github} & m4_tokenizer_commitname & \texttt{m4_tokenizerscript}  \\
+@% @%       \href{m4_tokenizergit}{Tokenizer}          
+@% @%                       & \dref{sec:installtokenizer}           &  snapshot          & m4_tokenizer_commitname & \texttt{m4_tokenizerscript}  \\
+@%        \href{m4_morphpargit}{morphosyntactic parser} 
+@%                        & \dref{sec:install-morphsynt-parser} & \href{m4_morphpargit}{Github}  & m4_morphpar_commitname  & \verb|m4_morphparscript|     \\
+@%        \href{m4_nercgit}{\textsc{nerc}} 
+@%                        & \dref{sec:nerc}                     & \href{m4_nercgit}{Gith.}/snap      & m4_nerc_commitname   & m4_nercscript      \\
+@%        \href{m4_wsdgit}{\textsc{wsd}}
+@%                        & \dref{sec:wsd}                       & \href{m4_wsdgit}{Gith.}/snap      & m4_wsd_commitname   & m4_wsdscript       \\
+@%        \hyperref[sec:onto]{Onto-tagger}
+@%                        & \dref{sec:onto}                                     & snapshot       &                      & m4_ontoscript      \\
+@%        \href{m4_heidelgit}{Heideltime}
+@%                        & \dref{sec:heideltime}              & \href{m4_heidelgit}{Gith.}/snap.     & m4_heidel_commitname  & m4_heidelscript   \\
+@%        \href{m4_srlgit}{\textsc{srl}}
+@%                        & \dref{sec:SRL}                        & \href{m4_srlgit}{Github}     & m4_srl_commitname   & m4_srlscript       \\
+@%        \href{m4_srlgit}{\textsc{srl-post}}
+@%                        & \dref{sec:srlpost}                                  & snapshot        &                    & m4_postsrlscript       \\
+@%        \href{m4_nedgit}{\textsc{ned}}
+@%                        & \dref{sec:ned}                        & \href{m4_nedgit}{Github}     & m4_ned_commitname   & m4_nedscript       \\
+@%        \href{m4_corefbasegit}{Nom. coref}
+@%                        & \dref{sec:nomcorefgraph}       & \href{m4_corefbasegit}{Github}      & m4_corefbase_commitname   & m4_ncorefscript   \\  
+@%        \href{m4_evcorefscript}{Ev. coref}
+@%                        & \dref{sec:eventcoref}                                & snapshot      &                           &  m4_evcorefscript  \\  
+@%        \hyperref[sec:vua-pylib]{Opinion miner}
+@%                        & \dref{sec:opinimin}   & \href{m4_opinigit}{Github} &           &  m4_opiniscript   & \\  
+@%        \hyperref[sec:framesrl]{Framenet SRL} 
+@%                        & \dref{sec:framesrl}                                  & snapshot      &                            &  m4_fsrlscript   \\  
+@%        \hyperref[sec:dbpedia-ner]{Dbpedia\_ner} 
+@%                        & \dref{sec:dbpedia-ner}                                  &  \href{m4_dbpnergit}{Github}       &  m4_dbpner_commitname                          &  m4_dbpnerscript   \\  
+@% @%     \hyperref[sec:install-alpino]{Alpino             & \verb|m4_alpinodir|    & \textsc{rug} & m4_Alpinoscript  & \\
+@% @%     \hyperref[]{Ticcutils          & \verb|m4_ticcdir|      & \textsc{ilk} & & \\
+@% @%     \hyperref[]{Timbl              & \verb|m4_timbldir|     & \textsc{ilk} & & \\
+@% @%     \hyperref[]{Treetagger         &                        &              & & \\
+@%     \end{tabular}
+@%   \end{footnotesize}
+@%   \caption{List of the modules to be installed. Column description:
+@%     \textbf{directory:} Name of the subdirectory below subdirectory \texttt{modules} in
+@%     which it is installed; \textbf{source:} From where the module has
+@%     been obtained; \textbf{commit:} Commit-name or version-tag \textbf{script:} Script to be included in a pipeline. \textbf{Note:} The tokenizer module has been temporarily obtained from the snapshot, because the commit that we used has disappeared from the Github repository.}
+@%   \label{tab:modulelist}
+@% \end{table}
 lists the modules in the pipeline. The column \emph{source} indicates
 the origin of the module. The modules are obtained in one of the following ways:
 
@@ -2634,7 +2673,7 @@ chmod 775 *.bin
 
 \paragraph{Script}
 
-@o m4_bindir/constpars @{@%
+@o m4_bindir/m4_consparscript @{@%
 @< start of module-script @(m4_conspardir@) @>
 java -Xmx1000m -jar ${MODDIR}/m4_consparname-m4_consparversion.jar parse -g sem -m ${MODDIR}/en-parser-chunking.bin
 @| @}
@@ -2702,7 +2741,7 @@ tar -xzf \$snapshotsocket/m4_snapshotdirectory/m4_nedrerball
 
 \paragraph{Script}
 
-@o m4_bindir/nedrer @{@%
+@o m4_bindir/m4_nedrerscript @{@%
 @< start of module-script @(m4_nedrerdir@) @>
 cd $MODDIR
 python $MODDIR/domain_model.py
@@ -2848,7 +2887,7 @@ a \NAF{} file.
 @| @}
 
 
-@o m4_bindir/eSRL @{@%
+@o m4_bindir/esrlscript @{@%
 @< start of module-script @(m4_srlserverdir@) @>
 m4_abindir/start_eSRL
 java -Xmx1000m -cp $MODDIR/IXA-EHU-srl-3.0.jar ixa.srl.SRLClient en
@@ -2894,7 +2933,6 @@ GITU=m4_srl_dn_git
 GITC=m4_srl_dn_commitname
 @< install from github @>
 cd \$modulesdir/m4_srl_dn_dir
-chmod 775 m4_srl_dn_binary
 @| @}
 
 \paragraph{Script}
@@ -2902,7 +2940,7 @@ chmod 775 m4_srl_dn_binary
 @o m4_bindir/m4_srl_dn_script @{@%
 @< start of module-script @(m4_srl_dn_dir@) @>
 cd $MODDIR
-cat | $MODDIR/m4_srl_dn_binary
+cat | python $MODDIR/m4_srl_dn_binary
 @| @}
 
 
@@ -3057,7 +3095,7 @@ temporary files with a random number to prevent confusion between
 tempfiles of different instances of this module. We generate a
 temp-directory per instance. 
 
-@o m4_bindir/FBK-temprel @{@%
+@o m4_bindir/m4_fbktemprelscript @{@%
 @< start of module-script @(m4_fbktempreldir@) @>
 cd $MODDIR
 scratchDir=`mktemp -d -t temprel.XXXXXX`
@@ -3155,7 +3193,7 @@ chmod 775 run.sh.hadoop
 
 \paragraph{Script}
 
-@o  m4_bindir/FBK-causalrel @{@%
+@o  m4_bindir/m4_fbkcausalrelscript @{@%
 @< start of module-script @(m4_fbkcausalreldir@) @>
 cd $MODDIR
 scratchDir=`mktemp -d -t causalrel.XXXXXX`
@@ -3179,7 +3217,7 @@ tar -xzf \$snapshotsocket/m4_snapshotdirectory/m4_factualityball
 \paragraph{Script}
 
 
-@o m4_bindir/factuality @{@%
+@o m4_bindir/m4_factualityscript @{@%
 @< start of module-script @(m4_factualitydir@) @>
 cd $MODDIR
 #local settings to prevent perl from complaining
