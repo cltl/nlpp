@@ -37,7 +37,6 @@ m4_include(texinclusions.m4)m4_dnl
   instrument to annotate Dutch or English documents with \NLP{} tags.
 \end{abstract}
 \tableofcontents
-
 \section{Introduction}
 \label{sec:Introduction}
 
@@ -151,50 +150,89 @@ Table~\ref{tab:modulelist}
 \begin{table}[hbtp]
   \centering
   \begin{footnotesize}
-    \begin{tabular}{llllll}
-     \textbf{Module}   & \textbf{Section}     & \textbf{Source} &  \textbf{Commit} & \textbf{Script} \\
-       \href{m4_tokenizergit}{Tokenizer}          
-                       & \dref{sec:installtokenizer}         & \href{m4_tokenizergit}{Github} & m4_tokenizer_commitname & \texttt{m4_tokenizerscript}  \\
-@%       \href{m4_tokenizergit}{Tokenizer}          
-@%                       & \dref{sec:installtokenizer}           &  snapshot          & m4_tokenizer_commitname & \texttt{m4_tokenizerscript}  \\
-       \href{m4_morphpargit}{morphosyntactic parser} 
-                       & \dref{sec:install-morphsynt-parser} & \href{m4_morphpargit}{Github}  & m4_morphpar_commitname  & \verb|m4_morphparscript|     \\
-       \href{m4_nercgit}{\textsc{nerc}} 
-                       & \dref{sec:nerc}                     & \href{m4_nercgit}{Gith.}/snap      & m4_nerc_commitname   & m4_nercscript      \\
-       \href{m4_wsdgit}{\textsc{wsd}}
-                       & \dref{sec:wsd}                       & \href{m4_wsdgit}{Gith.}/snap      & m4_wsd_commitname   & m4_wsdscript       \\
-       \hyperref[sec:onto]{Onto-tagger}
-                       & \dref{sec:onto}                                     & snapshot       &                      & m4_ontoscript      \\
-       \href{m4_heidelgit}{Heideltime}
-                       & \dref{sec:heideltime}              & \href{m4_heidelgit}{Gith.}/snap.     & m4_heidel_commitname  & m4_heidelscript   \\
-       \href{m4_srlgit}{\textsc{srl}}
-                       & \dref{sec:SRL}                        & \href{m4_srlgit}{Github}     & m4_srl_commitname   & m4_srlscript       \\
-       \href{m4_srlgit}{\textsc{srl-post}}
-                       & \dref{sec:srlpost}                                  & snapshot        &                    & m4_postsrlscript       \\
-       \href{m4_nedgit}{\textsc{ned}}
-                       & \dref{sec:ned}                        & \href{m4_nedgit}{Github}     & m4_ned_commitname   & m4_nedscript       \\
-       \href{m4_corefbasegit}{Nom. coref}
-                       & \dref{sec:nomcorefgraph}       & \href{m4_corefbasegit}{Github}      & m4_corefbase_commitname   & m4_ncorefscript   \\  
-       \href{m4_evcorefscript}{Ev. coref}
-                       & \dref{sec:eventcoref}                                & snapshot      &                           &  m4_evcorefscript  \\  
-       \hyperref[sec:vua-pylib]{Opinion miner}
-                       & \dref{sec:opinimin}   & \href{m4_opinigit}{Github} &           &  m4_opiniscript   & \\  
-       \hyperref[sec:framesrl]{Framenet SRL} 
-                       & \dref{sec:framesrl}                                  & snapshot      &                            &  m4_fsrlscript   \\  
-       \hyperref[sec:dbpedia-ner]{Dbpedia\_ner} 
-                       & \dref{sec:dbpedia-ner}                                  &  \href{m4_dbpnergit}{Github}       &  m4_dbpner_commitname                          &  m4_dbpnerscript   \\  
-@%     \hyperref[sec:install-alpino]{Alpino             & \verb|m4_alpinodir|    & \textsc{rug} & m4_Alpinoscript  & \\
-@%     \hyperref[]{Ticcutils          & \verb|m4_ticcdir|      & \textsc{ilk} & & \\
-@%     \hyperref[]{Timbl              & \verb|m4_timbldir|     & \textsc{ilk} & & \\
-@%     \hyperref[]{Treetagger         &                        &              & & \\
+    \begin{tabular}{lllllll}
+     \textbf{Module}              & \textbf{Source}        & \textbf{Section}                     & \textbf{Commit}         & \textbf{Script}              & \textbf{language} \\
+        Tokenizer                 & \url{m4_tokenizergit}  & \dref{sec:installtokenizer}          & m4_tokenizer_commitname & \texttt{m4_tokenizerscript}  & en/nl  \\
+        Topic detection           & snapshot               & \dref{sec:topic-install}             &  \ldots                 & \verb|m4_topicscript|        & en     \\
+        Morpho-syntactic parser   & \url{m4_morphpargit}   & \dref{sec:install-morphsynt-parser}  & m4_morphpar_commitname  & \verb|m4_morphparscript|     & nl     \\
+        \textsc{pos}-tagger       & snapshot               & \dref{sec:postagger}                 &  \ldots                 & \verb|m4_postagscript|       & en     \\
+        Named-entity rec/class    & \url{m4_nercgit}       & \dref{sec:nerc}                      & m4_nerc_commitname      & \verb|m4_nercscript|         & en/nl  \\
+        Constituent parser        & snapshot               & \dref{sec:constparser}               &  \ldots                 & \verb|m4_consparscript|      & en     \\
+        Word-sense disamb. nl     & \url{m4_wsdgit}        & \dref{sec:wsd}                       & m4_wsd_commitname       & \verb|wsd|                   & nl     \\
+        Word-sense disamb. en     & snapshot               & \dref{sec:IMS-WSD}                   &  \ldots                 & \verb|ewsd|                  & en     \\
+        Named entity/DBP          & snapshot               & \dref{sec:ned-module}                &  \ldots                 & \verb|ned|                   & en/nl  \\
+        NED reranker              & snapshot               & \dref{sec:nedrer}                    &  \ldots                 & \verb|nedrerscript|          & en     \\
+        Wikify                    & snapshot               & \dref{sec:wikify}                    &  \ldots                 & \verb|m4_wikify|             & en     \\
+        \UKB{}                    & snapshot               & \dref{sec:ukb}                       &  \ldots                 & \verb|m4_ukbscript|          & en     \\
+        Coreference-base          & snapshot               & \dref{sec:nomcorefgraph}             &  \ldots                 & \verb|m4_corefbasescript|    & en     \\
+        Heideltime                & \url{m4_heidelgit}     & \dref{sec:heideltime}                & m4_heidel_commitname    & \verb|m4_heidelscript|       & nl     \\
+        Onto-tagger               & \url{m4_ontogit}       & \dref{sec:onto}                      & m4_ontocommitname      & \verb|m4_ontoscript|         & nl     \\
+        Semantic Role labeling nl & \url{m4_srlgit}        & \dref{sec:SRL-module}                & m4_srl_commitname       & \verb|m4_srlcript|           & nl     \\
+        Semantic Role labeling en & snapshot               & \dref{sec:srlserver}                 &  \ldots                 & \verb|m4_esrlcript|          & en     \\
+        Nominal Event ann.        & \url{m4_ontogit}       & \dref{sec:onto}                      & m4_ontocommitname      & \verb|m4_nomeventscript|     & nl     \\
+        SRL dutch nominals        & \url{m4_srl_dn_git}    & \dref{sec:srl-dn}                    & m4_srl_dn_commitname    & \verb|m4_srl_dn_script|      & nl     \\
+        Framenet-SRL              & \url{m4_ontogit}       & \dref{sec:onto}                      & m4_ontocommitname      & \verb|m4_framesrlscript|     & nl     \\
+        FBK-time                  & snapshot               & \dref{sec:fbktime}                   & \ldots                  & \verb|m4_fbktimescript|      & en     \\
+        FBK-temprel               & snapshot               & \dref{sec:FBK-temprel}               & \ldots                  & \verb|m4_fbktimerelscript|   & en     \\
+        FBK-causalrel             & snapshot               & \dref{sec:FBK-causalrel}             & \ldots                  & \verb|m4_fbkcausalrelscript| & en     \\
+        Opinion-miner             & \url{m4_opinigit}      & \dref{sec:opinimin}                  & m4_opini_commitname     & \verb|m4_opiniscript|        & en/nl  \\
+        Event-coref               & snapshot               & \dref{sec:event-coref-module}        & \ldots                  & \verb|m4_evcorefscript|      & en/nl  \\
+        Factuality tagger         & snapshot               & \dref{sec:factuality}                & \ldots                  & \verb|m4_factualityscript|   & en     \\
     \end{tabular}
   \end{footnotesize}
-  \caption{List of the modules to be installed. Column description:
-    \textbf{directory:} Name of the subdirectory below subdirectory \texttt{modules} in
-    which it is installed; \textbf{source:} From where the module has
-    been obtained; \textbf{commit:} Commit-name or version-tag \textbf{script:} Script to be included in a pipeline. \textbf{Note:} The tokenizer module has been temporarily obtained from the snapshot, because the commit that we used has disappeared from the Github repository.}
-  \label{tab:modulelist}
+   \caption{List of the modules to be installed. Column description:
+     \textbf{directory:} Name of the subdirectory below subdirectory \texttt{modules} in
+     which it is installed; \textbf{source:} From where the module has
+     been obtained; \textbf{commit:} Commit-name or version-tag \textbf{script:} Script to be included in a pipeline. \textbf{Note:} The tokenizer module has been temporarily obtained from the snapshot, because the commit that we used has disappeared from the Github repository.}
+   \label{tab:modulelist}
 \end{table}
+@% \begin{table}[hbtp]
+@%   \centering
+@%   \begin{footnotesize}
+@%     \begin{tabular}{llllll}
+@%      \textbf{Module}   & \textbf{Section}     & \textbf{Source} &  \textbf{Commit} & \textbf{Script} \\
+@%        \href{m4_tokenizergit}{Tokenizer}          
+@%                        & \dref{sec:installtokenizer}         & \href{m4_tokenizergit}{Github} & m4_tokenizer_commitname & \texttt{m4_tokenizerscript}  \\
+@% @%       \href{m4_tokenizergit}{Tokenizer}          
+@% @%                       & \dref{sec:installtokenizer}           &  snapshot          & m4_tokenizer_commitname & \texttt{m4_tokenizerscript}  \\
+@%        \href{m4_morphpargit}{morphosyntactic parser} 
+@%                        & \dref{sec:install-morphsynt-parser} & \href{m4_morphpargit}{Github}  & m4_morphpar_commitname  & \verb|m4_morphparscript|     \\
+@%        \href{m4_nercgit}{\textsc{nerc}} 
+@%                        & \dref{sec:nerc}                     & \href{m4_nercgit}{Gith.}/snap      & m4_nerc_commitname   & m4_nercscript      \\
+@%        \href{m4_wsdgit}{\textsc{wsd}}
+@%                        & \dref{sec:wsd}                       & \href{m4_wsdgit}{Gith.}/snap      & m4_wsd_commitname   & m4_wsdscript       \\
+@%        \hyperref[sec:onto]{Onto-tagger}
+@%                        & \dref{sec:onto}                                     & snapshot       &                      & m4_ontoscript      \\
+@%        \href{m4_heidelgit}{Heideltime}
+@%                        & \dref{sec:heideltime}              & \href{m4_heidelgit}{Gith.}/snap.     & m4_heidel_commitname  & m4_heidelscript   \\
+@%        \href{m4_srlgit}{\textsc{srl}}
+@%                        & \dref{sec:SRL}                        & \href{m4_srlgit}{Github}     & m4_srl_commitname   & m4_srlscript       \\
+@%        \href{m4_srlgit}{\textsc{srl-post}}
+@%                        & \dref{sec:srlpost}                                  & snapshot        &                    & m4_postsrlscript       \\
+@%        \href{m4_nedgit}{\textsc{ned}}
+@%                        & \dref{sec:ned}                        & \href{m4_nedgit}{Github}     & m4_ned_commitname   & m4_nedscript       \\
+@%        \href{m4_corefbasegit}{Nom. coref}
+@%                        & \dref{sec:nomcorefgraph}       & \href{m4_corefbasegit}{Github}      & m4_corefbase_commitname   & m4_ncorefscript   \\  
+@%        \href{m4_evcorefscript}{Ev. coref}
+@%                        & \dref{sec:eventcoref}                                & snapshot      &                           &  m4_evcorefscript  \\  
+@%        \hyperref[sec:vua-pylib]{Opinion miner}
+@%                        & \dref{sec:opinimin}   & \href{m4_opinigit}{Github} &           &  m4_opiniscript   & \\  
+@%        \hyperref[sec:framesrl]{Framenet SRL} 
+@%                        & \dref{sec:framesrl}                                  & snapshot      &                            &  m4_fsrlscript   \\  
+@%        \hyperref[sec:dbpedia-ner]{Dbpedia\_ner} 
+@%                        & \dref{sec:dbpedia-ner}                                  &  \href{m4_dbpnergit}{Github}       &  m4_dbpner_commitname                          &  m4_dbpnerscript   \\  
+@% @%     \hyperref[sec:install-alpino]{Alpino             & \verb|m4_alpinodir|    & \textsc{rug} & m4_Alpinoscript  & \\
+@% @%     \hyperref[]{Ticcutils          & \verb|m4_ticcdir|      & \textsc{ilk} & & \\
+@% @%     \hyperref[]{Timbl              & \verb|m4_timbldir|     & \textsc{ilk} & & \\
+@% @%     \hyperref[]{Treetagger         &                        &              & & \\
+@%     \end{tabular}
+@%   \end{footnotesize}
+@%   \caption{List of the modules to be installed. Column description:
+@%     \textbf{directory:} Name of the subdirectory below subdirectory \texttt{modules} in
+@%     which it is installed; \textbf{source:} From where the module has
+@%     been obtained; \textbf{commit:} Commit-name or version-tag \textbf{script:} Script to be included in a pipeline. \textbf{Note:} The tokenizer module has been temporarily obtained from the snapshot, because the commit that we used has disappeared from the Github repository.}
+@%   \label{tab:modulelist}
+@% \end{table}
 lists the modules in the pipeline. The column \emph{source} indicates
 the origin of the module. The modules are obtained in one of the following ways:
 
@@ -982,26 +1020,33 @@ rm -rf $transdir
 @% @| @}
 
 A cornerstone Pythonmodule for the pipeline is
-\href{https://github.com/cltl/KafNafParserPy}{KafNafParserPy}. It is a
-feature of this module that you cannot install it with \textsc{pip}, but that
-you can add it to your \texttt{PYTHONPATH}.
+\href{https://github.com/cltl/KafNafParserPy}{KafNafParserPy}. Currently
+it is extremely easy installed:
+@% It is a
+@% feature of this module that you cannot install it with \textsc{pip}, but that
+@% you can add it to your \texttt{PYTHONPATH}.
 
 
 @d install kafnafparserpy @{@%
-@% cd m4_pythonmoddir
-cd \$envdir/python
-DIRN=KafNafParserPy
-@< move module @($DIRN@) @>
-git clone m4_kafnafgit
-if
-  [ $? -gt 0 ]
-then
-  @< logmess @(Cannot install current $DIRN version@) @>
-  @< re-instate old module @(\$DIRN@) @>
-else
-  @< remove old module @(\$DIRN@) @>
-fi
+pip install KafNafParserPy
 @| @}
+
+@% @d install kafnafparserpy @{@%
+@% @% cd m4_pythonmoddir
+@% cd \$envdir/python
+@% DIRN=KafNafParserPy
+@% @< move module @($DIRN@) @>
+@% git clone m4_kafnafgit
+@% if
+@%   [ $? -gt 0 ]
+@% then
+@%   @< logmess @(Cannot install current $DIRN version@) @>
+@%   @< re-instate old module @(\$DIRN@) @>
+@% else
+@%   @< remove old module @(\$DIRN@) @>
+@% fi
+@% @| @}
+
 
 \subsubsection{Python packages}
 \label{sec:pypacks}
@@ -1259,10 +1304,10 @@ echo Install modules
   echo ... WSD
   @< install the WSD module @>
 @< end conditional install @(wsd_installed@) @>
-@< begin conditional install @(onto_installed@) @>
+@< begin conditional install @(ontojar_installed@) @>
   echo ... Ontotagger
-  @< install the onto module @>
-@< end conditional install @(onto_installed@) @>
+  @< install the ontotagger repository @>
+@< end conditional install @(ontojar_installed@) @>
 @| @}
 @o m4_bindir/m4_module_installer @{@%
 @< begin conditional install @(heidel_installed@) @>
@@ -1288,10 +1333,10 @@ echo Install modules
   echo ... dbpedia-ner
   @< install the dbpedia-ner module @>
 @< end conditional install @(dbpner_installed@) @>
-@< begin conditional install @(nomevent_installed@) @>
-   echo ... nominal event
-   @< install the nomevent module @>
-@< end conditional install @(nomevent_installed@) @>
+@% @< begin conditional install @(nomevent_installed@) @>
+@%    echo ... nominal event
+@%    @< install the nomevent module @>
+@% @< end conditional install @(nomevent_installed@) @>
 @< begin conditional install @(post_SRL_installed@) @>
    echo ... post-SRL
    @< install the post-SRL module @>
@@ -1720,6 +1765,7 @@ ticbeldir=`mktemp -t -d tickbel.XXXXXX`
 cd \$ticbeldir
 tar -xzf \$snapshotsocket/m4_snapshotdirectory/\$TARB
 cd \$DIR
+sh ./bootstrap.sh
 ./configure --prefix=\$envdir
 make 
 make install
@@ -2627,7 +2673,7 @@ chmod 775 *.bin
 
 \paragraph{Script}
 
-@o m4_bindir/constpars @{@%
+@o m4_bindir/m4_consparscript @{@%
 @< start of module-script @(m4_conspardir@) @>
 java -Xmx1000m -jar ${MODDIR}/m4_consparname-m4_consparversion.jar parse -g sem -m ${MODDIR}/en-parser-chunking.bin
 @| @}
@@ -2695,7 +2741,7 @@ tar -xzf \$snapshotsocket/m4_snapshotdirectory/m4_nedrerball
 
 \paragraph{Script}
 
-@o m4_bindir/nedrer @{@%
+@o m4_bindir/m4_nedrerscript @{@%
 @< start of module-script @(m4_nedrerdir@) @>
 cd $MODDIR
 python $MODDIR/domain_model.py
@@ -2841,7 +2887,7 @@ a \NAF{} file.
 @| @}
 
 
-@o m4_bindir/eSRL @{@%
+@o m4_bindir/m4_esrlscript @{@%
 @< start of module-script @(m4_srlserverdir@) @>
 m4_abindir/start_eSRL
 java -Xmx1000m -cp $MODDIR/IXA-EHU-srl-3.0.jar ixa.srl.SRLClient en
@@ -2887,7 +2933,6 @@ GITU=m4_srl_dn_git
 GITC=m4_srl_dn_commitname
 @< install from github @>
 cd \$modulesdir/m4_srl_dn_dir
-chmod 775 m4_srl_dn_binary
 @| @}
 
 \paragraph{Script}
@@ -2895,7 +2940,7 @@ chmod 775 m4_srl_dn_binary
 @o m4_bindir/m4_srl_dn_script @{@%
 @< start of module-script @(m4_srl_dn_dir@) @>
 cd $MODDIR
-cat | $MODDIR/m4_srl_dn_binary
+cat | python $MODDIR/m4_srl_dn_binary
 @| @}
 
 
@@ -2918,6 +2963,8 @@ was a pipe consisting of two Java programs. However, that didn't seem
 to work in one of the computers that we use, therefore we have split
 the pipe using \verb|mytemp| as temporary storage. 
 
+
+
 @o m4_bindir/FBK-time @{@%
 @< start of module-script @(m4_fbktimedir@) @>
 BEGINTIME=`date '+%Y-%m-%dT%H:%M:%S%z'`
@@ -2929,6 +2976,7 @@ FILEOUT=$timdir/TimeProOUT.txp
 TIMEPRONORMIN=\$timdir/TimeProNormIN.txp
 JAVAMAXHEAP=2g
 mytemp=\$timdir/mytemp
+result=0
 cd $MODDIR
 cat > $CHUNKIN
 
@@ -2936,7 +2984,7 @@ JAVACLASSPATH="lib/jdom-2.0.5.jar:lib/kaflib-naf-1.1.9.jar:lib/NAFtoTXP_v11.jar"
 JAVAMODULE=eu.fbk.newsreader.naf.NAFtoTXP_v11
 cat $CHUNKIN | \
  java -Xmx$JAVAMAXHEAP -cp $JAVACLASSPATH $JAVAMODULE $FILETXP chunk+entity timex
-
+@< stop on error @(Java: $JAVACLASSPATH:$JAVAMODULE@) @>
 #echo "Saving... $FILETXP"
 tail -n +4 $FILETXP | awk -f resources/english-rules > $FILEOUT
 head -n +4 $FILETXP > $TIMEPRONORMIN
@@ -2945,20 +2993,20 @@ cat $FILEOUT | \
   $YAMCHA/yamcha-0.33/usr/local/bin/yamcha \
     -m models/tempeval3_silver-data.model \
   >> $TIMEPRONORMIN
-
+@< stop on error @(yamcha@) @>
 JAVACLASSPATH="lib/scala-library.jar:lib/timenorm-0.9.1-SNAPSHOT.jar"
 JAVACLASSPATH=$JAVACLASSPATH:"lib/threetenbp-0.8.1.jar:lib/TimeProNorm_v2.5.jar"
 JAVAMODULE=eu.fbk.timePro.TimeProNormApply
 cat $TIMEPRONORMIN | \
   java -Xmx$JAVAMAXHEAP -cp $JAVACLASSPATH $JAVAMODULE $FILETXP
-
+@< stop on error @(Java: $JAVACLASSPATH:$JAVAMODULE@) @>
 rm $FILEOUT
 rm $TIMEPRONORMIN
 
 JAVACLASSPATH="lib/jdom-2.0.5.jar:lib/kaflib-naf-1.1.9.jar:lib/NAFtoTXP_v11.jar"
 JAVAMODULE=eu.fbk.newsreader.naf.NAFtoTXP_v11
 cat $CHUNKIN | java -Xmx$JAVAMAXHEAP -cp $JAVACLASSPATH $JAVAMODULE $FILEOUT chunk+morpho+timex+event eval
-
+@< stop on error @(Java: $JAVACLASSPATH:$JAVAMODULE@)@>
 JAVACP1="lib/TXPtoNAF_v5.jar:lib/jdom-2.0.5.jar:lib/kaflib-naf-1.1.9.jar"
 JAVAMOD1=eu.fbk.newsreader.naf.TXPtoNAF_v4
 JAVACP2="lib/kaflib-naf-1.1.9.jar:lib/jdom-2.0.5.jar:lib/TimeProEmptyTimex_v2.jar"
@@ -2966,13 +3014,32 @@ JAVAMOD2=eu.fbk.timepro.TimeProEmptyTimex
 @% java  -Dfile.encoding=UTF8 -cp $JAVACP1 $JAVAMOD1 $CHUNKIN $FILETXP "$BEGINTIME" TIMEX3 | \
 @%  java -Dfile.encoding=UTF8 -cp $JAVACP2 $JAVAMOD2 $FILEOUT
 java -Xmx$JAVAMAXHEAP  -Dfile.encoding=UTF8 -cp $JAVACP1 $JAVAMOD1 $CHUNKIN $FILETXP "$BEGINTIME" TIMEX3 > $mytemp
+@% @< stop on error @(Java: $JAVACLASSPATH:$JAVAMODULE@)@>
 cat $mytemp | java -Xmx$JAVAMAXHEAP -Dfile.encoding=UTF8 -cp $JAVACP2 $JAVAMOD2 $FILEOUT
-
-
+@< stop on error @(Java: $JAVACLASSPATH:$JAVAMODULE@)@>
 rm $FILETXP
 rm $CHUNKIN
 rm -rf $timdir
 @| @}
+
+When one of the programs in the script fail, stop processing. Pass the
+error-code and write a message to locate the failing program. Remove
+the temporary directory. However, there is a problem. One of the java
+programs always results with result-code 1.  
+
+@d stop on error @{@%
+result=$?
+if
+  [ $result -ne 0 ]
+then
+  cd $MODDIR
+  echo Error: @1 >&2
+  rm -rf $timdir
+  exit $result
+fi
+@| @}
+
+
 
 \subsubsection{FBK-temprel module}
 \label{sec:FBK-temprel}
@@ -3028,7 +3095,7 @@ temporary files with a random number to prevent confusion between
 tempfiles of different instances of this module. We generate a
 temp-directory per instance. 
 
-@o m4_bindir/FBK-temprel @{@%
+@o m4_bindir/m4_fbktemprelscript @{@%
 @< start of module-script @(m4_fbktempreldir@) @>
 cd $MODDIR
 scratchDir=`mktemp -d -t temprel.XXXXXX`
@@ -3126,7 +3193,7 @@ chmod 775 run.sh.hadoop
 
 \paragraph{Script}
 
-@o  m4_bindir/FBK-causalrel @{@%
+@o  m4_bindir/m4_fbkcausalrelscript @{@%
 @< start of module-script @(m4_fbkcausalreldir@) @>
 cd $MODDIR
 scratchDir=`mktemp -d -t causalrel.XXXXXX`
@@ -3150,7 +3217,7 @@ tar -xzf \$snapshotsocket/m4_snapshotdirectory/m4_factualityball
 \paragraph{Script}
 
 
-@o m4_bindir/factuality @{@%
+@o m4_bindir/m4_factualityscript @{@%
 @< start of module-script @(m4_factualitydir@) @>
 cd $MODDIR
 #local settings to prevent perl from complaining
@@ -3294,7 +3361,10 @@ been randomly selected from a number of models that are available in
 @d get the nerc models @{@%
 @% @< get or have @(m4_nercmodelsball@) @>
 cd $modulesdir
-tar -xzf m4_snapshotsocket/m4_snapshotdirectory/m4_nercmodelsball
+tar -p -xzf m4_snapshotsocket/m4_snapshotdirectory/m4_nercmodelsball
+@% chmod g+rwxs nerc_models
+@% chmod o+rx nerc_models
+@% chmod o+rx nerc_models/nl
 @% mkdir -p \$modulesdir/m4_nercdir/en
 @% cp \$snapshotsocket/m4_enrepo_dir/m4_EHU_nercdir/\$en_nercmodel \$modulesdir/m4_nercdir/en/
 @% rm \$pipesocket/m4_nercmodelsball
@@ -3720,62 +3790,86 @@ cat | java -Xmx1000m -jar \$jarsdir/m4_nedjar -H http://$spotlighthost -p $spotl
 @%chmod 775  m4_bindir/m4_nedscript
 @%@| @}
 
-
-
-\subsubsection{Ontotagger}
+\subsubsection{Ontotagger, Framenet-SRL and nominal events}
 \label{sec:onto}
 
-We do not yet have a source-repository of the Ontotagger module. Therefore,
-install from a snapshot (\verb|m4_ontotarball|).
+The three modules ontotagger (aka ``predicatematrix''),
+Framenet-\textsc{srl} and nominal event detection are based on the
+same software packages and resources. The three modules need the same
+jar \verb|m4_ontojar|, they need resources from the
+\verb|cltl/vua_resources| Github repository and they are going to
+execute a script that resides in the scripts directory of the
+\verb|cltl/OntoTagger| repository. So, what we have to do is:
 
-\paragraph{Module}
+\begin{enumerate}
+\item Install from the \verb|cltl/OntoTagger| repository.
+\item Create the jar and put it in an appropriate place. 
+\item install from the \verb|cltl\vua-resources| repository.
+\item generate a script fot each of the modules.
+\end{enumerate}
+
+In fact, items~2 and~3 are performed by script \verb|install.sh| from
+the OntoTagger repository.
+
+
+\paragraph{Modules}
 \label{sec:ontotagger-module}
 
-@d install the onto module @{@%
-@% @< get or have @(m4_ontotarball@) @>
-@%cp -r m4_asnapshotroot/m4_ontodir \$modulesdir/
+@d install the ontotagger repository @{@%
+@%   obdir=`mktemp -d -t ontobuild.XXXXXX`
+@%   cd $obdir
 cd \$modulesdir
-tar -xzf \$snapshotsocket/m4_snapshotdirectory/m4_ontotarball
-@% rm \$pipesocket/m4_ontotarball
-chmod -R o+r \$modulesdir/m4_ontodir
+git clone m4_ontogit
+cd m4_ontoname
+git checkout m4_ontocommitname
+chmod 775 ./install.sh
+./install.sh
+cd $piperoot
 @| @}
 
 
-\paragraph{Script}
+
+\paragraph{Scripts}
 \label{sec:ontoscript}
+
+The ``onto'' (predicatematrix) script:
 
 @o m4_bindir/m4_ontoscript @{@%
 @< start of module-script @(m4_ontodir@) @>
-JARDIR=\$MODDIR/lib
-RESOURCESDIR=\$MODDIR/resources
-PREDICATEMATRIX="\$RESOURCESDIR/PredicateMatrix.v1.3.txt.role.odwn"
-GRAMMATICALWORDS="\$RESOURCESDIR/grammaticals/Grammatical-words.nl"
-TMPFIL=`mktemp -t stap6.XXXXXX`
-cat >$TMPFIL
-
-CLASSPATH=\$JARDIR/ontotagger-1.0-jar-with-dependencies.jar
-JAVASCRIPT=eu.kyotoproject.main.KafPredicateMatrixTagger
-MAPPINGS="fn;mcr;ili;eso"
-JAVA_ARGS="--mappings $MAPPINGS"
-JAVA_ARGS="\$JAVA_ARGS  --key odwn-eq"
-JAVA_ARGS="\$JAVA_ARGS  --version 1.2"
-JAVA_ARGS="\$JAVA_ARGS  --predicate-matrix \$PREDICATEMATRIX"
-JAVA_ARGS="\$JAVA_ARGS  --grammatical-words \$GRAMMATICALWORDS"
-JAVA_ARGS="\$JAVA_ARGS  --naf-file \$TMPFIL"
-java -Xmx1812m -cp \$CLASSPATH \$JAVASCRIPT \$JAVA_ARGS
-rm -rf \$TMPFIL
+cd \$MODDIR/scripts
+cat | \$MODDIR/scripts/m4_onto_subscript
+@% JARDIR=\$MODDIR/lib
+@% RESOURCESDIR=\$MODDIR/resources
+@% PREDICATEMATRIX="\$RESOURCESDIR/PredicateMatrix.v1.3.txt.role.odwn"
+@% GRAMMATICALWORDS="\$RESOURCESDIR/grammaticals/Grammatical-words.nl"
+@% TMPFIL=`mktemp -t stap6.XXXXXX`
+@% cat >$TMPFIL
+@% 
+@% CLASSPATH=\$JARDIR/ontotagger-1.0-jar-with-dependencies.jar
+@% JAVASCRIPT=eu.kyotoproject.main.KafPredicateMatrixTagger
+@% MAPPINGS="fn;mcr;ili;eso"
+@% JAVA_ARGS="--mappings $MAPPINGS"
+@% JAVA_ARGS="\$JAVA_ARGS  --key odwn-eq"
+@% JAVA_ARGS="\$JAVA_ARGS  --version 1.2"
+@% JAVA_ARGS="\$JAVA_ARGS  --predicate-matrix \$PREDICATEMATRIX"
+@% JAVA_ARGS="\$JAVA_ARGS  --grammatical-words \$GRAMMATICALWORDS"
+@% JAVA_ARGS="\$JAVA_ARGS  --naf-file \$TMPFIL"
+@% java -Xmx1812m -cp \$CLASSPATH \$JAVASCRIPT \$JAVA_ARGS
+@% rm -rf \$TMPFIL
 
 @| @}
 
-
-\subsubsection{Framenet SRL}
-\label{sec:framesrl}
-
-The framenet \SRL{} is part of the package that contains the ontotagger. We only need a different script.
+The ``Framenet SRL'' script:
 
 
-\paragraph{Script}
-\label{sec:framesrlscript}
+@% \subsubsection{Framenet SRL}
+@% \label{sec:framesrl}
+@% 
+@% The framenet \SRL{} is part of the package that contains the ontotagger. We only need a different script.
+@% 
+@% 
+@% \paragraph{Script}
+@% \label{sec:framesrlscript}
 
 The script contains a hack, because the framesrl script produces
 spurious lines containining ``frameMap.size()=...''. A \textsc{gawk}
@@ -3783,31 +3877,53 @@ script removes these lines.
 
 @o m4_bindir/m4_framesrlscript @{@%
 @< start of module-script @(m4_ontodir@) @>
-ONTODIR=$modulesdir/m4_ontodir
-JARDIR=\$MODDIR/lib
-RESOURCESDIR=\$MODDIR/resources
-@% PREDICATEMATRIX="\$RESOURCESDIR/PredicateMatrix.v1.1/PredicateMatrix.v1.1.role.nl-1.merged"
-PREDICATEMATRIX="\$RESOURCESDIR/PredicateMatrix_nl_lu_withESO.v0.2.role.txt"
-GRAMMATICALWORDS="\$RESOURCESDIR/grammaticals/Grammatical-words.nl"
-TMPFIL=`mktemp -t framesrl.XXXXXX`
-cat >$TMPFIL
-
-CLASSPATH=\$JARDIR/ontotagger-1.0-jar-with-dependencies.jar
-JAVASCRIPT=eu.kyotoproject.main.SrlFrameNetTagger
-
-JAVA_ARGS="--naf-file \$TMPFIL"
-JAVA_ARGS="\$JAVA_ARGS  --format naf"
-JAVA_ARGS="\$JAVA_ARGS  --frame-ns fn:"
-JAVA_ARGS="\$JAVA_ARGS   --role-ns fn-role:;pb-role:;fn-pb-role:;eso-role:"
-JAVA_ARGS="\$JAVA_ARGS   --ili-ns mcr:ili"
-JAVA_ARGS="\$JAVA_ARGS   --sense-conf 0.25"
-JAVA_ARGS="\$JAVA_ARGS   --frame-conf 70"
-
-java -Xmx1812m -cp \$CLASSPATH \$JAVASCRIPT \$JAVA_ARGS  | gawk '/^frameMap.size()/ {next}; {print}'
+cd \$MODDIR/scripts
+cat | \$MODDIR/scripts/m4_framesrl_subscript | gawk '/^frameMap.size()/ {next}; {print}'
+@% ONTODIR=$modulesdir/m4_ontodir
+@% JARDIR=\$MODDIR/lib
+@% RESOURCESDIR=\$MODDIR/resources
+@% @% PREDICATEMATRIX="\$RESOURCESDIR/PredicateMatrix.v1.1/PredicateMatrix.v1.1.role.nl-1.merged"
+@% PREDICATEMATRIX="\$RESOURCESDIR/PredicateMatrix_nl_lu_withESO.v0.2.role.txt"
+@% GRAMMATICALWORDS="\$RESOURCESDIR/grammaticals/Grammatical-words.nl"
+@% TMPFIL=`mktemp -t framesrl.XXXXXX`
+@% cat >$TMPFIL
+@% 
+@% CLASSPATH=\$JARDIR/ontotagger-1.0-jar-with-dependencies.jar
+@% JAVASCRIPT=eu.kyotoproject.main.SrlFrameNetTagger
+@% 
+@% JAVA_ARGS="--naf-file \$TMPFIL"
+@% JAVA_ARGS="\$JAVA_ARGS  --format naf"
+@% JAVA_ARGS="\$JAVA_ARGS  --frame-ns fn:"
+@% JAVA_ARGS="\$JAVA_ARGS   --role-ns fn-role:;pb-role:;fn-pb-role:;eso-role:"
+@% JAVA_ARGS="\$JAVA_ARGS   --ili-ns mcr:ili"
+@% JAVA_ARGS="\$JAVA_ARGS   --sense-conf 0.25"
+@% JAVA_ARGS="\$JAVA_ARGS   --frame-conf 70"
+@% 
+@% java -Xmx1812m -cp \$CLASSPATH \$JAVASCRIPT \$JAVA_ARGS  | gawk '/^frameMap.size()/ {next}; {print}'
 @% java -Xmx1812m -cp ../lib/ontotagger-1.0-jar-with-dependencies.jar eu.kyotoproject.main.SrlFrameNetTagger --naf-file "../example/test.srl.lexicalunits.pm.naf" --format naf --frame-ns "fn:" --role-ns "fn-role:;pb-role:;fn-pb-role:;eso-role:" --ili-ns "mcr:ili" --sense-conf 0.25 --frame-conf 70 > "../example/test.srl.lexicalunits.pm.fn.naf"
-rm -rf \$TMPFIL
+@% rm -rf \$TMPFIL
 
 @| @}
+
+The ``nomevent'' script:
+
+@o m4_bindir/m4_nomeventscript @{@%
+@< start of module-script @(m4_ontodir@) @>
+cd \$MODDIR/scripts
+cat | \$MODDIR/scripts/m4_nomevent_subscript
+@% LIBDIR=\$MODDIR/lib
+@% RESOURCESDIR=\$MODDIR/resources
+@% 
+@% JAR=\$LIBDIR/ontotagger-1.0-jar-with-dependencies.jar
+@% JAVAMODULE=eu.kyotoproject.main.NominalEventCoreference
+@% @% cat | iconv -f ISO8859-1 -t UTF-8 | java -Xmx812m -cp $JAR $JAVAMODULE --framenet-lu $RESOURCESDIR/nl-luIndex.xml
+@% cat | java -Xmx812m -cp $JAR $JAVAMODULE --framenet-lu $RESOURCESDIR/nl-luIndex.xml
+@| @}
+
+
+
+
+
 
 \subsubsection{Heideltime}
 \label{sec:heideltime}
@@ -4321,41 +4437,6 @@ cat | iconv -f ISO8859-1 -t UTF-8 | $MODDIR/dbpedia_ner.py -url http://$spotligh
 @| @}
 
 
-\subsubsection{Nominal events}
-\label{sec:nomevents}
-
-The module ``postprocessing-nl'' adds nominal events to the srl
-annotations. It has been obtained directly from the author (Piek
-Vossen). It is not yet available in a public repo. Probably in future
-versions the jar from the ontotagger module can be used for this module.
-
-
-\paragraph{Module}
-\label{sec:nemeventmodule}
-
-@d install the nomevent module @{@%
-@% @< get or have @(m4_nomeventball@) @>
-cd \$modulesdir
-tar -xzf \$snapshotsocket/m4_snapshotdirectory/m4_nomeventball
-@| @}
-
-\paragraph{Script}
-\label{par:nomeventscript}
-
-@o m4_bindir/m4_nomeventscript @{@%
-@< start of module-script @(m4_nomeventdir@) @>
-LIBDIR=\$MODDIR/lib
-RESOURCESDIR=\$MODDIR/resources
-
-JAR=\$LIBDIR/ontotagger-1.0-jar-with-dependencies.jar
-JAVAMODULE=eu.kyotoproject.main.NominalEventCoreference
-@% cat | iconv -f ISO8859-1 -t UTF-8 | java -Xmx812m -cp $JAR $JAVAMODULE --framenet-lu $RESOURCESDIR/nl-luIndex.xml
-cat | java -Xmx812m -cp $JAR $JAVAMODULE --framenet-lu $RESOURCESDIR/nl-luIndex.xml
-@| @}
-
-
-
-
 \subsubsection{Opinion miner}
 \label{sec:opinimin}
 
@@ -4517,22 +4598,41 @@ python tag_file.py -d hotel
 \label{sec:testscript}
 
 
-The following script pushes a test-document through the modules of
-the pipeline.
+The following script, \verb|test|, pushes a test-document through the modules of
+the pipeline. if provided with an argument ``nl'' or ``en'', it
+obtains a standard test-document in the appropriate language and puts
+it in \verb|test/test.in.naf| (Let us call this file \verb|TESTIN|). Otherwise, it expects to find file
+\verb|test/test.in.naf|.
+
+@d get a testfile or die @{@%
+if 
+  [ "$1" == "en" ]
+then
+  cp \$ROOT/nuweb/test.en.in.naf \$TESTIN
+else
+  if
+    [ "\$1" == "nl" ]
+  then
+    cp \$ROOT/nuweb/test.nl.in.naf \$TESTIN
+  fi
+fi
+if
+  [ ! -e \$TESTIN ]
+then
+  echo "Please supply test-file \$TESTIN or specify language"
+  exit 4
+fi
+@| @}
 
 @o m4_bindir/test @{@%
 #!/bin/bash
 ROOT=m4_aprojroot
-TESTDIR=$ROOT/test
-@< function to run a module in the test @>
-TESTIN=\$ROOT/nuweb/test.nl.in.naf
-if 
-  [ "$1" == "en" ]
-then
-  TESTIN=\$ROOT/nuweb/test.en.in.naf
-fi
 BIND=$ROOT/bin
+TESTDIR=$ROOT/test
+TESTIN=$ROOT/test/test.in.naf
 mkdir -p $TESTDIR
+@< function to run a module in the test @>
+@< get a testfile or die @>
 cd $TESTDIR
 @< set the language variable @($TESTIN@)@>
 @< select language-dependent features @>
@@ -4559,6 +4659,8 @@ else
   @< annotate english document @>
 fi
 @| @}
+
+
 
 The following function, runmodule, applies a module on a naf
 file. When the module results in error, the function  exits the script
