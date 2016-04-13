@@ -1,7 +1,7 @@
 NLPP
 ====
 
-Install the latest English/Dutch bi-lingual  [Newsreader]{http://www.newsreader-project.eu} pipeline on a decent Linux computer.
+Install the latest English/Dutch bi-lingual  [Newsreader](http://www.newsreader-project.eu) pipeline on a decent Linux computer.
 
 When possible, the installer obtains the modules directly from repo's
 like Github. Otherwise, it downloads them from a closed snapshot archive. To get modules
