@@ -73,44 +73,44 @@ pipeline from a frozen repository of the Newsreader Project.
 
 \subsection{List of the modules to be installed}
 \label{sec:moduleslist}
-Table~\ref{tab:installed_modules}%
-\begin{table}[hbtp]
-  \centering
-  \begin{small}
-    \begin{tabular}{llll}
-      \textbf{Module}    &  \textbf{NL}         &  \textbf{EN} &  \textbf{EN component} \\    
-      Tokenizer        & m4_tokenizertex  & m4_tokenizertex    &                           \\
-      Topic detection  &                  & m4_topictooltex    & \verb|m4_topictooldir|    \\
-      \POS{}/\MOR{}    & m4_morphpartex   & m4_postex          & \verb|m4_posdir|          \\
-      Constit. parser  &                  & m4_conspartex      & \verb|m4_conspardir|      \\
-      \NERC{}          & m4_nerctex       & m4_nerctex         &                           \\
-      \UKB{}           &                  & m4_ukbtex          & \verb|m4_ukbdir|          \\
-      \WSD{}           & m4_wsdtex        & m4_ewsdtex         & \verb|m4_ewsddir|         \\
-      \NED{}           & m4_nedtex        & m4_nedname         &                           \\
-      Heideltime       & m4_heideltex     &                    &                           \\
-      FBK-time         &                  & m4_fbktimetex      & \verb|m4_fbktimedir|      \\
-      FBK-temprel      &                  & m4_fbktempreltex   & \verb|m4_fbktempreldir|   \\
-      FBK-causalrel    &                  & m4_fbkcausalreltex & \verb|m4_fbkcausalreldir| \\
-      Onto-tagger      & m4_ontotex       &                    &                           \\
-      \textsc{srl}     & m4_nl_srltex     & m4_en_srltex       & \verb|m4_en_srldir|       \\
-      Nominal event det. & m4_nomeventtex &                    &                           \\
-      \NED{}-reranker  &                  & m4_nedrertex       & \verb|m4_nedrerdir|       \\
-      Wikify           &                  & m4_wikifyname      & \verb|m4_wikifydir|       \\
-      factuality       &                  &                    & \verb|m4_factualitydir|   \\
-@%      Corefgraph       &                  &                    & \verb|m4_corefdir|        \\
-      Opinion-miner    & m4_opinitex      & m4_opinitex        & \\
-      Eventcoref       & m4_evcoreftex    & m4_evcoreftex      & \\
-    \end{tabular}
-  \end{small}
-  \caption{List of modules to be installed.
-           \textbf{Module}: functional name of the module;
-           \textbf{NL}:     modules used in Dutch pipeline}; 
-           \textbf{EN}: modules used in English pipeline;
-           \textbf{EN components} Name of the module in the \textsc{ehu} repository.
-  \label{tab:installed_modules}
-\end{table}
-lists the modules that are installed. Some of the modules are used for
-both languages (Dutch and English), some for only one of them.
+@% Table~\ref{tab:installed_modules}%
+@% \begin{table}[hbtp]
+@%   \centering
+@%   \begin{small}
+@%     \begin{tabular}{llll}
+@%       \textbf{Module}    &  \textbf{NL}         &  \textbf{EN} &  \textbf{EN component} \\    
+@%       Tokenizer        & m4_tokenizertex  & m4_tokenizertex    &                           \\
+@%       Topic detection  &                  & m4_topictooltex    & \verb|m4_topictooldir|    \\
+@%       \POS{}/\MOR{}    & m4_morphpartex   & m4_postex          & \verb|m4_posdir|          \\
+@%       Constit. parser  &                  & m4_conspartex      & \verb|m4_conspardir|      \\
+@%       \NERC{}          & m4_nerctex       & m4_nerctex         &                           \\
+@%       \UKB{}           &                  & m4_ukbtex          & \verb|m4_ukbdir|          \\
+@%       \WSD{}           & m4_wsdtex        & m4_ewsdtex         & \verb|m4_ewsddir|         \\
+@%       \NED{}           & m4_nedtex        & m4_nedname         &                           \\
+@%       Heideltime       & m4_heideltex     &                    &                           \\
+@%       FBK-time         &                  & m4_fbktimetex      & \verb|m4_fbktimedir|      \\
+@%       FBK-temprel      &                  & m4_fbktempreltex   & \verb|m4_fbktempreldir|   \\
+@%       FBK-causalrel    &                  & m4_fbkcausalreltex & \verb|m4_fbkcausalreldir| \\
+@%       Onto-tagger      & m4_ontotex       &                    &                           \\
+@%       \textsc{srl}     & m4_nl_srltex     & m4_en_srltex       & \verb|m4_en_srldir|       \\
+@%       Nominal event det. & m4_nomeventtex &                    &                           \\
+@%       \NED{}-reranker  &                  & m4_nedrertex       & \verb|m4_nedrerdir|       \\
+@%       Wikify           &                  & m4_wikifyname      & \verb|m4_wikifydir|       \\
+@%       factuality       &                  &                    & \verb|m4_factualitydir|   \\
+@% @%      Corefgraph       &                  &                    & \verb|m4_corefdir|        \\
+@%       Opinion-miner    & m4_opinitex      & m4_opinitex        & \\
+@%       Eventcoref       & m4_evcoreftex    & m4_evcoreftex      & \\
+@%     \end{tabular}
+@%   \end{small}
+@%   \caption{List of modules to be installed.
+@%            \textbf{Module}: functional name of the module;
+@%            \textbf{NL}:     modules used in Dutch pipeline; 
+@%            \textbf{EN}: modules used in English pipeline;
+@%            \textbf{EN components} Name of the module in the \textsc{ehu} repository.}
+@%   \label{tab:installed_modules}
+@% \end{table}
+@% lists the modules that are installed. Some of the modules are used for
+@% both languages (Dutch and English), some for only one of them.
 
 
 
@@ -1529,10 +1529,6 @@ for k in root.attrib:
 print language
 @| @}
 
-@d set the language variable @{@%
-naflang=`cat @1 | m4_aenvbindir/langdetect.py`
-export naflang
-@| naflang @}
 
 The module-scripts depend on the existence of variable \verb|naflang|.
 In most cases this is not a problem because the scripts run in a
@@ -4594,79 +4590,156 @@ python tag_file.py -d hotel
 \section{Utilities}
 \label{sec:utilities}
 
-\subsection{Test script}
-\label{sec:testscript}
 
-
-The following script, \verb|test|, pushes a test-document through the modules of
-the pipeline. if provided with an argument ``nl'' or ``en'', it
-obtains a standard test-document in the appropriate language and puts
-it in \verb|test/test.in.naf| (Let us call this file \verb|TESTIN|). Otherwise, it expects to find file
-\verb|test/test.in.naf|.
-
-@d get a testfile or die @{@%
-if 
-  [ "$1" == "en" ]
-then
-  cp \$ROOT/nuweb/test.en.in.naf \$TESTIN
-else
-  if
-    [ "\$1" == "nl" ]
-  then
-    cp \$ROOT/nuweb/test.nl.in.naf \$TESTIN
-  fi
-fi
-if
-  [ ! -e \$TESTIN ]
-then
-  echo "Please supply test-file \$TESTIN or specify language"
-  exit 4
-fi
-@| @}
-
-@o m4_bindir/test @{@%
-#!/bin/bash
-ROOT=m4_aprojroot
-BIND=$ROOT/bin
-TESTDIR=$ROOT/test
-TESTIN=$ROOT/test/test.in.naf
-mkdir -p $TESTDIR
-@< function to run a module in the test @>
-@< get a testfile or die @>
-cd $TESTDIR
-@< set the language variable @($TESTIN@)@>
-@< select language-dependent features @>
-@< find a spotlightserver or exit @>
-if
- [ "\$naflang" == "nl" ]
-then
-@%    @< annotate dutch document @>
-@%   cat \$TESTIN    | \$BIND/tok                    > tok.naf
-runmodule \$TESTIN    tok                     tok.naf
-runmodule tok.naf     mor                     mor.naf
-runmodule mor.naf     nerc                    nerc.naf
-runmodule nerc.naf    wsd                     wsd.naf
-runmodule wsd.naf     ned                     ned.naf
-runmodule ned.naf     heideltime              times.naf
-runmodule times.naf   onto                    onto.naf
-runmodule onto.naf    srl                     srl.naf
-runmodule srl.naf     m4_nomeventscript       nomev.naf
-runmodule nomev.naf   srl-dutch-nominals      psrl.naf
-runmodule psrl.naf    m4_framesrlscript       fsrl.naf
-runmodule fsrl.naf    m4_opiniscript          opin.naf
-runmodule opin.naf    m4_evcorefscript        out.naf
-else
-  @< annotate english document @>
-fi
-@| @}
+@% The following script, \verb|test|, pushes a test-document through the modules of
+@% the pipeline. if provided with an argument ``nl'' or ``en'', it
+@% obtains a standard test-document in the appropriate language and puts
+@% it in \verb|test/test.in.naf| (Let us call this file \verb|TESTIN|). Otherwise, it expects to find file
+@% \verb|test/test.in.naf|.
+@% 
+@% @% @d get a testfile or die @{@%
+@% @% if 
+@% @%   [ "$1" == "en" ]
+@% @% then
+@% @%   cp \$ROOT/nuweb/test.en.in.naf \$TESTIN
+@% @% else
+@% @%   if
+@% @%     [ "\$1" == "nl" ]
+@% @%   then
+@% @%     cp \$ROOT/nuweb/test.nl.in.naf \$TESTIN
+@% @%   fi
+@% @% fi
+@% @% if
+@% @%   [ ! -e \$TESTIN ]
+@% @% then
+@% @%   echo "Please supply test-file \$TESTIN or specify language"
+@% @%   exit 4
+@% @% fi
+@% @% @| @}
+@% 
+@% @o m4_bindir/test @{@%
+@% #!/bin/bash
+@% ROOT=m4_aprojroot
+@% BIND=$ROOT/bin
+@% TESTDIR=$ROOT/test
+@% TESTIN=$ROOT/test/test.in.naf
+@% mkdir -p $TESTDIR
+@% @< function to run a module in the test @>
+@% @< get a testfile or die @>
+@% cd $TESTDIR
+@% @< set the language variable @($TESTIN@)@>
+@% @< select language-dependent features @>
+@% @< find a spotlightserver or exit @>
+@% if
+@%  [ "\$naflang" == "nl" ]
+@% then
+@% @%    @< annotate dutch document @>
+@% @%   cat \$TESTIN    | \$BIND/tok                    > tok.naf
+@% runmodule \$TESTIN    tok                     tok.naf
+@% runmodule tok.naf     mor                     mor.naf
+@% runmodule mor.naf     nerc                    nerc.naf
+@% runmodule nerc.naf    wsd                     wsd.naf
+@% runmodule wsd.naf     ned                     ned.naf
+@% runmodule ned.naf     heideltime              times.naf
+@% runmodule times.naf   onto                    onto.naf
+@% runmodule onto.naf    srl                     srl.naf
+@% runmodule srl.naf     m4_nomeventscript       nomev.naf
+@% runmodule nomev.naf   srl-dutch-nominals      psrl.naf
+@% runmodule psrl.naf    m4_framesrlscript       fsrl.naf
+@% runmodule fsrl.naf    m4_opiniscript          opin.naf
+@% runmodule opin.naf    m4_evcorefscript        out.naf
+@% else
+@%   @< annotate english document @>
+@% fi
+@% @| @}
 
 
 
-The following function, runmodule, applies a module on a naf
-file. When the module results in error, the function  exits the script
-with the error code of the failing module. 
+@% The following function, runmodule, applies a module on a naf
+@% file. When the module results in error, the function  exits the script
+@% with the error code of the failing module. 
+@% 
+@% @d function to run a module in the test @{@%
+@% function runmodule {
+@%   local infile=$1
+@%   local modulecommand=\$BIND/$2
+@%   local outfile=$3
+@%   if
+@%     [ $moduleresult -eq 0 ]
+@%   then
+@%     cat $infile | $modulecommand > $outfile
+@%     moduleresult=$?
+@%     if
+@%       [ $moduleresult -gt 0 ]
+@%     then
+@%       failmodule=$modulecommand
+@%        echo "Failed: module $modulecommand; result $moduleresult" >&2
+@%        exit $moduleresult
+@%     else
+@%        echo "Completed: module $modulecommand; result $moduleresult" >&2
+@%     fi
+@%   fi  
+@% }
+@% @| @}
+@% 
+@% Initialize the variable \verb|moduleresult|:
+@% 
+@% @d function to run a module in the test @{@%
+@% export moduleresult=0
+@% @| moduleresult @}
 
-@d function to run a module in the test @{@%
+
+
+@% Correct sequence of the modules in the Dutch pipeline:
+@% 
+@% \begin{itemize}
+@% \item tok
+@% \item mor
+@% \item nerc
+@% \item wsd
+@% \item ned
+@% \item heidel
+@% \item onto (\verb|predicate-matrix-tagger.sh| uit \verb|vua-ontotagger-v1.0|)
+@% \item srl
+@% \item Nominal event detectie
+@% \item vua-srl-extra
+@% \item framesrl (\verb|srl-framenet-tagger.sh| uit \verb|vua-ontotagger-v1.0|)
+@% \item opinion mining
+@% \item ecrf
+@% \end{itemize}
+
+\subsection{Run-script and test-script}
+\label{sec:runscript}
+
+The script \verb|nlpp| reads a \NAF{} document from standard in and
+produces an annotated \NAF{} on standard out. The script \verb|test| 
+annotates either a test-document that resides in the nuweb directory
+or a user-provided document and
+leaves the intermediate results in its working directory
+\verb|nlpp/test|, so that, in case of problems, it is easy traceable what went wrong.
+
+The annotion process involves a sequence in which an \NLP{} module reads
+a file that contains
+the output from a previous module (or the input \NAF{} file),
+processes it and writes the result in another file.
+
+The following function, \verb|runmodule|, performs the action of a
+single module in the sequence. It needs
+three arguments: 1) the name of the \NAF{} file that the previous module
+produced or the input file; 2) the name of thje script that runs the module and 3) the name of the
+output \NAF{}.
+
+The function uses variable \verb|moduleresult| to decide
+whether it is really going to annotate. If this variable is "false"
+(i.e., not equal to zero), this means that one of the previous
+modules failed, and it is of no use to process the input file. In that
+case, the function leaves \verb|moderesult| as it is and does not
+process the input-file. Otherwise, it will process the input-file and it
+sets \verb|moduleresult| to the result of the processing module.
+
+@d function to run a module @{@%
+export moduleresult=0
+
 function runmodule {
   local infile=$1
   local modulecommand=\$BIND/$2
@@ -4680,44 +4753,24 @@ function runmodule {
       [ $moduleresult -gt 0 ]
     then
       failmodule=$modulecommand
-       echo "Failed: module $modulecommand; result $moduleresult" >&2
-       exit $moduleresult
+      echo "Failed: module $modulecommand; result $moduleresult" >&2
+      exit $moduleresult
     else
        echo "Completed: module $modulecommand; result $moduleresult" >&2
     fi
   fi  
 }
-@| @}
 
-Initialize the variable \verb|moduleresult|:
+@| moduleresult runmodule BIND @}
 
-@d function to run a module in the test @{@%
-export moduleresult=0
-@| moduleresult @}
-
-
-
-Correct sequence of the modules in the Dutch pipeline:
-
-\begin{itemize}
-\item tok
-\item mor
-\item nerc
-\item wsd
-\item ned
-\item heidel
-\item onto (\verb|predicate-matrix-tagger.sh| uit \verb|vua-ontotagger-v1.0|)
-\item srl
-\item Nominal event detectie
-\item vua-srl-extra
-\item framesrl (\verb|srl-framenet-tagger.sh| uit \verb|vua-ontotagger-v1.0|)
-\item opinion mining
-\item ecrf
-\end{itemize}
-
+\textbf{Note:} that variable \verb|BIND| has to be defined prior to
+using this function.
+ 
+Use the function to annotate a \NAF{} file that \verb|infile| points
+to and write the result in a file that  \verb|outfile| points to:
 
 @d annotate dutch document @{@%
-runmodule \$TESTIN    tok                     tok.naf
+runmodule \$infile    tok                     tok.naf
 runmodule tok.naf     mor                     mor.naf
 runmodule mor.naf     nerc                    nerc.naf
 runmodule nerc.naf    wsd                     wsd.naf
@@ -4729,11 +4782,13 @@ runmodule srl.naf     m4_nomeventscript       nomev.naf
 runmodule nomev.naf   srl-dutch-nominals      psrl.naf
 runmodule psrl.naf    m4_framesrlscript       fsrl.naf
 runmodule fsrl.naf    m4_opiniscript          opin.naf
-runmodule opin.naf    m4_evcorefscript        out.naf
+runmodule opin.naf    m4_evcorefscript        \$outfile
 @| @}
 
+Similar for an English naf:
+
 @d annotate english document @{@%
-  runmodule \$TESTIN    tok                     tok.naf
+  runmodule \$infile    tok                     tok.naf
   runmodule tok.naf     topic                   top.naf
   runmodule top.naf     pos                     pos.naf
   runmodule pos.naf     constpars               consp.naf
@@ -4750,8 +4805,131 @@ runmodule opin.naf    m4_evcorefscript        out.naf
   runmodule trel.naf    FBK-causalrel           crel.naf
   runmodule crel.naf    evcoref                 ecrf.naf
   runmodule ecrf.naf    factuality              fact.naf
-  runmodule fact.naf    m4_opiniscript          out.naf
+  runmodule fact.naf    m4_opiniscript          \$outfile
 @| @}
+
+Determine the language and select one of the above macro's to annotate
+the document. In fact, consider the document as an English document unless \verb|naflang| is ``nl''
+
+
+@% Set variable \verb|naflang| to the language of the input-document:
+@% 
+@% @d set the language variable @{@%
+@% naflang=`cat \$infile | m4_aenvbindir/langdetect.py`
+@% export naflang
+@% @| naflang @}
+
+
+@d annotate @{@%
+naflang=`cat \$infile | m4_aenvbindir/langdetect.py`
+export naflang
+if
+ [ "\$naflang" == "nl" ]
+then
+@%    @< annotate dutch document @>
+@%   cat \$TESTIN    | \$BIND/tok                    > tok.naf
+runmodule \$infile    tok                     tok.naf
+runmodule tok.naf     mor                     mor.naf
+runmodule mor.naf     nerc                    nerc.naf
+runmodule nerc.naf    wsd                     wsd.naf
+runmodule wsd.naf     ned                     ned.naf
+runmodule ned.naf     heideltime              times.naf
+runmodule times.naf   onto                    onto.naf
+runmodule onto.naf    srl                     srl.naf
+runmodule srl.naf     m4_nomeventscript       nomev.naf
+runmodule nomev.naf   srl-dutch-nominals      psrl.naf
+runmodule psrl.naf    m4_framesrlscript       fsrl.naf
+runmodule fsrl.naf    m4_opiniscript          opin.naf
+runmodule opin.naf    m4_evcorefscript        \$outfile
+else
+  @< annotate english document @>
+fi
+@| naflang @}
+
+Use the above ``annotate'' macro in a test script and in a run
+script. The scripts set a working directory and put the input-file in
+it, and then annotate it. 
+
+The test-script uses a special test-directory and leaves it behind when
+it is finished. If the user specified a language, the script copies a
+\NAF{} testfile from the nuweb directory as input-file. Otherwise, the script
+expexts the test-directory to be present, with an input-file (named
+\verb|in.naf|) in it.
+
+@d get a testfile or die @{@%
+cd $workdir
+if 
+  [ "\$1" == "en" ]
+then
+  cp \$ROOT/nuweb/test.en.in.naf \$infile
+else
+  if
+    [ "\$1" == "nl" ]
+  then
+    cp \$ROOT/nuweb/test.nl.in.naf  \$infile
+  fi
+fi
+if
+  [ ! -e \$infile ]
+then
+  echo "Please supply test-file \$workdir/\$infile or specify language"
+  exit 4
+fi
+@| @}
+
+This is the test-script:
+
+@o m4_bindir/test @{@%
+#!/bin/bash
+oldd=`pwd`
+@< set variables for test/run script @>
+workdir=$ROOT/test
+mkdir -p $workdir
+cd \$workdir
+@< get a testfile or die @>
+@< function to run a module @>
+@< annotate @>
+if
+  [ \$moduleresult -eq 0 ]
+then
+  echo Test succeeded.
+else
+  echo Something went wrong.
+fi
+exit \$moduleresult
+@| @}
+
+The run-script \verb|nlpp| reads a ``raw'' naf from standard in and
+produces an annotated naf on standard out. It creates a temporary
+directory to store intermediate results from the modules and removes this directory afterwards.
+
+@o m4_bindir/nlpp @{@%
+#!/bin/bash
+oldd=`pwd`
+@< set variables for test/run script @>
+workdir=`mktemp -d -t nlpp.XXXXXX`
+cd $workdir
+cat >$workdir/$infile
+@< function to run a module @>
+@< annotate @>
+if
+  [ \$moduleresult -eq 0 ]
+then
+  cat \$outfile
+fi
+cd \$oldd
+rm -rf $workdir
+exit \$moduleresult
+@| @}
+
+@d set variables for test/run script @{@%
+ROOT=m4_aprojroot
+BIND=$ROOT/bin
+infile=in.naf
+outfile=out.naf
+@| @}
+
+
 
 \subsection{Logging}
 \label{sec:logging}
@@ -4943,12 +5121,10 @@ clean:
 
 @| @}
 
+The default is, to install nlpp.
 
-
-One of the targets is certainly the \textsc{pdf} version of this
-document.
-
-@d all targets @{m4_progname.pdf@}
+@% @d all targets @{m4_progname.pdf@}
+ @d all targets @{install@}
 
 We use many suffixes that were not known by the C-programmers who
 constructed the \texttt{make} utility. Add these suffixes to the list.
@@ -5597,7 +5773,7 @@ htlatex \$trunk
 @| @}
 
 
-\subsection{Create the program sources}
+\subsection{Perform the installation}
 \label{sec:createsources}
 
 Run nuweb, but suppress the creation of the \LaTeX{} documentation.
@@ -5630,7 +5806,10 @@ chmod -R 775  m4_bindir/*
 chmod -R 775  m4_envbindir/*
 @| @}
 
-
+The target ``sources'' unpacks the nuweb file and creates the program
+scripts, i.e. the scripts that will apply modules on a \NAF{} file and
+the script \verb|install_modules| that installs the modules themselves
+and that creates the software environment the the modules need. 
 
 @d make targets @{@%
 sources : m4_progname.w \$(DIRS) \$(NUWEB)
@@ -5641,6 +5820,40 @@ sources : m4_progname.w \$(DIRS) \$(NUWEB)
 	@< make scripts executable @>
 
 @| @}
+
+The ``install'' target performs the complete installation.
+
+@d make targets @{@%
+install : sources
+	../bin/m4_module_installer
+
+@|install @}
+
+\subsection{Test whether it works}
+\label{sec:test}
+
+
+The targets testnl and testen perform the test-script
+(section~\ref{sec:testscript}) to test the dutch resp. english pipeline.
+
+@d make targets @{@%
+
+testnl : install test.nl.in.naf
+	rm -rf ../test
+	mkdir ../test
+	cd ../test && ../bin/test nl
+
+testen : install test.en.in.naf
+	rm -rf ../test
+	mkdir ../test
+	cd ../test && ../bin/test en
+
+
+@| testnl testen @}
+  
+
+
+
 
 @%@o createdirs @{@%
 @%#/bin/bash

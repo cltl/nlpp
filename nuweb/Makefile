@@ -1,4 +1,4 @@
-all : nlpp.pdf
+all : install
 .PHONY : all
 
 
@@ -83,8 +83,10 @@ clean:
 	cd $piperoot
 	mv /home/paul/projecten/nlpp/installed_modules old.modulelist
 	cat old.modulelist | gawk '/maven_installed/ {next}; {print}' >/home/paul/projecten/nlpp/installed_modules
+	
 	rm -rf $snapshotsocket/t_nlpp_resources/Alpino-x86_64-linux-glibc2.5-20706-sicstus.tar.gz
 	rm -rf ../nuweb-1.58
+	
 
 pdf : nlpp.pdf
 
@@ -108,8 +110,24 @@ $(DIRS) :
 sources : nlpp.w $(DIRS) $(NUWEB)
 	$(NUWEB) nlpp.w
 	chmod 775  ../bin/install-modules
+	chmod 775  ../bin/check_start_spotlight
 	chmod -R 775  ../bin/*
 	chmod -R 775  ../env/bin/*
+	
+
+install : sources
+	../bin/install-modules
+
+
+testnl : install test.nl.in.naf
+	rm -rf ../test
+	mkdir ../test
+	cd ../test && ../bin/test nl
+
+testen : install test.en.in.naf
+	rm -rf ../test
+	mkdir ../test
+	cd ../test && ../bin/test en
 
 
 transplant :
