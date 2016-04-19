@@ -1,4 +1,4 @@
-m4_define(m4_repoversion, `1.1.01')m4_dnl
+m4_define(m4_repoversion, `1.1.02')m4_dnl
 m4_dnl
 m4_dnl Titles
 m4_dnl
@@ -65,6 +65,14 @@ m4_define(m4_activepythonball, ActivePython-2.7.8.10-linux-x86_64.tar.gz)m4_dnl
 m4_define(m4_apythonenvdir, m4_aenvdir/python)m4_dnl
 m4_define(m4_pythonenvdir, m4_envdir/python)m4_dnl
 m4_dnl
+m4_dnl Perl
+m4_dnl
+m4_define(m4_perl_ddir, perl-5.22.1)m4_dnl
+m4_define(m4_perl_ball, m4_perl_ddir`'.tar.gz)m4_dnl
+m4_define(m4_perl_url, http://www.cpan.org/src/5.0/`'m4_perl_ball)m4_dnl
+
+
+m4_dnl
 m4_dnl snapshot
 m4_dnl
 m4_define(m4_repo_url, kyoto.let.vu.nl)m4_dnl
@@ -81,6 +89,15 @@ m4_define(m4_enrepo_url, u017940.si.ehu.es)m4_dnl
 m4_define(m4_enrepo_port, 2223)m4_dnl
 m4_define(m4_enrepo_user, newsreader)m4_dnl
 m4_define(m4_enrepo_dir, components)m4_dnl
+m4_dnl
+m4_dnl shared libs
+m4_dnl
+m4_define(m4_autoconf_version, 2.69)m4_dnl
+m4_define(m4_autoconf_ball, autoconf-m4_autoconf_version.tar.gz)m4_dnl
+m4_define(m4_autoconf_url, http://ftp.gnu.org/gnu/autoconf/m4_autoconf_ball)m4_dnl
+m4_define(m4_libxml2git, git://git.gnome.org/libxml2)m4_dnl
+m4_define(m4_lxsltgit, git://git.gnome.org/libxslt)m4_dnl
+
 m4_dnl
 m4_dnl Maven
 m4_dnl

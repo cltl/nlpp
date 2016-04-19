@@ -650,13 +650,77 @@ rsync -e "ssh -i \$HOME/m4_snapshotkeyfilename" -rLt m4_snapshotrootURL:m4_snaps
 @% rsync -e "ssh -i $HOME/nrkey -p m4_enrepo_port" -zrLt m4_enrepo_user@@m4_enrepo_url:m4_enrepo_dir .
 @% @| @}
 
+\section{Shared libraries}
+\label{sec:sharedlibs}
 
-\section{Java and Python environment}
+When we do not want to rely on what the host can present to us, we need to make our own shared libraries. For the present, we will
+generate the shared libraries \verb|libxslt| and \verb|libxml2|. We do the following:
+
+\begin{enumerate}
+\item install autoconf, needed to compile the libs.
+\item install libxslt
+\item install libxml2
+\end{enumerate}
+
+
+\subsection{Autoconf}
+\label{sec:autoconf}
+
+Gnu autoconf is a system to help configure the Makefiles for a software package. Softwarepackages that use this,
+supply a file \verb|configure|, \verb|configure.in| or \verb|configure.ac|. To compile and install a package from source we
+can then perform 1) \verb|./configure --prefix=<environment>|; 2) \verb|make|; 3) \verb|make install|.
+
+Install autoconf:
+
+
+@d install shared libs @{
+autoconfdir=`mktemp -d -t autoconf.XXXXXX`
+cd $autoconfdir
+wget m4_autoconf_url
+tar -xzf m4_autoconf_ball
+cd autoconf-<!!>m4_autoconf_version
+./autogen.sh --prefix=$envdir
+make
+make install
+cd $piperoot
+rm -rf $autoconfdir
+@| @}
+
+\subsection{libxml2 and libxslt}
+\label{sec:libxml2}
+
+Compilation and installation of \verb|libxml2| and \verb|libxslt| goes similar, according to the following template:
+
+@d install libxml2 or libxslt @{
+shtmpdir=`mktemp -d -t shl.XXXXXX`
+cd $shtmpdir
+git clone @1
+packagedir=`ls -1`
+cd $packagedir
+@% autoreconf --install
+@% ./configure --prefix=$envdir
+./autogen.sh --prefix=$envdir
+make
+make install
+cd $piperoot
+rm -rf $shtmpdir
+
+@| @}
+
+
+@d install shared libs @{
+@< install libxml2 or libxslt @(m4_libxml2git@)@>
+@< install libxml2 or libxslt @(m4_lxsltgit@)@>
+@| @}
+
+
+
+\section{Java, Python en Perl}
 \label{sec:environment}
 
 To be independent from the software environment of the host computer
 and to perform reproducible processing, the pipeline features its own
-Java and Python environment. The costs of this feature are that the
+Java, Perl and Python environments. The costs of this feature are that the
 pipeline takes more disk-space by reproducing infra-structure that is
 already present in the system and that installation takes more time.
 
@@ -813,8 +877,8 @@ Python packages that are needed.
 @< create a virtual environment for Python @>
 @< activate the python environment @>
 @< update pip @>
-@< install kafnafparserpy @>
 @< install python packages @>
+@< install kafnafparserpy @>
 @| @}
 
 
@@ -845,7 +909,7 @@ cd $acdir
 ./install.sh -I \$envdir
 cd \$piperoot
 rm -rf \$pytinsdir
-pip install -U pip virtualenv setuptools
+pip install -U virtualenv setuptools
 @| @}
 
 @% \subsubsection{Transplant ActivePython}
@@ -938,6 +1002,7 @@ cd \$envdir
 virtualenv venv
 @| @}
 
+
 @d test whether virtualenv is present on the host @{@%
 which virtualenv
 if
@@ -948,6 +1013,9 @@ then
 fi
 @|virtualenv @}
 
+
+Activate the virtual environment immediately in the installation-script, and add the activation-instruction
+to the initialisation-script.
 
 @d activate the python environment @{@%
 source \$envdir/venv/bin/activate
@@ -970,6 +1038,14 @@ packages are:
 echo export 'PYTHONPATH=\$envdir/python:\$PYTHONPATH' >> m4_aenvbindir/javapython
 export PYTHONPATH=\$envdir/python:\$PYTHONPATH
 @|PYTHONPATH @}
+
+We will use home-brewed shared libraries in Python, e.g.{} libxml2 and libxslt:
+
+@d activate the python environment @{@%
+echo export 'LD_LIBRARY_PATH=\$envlibdir:\$LD_LIBRARY_PATH' >> m4_aenvbindir/javapython
+export LD_LIBRARY_PATH=\$envdir/python:\$LD_LIBRARY_PATH
+@|LD_LIBRARY_PATH @}
+
 
 Update pip in the virtual environment, because otherwise it keeps
 complaining about outdated versions
@@ -1071,6 +1147,42 @@ pip install --upgrade networkx
 @| lxml pyyaml networkx@}
 
 
+\subsection{Perl}
+\label{sec:perl}
+
+Install Perl locally, to be certain that Perl is available and to enable to install
+packages that we need (in any case: \verb|XML::LibXML|).
+
+@d install perl @{@%
+tempdir=`mktemp -d -t perl.XXXXXX`
+cd $tempdir
+wget m4_perl_url
+tar -xzf m4_perl_ball 
+cd m4_perl_ddir
+./Configure -des -Dprefix=$envdir/perl
+make
+make test
+make install
+cd $progroot
+rm -rf $tempdir 
+
+@| @}
+
+Make sure that modules use the correct Perl
+
+@d install perl @{@%
+echo 'export PERL_HOME=$envdir/perl' >> m4_aenvbindir/javapython
+echo 'export PATH=$PERL_HOME/bin:$PATH' >> m4_aenvbindir/javapython
+export PERL_HOME=$envdir/perl
+export PATH=$PERL_HOME/bin:$PATH
+@| @}
+
+Install what is called \verb|XML::XMLLib| in the Perl world.
+
+@d install perl @{@%
+perl -MCPAN -e 'install XML::LibXML'
+@| @}
+
 
 \section{Installation of the modules}
 \label{sec:install}
@@ -1158,6 +1270,9 @@ echo Set up environment
 @< end conditional install @(repo_installed@) @>
 @< variables of m4_module_installer @>
 @%@< unpack snapshots or die @>
+@< begin conditional install @(shared_libs@) @>
+  @< install shared libs @>
+@< end conditional install @(shared_libs@) @>
 @< create javapython script @>
 echo ... Java
 @< set up java @>
@@ -1177,6 +1292,10 @@ fi
 @< begin conditional install @(python_installed@) @>
   @< set up python @>
 @< end conditional install @(python_installed@) @>
+@< begin conditional install @(perl_installed@) @>
+  @< install perl @>
+@< end conditional install @(perl__installed@) @>
+
 @< begin conditional install @(sematree_installed@) @>
   @< install sematree @>
 @< end conditional install @(sematree_installed@) @>
@@ -1365,8 +1484,23 @@ chmod 775  m4_bindir/m4_module_installer
 Test for some resources that we need and that may not be available on this host.
 
 @d check this first @{@%
+@< check whether program is present @(git@) @>
+@< check whether program is present @(tar@) @>
+@< check whether program is present @(unzip@) @>
+@< check whether program is present @(tcsh@) @>
 @< check whether mercurial is present @>
 @| @}
+
+@d check whether program is present @{@%
+which @1
+if
+  [ $? -ne 0 ]
+then
+  echo Please install @1.
+  exit 1
+fi
+@| @}
+
 
 @d check whether mercurial is present @{@%
 which hg
@@ -1918,9 +2052,16 @@ cd \$envdir/spotlight
 @| @}
 
 @d get spotlight model ball @{@%
-wget m4_spotlight_download_url/@1
-tar -xzf @1
-rm @1
+if
+  [ -e \$snapshotsocket/m4_snapshotdirectory/@1 ]
+then
+  tar -xzf \$snapshotsocket/m4_snapshotdirectory/@1
+else
+  wget m4_spotlight_download_url/@1
+  tar -xzf @1
+  rm @1
+fi
+
 @| @}
 
 
@@ -2791,11 +2932,13 @@ UKB needs boost libraries and Perl version 5. For now, we consider them installe
 Put the path to the boost libraries in the \verb|LD_LIBRARY_PATH|
 variable and then run \textsc{ukb}.
 
+Note that we cannot call perl impicitly with the hashbang.
+
 @o m4_bindir/ukb @{@%
 @< start of module-script @(m4_ukbdir@) @>
 cd $MODDIR
-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$envdir/lib:$envdir/boost_1_54_0/stage/lib
-${MODDIR}/naf_ukb/naf_ukb.pl -x ${MODDIR}/ukb/bin/ukb_wsd -K ${MODDIR}/wn30-ili_lkb/wn30g.bin64 -D ${MODDIR}/wn30-ili_lkb/wn30.lex - -- --dict_weight --dgraph_dfs --dgraph_rank ppr
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$envdir/boost_1_54_0/stage/lib
+perl ${MODDIR}/naf_ukb/naf_ukb.pl -x ${MODDIR}/ukb/bin/ukb_wsd -K ${MODDIR}/wn30-ili_lkb/wn30g.bin64 -D ${MODDIR}/wn30-ili_lkb/wn30.lex - -- --dict_weight --dgraph_dfs --dgraph_rank ppr
 
 @| @}
 
@@ -4883,7 +5026,7 @@ This is the test-script:
 #!/bin/bash
 oldd=`pwd`
 @< set variables for test/run script @>
-workdir=$ROOT/test
+workdir=$piperoot/test
 mkdir -p $workdir
 cd \$workdir
 @< get a testfile or die @>
@@ -4924,7 +5067,8 @@ exit \$moduleresult
 
 @d set variables for test/run script @{@%
 ROOT=m4_aprojroot
-BIND=$ROOT/bin
+source m4_aenvbindir/progenv
+BIND=$pipebin
 infile=in.naf
 outfile=out.naf
 @| @}
