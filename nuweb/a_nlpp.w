@@ -1,6 +1,6 @@
 m4_include(inst.m4)m4_dnl
-m4_dnl m4_sinclude(`../../local.m4')m4_dnl
-m4_sinclude(../../local.m4)m4_dnl
+m4_dnl m4_sinclude(../../local.m4)m4_dnl
+m4_sinclude(/tmp/local.m4)m4_dnl
 \documentclass[twoside,oldtoc]{artikel3}
 @% \documentclass[twoside]{article}
 \pagestyle{headings}
@@ -553,8 +553,8 @@ have the key:
 
 @d check this first @{@%
 if
-@%   [ ! -e m4_snapshotkeyfile ]
-  [ ! -e \$pipesocket/m4_snapshotkeyfilename ]
+  [ ! -e m4_snapshotkeyfile ]
+@%   [ ! -e \$pipesocket/m4_snapshotkeyfilename ]
 then
   echo "No key to connect to snapshot!"
   exit 1
@@ -565,7 +565,8 @@ Update the local snapshot repository.
 
 @d get the snapshot @{@%
 cd $snapshotsocket
-rsync -e "ssh -i \$HOME/m4_snapshotkeyfilename" -rLt m4_snapshotrootURL:m4_snapshotdirectory .
+@% rsync -e "ssh -i \$HOME/m4_snapshotkeyfilename" -rLt m4_snapshotrootURL:m4_snapshotdirectory .
+rsync -e "ssh -i m4_snapshotkeyfile" -rLt m4_snapshotrootURL:m4_snapshotdirectory .
 @| @}
 
 
@@ -4937,7 +4938,7 @@ Similar for an English naf:
   runmodule pos.naf     constpars               consp.naf
   runmodule consp.naf   nerc                    nerc.naf
   runmodule nerc.naf    ned                     ned.naf
-  runmodule nerc.naf    nedrer                  nedr.naf
+  runmodule ned.naf     nedrer                  nedr.naf
   runmodule nedr.naf    wikify                  wikif.naf
   runmodule wikif.naf   ukb                     ukb.naf
   runmodule ukb.naf     ewsd                    ewsd.naf

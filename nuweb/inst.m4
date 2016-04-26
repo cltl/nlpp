@@ -1,4 +1,4 @@
-m4_define(m4_repoversion, `1.1.02')m4_dnl
+m4_define(m4_repoversion, `1.1.03')m4_dnl
 m4_dnl
 m4_dnl Titles
 m4_dnl
@@ -78,7 +78,7 @@ m4_dnl
 m4_define(m4_repo_url, kyoto.let.vu.nl)m4_dnl
 m4_define(m4_repo_user, newsreader)m4_dnl
 m4_define(m4_snapshotkeyfilename, nrkey)m4_dnl
-m4_define(m4_snapshotkeyfile, m4_asocket/nrkey)m4_dnl
+m4_define(m4_snapshotkeyfile, m4_asocket/m4_snapshotkeyfilename)m4_dnl
 m4_dnl m4_define(m4_snapshotrootURL, kyoto.let.vu.nl~huygen/dutch_snapshots)m4_dnl
 m4_define(m4_snapshotrootURL, newsreader@@kyoto.let.vu.nl)m4_dnl
 m4_define(m4_snapshotdirectory, t_nlpp_resources)m4_dnl
