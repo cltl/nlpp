@@ -1180,8 +1180,26 @@ export PATH=$PERL_HOME/bin:$PATH
 
 Install what is called \verb|XML::XMLLib| in the Perl world.
 
-@d install perl @{@%
+It should be done with the following statement:
+
+\begin{verbatim}
 perl -MCPAN -e 'install XML::LibXML'
+
+\end{verbatim}
+
+@% @d install perl @{@%
+@% perl -MCPAN -e 'install XML::LibXML'
+@% @| @}
+
+but that doesn't seem to work in all cases. It worked during an
+installation in ArchLinux, but not in an installation in Ubuntu a few
+weeks later.
+
+Therefore, get the lib from the snapshot.
+
+@d install perl @{@%
+cd \$envdir/perl/lib
+tar -xzf \$snapshotsocket/m4_snapshotdirectory/m4_perl_libball
 @| @}
 
 
@@ -1295,7 +1313,7 @@ fi
 @< end conditional install @(python_installed@) @>
 @< begin conditional install @(perl_installed@) @>
   @< install perl @>
-@< end conditional install @(perl__installed@) @>
+@< end conditional install @(perl_installed@) @>
 
 @< begin conditional install @(sematree_installed@) @>
   @< install sematree @>
@@ -1590,7 +1608,7 @@ lockfile exists. If that is the case, it either waits or
 fails. When the lockfile is not (or no longer) present, sematree
 creates the lockfile.
 
-When installing Sematree, set the default directory for lock-files. We
+When installing sematree, set the default directory for lock-files. We
 set this as a subdirectory of the \verb|env| tree. However, in some
 cases, notably when running in a node in Lisa, we need a directory on
 the filesystem of the node itself.
@@ -1599,6 +1617,7 @@ the filesystem of the node itself.
 cat \$snapshotsocket/m4_snapshotdirectory/m4_sematree_script | \
   sed "s|/var/run|<!!>m4_asematreedir<!!>|g" \
 > \$envbindir/sematree
+chmod 775 \$envbindir/sematree
 @| @}
 
 
@@ -2455,7 +2474,7 @@ do
   sleep 10
 done
 if
-  [ spotlightrunning -ne 0 ]
+  [ \$spotlightrunning -ne 0 ]
 then
  export spotlighthost="none"
 fi
