@@ -96,7 +96,6 @@ m4_define(m4_autoconf_ball, autoconf-m4_autoconf_version.tar.gz)m4_dnl
 m4_define(m4_autoconf_url, http://ftp.gnu.org/gnu/autoconf/m4_autoconf_ball)m4_dnl
 m4_define(m4_libxml2git, git://git.gnome.org/libxml2)m4_dnl
 m4_define(m4_lxsltgit, git://git.gnome.org/libxslt)m4_dnl
-
 m4_dnl
 m4_dnl Maven
 m4_dnl
@@ -108,7 +107,17 @@ m4_define(m4_amavendir, m4_aenvdir/m4_mavensubdir)m4_dnl
 m4_define(m4_maventarball, apache-maven-`'m4_mavenversion`'-bin.tar.gz)m4_dnl
 m4_define(m4_maventarballurl, http://apache.rediris.es/maven/maven-3/`'m4_mavenversion`'/binaries/`'m4_maventarball)m4_dnl
 m4_define(m4_maven_javaversion, 1.7)m4_dnl
+m4_dnl
+m4_dnl install-to-project-repo tool for Maven
+m4_dnl
+m4_define(m4_installtoprojectgit, https://github.com/carchrae/install-to-project-repo.git)m4_dnl
+m4_define(m4_installtoprojectdir, install-to-project-repo)m4_dnl
+m4_define(m4_installtoprojectpy, install-to-project-repo.py)m4_dnl
+m4_define(m4_installtoprojectpyurl, https://github.com/carchrae/install-to-project-repo/blob/master/m4_installtoprojectpy)m4_dnl
+
+m4_dnl
 m4_dnl boost libs
+m4_dnl
 m4_define(m4_boostname, boost_1_54_0)m4_dnl
 m4_define(m4_boosttarball, m4_boostname.tar.bz2)m4_dnl
 m4_define(m4_boostsnaptarball, 20151231_`'m4_boosttarball)m4_dnl
@@ -149,10 +158,14 @@ m4_dnl
 m4_dnl Topic detection tool
 m4_define(m4_topictoolname, ixa-pipe-topic)m4_dnl
 m4_define(m4_topictooltex, \verb|m4_topictoolname|)m4_dnl
-m4_define(m4_topictooldir, EHU-topic.v30)m4_dnl
+m4_dnl m4_define(m4_topictooldir, EHU-topic.v30)m4_dnl
+m4_define(m4_topictooldir, m4_topictoolname)m4_dnl
 m4_define(m4_topictoolball, 20151220_EHU-topic.v30.tgz)m4_dnl
 m4_define(m4_topictoolgit, https://github.com/ialdabe/ixa-pipe-topic.git)m4_dnl
 m4_define(m4_topicscript, topic)m4_dnl
+m4_define(m4_jex_resources_en_ball, http://optima.jrc.it/Resources/Eurovoc/indexing/en-eurovoc-1.0.zip)m4_dnl
+m4_define(m4_jex_resources_nl_ball, http://optima.jrc.it/Resources/Eurovoc/indexing/nl-eurovoc-1.0.zip)m4_dnl
+m4_define(m4_topic_jar, ixa-pipe-topic-1.0.3.jar)m4_dnl
 m4_dnl
 m4_dnl Pos tagger
 m4_define(m4_posname, EHU-pos.v30)m4_dnl
@@ -350,9 +363,6 @@ m4_define(m4_heidelncommitname, 2a2999bb6558401326bf88bda44e9a9c404492c6)m4_dnl
 m4_define(m4_heidelnstandaloneball, `D6lUEN')m4_dnl
 m4_define(m4_heidelnstandaloneurl, `http://goo.gl/m4_heidelnstandaloneball')m4_dnl
 m4_define(m4_heidelnstandalonejar, `de.unihd.dbs.heideltime.standalone.jar')m4_dnl
-m4_define(m4_installtoprojectgit, https://github.com/carchrae/install-to-project-repo.git)m4_dnl
-m4_define(m4_installtoprojectpy, install-to-project-repo.py)m4_dnl
-m4_define(m4_installtoprojectpyurl, https://github.com/carchrae/install-to-project-repo/blob/master/m4_installtoprojectpy)m4_dnl
 m4_define(m4_mappingsfile, eagles-to-treetager.csv)m4_dnl
 m4_define(m4_mappingsfileurl, http://ixa2.si.ehu.es/~jibalari/eagles-to-treetager.csv)m4_dnl
 m4_define(m4_heidel_mvn_localdir, `$HOME/.m2/repository/local/de.unihd.dbs.heideltime.standalone')m4_dnl

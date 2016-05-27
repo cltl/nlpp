@@ -2694,26 +2694,110 @@ java -Xmx1000m  -jar \$JARFILE tok -l \$naflang --inputkaf
 \subsubsection{Topic analyser}
 \label{sec:topic-install}
 
-The English pipeline contains a topic analyser that seems not yet fit
-for Dutch. Get it from the Newsreader repo and update the config file.
+Install the topic tool \verb|ixa-pipe-topic| that is based on \href{https://ec.europa.eu/jrc/en/language-technologies/jrc-eurovoc-indexer}{\textsc{jex}}. 
+
+Installation goes as follows:
+
+\begin{enumerate}
+\item Clone from Github.
+\item Download \textsc{jex} resources and \textsc{jex} jar libraries and put them at proper places.
+\item Download and run a utility, \verb|m4_installtoprojectpy|, that puts the \textsc{jex} libraries in a place where Maven can find them.
+\item run maven
+@% \item Generate config-files for Dutch and for English
+\end{enumerate}
+
 
 @d install the topic analyser @{@%
 @% cp -r \$snapshotsocket/components/m4_topictooldir \$modulesdir/
 cd $modulesdir
-tar -xzf \$snapshotsocket/m4_snapshotdirectory/m4_topictoolball
-cd \$modulesdir/m4_topictooldir
-mv conf.prop old.conf.prop
-gawk '{gsub("/home/newsreader/components", subs); print}' subs=$modulesdir old.conf.prop >conf.prop
+git clone m4_topictoolgit
+tempdir=`mktemp -d -t topinambour.XXXXXX`
+moddir=$modulesdir/m4_topictooldir
+@< install the jex resources and libraries @>
+@< compile the topic-tool jar @>
+@% @< generate topic-tool config-file for @(nl@) @>
+@% @< generate topic-tool config-file for @(en@) @>
+cd $modulesdir
+rm -rf $tempdir
 @| @}
+
+The two zip-balls \verb|m4_jex_resources_en_ball| and
+\verb|m4_jex_resources_nl_ball| contain resources in a sub-directory
+\verb|resources| and jar libs in a subdirectory \verb|jar|. The jars
+in the two zip-balls are identical, so the jars from one of the balls
+can be copied to the \verb|lib| subdirectory of the module where the
+compilation-tool expects them. The \verb|resources| directories are
+placed in subdirectories \verb|en| resp. \verb|nl| of the \verb|jex|
+subdirectory of the module directory.
+
+@d install the jex resources and libraries @{@%
+moddir=\$modulesdir/m4_topictooldir
+cd \$moddir
+mkdir -p jex/en
+mkdir -p jex/nl
+mkdir -p lib
+cd \$tempdir
+wget m4_jex_resources_en_ball
+wget m4_jex_resources_nl_ball
+unzip -q en-eurovoc-1.0.zip
+unzip -q nl-eurovoc-1.0.zip
+cp -r en-eurovoc-1.0/resources \$moddir/jex/en/
+cp -r nl-eurovoc-1.0/resources \$moddir/jex/nl/
+cp -r nl-eurovoc-1.0/lib/*.jar \$moddir/lib/
+@| @}
+
+
+To make the jar's in the \verb|lib| directory accessible for Maven, we
+use the \href{m4_installtoprojectgit}{m4_installtoprojectdir}
+utility. So, unpack and run this utility and finally, run Maven:
+
+
+@d compile the topic-tool jar @{@%
+git clone m4_installtoprojectgit
+cd \$modulesdir/m4_topictooldir
+python $tempdir/m4_installtoprojectdir/m4_installtoprojectpy
+mvn clean install
+@| @}
+
+
+
+@% @d generate topic-tool config-file for @{@%
+@% cat $moddir/default.prop \
+@%     | sed 's|jex/resources|'${moddir}'/jex/@1/resources|g' \
+@%     | sed 's|jex/result|'${tempdir}'/jex/result|g' \
+@%     >$moddir/@1.conf.prop
+@% 
+@% @| @}
+
+
+@% @d install the topic analyser @{@%
+@% @% cp -r \$snapshotsocket/components/m4_topictooldir \$modulesdir/
+@% cd $modulesdir
+@% tar -xzf \$snapshotsocket/m4_snapshotdirectory/m4_topictoolball
+@% cd \$modulesdir/m4_topictooldir
+@% mv conf.prop old.conf.prop
+@% gawk '{gsub("/home/newsreader/components", subs); print}' subs=$modulesdir old.conf.prop >conf.prop
+@% @| @}
 
 
 \paragraph{Script:}
 
+The topic module uses a temporary directory to store intermediate
+results. To tell the Java program where the temp storage is, a config
+file has to generated on the fly.
+
 @o m4_bindir/topic @{@%
 @< start of module-script @(m4_topictooldir@) @>
-@% @< abort when the language is not English or Dutch @>
-@% rootDir=\$modulesdir/EHU-topic.v30
-java -Xmx1000m -jar $MODDIR/ixa-pipe-topic-1.0.1.jar -p $MODDIR/conf.prop
+tempdir=`mktemp -d -t jex.XXXXXX`
+mkdir $tempdir/documents
+mkdir $tempdir/results
+cat $MODDIR/default.prop \
+    | sed 's|jex/resources|'${MODDIR}'/jex/LANG/resources|g' \
+    | sed 's|jex/result|'${tempdir}'/jex/result|g' \
+    | sed 's|LANG|'${naflang}'|g' \
+    >\$tempdir/conf.prop
+java -Xmx1000m -jar $MODDIR/target/m4_topic_jar -p \$tempdir/conf.prop
+rm -rf $tempdir
 @| @}
 
 
