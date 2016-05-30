@@ -7,6 +7,10 @@ m4_sinclude(/tmp/local.m4)m4_dnl
 \usepackage{pdfswitch}
 \usepackage{figlatex}
 \usepackage{makeidx}
+\usepackage{xstring}
+\usepackage{pdflscape}
+\usepackage{afterpage}
+\usepackage{capt-of}% or use the larger `caption` package
 \renewcommand{\indexname}{General index}
 \makeindex
 \newcommand{\thedoctitle}{m4_doctitle}
@@ -145,47 +149,70 @@ pipeline from a frozen repository of the Newsreader Project.
 
 
 \newcommand{\dref}[1]{\hyperref[#1]{\ref{#1}}}
+\newcommand{\brevcomm}[1]{\StrLeft{#1}{4}\ldots}
+@%\newcommand{\ghtail}[1]{\StrDel{#1}{https://github.com}}
+@%\newcommand{\brevgh}[1]{\def\aap{#1}\href{\aap}{Github: \alltt{\ghtail{\aap}}}}
 
-Table~\ref{tab:modulelist}
-\begin{table}[hbtp]
-  \centering
-  \begin{footnotesize}
-    \begin{tabular}{lllllll}
-     \textbf{Module}              & \textbf{Source}        & \textbf{Section}                     & \textbf{Commit}         & \textbf{Script}              & \textbf{language} \\
-        Tokenizer                 & \url{m4_tokenizergit}  & \dref{sec:installtokenizer}          & m4_tokenizer_commitname & \texttt{m4_tokenizerscript}  & en/nl  \\
-        Topic detection           & snapshot               & \dref{sec:topic-install}             &  \ldots                 & \verb|m4_topicscript|        & en     \\
-        Morpho-syntactic parser   & \url{m4_morphpargit}   & \dref{sec:install-morphsynt-parser}  & m4_morphpar_commitname  & \verb|m4_morphparscript|     & nl     \\
-        \textsc{pos}-tagger       & snapshot               & \dref{sec:postagger}                 &  \ldots                 & \verb|m4_postagscript|       & en     \\
-        Named-entity rec/class    & \url{m4_nercgit}       & \dref{sec:nerc}                      & m4_nerc_commitname      & \verb|m4_nercscript|         & en/nl  \\
-        Constituent parser        & snapshot               & \dref{sec:constparser}               &  \ldots                 & \verb|m4_consparscript|      & en     \\
-        Word-sense disamb. nl     & \url{m4_wsdgit}        & \dref{sec:wsd}                       & m4_wsd_commitname       & \verb|wsd|                   & nl     \\
-        Word-sense disamb. en     & snapshot               & \dref{sec:IMS-WSD}                   &  \ldots                 & \verb|ewsd|                  & en     \\
-        Named entity/DBP          & snapshot               & \dref{sec:ned-module}                &  \ldots                 & \verb|ned|                   & en/nl  \\
-        NED reranker              & snapshot               & \dref{sec:nedrer}                    &  \ldots                 & \verb|nedrerscript|          & en     \\
-        Wikify                    & snapshot               & \dref{sec:wikify}                    &  \ldots                 & \verb|m4_wikify|             & en     \\
-        \UKB{}                    & snapshot               & \dref{sec:ukb}                       &  \ldots                 & \verb|m4_ukbscript|          & en     \\
-        Coreference-base          & snapshot               & \dref{sec:nomcorefgraph}             &  \ldots                 & \verb|m4_corefbasescript|    & en     \\
-        Heideltime                & \url{m4_heidelgit}     & \dref{sec:heideltime}                & m4_heidel_commitname    & \verb|m4_heidelscript|       & nl     \\
-        Onto-tagger               & \url{m4_ontogit}       & \dref{sec:onto}                      & m4_ontocommitname      & \verb|m4_ontoscript|         & nl     \\
-        Semantic Role labeling nl & \url{m4_srlgit}        & \dref{sec:SRL-module}                & m4_srl_commitname       & \verb|m4_srlcript|           & nl     \\
-        Semantic Role labeling en & snapshot               & \dref{sec:srlserver}                 &  \ldots                 & \verb|m4_esrlcript|          & en     \\
-        Nominal Event ann.        & \url{m4_ontogit}       & \dref{sec:onto}                      & m4_ontocommitname      & \verb|m4_nomeventscript|     & nl     \\
-        SRL dutch nominals        & \url{m4_srl_dn_git}    & \dref{sec:srl-dn}                    & m4_srl_dn_commitname    & \verb|m4_srl_dn_script|      & nl     \\
-        Framenet-SRL              & \url{m4_ontogit}       & \dref{sec:onto}                      & m4_ontocommitname      & \verb|m4_framesrlscript|     & nl     \\
-        FBK-time                  & snapshot               & \dref{sec:fbktime}                   & \ldots                  & \verb|m4_fbktimescript|      & en     \\
-        FBK-temprel               & snapshot               & \dref{sec:FBK-temprel}               & \ldots                  & \verb|m4_fbktimerelscript|   & en     \\
-        FBK-causalrel             & snapshot               & \dref{sec:FBK-causalrel}             & \ldots                  & \verb|m4_fbkcausalrelscript| & en     \\
-        Opinion-miner             & \url{m4_opinigit}      & \dref{sec:opinimin}                  & m4_opini_commitname     & \verb|m4_opiniscript|        & en/nl  \\
-        Event-coref               & snapshot               & \dref{sec:event-coref-module}        & \ldots                  & \verb|m4_evcorefscript|      & en/nl  \\
-        Factuality tagger         & snapshot               & \dref{sec:factuality}                & \ldots                  & \verb|m4_factualityscript|   & en     \\
-    \end{tabular}
-  \end{footnotesize}
-   \caption{List of the modules to be installed. Column description:
-     \textbf{directory:} Name of the subdirectory below subdirectory \texttt{modules} in
-     which it is installed; \textbf{source:} From where the module has
-     been obtained; \textbf{commit:} Commit-name or version-tag \textbf{script:} Script to be included in a pipeline. \textbf{Note:} The tokenizer module has been temporarily obtained from the snapshot, because the commit that we used has disappeared from the Github repository.}
-   \label{tab:modulelist}
-\end{table}
+\afterpage{%
+  \clearpage% Flush earlier floats (otherwise order might not be correct)
+  \thispagestyle{empty}% empty page style (?)
+  \begin{landscape}% Landscape page
+@% %\begin{table}[hbtp]
+    \centering
+    \begin{footnotesize}
+      \begin{tabular}{lllllll}
+        \textbf{Module}              & \textbf{Source}        & \textbf{Section}                     & \textbf{Commit}                    & \textbf{Script}              & \textbf{language} \\
+         Tokenizer                 & \url{m4_tokenizergit}  & \dref{sec:installtokenizer}          & \brevcomm{m4_tokenizer_commitname} & \texttt{m4_tokenizerscript}  & en/nl  \\
+         Topic detection           & \url{m4_topictoolgit}   & \dref{sec:topic-install}            & \brevcomm{m4_topic_commitname}     & \texttt{m4_underslas(m4_topicscript)} & en/nl     \\
+          Morpho-syntactic parser   & \url{m4_morphpargit}   & \dref{sec:install-morphsynt-parser}  & \brevcomm{m4_morphpar_commitname}  & \texttt{m4_underslas(m4_morphparscript)}     & nl     \\
+          \textsc{pos}-tagger       & snapshot               & \dref{sec:postagger}                 &  \ldots                            & \texttt{m4_underslas(m4_postagscript)}       & en     \\
+          Named-entity rec/class    & \url{m4_nercgit}       & \dref{sec:nerc}                      & \brevcomm{m4_nerc_commitname}      & \texttt{m4_underslas(m4_nercscript)}         & en/nl  \\
+          Constituent parser        & snapshot               & \dref{sec:constparser}               &  \ldots                            & \texttt{m4_underslas(m4_consparscript)}      & en     \\
+          Word-sense disamb. nl     & \url{m4_wsdgit}        & \dref{sec:wsd}                       & \brevcomm{m4_wsd_commitname}       & \texttt{m4_underslas(wsd)}                   & nl     \\
+          Word-sense disamb. en     & snapshot               & \dref{sec:IMS-WSD}                   &  \ldots                            & \texttt{m4_underslas(ewsd)}                  & en     \\
+          Named entity/DBP          & snapshot               & \dref{sec:ned-module}                &  \ldots                            & \texttt{m4_underslas(ned)}                   & en/nl  \\
+          NED reranker              & snapshot               & \dref{sec:nedrer}                    &  \ldots                            & \texttt{m4_underslas(nedrerscript)}          & en     \\
+          Wikify                    & snapshot               & \dref{sec:wikify}                    &  \ldots                            & \texttt{m4_underslas(m4_wikifyscript)}       & en     \\
+          \UKB{}                    & snapshot               & \dref{sec:ukb}                       &  \ldots                            & \texttt{m4_underslas(m4_ukbscript)}          & en     \\
+          Coreference-base          & snapshot               & \dref{sec:nomcorefgraph}             &  \ldots                            & \texttt{m4_underslas(m4_corefbasescript)}    & en     \\
+          Heideltime                & \url{m4_heidelgit}     & \dref{sec:heideltime}                & \brevcomm{m4_heidel_commitname}    & \texttt{m4_underslas(m4_heidelscript)}       & nl     \\
+          Onto-tagger               & \url{m4_ontogit}       & \dref{sec:onto}                      & \brevcomm{m4_ontocommitname}       & \texttt{m4_underslas(m4_ontoscript)}         & nl     \\
+          Semantic Role labeling nl & \url{m4_srlgit}        & \dref{sec:SRL-module}                & \brevcomm{m4_srl_commitname}       & \texttt{m4_underslas(m4_srlscript)}           & nl     \\
+          Semantic Role labeling en & snapshot               & \dref{sec:srlserver}                 &  \ldots                            & \texttt{m4_underslas(m4_esrlscript)}          & en     \\
+          Nominal Event ann.        & \url{m4_ontogit}       & \dref{sec:onto}                      & \brevcomm{m4_ontocommitname}       & \texttt{m4_underslas(m4_nomeventscript)}     & nl     \\
+          SRL dutch nominals        & \url{m4_srl_dn_git}    & \dref{sec:srl-dn}                    & \brevcomm{m4_srl_dn_commitname}    & \texttt{m4_underslas(m4_srl_dn_script)}      & nl     \\
+          Framenet-SRL              & \url{m4_ontogit}       & \dref{sec:onto}                      & \brevcomm{m4_ontocommitname}       & \texttt{m4_underslas(m4_framesrlscript)}     & nl     \\
+          FBK-time                  & snapshot               & \dref{sec:fbktime}                   & \ldots                             & \texttt{m4_underslas(m4_fbktimescript)}      & en     \\
+          FBK-temprel               & snapshot               & \dref{sec:FBK-temprel}               & \ldots                             & \texttt{m4_underslas(m4_fbktemprelscript)}   & en     \\
+          FBK-causalrel             & snapshot               & \dref{sec:FBK-causalrel}             & \ldots                             & \texttt{m4_underslas(m4_fbkcausalrelscript)} & en     \\
+          Opinion-miner             & \url{m4_opinigit}      & \dref{sec:opinimin}                  & \brevcomm{m4_opini_commitname}     & \texttt{m4_underslas(m4_opiniscript)}        & en/nl  \\
+          Event-coref               & snapshot               & \dref{sec:event-coref-module}        & \ldots                             & \texttt{m4_underslas(m4_evcorefscript)}      & en/nl  \\
+          Factuality tagger         & snapshot               & \dref{sec:factuality}                & \ldots                             & \texttt{m4_underslas(m4_factualityscript)}   & en     \\
+       \end{tabular}
+    \end{footnotesize}
+@% %   \caption{List of the modules to be installed. Column description:
+@% %     \textbf{directory:} Name of the subdirectory below subdirectory \texttt{modules} in
+@% %     which it is installed; \textbf{source:} From where the module has
+@% %     been obtained; \textbf{commit:} Commit-name or version-tag \textbf{script:} Script to be included in a pipeline. \textbf{Note:} The tokenizer module has been temporarily obtained from the snapshot, because the commit that we used has disappeared from the Github repository.}
+@% %   \label{tab:modulelist}
+    \captionof{table}{%
+      \label{tab:modulelist}
+      List of the modules to be installed. Column description:
+      \textbf{directory:} Name of the subdirectory below subdirectory \texttt{modules} in
+      which it is installed; \textbf{source:} From where the module has
+      been obtained; \textbf{commit:} Commit-name or version-tag
+      \textbf{script:} Script to be included in a
+      pipeline. % \textbf{Note:} The tokenizer module has been
+ %      temporarily obtained from the snapshot, because the commit
+ %      that we used has disappeared from the Github repository.
+}
+@% %\end{table}
+  \end{landscape}
+  \clearpage% Flush page
+@% }
+}
+
+
 @% \begin{table}[hbtp]
 @%   \centering
 @%   \begin{footnotesize}
@@ -233,6 +260,7 @@ Table~\ref{tab:modulelist}
 @%     been obtained; \textbf{commit:} Commit-name or version-tag \textbf{script:} Script to be included in a pipeline. \textbf{Note:} The tokenizer module has been temporarily obtained from the snapshot, because the commit that we used has disappeared from the Github repository.}
 @%   \label{tab:modulelist}
 @% \end{table}
+Table~\ref{tab:modulelist}
 lists the modules in the pipeline. The column \emph{source} indicates
 the origin of the module. The modules are obtained in one of the following ways:
 
@@ -1339,14 +1367,12 @@ echo ... Boost
 @< begin conditional install @(boost_installed@) @>
   @< install boost @>
 @< end conditional install @(boost_installed@) @>
-
 echo ... VUA-pylib, SVMlight, CRFsuite
 @< begin conditional install @(miscutils_installed@) @>
   @< install VUA-pylib @>
   @< install SVMLight @>
   @< install CRFsuite @>
 @< end conditional install @(miscutils_installed@) @>
-
 @| @}
 
 Next, install the modules:
@@ -2711,6 +2737,8 @@ Installation goes as follows:
 @% cp -r \$snapshotsocket/components/m4_topictooldir \$modulesdir/
 cd $modulesdir
 git clone m4_topictoolgit
+cd m4_topictooldir
+git checkout m4_topic_commitname
 tempdir=`mktemp -d -t topinambour.XXXXXX`
 moddir=$modulesdir/m4_topictooldir
 @< install the jex resources and libraries @>
@@ -5018,7 +5046,8 @@ to and write the result in a file that  \verb|outfile| points to:
 
 @d annotate dutch document @{@%
 runmodule \$infile    tok                     tok.naf
-runmodule tok.naf     mor                     mor.naf
+runmodule tok.naf     topic                   top.naf
+runmodule top.naf   mor                     mor.naf
 runmodule mor.naf     nerc                    nerc.naf
 runmodule nerc.naf    wsd                     wsd.naf
 runmodule wsd.naf     ned                     ned.naf
@@ -5076,7 +5105,8 @@ then
 @%    @< annotate dutch document @>
 @%   cat \$TESTIN    | \$BIND/tok                    > tok.naf
 runmodule \$infile    tok                     tok.naf
-runmodule tok.naf     mor                     mor.naf
+runmodule tok.naf     topic                   top.naf
+runmodule top.naf   mor                     mor.naf
 runmodule mor.naf     nerc                    nerc.naf
 runmodule nerc.naf    wsd                     wsd.naf
 runmodule wsd.naf     ned                     ned.naf

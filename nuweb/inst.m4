@@ -1,4 +1,4 @@
-qm4_define(m4_repoversion, `1.1.04')m4_dnl
+m4_define(m4_repoversion, `1.1.04')m4_dnl
 m4_dnl
 m4_dnl Titles
 m4_dnl
@@ -162,6 +162,7 @@ m4_dnl m4_define(m4_topictooldir, EHU-topic.v30)m4_dnl
 m4_define(m4_topictooldir, m4_topictoolname)m4_dnl
 m4_define(m4_topictoolball, 20151220_EHU-topic.v30.tgz)m4_dnl
 m4_define(m4_topictoolgit, https://github.com/ialdabe/ixa-pipe-topic.git)m4_dnl
+m4_define(m4_topic_commitname, 40be8debb88093b426ae3520d60df60161968e27)m4_dnl
 m4_define(m4_topicscript, topic)m4_dnl
 m4_define(m4_jex_resources_en_ball, http://optima.jrc.it/Resources/Eurovoc/indexing/en-eurovoc-1.0.zip)m4_dnl
 m4_define(m4_jex_resources_nl_ball, http://optima.jrc.it/Resources/Eurovoc/indexing/nl-eurovoc-1.0.zip)m4_dnl
@@ -302,18 +303,21 @@ m4_define(m4_fbktimename, FBK-time.v30)m4_dnl
 m4_define(m4_fbktimetex, \verb|m4_fbktimename|)m4_dnl
 m4_define(m4_fbktimedir, FBK-time.v30)m4_dnl
 m4_define(m4_fbktimeball, 20151220_FBK-time.v30.tgz)m4_dnl
+m4_define(m4_fbktimescript, FBK-time)m4_dnl
 m4_dnl
 m4_dnl FBK-temprel
 m4_define(m4_fbktemprelname, FBK-temprel.v30)m4_dnl
 m4_define(m4_fbktempreltex, \verb|m4_fbktemprelname|)m4_dnl
 m4_define(m4_fbktempreldir, FBK-temprel.v30)m4_dnl
 m4_define(m4_fbktemprelball, 20151220_FBK-temprel.v30.tgz)m4_dnl
+m4_define(m4_fbktemprelscript, FBK-temprel)m4_dnl
 m4_dnl
 m4_dnl FBK-causalrel
 m4_define(m4_fbkcausalrelname, FBK-causalrel.v30)m4_dnl
 m4_define(m4_fbkcausalreltex, \verb|m4_fbkcausalrelname|)m4_dnl
 m4_define(m4_fbkcausalreldir, FBK-causalrel.v30)m4_dnl
 m4_define(m4_fbkcausalrelball, 20151220_FBK-causalrel.v30.tgz)m4_dnl
+m4_define(m4_fbkcausalrelscript, FBK-causalrel)m4_dnl
 m4_dnl
 m4_dnl ONTO
 m4_define(m4_ontoname, `OntoTagger')m4_dnl
@@ -652,6 +656,10 @@ m4_dnl max times to compile with LaTeX.
 m4_dnl
 m4_define(m4_maxtexloops, `10')m4_dnl
 m4_dnl
+m4_dnl Functions
+m4_dnl
+m4_define(m4_underslas, `m4_patsubst($1, `_', `\\_')')
+m4_dnl 
 m4_dnl (style) things that probably do not have to be modified
 m4_dnl
 m4_changequote(`<!',`!>')m4_dnl
