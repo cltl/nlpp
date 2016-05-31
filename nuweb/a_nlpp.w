@@ -708,7 +708,8 @@ cd $autoconfdir
 wget m4_autoconf_url
 tar -xzf m4_autoconf_ball
 cd autoconf-<!!>m4_autoconf_version
-./autogen.sh --prefix=$envdir
+@% ./autogen.sh --prefix=$envdir
+./configure --prefix=$envdir
 make
 make install
 cd $piperoot
