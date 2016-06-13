@@ -478,6 +478,38 @@ MESS="Replaced previous version of @1"
 
 @| @}
 
+\subsection{Download materials}
+\label{sec:download}
+
+This installer needs to download a lot from different sources:
+
+\begin{itemize}
+\item Most of the NLP-modules will be built up from their sources in
+  Github. The sources must be cloned.
+\item Many modules need external resources, e.g. the Alpino
+  tagger. Often these utilities must be downloaded from a location
+  specified by the supplier. 
+\item Many modules use extra resources like model-data, that must be
+  obtained separately.
+\item Some of the resources are not publicly available. They must be
+  obtained from a pass-word protected \URL{}.
+\item 
+\end{itemize}
+
+Usually downloads are slow, and the duration is only little determined
+by the resources in the installing computer, but by the network and
+the performance of the systems from which we download. Therefore, we
+may speed up by first downloading things, if possible in parallel processes.
+
+We put the following the beginning of the install-script:
+
+@d download everything @{@%
+@< download stuff @>
+echo Waiting for downloads to complete ...
+wait
+echo Download completed
+@| @}
+
 
 
 
@@ -569,6 +601,11 @@ if
 then
   export snapshotsocket=m4_snapshotsocket
 fi
+if 
+  [ ! $snapshotdirectory ]
+then
+  export snapshotdirectory=m4_snapshotdirectory
+fi
 @| @}
 
 
@@ -591,10 +628,32 @@ fi
 
 Update the local snapshot repository.
 
-@d get the snapshot @{@%
+@d download stuff @{@%
 cd $snapshotsocket
+mkdir -p \$snapshotdirectory
 @% rsync -e "ssh -i \$HOME/m4_snapshotkeyfilename" -rLt m4_snapshotrootURL:m4_snapshotdirectory .
-rsync -e "ssh -i m4_snapshotkeyfile" -rLt m4_snapshotrootURL:m4_snapshotdirectory .
+( rsync -e "ssh -i m4_snapshotkeyfile" -rLt m4_snapshotrootURL:m4_snapshotdirectory . ) &
+@| @}
+
+\subsection{Download other materials}
+\label{sec:general-download}
+
+Apart from the material that we obtain from the snapshot, we need to
+download resources from different places in the Internet. Downloading
+can take much time. While working on this installer, we do not want to
+repeat downloading every time that we run it e.g. to test
+something. Therefore, we download everything in the
+snapshot-directory, and check whether it is already there before we
+start downloading.
+
+
+@d need to wget @{@%
+if
+  [ ! -e $snapshotsocket/\$snapshotdirectory/@1 ]
+then
+  cd $snapshotsocket/\$snapshotdirectory
+  ( wget @2 ) &
+fi
 @| @}
 
 
@@ -699,14 +758,19 @@ Gnu autoconf is a system to help configure the Makefiles for a software package.
 supply a file \verb|configure|, \verb|configure.in| or \verb|configure.ac|. To compile and install a package from source we
 can then perform 1) \verb|./configure --prefix=<environment>|; 2) \verb|make|; 3) \verb|make install|.
 
-Install autoconf:
+Get autoconf:
 
+@d download stuff @{@%
+@< need to wget @(m4_autoconf_ball@,m4_autoconf_url@) @>
+@| @}
+
+
+Install autoconf:
 
 @d install shared libs @{
 autoconfdir=`mktemp -d -t autoconf.XXXXXX`
 cd $autoconfdir
-wget m4_autoconf_url
-tar -xzf m4_autoconf_ball
+tar -xzf \$snapshotsocket/\$snapshotdirectory/m4_autoconf_ball
 cd autoconf-<!!>m4_autoconf_version
 @% ./autogen.sh --prefix=$envdir
 ./configure --prefix=$envdir
@@ -802,7 +866,7 @@ in a subdirectory of \texttt{envdir}.
 @d set up java @{@%
 @< begin conditional install @(java_installed@) @>
   cd \$envdir/java
-  tar -xzf \$snapshotsocket/m4_snapshotdirectory/m4_javatarball
+  tar -xzf \$snapshotsocket/\$snapshotdirectory/m4_javatarball
 @< end conditional install @(java_installed@) @>
 @| @}
 
@@ -842,15 +906,17 @@ Put jars in the jar subdirectory of the java directory:
 \label{sec:Maven}
 
 Some Java-based modules can best be compiled with
-\href{m4_mavenurl}{Maven}. 
+\href{m4_mavenurl}{Maven}. So download and install Maven:
+
+@d download stuff @{@%
+@< need to wget @(m4_maventarball@,m4_maventarballurl@) @>
+@| @}
 
 @d directories to create @{m4_mavendir @| @}
 
 @d install maven @{@%
 cd \$envdir
-wget m4_maventarballurl
-tar -xzf m4_maventarball
-rm m4_maventarball
+tar -xzf m4_snapshotsocket/\$m4_snapshotdirectory/m4_maventarball
 @| @}
 
 @d set variables that point to the directory-structure @{@%
@@ -1183,11 +1249,18 @@ pip install --upgrade networkx
 Install Perl locally, to be certain that Perl is available and to enable to install
 packages that we need (in any case: \verb|XML::LibXML|).
 
+@d download stuff @{@%
+@< need to wget @(m4_perl_ball@,m4_perl_url@) @>
+
+@| @}
+
+
+
 @d install perl @{@%
 tempdir=`mktemp -d -t perl.XXXXXX`
 cd $tempdir
-wget m4_perl_url
-tar -xzf m4_perl_ball 
+@% wget m4_perl_url
+tar -xzf \$snapshotsocket/\$snapshotdirectory/m4_perl_ball 
 cd m4_perl_ddir
 ./Configure -des -Dprefix=$envdir/perl
 make
@@ -1312,10 +1385,10 @@ echo Set up environment
 @< set variables that point to the directory-structure @>
 @< read the list of installed modules @>
 @< check this first @>
-@< begin conditional install @(repo_installed@) @>
-  @< get the snapshot @>
+@% @< begin conditional install @(repo_installed@) @>
+@< download everything @>
 @%   @< get the newsreader-repo @>
-@< end conditional install @(repo_installed@) @>
+@% @< end conditional install @(repo_installed@) @>
 @< variables of m4_module_installer @>
 @%@< unpack snapshots or die @>
 @< begin conditional install @(shared_libs@) @>
@@ -1863,15 +1936,24 @@ DUTCHPARS_2_GZ=m4_treetag_dutchparms2
 
 Download everything in the target directory:
 
+@% @d download stuff @{@%
+@% @< need to wget @(\$TREETAGSRC@,\$TREETAGURL/\$TREETAGSRC@) @>
+@% @< need to wget @(\$TREETAGSCRIPTS@,\$TREETAGURL/\$TREETAGSCRIPTS   @) @>        
+@% @< need to wget @(\$TREETAG_INSTALLSCRIPT@,\$TREETAGURL/\$TREETAG_INSTALLSCRIPT @) @> 
+@% @< need to wget @(\$DUTCHPARS_UTF_GZ@,\$TREETAGURL/\$DUTCHPARS_UTF_GZ @) @>      
+@% @< need to wget @(\$DUTCH_TAGSET@,\$TREETAGURL/\$DUTCH_TAGSET@) @> 
+@% @< need to wget @(\$DUTCHPARS_2_GZ@,\$TREETAGURL/\$DUTCHPARS_2_GZ@) @>     
+@% @| @}
+
 @d install the treetagger utility @{@%
 mkdir -p \$modulesdir/\$TREETAGDIR
 cd \$modulesdir/\$TREETAGDIR
-wget \$TREETAGURL/\$TREETAGSRC
-wget \$TREETAGURL/\$TREETAGSCRIPTS
-wget \$TREETAGURL/\$TREETAG_INSTALLSCRIPT
-wget \$TREETAGURL/\$DUTCHPARS_UTF_GZ
-wget \$TREETAGURL/\$DUTCH_TAGSET    
-wget \$TREETAGURL/\$DUTCHPARS_2_GZ  
+wget \$TREETAGURL/\$TREETAGSRC            
+wget \$TREETAGURL/\$TREETAGSCRIPTS        
+wget \$TREETAGURL/\$TREETAG_INSTALLSCRIPT 
+wget \$TREETAGURL/\$DUTCHPARS_UTF_GZ      
+wget \$TREETAGURL/\$DUTCH_TAGSET          
+wget \$TREETAGURL/\$DUTCHPARS_2_GZ        
 @| @}
 
 Run the install-script:
@@ -2077,7 +2159,18 @@ java -jar -Xmx8g dbpedia-spotlight-0.7-jar-with-dependencies-candidates.jar nl h
 We set 8Gb for the English server, but the Italian and Dutch Spotlight will require less memory. 
 
 
-So, let us do that:
+So, let us do that.
+
+First, get the Spotlight model data that we need:
+
+@d download stuff @{@%
+@< need to wget @(m4_spotlight_nl_model_ball@,m4_spotlight_download_url/m4_spotlight_nl_model_ball@) @>
+@< need to wget @(m4_spotlight_en_model_ball@,m4_spotlight_download_url/m4_spotlight_en_model_ball@) @>
+@< need to wget @(m4_wikipediadb_tarball@,m4_wikipediadb_url@) @>
+
+@| @}
+
+
 
 @% @d select language-dependent features @{@%
 @% if
@@ -2089,13 +2182,14 @@ So, let us do that:
 @% fi
 @% @| @}
 
-
 @d install the Spotlight server @{@%
 cd \$envdir
 tar -xzf \$snapshotsocket/m4_snapshotdirectory/m4_spotlightball
 cd \$envdir/spotlight
-@< get spotlight model ball @(m4_spotlight_nl_model_ball@) @>
-@< get spotlight model ball @(m4_spotlight_en_model_ball@) @>
+tar -xzf \$snapshotsocket/m4_snapshotdirectory/m4_spotlight_nl_model_ball
+tar -xzf \$snapshotsocket/m4_snapshotdirectory/m4_spotlight_en_model_ball
+@% @< get spotlight model ball @(m4_spotlight_nl_model_ball@) @>
+@% @< get spotlight model ball @(m4_spotlight_en_model_ball@) @>
 @| @}
 
 @d get spotlight model ball @{@%
@@ -2117,9 +2211,8 @@ We choose to put the Wikipedia database in the spotlight directory.
 
 @d install the Spotlight server @{@%
 cd \$envdir/spotlight
-wget m4_wikipediadb_url
-tar -xzf m4_wikipediadb_tarball
-rm  m4_wikipediadb_tarball
+@% wget m4_wikipediadb_url
+tar -xzf \$snapshotsocket/\$snapshotdirectory/m4_wikipediadb_tarball
 @| @}
 
 
@@ -2568,13 +2661,19 @@ SVMlight supplies a Support Vector Machine. It is used by the
 opinion-miner. SVMlight can be obtained from 
 \href{m4_SVMlightsite}{the site} where it is documented.
 
+@d download stuff @{@%
+@< need to wget @(m4_SVMlightball@,m4_SVMlightball_url@) @>
+@| @}
+
+
+
 Installation goes like this:
 
 @d install SVMLight @{@%
 tempdir=`mktemp -d -t SVMlight.XXXXXX`
 cd $tempdir
-wget m4_SVMlightball_url
-tar -xzf m4_SVMlightball
+@% wget m4_SVMlightball_url
+tar -xzf \$snapshotsocket/\$snapshotdirectory/m4_SVMlightball
 make all
 cp svm_classify m4_aenvbindir/
 cp svm_learn m4_aenvbindir/
@@ -2759,6 +2858,12 @@ compilation-tool expects them. The \verb|resources| directories are
 placed in subdirectories \verb|en| resp. \verb|nl| of the \verb|jex|
 subdirectory of the module directory.
 
+@d download stuff @{@%
+@< need to wget @(m4_jex_resources_en_ball@,m4_jex_resources_en_url@) @>
+@< need to wget @(m4_jex_resources_nl_ball@,m4_jex_resources_nl_url@) @>
+@| @}
+
+
 @d install the jex resources and libraries @{@%
 moddir=\$modulesdir/m4_topictooldir
 cd \$moddir
@@ -2766,10 +2871,10 @@ mkdir -p jex/en
 mkdir -p jex/nl
 mkdir -p lib
 cd \$tempdir
-wget m4_jex_resources_en_ball
-wget m4_jex_resources_nl_ball
-unzip -q en-eurovoc-1.0.zip
-unzip -q nl-eurovoc-1.0.zip
+@% wget m4_jex_resources_en_ball
+@% wget m4_jex_resources_nl_ball
+unzip -q \$snapshotsocket/\$snapshotdirectory/m4_jex_resources_en_ball
+unzip -q \$snapshotsocket/\$snapshotdirectory/m4_jex_resources_nl_ball
 cp -r en-eurovoc-1.0/resources \$moddir/jex/en/
 cp -r nl-eurovoc-1.0/resources \$moddir/jex/nl/
 cp -r nl-eurovoc-1.0/lib/*.jar \$moddir/lib/
@@ -3754,7 +3859,6 @@ cd \$modulesdir/m4_wsddir
 @< install svm lib @>
 @< download svm models @>
 
-
 @| @}
 
 
@@ -3785,7 +3889,7 @@ cd \$modulesdir/m4_wsddir
 @% echo 'Downloading models...(could take a while)'
 wget --user=cltl --password='.cltl.' kyoto.let.vu.nl/~izquierdo/models_wsd_svm_dsc.tgz 2> /dev/null
 echo 'Unzipping models...'
-tar xzf models_wsd_svm_dsc.tgz
+tar -xzf models_wsd_svm_dsc.tgz
 rm models_wsd_svm_dsc.tgz
 echo 'Models installed in folder models'
 
@@ -4008,14 +4112,24 @@ mv target/ixa-pipe-ned-<!!>m4_ned_version.jar \$jarsdir/
 
 \NED{} needs to have m4_simple_spotlightjar in the local Maven
 repository. That is a different jar than the jar that we use to start Spotlight.
+The Dutch data in \verb|m4_spotlight_nl_model_ball| seems to be needed
+as well. We already downloaded that resource for Spotlight itself, so
+we do not download that again.
+
+@d download stuff @{@%
+@< need to wget @(m4_simple_spotlightjar@,m4_spotlight_download_url/m4_simple_spotlightjar@) @>
+@% @< need to wget @(m4_spotlight_nl_model_ball@,m4_spotlight_download_url@) @>
+@| @}
+
 
 @d put spotlight jar in the Maven repository @{@%
 echo Put Spotlight jar in the Maven repository.
 tempdir=`mktemp -d -t simplespot.XXXXXX`
 cd $tempdir
-wget m4_spotlight_download_url/m4_simple_spotlightjar
-wget m4_spotlight_download_url/m4_spotlight_nl_model_ball
-tar -xzf m4_spotlight_nl_model_ball
+@% wget m4_spotlight_download_url/m4_simple_spotlightjar
+@% wget m4_spotlight_download_url/m4_spotlight_nl_model_ball
+cp \$snapshotsocket/\$snapshotdirectory/m4_simple_spotlightjar .
+tar -xzf \$snapshotsocket/\$snapshotdirectory/m4_spotlight_nl_model_ball
 @% wget m4_spotlight_download_url/m4_spotlight_en_model
 @% tar -xzf m4_spotlight_en_model
 MVN_SPOTLIGHT_OPTIONS="-Dfile=m4_simple_spotlightjar"
@@ -4256,17 +4370,25 @@ rm -rf antske_heideltime_stuff
 
 Compile the Heideltime wrapper according to the \href{m4_heidelhtml}{instruction} on Github.
 
+@d download stuff @{@%
+@< need to wget @(jvntextpro-2.0.jar@,http://ixa2.si.ehu.es/%7Ejibalari/jvntextpro-2.0.jar@) @>
+
+@| @}
+
+
+
 @d compile the heideltime wrapper @{@%
-@< get jvntextpro-2.0.jar @>
+cp \$snapshotsocket/\$snapshotdirectory/jvntextpro-2.0.jar m4_amoddir/$DIRN/
+@% @< get jvntextpro-2.0.jar @>
 @< activate the install-to-project-repo utility @>
 cd m4_amoddir/$DIRN
 mvn clean install
 @| @}
 
-@d get jvntextpro-2.0.jar @{@%
-cd  m4_amoddir/$DIRN/lib
-wget http://ixa2.si.ehu.es/%7Ejibalari/jvntextpro-2.0.jar
-@| @}
+@% @d get jvntextpro-2.0.jar @{@%
+@% cd  m4_amoddir/$DIRN/lib
+@% wget http://ixa2.si.ehu.es/%7Ejibalari/jvntextpro-2.0.jar
+@% @| @}
 
 
 Script \verb|install-to-project-repo.py| generates a library in
@@ -4744,7 +4866,7 @@ moduledir=$modulesdir/m4_opinidir
 crfdir=`mktemp -d -t crf.XXXXXX`
 cd $crfdir
 @% tar xvzf CRF++-0.58.tar.gz
-tar xzf $moduledir/crf_lib/CRF++-0.58.tar.gz
+tar -xzf $moduledir/crf_lib/CRF++-0.58.tar.gz
 cd CRF++-0.58
 ./configure --prefix=$envdir
 make
@@ -5235,7 +5357,7 @@ Install a module from a tarball: The macro expects the following three
 variables to be present:
 
 \begin{description}
-\item[URL:] The \textsc{url} tfrom where the taball can be downloaded.
+\item[URL:] The \textsc{url} from where the taball can be downloaded.
 \item[TARB:] The name of the tarball.
 \item[DIR;] Name of the directory for the module.
 \end{description}

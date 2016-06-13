@@ -164,8 +164,10 @@ m4_define(m4_topictoolball, 20151220_EHU-topic.v30.tgz)m4_dnl
 m4_define(m4_topictoolgit, https://github.com/ialdabe/ixa-pipe-topic.git)m4_dnl
 m4_define(m4_topic_commitname, 40be8debb88093b426ae3520d60df60161968e27)m4_dnl
 m4_define(m4_topicscript, topic)m4_dnl
-m4_define(m4_jex_resources_en_ball, http://optima.jrc.it/Resources/Eurovoc/indexing/en-eurovoc-1.0.zip)m4_dnl
-m4_define(m4_jex_resources_nl_ball, http://optima.jrc.it/Resources/Eurovoc/indexing/nl-eurovoc-1.0.zip)m4_dnl
+m4_define(m4_jex_resources_en_ball, en-eurovoc-1.0.zip)m4_dnl
+m4_define(m4_jex_resources_nl_ball, nl-eurovoc-1.0.zip)m4_dnl
+m4_define(m4_jex_resources_en_url, http://optima.jrc.it/Resources/Eurovoc/indexing/m4_jex_resources_en_ball)m4_dnl
+m4_define(m4_jex_resources_nl_url, http://optima.jrc.it/Resources/Eurovoc/indexing/m4_jex_resources_nl_ball)m4_dnl
 m4_define(m4_topic_jar, ixa-pipe-topic-1.0.3.jar)m4_dnl
 m4_dnl
 m4_dnl Pos tagger
@@ -607,7 +609,6 @@ m4_dnl Wikipedia db
 m4_dnl
 m4_define(m4_wikipediadb_tarball, wikipedia-db.v1.tar.gz)m4_dnl
 m4_define(m4_wikipediadb_url, http://ixa2.si.ehu.es/ixa-pipes/models/m4_wikipediadb_tarball)m4_dnl
-m4_define(m4_wikipediadb_tarball, wikipedia-db.v1.tar.gz)m4_dnl
 m4_dnl
 m4_dnl
 m4_dnl
