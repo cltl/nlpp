@@ -304,7 +304,7 @@ m4_dnl FBK-time
 m4_define(m4_fbktimename, FBK-time.v30)m4_dnl
 m4_define(m4_fbktimetex, \verb|m4_fbktimename|)m4_dnl
 m4_define(m4_fbktimedir, FBK-time.v30)m4_dnl
-m4_define(m4_fbktimeball, 20151220_FBK-time.v30.tgz)m4_dnl
+m4_define(m4_fbktimeball, 20160615_FBK-time.v30.tgz)m4_dnl
 m4_define(m4_fbktimescript, FBK-time)m4_dnl
 m4_dnl
 m4_dnl FBK-temprel

@@ -3324,6 +3324,33 @@ cat | python $MODDIR/m4_srl_dn_binary
 \subsubsection{FBK-time module}
 \label{sec:fbktime}
 
+The FBK-time module is obtained from a tarball that has been ripped
+from the Newsreader server. Note: on june 15, 2016 jar file
+\verb|TimeProNorm_v2.6.jar| has been added to the \verb|lib|
+subdirectory.
+
+Anne-Lyse Minard wrote in an e-mail on june 10, 2016:
+
+\begin{verbatim}
+For the following example:
+"*will* have a collective chance to discuss the British demands at an EU summit on October 15-16"
+
+The day "16" is considered as the year, it is why it is annotated as 2016-10-15.
+I cannot do much because "15-16" is considered as one token. In TimeML it would have been annotated as follow:
+<TIMEX3 value="2015-10-15">October 15</TIMEX3>-<TIMEX3 value="2015-10-16">16</TIMEX3>.
+But in NAF as the annotation is done at the token level this is not possible.
+
+What I have done to solve these types of errors is to consider only "October 15" and so to normalize "October 15-16" as "2015-10-15".
+
+A new version of TimeProNorm can be download from https://github.com/alminard/TimeProNorm/blob/master/TimeProNorm_v2.6.jar (copy it in FBK-time.v30/lib/ and change in FBK-time.v30/run.sh the version of the library).
+
+I don't have time now to test the changes I have done (I have just run it on 2 files).
+How urgent is it for you to process the data?
+
+\end{verbatim}
+
+
+
 \paragraph{Module}
 
 @d install the FBK-time module @{@%
