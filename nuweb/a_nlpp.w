@@ -4330,13 +4330,14 @@ treetagger in a variable \texttt{TreetaggerHome} in config-file
 \verb|config.props|.
 
 
-
-
 @d install the heideltime module @{@%
 moduledir=m4_amoddir/m4_heideldir
+heideltemp=`mktemp -d -t heidel.XXXXXX`
 @< clone the heideltime wrapper @>
-@< put Antske's material in the heideltime wrapper @>
+@< put miscellaneous stuff in the heideltime module @>
+@% @< put Antske's material in the heideltime wrapper @>
 @< compile the heideltime wrapper @>
+rm -rf $heideltemp
 @| @}
 
 
@@ -4346,7 +4347,7 @@ DIRN=m4_heideldir
 GITU=m4_heidelgit
 GITC=m4_heidel_commitname
 @< install from github @(m4_heidelndir@) @>
-mkdir $moduledir/lib
+@% mkdir $moduledir/lib
 @| @}
 
 In the wrapper we need the following extra material:
@@ -4357,31 +4358,41 @@ In the wrapper we need the following extra material:
 \end{itemize}
 The extra material has been provided by Antske Fokkens.
 
-
-@d put Antske's material in the heideltime wrapper @{@%
-@% @< get or have @(m4_heidelantske@) @>
-cd $modulesdir/$DIRN
+@d put miscellaneous stuff in the heideltime module @{@%
+cd $heideltemp
 tar -xzf \$snapshotsocket/m4_snapshotdirectory/m4_heidelantske
-mv antske_heideltime_stuff/m4_heidelstandalonejar lib/
-mv antske_heideltime_stuff/config.props .
-mv antske_heideltime_stuff/alpino-to-treetagger.csv .
-rm -rf antske_heideltime_stuff
+cp antske_heideltime_stuff/config.props $moduledir/
+wget http://ixa2.si.ehu.es/~jibalari/jvntextpro-2.0.jar
+mv jvntextpro-2.0.jar $moduledir/lib/
+git clone https://github.com/carchrae/install-to-project-repo.git
 @| @}
+
+
+@% @d put Antske's material in the heideltime wrapper @{@%
+@% @% @< get or have @(m4_heidelantske@) @>
+@% cd $modulesdir/$DIRN
+@% tar -xzf \$snapshotsocket/m4_snapshotdirectory/m4_heidelantske
+@% mv antske_heideltime_stuff/m4_heidelstandalonejar lib/
+@% mv antske_heideltime_stuff/config.props .
+@% mv antske_heideltime_stuff/alpino-to-treetagger.csv .
+@% rm -rf antske_heideltime_stuff
+@% @| @}
 
 Compile the Heideltime wrapper according to the \href{m4_heidelhtml}{instruction} on Github.
 
-@d download stuff @{@%
-@< need to wget @(jvntextpro-2.0.jar@,http://ixa2.si.ehu.es/%7Ejibalari/jvntextpro-2.0.jar@) @>
-
-@| @}
+@% @d download stuff @{@%
+@% @< need to wget @(jvntextpro-2.0.jar@,http://ixa2.si.ehu.es/%7Ejibalari/jvntextpro-2.0.jar@) @>
+@% 
+@% @| @}
 
 
 
 @d compile the heideltime wrapper @{@%
-cp \$snapshotsocket/\$snapshotdirectory/jvntextpro-2.0.jar m4_amoddir/$DIRN/
+@% cp \$snapshotsocket/\$snapshotdirectory/jvntextpro-2.0.jar m4_amoddir/$DIRN/
 @% @< get jvntextpro-2.0.jar @>
-@< activate the install-to-project-repo utility @>
+@% @< activate the install-to-project-repo utility @>
 cd m4_amoddir/$DIRN
+python $heideltemp/install-to-project-repo/install-to-project-repo.py 
 mvn clean install
 @| @}
 
@@ -4601,7 +4612,7 @@ rm -rf m4_jvntextpro_mvn_localdir
 @< start of module-script @(m4_heideldir@) @>
 MODDIR=\$modulesdir/m4_heideldir
 cd $MODDIR
-iconv -t utf-8//IGNORE | java -Xmx1000m -jar target/ixa.pipe.time.jar -m alpino-to-treetagger.csv -c config.props
+iconv -t utf-8//IGNORE | java -Xmx1000m -jar target/ixa.pipe.time.jar -m lib/alpino-to-treetagger.csv -c config.props
 @| @}
 
 @% @o m4_bindir/m4_heidelscript @{@%

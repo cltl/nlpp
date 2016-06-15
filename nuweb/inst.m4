@@ -356,7 +356,8 @@ m4_define(m4_heideltex, \verb|m4_heidelname|)m4_dnl
 m4_define(m4_heideldir, ixa-pipe-time)m4_dnl
 m4_define(m4_heidelgit, https://github.com/ixa-ehu/ixa-pipe-time.git)m4_dnl
 m4_define(m4_heidelhtml, https://github.com/ixa-ehu/ixa-pipe-time)m4_dnl
-m4_define(m4_heidel_commitname, da4604a7b33975e977017440cbc10f7d59917ddf)m4_dnl
+m4_define(m4_heidel_commitname, 0fd3b5bd4c9a82b1624928a487b3a963a266f10c)m4_dnl
+n4_fnl m4_define(m4_heidel_commitname, da4604a7b33975e977017440cbc10f7d59917ddf)m4_dnl
 m4_define(m4_heidelscript, heideltime)m4_dnl
 m4_define(m4_heidelstandalonejar, de.unihd.dbs.heideltime.standalone.jar)m4_dnl
 m4_define(m4_heidelantske, 20151123_antske_heideltime_stuff.tgz)m4_dnl
