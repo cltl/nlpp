@@ -1,5 +1,5 @@
 m4_include(inst.m4)m4_dnl
-m4_dnl m4_sinclude(../../local.m4)m4_dnl
+m4_sinclude(../../local.m4)m4_dnl
 m4_sinclude(/tmp/local.m4)m4_dnl
 \documentclass[twoside,oldtoc]{artikel3}
 @% \documentclass[twoside]{article}
@@ -916,7 +916,7 @@ Some Java-based modules can best be compiled with
 
 @d install maven @{@%
 cd \$envdir
-tar -xzf m4_snapshotsocket/\$m4_snapshotdirectory/m4_maventarball
+tar -xzf m4_snapshotsocket/m4_snapshotdirectory/m4_maventarball
 @| @}
 
 @d set variables that point to the directory-structure @{@%
