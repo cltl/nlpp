@@ -3291,7 +3291,7 @@ pidFile=m4_apiddir/SRLServer.pid
 if
  [ -e "$pidFile" ]
 then
- kill `echo $pidFile`
+ kill `cat $pidFile`
  rm $pidFile
 fi
 @| @}
