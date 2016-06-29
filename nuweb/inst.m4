@@ -44,7 +44,7 @@ m4_define(m4_aenvlibdir, m4_aenvdir`'/lib)m4_dnl     Program environment
 m4_define(m4_envlibdir, m4_envdir`'/lib)m4_dnl 
 m4_define(m4_aenvetcdir, m4_aenvdir`'/etc)m4_dnl 
 m4_define(m4_envetcdir, m4_envdir`'/etc)m4_dnl 
-m4_define(m4_apiddir, m4_aenvetcdir/pid)m4_dnl To store lockfiles for sematree.
+m4_define(m4_apiddir, m4_aenvetcdir/srlpid)m4_dnl To store lockfiles for sematree.
 m4_define(m4_asematreedir, m4_aenvetcdir/sematree)m4_dnl To store pid files for servers.
 m4_dnl     m4_define(m4_usrlocaldir, m4_envdir`/usrlocal')m4_dnl     
 m4_dnl     m4_define(m4_ausrlocaldir, m4_aenvdir`/usrlocal')m4_dnl

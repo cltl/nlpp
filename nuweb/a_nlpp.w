@@ -3227,15 +3227,93 @@ $MODDIR/call_ims.py -ili30
 \subsubsection{SRL server}
 \label{sec:srlserver}
 
-The EHU SRL-module, that we use for Enghlish documents, has been set
+The EHU SRL-module, that we use for English documents, has been set
 up as a server/client system. Hence, we have to start the server
 before we can process something.
 
 We don't know in advance whether we run the pipeline for a single text
 or from a whole bunch of text and hence we do not know whether it is
 advisable that the server keeps running, occupying precious
-memory. Therefore, currently we just start and stop the server every
-time that we use it.
+memory.
+
+Anyway, we need a script that starts the server if it is not already
+running.
+
+\begin{enumerate}
+\item Try to create a directory that will contain a file with the pid
+  of the running server.
+\item If the directory didn't exist before you created it, the server
+  has not been started. So start the server.
+\item Otherwise, if the directory did exist, look in the pid-file in
+  the directory. Check whether the process with that ID does still
+  run. Otherwise, the process has died. So start the server.
+\item There is the possibility that the directory for the pid-file
+  exists, but that it is empty. Assume this is caused because another
+  process is busy starting the server and has not yet created the
+  pid-file. 
+\end{enumerate}
+
+@d start EHU SRL server if it isn't running @{@%
+pidFile=m4_apiddir/SRLServer.pid
+startserver=1
+mkdir m4_apiddir
+result=\$?
+if
+  [ $result -eq 0 ]
+then
+  >&2 echo "Start the Srl server."
+  startserver=0
+else
+  >&2 echo "Srl server has already been started."
+  if 
+     [ -e "$pidFile" ]
+  then
+     pid=`cat $pidFile`
+     ps -p $pid > /dev/null
+     result=\$?
+     if 
+       [ $result -gt 0 ]
+     then
+        >&2 echo "Srl server has died. Start it again."
+        rm \$pidFile
+        startserver=0
+     fi
+  fi
+fi
+if
+  [ $startserver -eq 0 ]
+then
+  >&2 echo "Do start."
+  @< start EHU SRL server @>
+fi
+@| @}
+
+When the server is up and running, it serves port m4_srlserverport. So
+when we know that the server has been started up, let us wait until
+that port is served.
+
+@d wait for SRL server @{@%
+while
+  portInfo=$(nmap -p m4_srlserverport localhost | grep open)
+  [ -z "$portInfo" ]
+do
+  sleep 10
+done
+@| @}
+
+Sometimes we want to stop the server:
+
+@d stop EHU SRL server @{@%
+pidFile=m4_apiddir/SRLServer.pid
+if
+ [ -e "$pidFile" ]
+then
+ kill `cat $pidFile`
+@%  rm $pidFile
+ rm -rf m4_apiddir
+fi
+@| @}
+
 
 \paragraph{Module}
 
@@ -3243,7 +3321,7 @@ time that we use it.
 cd \$modulesdir
 tar -xzf \$snapshotsocket/m4_snapshotdirectory/m4_srlserverball
 cd m4_srlserverdir
-mkdir -p m4_apiddir
+@% mkdir -p m4_apiddir
 @| @}
 
 
@@ -3267,34 +3345,36 @@ a \NAF{} file.
 @o m4_bindir/m4_esrlscript @{@%
 @< start of module-script @(m4_srlserverdir@) @>
 m4_abindir/start_eSRL
+@< wait for SRL server @>
 java -Xmx1000m -cp $MODDIR/IXA-EHU-srl-3.0.jar ixa.srl.SRLClient en
 @| @}
 
 
-@d start EHU SRL server if it isn't running @{@%
+In some environments it may happen that two processes try
+simultaneously to start the server. The PID-file that is to contain
+the PID of the server, can help to prevent this.
+
+
+
+@d start EHU SRL server @{@%
 pidFile=m4_apiddir/SRLServer.pid
-portInfo=$(nmap -p m4_srlserverport localhost | grep open)
-if [ -z "$portInfo" ]; then
-  >&2 echo "Starting srl-server as it is not runnning"
-  java -Xms2500m -cp $MODDIR/IXA-EHU-srl-3.0.jar ixa.srl.SRLServer en &> /dev/null &
-  pid=$!
-  echo $pid > $pidFile
-  sleep 60
-  >&2 echo "Server running: ${pid}"
-else
- >&2 echo "Server already running.."
-fi
+java -Xms2500m -cp $MODDIR/IXA-EHU-srl-3.0.jar ixa.srl.SRLServer en &> /dev/null &
+pid=\$!
+echo \$pid > \$pidFile
 @| @}
 
-@d stop EHU SRL server @{@%
-pidFile=m4_apiddir/SRLServer.pid
-if
- [ -e "$pidFile" ]
-then
- kill `cat $pidFile`
- rm $pidFile
-fi
-@| @}
+
+
+@% ; then
+@%   >&2 echo "Starting srl-server as it is not runnning"
+@%   java -Xms2500m -cp $MODDIR/IXA-EHU-srl-3.0.jar ixa.srl.SRLServer en &> /dev/null &
+@%   pid=$!
+@%   echo $pid > $pidFile
+@%   sleep 60
+@%   >&2 echo "Server running: ${pid}"
+@% else
+@%  >&2 echo "Server already running.."
+@% fi
 
 
 \subsubsection{SRL Dutch nominals}
