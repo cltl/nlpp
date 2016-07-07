@@ -1710,12 +1710,15 @@ creates the lockfile.
 
 When installing sematree, set the default directory for lock-files. We
 set this as a subdirectory of the \verb|env| tree. However, in some
-cases, notably when running in a node in Lisa, we need a directory on
-the filesystem of the node itself.
+cases, e.g. when multiple compute nodes use the same file-system, we
+need a directory on the local filesystem of the node itself. In that
+case you can set variable \verb|semaworkdir| to override the default
+directory.
 
 @d install sematree @{@%
-cat \$snapshotsocket/m4_snapshotdirectory/m4_sematree_script | \
-  sed "s|/var/run|<!!>m4_asematreedir<!!>|g" \
+cat \$snapshotsocket/m4_snapshotdirectory/m4_sematree_script \
+| sed "s|workdir|<!!>semaworkdir<!!>|g" \
+| sed "s|/var/run|<!!>m4_asematreedir<!!>|g" \
 > \$envbindir/sematree
 chmod 775 \$envbindir/sematree
 @| @}
@@ -3253,10 +3256,24 @@ running.
   pid-file. 
 \end{enumerate}
 
+
+Set a default location or the directory for the pidfile, that can be
+overrided by user-set variable.
+
+@o m4_envbindir/progenv @{@%
+if
+  [ -z ${eSRL_piddir+x} ]
+then
+  export eSRL_piddir=m4_apiddir
+fi
+@| @}
+
+
+
 @d start EHU SRL server if it isn't running @{@%
-pidFile=m4_apiddir/SRLServer.pid
+pidFile=$eSRL_piddir/SRLServer.pid
 startserver=1
-mkdir m4_apiddir
+mkdir $eSRL_piddir
 result=\$?
 if
   [ $result -eq 0 ]
@@ -3349,15 +3366,8 @@ m4_abindir/start_eSRL
 java -Xmx1000m -cp $MODDIR/IXA-EHU-srl-3.0.jar ixa.srl.SRLClient en
 @| @}
 
-
-In some environments it may happen that two processes try
-simultaneously to start the server. The PID-file that is to contain
-the PID of the server, can help to prevent this.
-
-
-
 @d start EHU SRL server @{@%
-pidFile=m4_apiddir/SRLServer.pid
+pidFile=$eSRL_piddir/SRLServer.pid
 java -Xms2500m -cp $MODDIR/IXA-EHU-srl-3.0.jar ixa.srl.SRLServer en &> /dev/null &
 pid=\$!
 echo \$pid > \$pidFile
