@@ -3240,22 +3240,47 @@ advisable that the server keeps running, occupying precious
 memory.
 
 Anyway, we need a script that starts the server if it is not already
-running.
+running. We must be aware that in some applications a bunch of
+parallel processes may be running this script at the same time, which
+causes synchronisation errors. So do as follows:
 
 \begin{enumerate}
-\item Try to create a directory that will contain a file with the pid
-  of the running server.
-\item If the directory didn't exist before you created it, the server
-  has not been started. So start the server.
-\item Otherwise, if the directory did exist, look in the pid-file in
-  the directory. Check whether the process with that ID does still
-  run. Otherwise, the process has died. So start the server.
-\item There is the possibility that the directory for the pid-file
-  exists, but that it is empty. Assume this is caused because another
-  process is busy starting the server and has not yet created the
-  pid-file. 
+\item Check whether the server is in the air (listening on its
+  port). If that is the case, we are ready.
+\item Otherwise, gain exclusive permission to proceed. (\textbf{P} operation)
+\item Check whether the ``pidfile'' (file that contains the
+  process-id of the server) exists.
+\item If the pidfile does not exist, start the server (and write its pid in
+  the pidfile). Give up exclusive permission (\textbf{V}
+  operation). We are ready.
+\item Otherwise, if the pid-file exists, check whether a process with
+  the given pid is running.
+\item If such a process is running, the server has been started, but
+  it is may not yet be up. Give up exclusive
+  permission (\textbf{V} operation). We are ready.
+\item If no running process has the given pid, the server may have been
+  aborted. Start the server. Give up exclusive
+  permission. We are ready
 \end{enumerate}
 
+The following scheme shows the process:
+
+\begin{tabbing}
+  yess  \= yess  \= yess \= \kill
+  \textbf{Server up?}  \\
+   yes: \> \textbf{ready} \\
+   no:  \> \textbf{P} \+ \\
+          \textbf{PID-file exists?} \\
+           no: \> start server \+ \\
+                  \textbf{V} \\
+                  \textbf{ready} \- \\
+           yes: \> \textbf{process with PID exists?} \+ \\
+                    yes: \> \textbf{V} \\
+                         \> \textbf{ready}  \\
+                    no:  \> start server \+ \\
+                            \textbf{V} \\
+                            \textbf{ready} \- \\
+\end{tabbing}
 
 Set a default location or the directory for the pidfile, that can be
 overrided by user-set variable.
@@ -3266,44 +3291,77 @@ if
 then
   export eSRL_piddir=m4_apiddir
 fi
-@| @}
+@|eSRL_piddir @}
 
 
 
 @d start EHU SRL server if it isn't running @{@%
 pidFile=$eSRL_piddir/SRLServer.pid
-startserver=1
-mkdir $eSRL_piddir
-result=\$?
-if
-  [ $result -eq 0 ]
+portInfo=$(nmap -p m4_srlserverport localhost | grep open)
+if 
+  [ -z "$portInfo" ]
 then
-  >&2 echo "Start the Srl server."
-  startserver=0
-else
-  >&2 echo "Srl server has already been started."
-  if 
-     [ -e "$pidFile" ]
+  sematree acquire esrl_lock
+  if
+    [ ! -e "$pidFile" ]
   then
+      start_eSRL_server
+  else
      pid=`cat $pidFile`
      ps -p $pid > /dev/null
      result=\$?
-     if 
-       [ $result -gt 0 ]
+     if
+       [ \$result -ne 0 ]
      then
-        >&2 echo "Srl server has died. Start it again."
-        rm \$pidFile
-        startserver=0
+      start_eSRL_server
      fi
-  fi
+  fi  
+  sematree release esrl_lock
 fi
-if
-  [ $startserver -eq 0 ]
-then
-  >&2 echo "Do start."
-  @< start EHU SRL server @>
-fi
+@% startserver=1
+@% mkdir $eSRL_piddir
+@% result=\$?
+@% if
+@%   [ $result -eq 0 ]
+@% then
+@%   >&2 echo "Start the Srl server."
+@%   startserver=0
+@% else
+@%   >&2 echo "Srl server has already been started."
+@%   if 
+@%      [ -e "$pidFile" ]
+@%   then
+@%      pid=`cat $pidFile`
+@%      ps -p $pid > /dev/null
+@%      result=\$?
+@%      if 
+@%        [ $result -gt 0 ]
+@%      then
+@%         >&2 echo "Srl server has died. Start it again."
+@%         rm \$pidFile
+@%         startserver=0
+@%      fi
+@%   fi
+@% fi
+@% if
+@%   [ $startserver -eq 0 ]
+@% then
+@%   >&2 echo "Do start."
+@%   @< start EHU SRL server @>
+@% fi
 @| @}
+
+@d function to start EHU SRL server @{@%
+function start_eSRL_server {
+  pidFile=$eSRL_piddir/SRLServer.pid
+  java -Xms2500m -cp $MODDIR/IXA-EHU-srl-3.0.jar ixa.srl.SRLServer en &> /dev/null &
+  pid=\$!
+  echo \$pid > \$pidFile
+}
+
+@| @}
+
+
 
 When the server is up and running, it serves port m4_srlserverport. So
 when we know that the server has been started up, let us wait until
@@ -3350,6 +3408,7 @@ a \NAF{} file.
 
 @o m4_bindir/start_eSRL @{@%
 @< start of module-script @(m4_srlserverdir@) @>
+@< function to start EHU SRL server @>
 @< start EHU SRL server if it isn't running @>
 @| @}
 
