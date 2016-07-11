@@ -268,6 +268,7 @@ m4_define(m4_wikifytex, \verb|m4_wikifyname|)m4_dnl
 m4_define(m4_wikifydir, EHU-wikify.v30)m4_dnl
 m4_define(m4_wikifyball, 20151220_EHU-wikify.v30.tgz)m4_dnl
 m4_define(m4_wikifyscript, wikify)m4_dnl
+m4_define(m4_wikifyjar, `ixa-pipe-wikify-1.2.1.jar')m4_dnl
 m4_dnl
 m4_dnl UKB
 m4_define(m4_ukbname, ukb)m4_dnl

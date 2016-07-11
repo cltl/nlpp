@@ -1809,7 +1809,7 @@ The macro does the following if \verb|naflang| has not been set:
 
 @d run in subshell when naflang is not known @{@%
 if
-  [ "\$naflang" == "" ]
+  [ -z "\${naflang+x}" ]
 then
   naffile=`mktemp -t naf.XXXXXX`
   cat >$naffile
@@ -3130,9 +3130,15 @@ python $MODDIR/domain_model.py
 
 \paragraph{Module}
 
+Wikify is still obtained from the snapshot. Make sure that the jar of
+the module is accessable for everybody.
+
+
+
 @d install the wikify module @{@%
 cd \$modulesdir
 tar -xzf \$snapshotsocket/m4_snapshotdirectory/m4_wikifyball
+chmod 775 \$modulesdir/m4_wikifydir/m4_wikifyjar
 @| @}
 
 \paragraph{Script}
@@ -3151,7 +3157,7 @@ The Wikify module needs DBpedia to generate ``markables''.
 @% [ $spotlightrunning ] || source m4_abindir/start-spotlight
 @< find a spotlightserver or exit @>
 cd $MODDIR
-java -Xmx1000m -jar ${MODDIR}/ixa-pipe-wikify-1.2.1.jar -s http://$spotlighthost -p $spotlightport 
+java -Xmx1000m -jar ${MODDIR}/m4_wikifyjar -s http://$spotlighthost -p $spotlightport 
 @| @}
 
 
@@ -3260,7 +3266,7 @@ causes synchronisation errors. So do as follows:
   permission (\textbf{V} operation). We are ready.
 \item If no running process has the given pid, the server may have been
   aborted. Start the server. Give up exclusive
-  permission. We are ready
+  permission. We are ready.
 \end{enumerate}
 
 The following scheme shows the process:
@@ -3291,12 +3297,13 @@ if
 then
   export eSRL_piddir=m4_apiddir
 fi
-@|eSRL_piddir @}
+@| @}
 
 
 
 @d start EHU SRL server if it isn't running @{@%
 pidFile=$eSRL_piddir/SRLServer.pid
+mkdir -p $eSRL_piddir
 portInfo=$(nmap -p m4_srlserverport localhost | grep open)
 if 
   [ -z "$portInfo" ]
@@ -3365,29 +3372,25 @@ function start_eSRL_server {
 
 When the server is up and running, it serves port m4_srlserverport. So
 when we know that the server has been started up, let us wait until
-that port is served.
+that port is served. When it takes too long, give up.
 
 @d wait for SRL server @{@%
+nr_of_trials=0
+maxtrials=20
 while
   portInfo=$(nmap -p m4_srlserverport localhost | grep open)
-  [ -z "$portInfo" ]
+  [ -z "$portInfo" ] && [ $nr_of_trials -le $maxtrials ]
 do
   sleep 10
+  nr_of_trials=\$((nr_of_trials+1))
 done
-@| @}
-
-Sometimes we want to stop the server:
-
-@d stop EHU SRL server @{@%
-pidFile=m4_apiddir/SRLServer.pid
 if
- [ -e "$pidFile" ]
+  [ -z "$portInfo" ]
 then
- kill `cat $pidFile`
-@%  rm $pidFile
- rm -rf m4_apiddir
-fi
+  echo "eSRL server does not start."  >&2
+fi  
 @| @}
+
 
 
 \paragraph{Module}
@@ -3396,7 +3399,8 @@ fi
 cd \$modulesdir
 tar -xzf \$snapshotsocket/m4_snapshotdirectory/m4_srlserverball
 cd m4_srlserverdir
-@% mkdir -p m4_apiddir
+mkdir -p m4_apiddir
+chmod o+rwx m4_apiddir
 @| @}
 
 
@@ -3407,15 +3411,43 @@ Generate three scripts: \verb|start_eSRL|, \verb|stop_esrl| and
 a \NAF{} file.
 
 @o m4_bindir/start_eSRL @{@%
-@< start of module-script @(m4_srlserverdir@) @>
+#!/bin/bash
+source m4_aenvbindir/progenv
+ROOT=\$piperoot
+MODDIR=\$modulesdir/m4_srlserverdir
+@% @< get the path to the module-script @>
+@% @< start of module-script @(m4_srlserverdir@) @>
 @< function to start EHU SRL server @>
 @< start EHU SRL server if it isn't running @>
 @| @}
 
 @o  m4_bindir/stop_eSRL @{@%
-@< start of module-script @(m4_srlserverdir@) @>
-@< stop EHU SRL server @>
+#!/bin/bash
+source m4_aenvbindir/progenv
+ROOT=\$piperoot
+@% @< stop EHU SRL server @>
+@% pidFile=\$eSRL_piddir/SRLServer.pid
+pidFile=\$eSRL_piddir/SRLServer.pid
+if
+  [ -e "$pidFile" ]
+ then
+  kill `cat $pidFile`
+  rm $pidFile
+ fi
 @| @}
+
+@% Sometimes we want to stop the server:
+@% 
+@% @d stop EHU SRL server @{@%
+@% pidFile=m4_apiddir/SRLServer.pid
+@% if
+@%  [ -e "$pidFile" ]
+@% then
+@%  kill `cat $pidFile`
+@% @%  rm $pidFile
+@%  rm -rf m4_apiddir
+@% fi
+@% @| @}
 
 
 @o m4_bindir/m4_esrlscript @{@%
