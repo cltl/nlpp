@@ -1445,7 +1445,7 @@ echo ... VUA-pylib, SVMlight, CRFsuite
 @< begin conditional install @(miscutils_installed@) @>
   @< install VUA-pylib @>
   @< install SVMLight @>
-  @< install CRFsuite @>
+@%   @< install CRFsuite @>
 @< end conditional install @(miscutils_installed@) @>
 @| @}
 
@@ -2676,38 +2676,53 @@ Installation goes like this:
 tempdir=`mktemp -d -t SVMlight.XXXXXX`
 cd $tempdir
 @% wget m4_SVMlightball_url
-tar -xzf \$snapshotsocket/\$snapshotdirectory/m4_SVMlightball
-make all
+#tar -xzf \$snapshotsocket/\$snapshotdirectory/m4_SVMlightball
+wget http://download.joachims.org/svm_light/current/svm_light.tar.gz
+tar -xzf svm_light.tar.gz
+make
 cp svm_classify m4_aenvbindir/
 cp svm_learn m4_aenvbindir/
 cd m4_aprojroot
 rm -rf \$tempdir
 @| @}
 
+@% @d install SVMLight @{@%
+@% tempdir=`mktemp -d -t SVMlight.XXXXXX`
+@% cd $tempdir
+@% @% wget m4_SVMlightball_url
+@% tar -xzf \$snapshotsocket/\$snapshotdirectory/m4_SVMlightball
+@% make all
+@% cp svm_classify m4_aenvbindir/
+@% cp svm_learn m4_aenvbindir/
+@% cd m4_aprojroot
+@% rm -rf \$tempdir
+@% @| @}
 
-\subsubsection{CRFsuite}
-\label{sec:crfsuite}
 
-\href{http://www.chokkan.org/software/crfsuite}{CRFsuite} is an
-implementation of Conditional Random Fields (\textsc{crf}). Module
-\href{https://github.com/cltl/opinion_miner_deluxe}{opinion-miner-de-luxe}
-needs it. It can be installed from it's sources, but I did not manage
-to this. Therefore, currently we use a pre-compiled ball. 
 
-@d install CRFsuite @{@%
-@% @< get or have @(m4_CRFsuitebinball@) @>
-tempdir=`mktemp -d -t crfsuite.XXXXXX`
-cd $tempdir
-tar -xzf \$snapshotsocket/m4_snapshotdirectory/m4_CRFsuitebinball
-cd crfsuite-0.12
-cp -r bin/crfsuite $envbindir/
-mkdir -p $envdir/include/
-cp -r include/* $envdir/include/
-mkdir -p $envdir/lib/
-cp -r lib/* $envdir/lib/
-cd m4_aprojroot
-rm -rf $tempdir
-@| @}
+@% \subsubsection{CRFsuite}
+@% \label{sec:crfsuite}
+@% 
+@% \href{http://www.chokkan.org/software/crfsuite}{CRFsuite} is an
+@% implementation of Conditional Random Fields (\textsc{crf}). Module
+@% \href{https://github.com/cltl/opinion_miner_deluxe}{opinion-miner-de-luxe}
+@% needs it. It can be installed from it's sources, but I did not manage
+@% to this. Therefore, currently we use a pre-compiled ball. 
+@% 
+@% @d install CRFsuite @{@%
+@% @% @< get or have @(m4_CRFsuitebinball@) @>
+@% tempdir=`mktemp -d -t crfsuite.XXXXXX`
+@% cd $tempdir
+@% tar -xzf \$snapshotsocket/m4_snapshotdirectory/m4_CRFsuitebinball
+@% cd crfsuite-0.12
+@% cp -r bin/crfsuite $envbindir/
+@% mkdir -p $envdir/include/
+@% cp -r include/* $envdir/include/
+@% mkdir -p $envdir/lib/
+@% cp -r lib/* $envdir/lib/
+@% cd m4_aprojroot
+@% rm -rf $tempdir
+@% @| @}
 
 
 
@@ -5053,7 +5068,24 @@ cat | iconv -f ISO8859-1 -t UTF-8 | $MODDIR/dbpedia_ner.py -url http://$spotligh
 \subsubsection{Opinion miner}
 \label{sec:opinimin}
 
-Get \verb|opinion-miner_deluxePP| from Github. 
+Get \verb|opinion-miner_deluxePP| from Github. The repository contains an install script \verb|install_me| that installs the following:
+
+\begin{itemize}
+\item KafNafParserPy (we have this already);
+\item The ``Conditional Random Fields'' program, that is included in the tarball;
+\item The \verb|SVM_light| utility that we installed in section~\ref{sec:svmlight}.
+\item Trained models (hotels, news).
+\item Polarity-models.
+\end{itemize}
+
+So, we need to do the following:
+
+\begin{itemize}
+\item Get the module from the Github repo.
+\item Install the included CRF program.
+\item Link the binaries of SVM to a place where the opinion-miner expects it.
+\item Download and install the models.
+\end{itemize}
 
 @% To run the opinion-miner, the following things are needed:
 @% 
@@ -5075,9 +5107,7 @@ GITC=m4_opini_commitname
 @< install from github @>
 @| @}
 
-The module contains a script \verb|install_me.sh| that we will follow
-here. First install the CRF module that comes with the opinion-miner:
-
+Install the \textsc{crf} uitilty:
 
 @d install the opinion-miner @{@%
 moduledir=$modulesdir/m4_opinidir
@@ -5086,6 +5116,7 @@ crfdir=`mktemp -d -t crf.XXXXXX`
 cd $crfdir
 @% tar xvzf CRF++-0.58.tar.gz
 tar -xzf $moduledir/crf_lib/CRF++-0.58.tar.gz
+rm -rf $moduledir/crf_lib/CRF++-0.58.tar.gz
 cd CRF++-0.58
 ./configure --prefix=$envdir
 make
@@ -5095,14 +5126,32 @@ cd $moduledir
 rm -rf $crfdir
 @| @}
 
+The opinion-miner expects the SVM-light executables in a subdirectory \verb|svm_light|.
 
-Next, download the trained models. 
+@d install the opinion-miner @{@%
+cd $moduledir
+mkdir $moduledir/svm_light
+ln -s m4_aenvbindir/svm_classify $moduledir/svm_light/ 
+ln -s m4_aenvbindir/svm_learn $moduledir/svm_light/
+@|svm_classify svm_learn @}
+
+
+
+Download the trained models. 
 
 @d install the opinion-miner @{@%
 ##Download the models
+cd $moduledir
 echo Downloading the trained models.
 tar -xzf \$snapshotsocket/m4_snapshotdirectory/m4_opimodelball
 @| @}
+
+@d install the opinion-miner @{@%
+wget m4_polaritymodelball_url
+tar -xzf m4_polaritymodelball
+rm m4_polaritymodelball
+@| m4_polaritymodelball @}
+
 
 
 @% The module can be cloned from Github. However, currently there are
@@ -5178,7 +5227,7 @@ tar -xzf \$snapshotsocket/m4_snapshotdirectory/m4_opimodelball
 @o m4_bindir/m4_opiniscript @{@%
 @< start of module-script @(m4_opinidir@) @>
 cd $MODDIR
-python tag_file.py -d hotel
+python tag_file.py -polarity -d hotel
 @| @}
 
 
