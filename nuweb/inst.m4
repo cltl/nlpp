@@ -446,7 +446,7 @@ m4_define(m4_opiniscript, opinimin)m4_dnl
 m4_define(m4_opini_trained_models_ball, 20150730_opimin_final_models.tgz)m4_dnl
 m4_dnl m4_define(m4_opini_commitname, 818e96394126123c8c8a31375811aee60e766ab6)m4_dnl
 m4_dnl m4_define(m4_opini_commitname, 00fdcec05c441daad7a09a8f8bee50ddda7466b5)m4_dnl
-m4_define(m4_opini_commitname, 5f46af89f139080ae030abe70a540f693ac4676b)m4_dnl
+m4_dnl m4_define(m4_opini_commitname, 5f46af89f139080ae030abe70a540f693ac4676b)m4_dnl
 m4_define(m4_opini_commitname, d7285b45a4d52437ecaf66992690481c12f3a424)m4_dnl
 m4_dnl m4_define(m4_opini_nl_conf, opini_nl.cfg)m4_dnl
 m4_define(m4_opini_conf, opini.cfg)m4_dnl
