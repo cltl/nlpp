@@ -3123,10 +3123,15 @@ java -Xmx1000m -jar ${MODDIR}/m4_consparname-m4_consparversion.jar parse -g sem 
 \subsubsection{NED-reranker}
 \label{sec:nedrer}
 
+The NED-reranker is not open-source yet. It must be retrieved from the
+snapshot. 
+
+
 \paragraph{Module}
 
 @d install the \NED-reranker module @{@%
 cd \$modulesdir
+pip install SPARQLWrapper
 tar -xzf \$snapshotsocket/m4_snapshotdirectory/m4_nedrerball
 @| @}
 
