@@ -143,6 +143,11 @@ m4_define(m4_ehu_modules_directory, components)m4_dnl
 m4_define(m4_ehu_user, newsreader)m4_dnl
 m4_dnl Modules
 m4_dnl
+m4_dnl EventCoreference
+m4_define(m4_eventcoreferenceversion, `v3.1.2')m4_dnl
+m4_define(m4_eventcoreference_commitname, 52765c55354fda9d5d3046e91d4b0f99898b014b)m4_dnl
+m4_define(m4_eventcoreferencegit, `https://github.com/cltl/EventCoreference.git')m4_dnl  Subdir. of modules
+m4_define(m4_eventcoreferencejar, EventCoreference-`'m4_eventcoreferenceversion`'-jar-with-dependencies.jar)m4_dnl
 m4_dnl Tokenizer
 m4_define(m4_tokenizername, ixa-pipe-tok)m4_dnl
 m4_define(m4_tokenizertex, \verb|m4_tokenizername|)m4_dnl
@@ -150,10 +155,10 @@ m4_define(m4_tokenizerversion, `1.8.0')m4_dnl
 m4_dnl m4_define(m4_tokenizer_commitname, c4d307eece4ef19aca365e3a08abd7f3324e3707)m4_dnl
 m4_dnl m4_define(m4_tokenizer_commitname, 410a97ba4a847d4dfea6a45b9ae09f4bfbbfdc5a)m4_dnl
 m4_define(m4_tokenizer_commitname, 56f83ce4b61680346f15e5d4e6de6293764f7383)m4_dnl
-m4_define(m4_tokenizergit, https://github.com/ixa-ehu/ixa-pipe-tok.git)m4_dnl  Subdir. of modules
+m4_define(m4_tokenizergit, `https://github.com/ixa-ehu/ixa-pipe-tok.git')m4_dnl  Subdir. of modules
 m4_define(m4_tokenizerdir, ixa-pipe-tok)m4_dnl  Subdir. of modules
 m4_define(m4_tokenizerjar, ixa-pipe-tok-`'m4_tokenizerversion.jar)m4_dnl
-m4_define(m4_tokenizerscript, tok)m4_dnl
+m4_define(m4_tokenizerscript, `tok')m4_dnl
 m4_dnl
 m4_dnl Topic detection tool
 m4_define(m4_topictoolname, ixa-pipe-topic)m4_dnl
@@ -436,6 +441,11 @@ m4_define(m4_evcoreftarball, 20151217_`'m4_evcorefdir`'.tgz)m4_dnl
 m4_define(m4_evcorefscript, evcoref)m4_dnl
 m4_define(m4_evcorefjar, EventCoreference-1.0-SNAPSHOT-jar-with-dependencies.jar)m4_dnl
 m4_dnl
+m4_dnl Naf2Sem
+m4_dnl
+m4_define(m4_naf2semscript, `naf2sem')m4_dnl
+
+m4_dnl
 m4_dnl Opinion-miner
 m4_define(m4_opininame, opinion_miner_deluxePP)m4_dnl
 m4_define(m4_opinidir, opinion_miner_deluxePP)m4_dnl
@@ -513,6 +523,16 @@ m4_define(m4_nomeventdir, vua-nominal-event-detection-nl)m4_dnl
 m4_define(m4_nomeventscript, nomevent)m4_dnl
 m4_define(m4_nomevent_subscript, nominal-events.sh)m4_dnl
 m4_dnl
+m4_dnl Dark-entity relinker
+m4_dnl
+m4_define(m4_delinkdir, entity-relink-pipeline)m4_dnl  Subdir. of modules
+m4_define(m4_delinkscript, derel)m4_dnl
+m4_define(m4_delinkpy, relinkDarkEntities.py)m4_dnl
+m4_define(m4_delinkgit, https://github.com/cltl/entity-relink-pipeline.git)m4_dnl
+m4_dnl m4_define(m4_delink_commitname, `009e3f46580bce8ef190a7127f7ff87bfa5616c8')m4_dnl
+m4_define(m4_delink_commitname, `90d7b64840dda8ce3baf744e140891a6f8419052')m4_dnl
+
+
 m4_dnl Utilities
 m4_dnl
 m4_dnl

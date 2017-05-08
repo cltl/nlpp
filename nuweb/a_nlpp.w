@@ -1485,6 +1485,10 @@ echo Install modules
   echo ... NED
   @< install the \NED{} module @>
 @< end conditional install @(ned_installed@) @>
+@< begin conditional install @(der_installed@) @>
+  echo ... Dark-entity relinker
+  @< install the de-link module @>
+@< end conditional install @(der_installed@) @>
 @< begin conditional install @(nedrer_installed@) @>
   echo ...NED reranker
   @< install the \NED-reranker module @>
@@ -4404,6 +4408,42 @@ cat | java -Xmx1000m -jar \$jarsdir/m4_nedjar -H http://$spotlighthost -p $spotl
 @%chmod 775  m4_bindir/m4_nedscript
 @%@| @}
 
+
+\subsubsection{Dark entity relinker}
+\label{sec:derelink}
+
+The ``Dark Entity Relinker'' tries to link ``Dark entities'' (named
+entities that have not been recognized) to the link of a known entity
+with a similar name structure that has been found in the same text.
+
+\paragraph{Module}
+\label{sec:dark-entity-linker-module}
+
+Install the module from Github.
+
+@d install the de-link module @{@%
+cd $modulesdir
+git clone m4_delinkgit
+cd m4_delinkdir
+git checkout m4_delink_commitname
+@| @}
+
+\paragraph{script}
+\label{sec:dark-entity-linker-script}
+
+@o m4_bindir/m4_delinkscript @{@%
+@< start of module-script @(m4_ontodir@) @>
+MODDIR=m4_amoddir/m4_delinkdir
+cd \$MODDIR/
+cat | python m4_delinkpy
+@| @}
+
+
+
+
+
+
+
 \subsubsection{Ontotagger, Framenet-SRL and nominal events}
 \label{sec:onto}
 
@@ -5069,6 +5109,67 @@ Spotlight server.
 cat | iconv -f ISO8859-1 -t UTF-8 | $MODDIR/dbpedia_ner.py -url http://$spotlighthost:<!!>m4_spotlight_nl_port<!!>/rest/candidates
 @| @}
 
+\subsubsection{GetSemfromNaf}
+\label{sec:GetSemFromNaf}
+
+The \verb|naf2sem| module is a application that is hidden in the
+EventCoreference jar
+(\url{https://github.com/cltl/EventCoreference}). It uses resources
+from \texttt{https://github.com/cltl/vua-resources}, that has been
+installed by the ontotagger installer.
+
+
+\paragraph{Module}
+\label{sec:naf2semmod}
+
+@d install naf2sem @{@%
+n2sdir=`mktemp -d -t n2s.XXXXXX`
+cd $n2sdir
+MODNAM=EventCoreference
+GITC=m4_eventcoreference_commitname
+git clone m4_eventcoreferencegit
+cd $MODNAM
+git checkout $GITC
+set -e
+mvn clean
+mvn install
+@%jarfile=`find target -name "EventCoreference-v*-jar-with-dependencies.jar" -print`
+jarfile=m4_eventcoreferencejar
+if
+  [ -d "target/\$jarfile" ]
+then
+  mv target/\$jarfile \$jarsdir
+else
+  echo "Could not generate m4_eventcoreferencejar
+  exit 4
+fi
+cd "$modulesdir"
+rm -rf $n2sdir
+
+@| @}
+
+
+\paragraph{Script}
+\label{sec:naf2semscript}
+
+The script is not yet correct.
+
+@o m4_bindir/m4_naf2semscript @{@%
+@< start of module-script @(m4_dbpnerdir@) @>
+JAR=\$jarsdir/m4_eventcoreferencejar
+RESOURCES="\$modulesdir/vua-resources"
+DATA="../data2"
+
+java -Xmx2000m -cp "$LIB/EventCoreference-v3.1.2-jar-with-dependencies.jar" eu.newsreader.eventcoreference.naf.GetSemFromNafFolder --naf-folder "$DATA" --extension ".naf" --verbose --project dasym --all --ili "$RESOURCES/ili.ttl.gz" --perspective --source-frames "$RESOURCES/source-nl.txt" --non-entities
+
+# --eurovoc-en "$RESOURCES/mapping_eurovoc_skos.csv.gz" 
+# --no-doc-time
+# --no-context-time
+# --non-entities
+  
+@| @}
+
+
 
 \subsubsection{Opinion miner}
 \label{sec:opinimin}
@@ -5443,11 +5544,12 @@ to and write the result in a file that  \verb|outfile| points to:
 @d annotate dutch document @{@%
 runmodule \$infile    tok                     tok.naf
 runmodule tok.naf     topic                   top.naf
-runmodule top.naf   mor                     mor.naf
+runmodule top.naf     mor                     mor.naf
 runmodule mor.naf     nerc                    nerc.naf
 runmodule nerc.naf    wsd                     wsd.naf
 runmodule wsd.naf     ned                     ned.naf
-runmodule ned.naf     heideltime              times.naf
+runmodule ned.naf     derel                   derel.naf
+runmodule derel.naf   heideltime              times.naf
 runmodule times.naf   onto                    onto.naf
 runmodule onto.naf    srl                     srl.naf
 runmodule srl.naf     m4_nomeventscript       nomev.naf
@@ -5466,7 +5568,8 @@ Similar for an English naf:
   runmodule pos.naf     constpars               consp.naf
   runmodule consp.naf   nerc                    nerc.naf
   runmodule nerc.naf    ned                     ned.naf
-  runmodule ned.naf     nedrer                  nedr.naf
+  runmodule ned.naf     derel                   derel.naf
+  runmodule derel.naf   nedrer                  nedr.naf
   runmodule nedr.naf    wikify                  wikif.naf
   runmodule wikif.naf   ukb                     ukb.naf
   runmodule ukb.naf     ewsd                    ewsd.naf
@@ -5502,11 +5605,12 @@ then
 @%   cat \$TESTIN    | \$BIND/tok                    > tok.naf
 runmodule \$infile    tok                     tok.naf
 runmodule tok.naf     topic                   top.naf
-runmodule top.naf   mor                     mor.naf
+runmodule top.naf     mor                     mor.naf
 runmodule mor.naf     nerc                    nerc.naf
 runmodule nerc.naf    wsd                     wsd.naf
 runmodule wsd.naf     ned                     ned.naf
-runmodule ned.naf     heideltime              times.naf
+runmodule ned.naf     derel                   derel.naf
+runmodule derel.naf   heideltime              times.naf
 runmodule times.naf   onto                    onto.naf
 runmodule onto.naf    srl                     srl.naf
 runmodule srl.naf     m4_nomeventscript       nomev.naf
