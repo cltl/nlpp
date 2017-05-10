@@ -457,7 +457,8 @@ m4_define(m4_opini_trained_models_ball, 20150730_opimin_final_models.tgz)m4_dnl
 m4_dnl m4_define(m4_opini_commitname, 818e96394126123c8c8a31375811aee60e766ab6)m4_dnl
 m4_dnl m4_define(m4_opini_commitname, 00fdcec05c441daad7a09a8f8bee50ddda7466b5)m4_dnl
 m4_dnl m4_define(m4_opini_commitname, 5f46af89f139080ae030abe70a540f693ac4676b)m4_dnl
-m4_define(m4_opini_commitname, d7285b45a4d52437ecaf66992690481c12f3a424)m4_dnl
+m4_dnl m4_define(m4_opini_commitname, d7285b45a4d52437ecaf66992690481c12f3a424)m4_dnl
+m4_define(m4_opini_commitname, 40a714c9823d439262caa29f3a14c5ce2be91241)m4_dnl
 m4_dnl m4_define(m4_opini_nl_conf, opini_nl.cfg)m4_dnl
 m4_define(m4_opini_conf, opini.cfg)m4_dnl
 m4_dnl m4_define(m4_opinigit, https://github.com/cltl/opinion_miner_deluxe.git )m4_dnl  
@@ -491,9 +492,14 @@ m4_dnl
 m4_dnl Factuality
 m4_define(m4_factualityname, factuality)m4_dnl
 m4_define(m4_factualitytex, \verb|factuality|)m4_dnl
-m4_define(m4_factualitydir, VUA-factuality.v30)m4_dnl
-m4_define(m4_factualityball, 20151220_VUA-factuality.v30.tgz)m4_dnl
 m4_define(m4_factualityscript, factuality)m4_dnl
+m4_define(m4_en_factualitydir, vua_factuality)m4_dnl
+m4_define(m4_nl_factualitydir, multilingual_factuality)m4_dnl
+m4_define(m4_en_factualitygit, `https://github.com/cltl/vua_factuality.git')m4_dnl
+m4_define(m4_nl_factualitygit, `https://github.com/cltl/multilingual_factuality')m4_dnl
+m4_define(m4_en_factualitycommit, `58fae1dc27d503642f4899460a3481417f044e95')m4_dnl
+m4_define(m4_nl_factualitycommit, `cbad4849b7d4421790589b018a9073d646ca45e3')m4_dnl
+m4_dnl m4_define(m4_factualityball, 20151220_VUA-factuality.v30.tgz)m4_dnl
 m4_dnl m4_dnl
 m4_dnl m4_dnl Corefgraph (=coreference-base)
 m4_dnl m4_define(m4_corefgraphname, corefgraph)m4_dnl

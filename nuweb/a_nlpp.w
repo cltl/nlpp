@@ -1534,7 +1534,7 @@ echo Install modules
 @< end conditional install @(FBK_causalrel_installed@) @>
 @< begin conditional install @(factuality_installed@) @>
   echo ... factuality module
-  @< install the factuality module @>
+  @< install the factuality modules @>
 @< end conditional install @(factuality_installed@) @>
 @| @}
 @o m4_bindir/m4_module_installer @{@%
@@ -3812,14 +3812,31 @@ cat >$scratchDir/in.naf
 rm -rf $scratchDir
 @| @}
 
-\subsubsection{Factuality module}
+\subsubsection{Factuality modules}
 \label{sec:factuality}
 
-\paragraph{Module}
+At this moment there is not yet a single factuality modules that
+server Dutsch as well as English. In spite of it's name, the
+\href{https://github.com/cltl/multilingual_factuality}{multilingual_factuality}
+module serves only Dutch on production-quality level. For English, we
+have the \href{https://github.com/cltl/vua_factuality}{VUA-factuality} module.
 
-@d install the factuality module @{@%
-cd \$modulesdir
-tar -xzf \$snapshotsocket/m4_snapshotdirectory/m4_factualityball
+\paragraph{Modules}
+
+@d install the factuality modules @{@%
+MODNAM=m4_en_factualitydir
+DIRN=m4_en_factualitydir
+GITU=m4_en_factualitygit
+GITC=m4_en_factualitycommit
+@< install from github @>
+MODNAM=m4_nl_factualitydir
+DIRN=m4_nl_factualitydir
+GITU=m4_nl_factualitygit
+GITC=m4_nl_factualitycommit
+@< install from github @>
+
+@% cd \$modulesdir
+@% tar -xzf \$snapshotsocket/m4_snapshotdirectory/m4_factualityball
 @| @}
 
 
@@ -3827,25 +3844,43 @@ tar -xzf \$snapshotsocket/m4_snapshotdirectory/m4_factualityball
 
 
 @o m4_bindir/m4_factualityscript @{@%
-@< start of module-script @(m4_factualitydir@) @>
-cd $MODDIR
-#local settings to prevent perl from complaining
-export LANGUAGE=en_US.UTF-8
-export LANG=en_US.UTF-8
-export LC_ALL=en_US.UTF-8
+@< start of module-script @(LATER@) @>
+if
+  [ "\$naflang" == "nl" ]
+then
+  MODDIR=\$modulesdir/<!!>m4_nl_factualitydir<!!>
+  @< run dutch factuality @>
+else
+  MODDIR=\$modulesdir/<!!>m4_en_factualitydir<!!>
+  @< run english factuality @>
+fi
+@% #local settings to prevent perl from complaining
+@% export LANGUAGE=en_US.UTF-8
+@% export LANG=en_US.UTF-8
+@% export LC_ALL=en_US.UTF-8
 
-rootDir=${MODDIR}
-tmpDir=$(mktemp -d -t factuality.XXXXXX)
-
-export PATH=$PATH:${rootDir}:.
-# export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:${rootDir}/../opt/lib/:${rootDir}/../opt/boost_1_54_0/stage/lib
-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:m4_aenvdir/lib/
-
-#mkdir -p ${scratchDir}/test
-
-python ${rootDir}/vua_factuality_naf_wrapper.py -t m4_aenvbindir/timbl -p ${rootDir} ${tmpDir}/
 
 @| @}
+
+@d run english factuality @{@%
+rootDir=${MODDIR}
+tmpDir=$(mktemp -d -t factuality.XXXXXX)
+export PATH=$PATH:${rootDir}:.
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:m4_aenvdir/lib/
+cd $rootDir
+python ${rootDir}/vua_factuality_naf_wrapper.py -t m4_aenvbindir/timbl -p ${rootDir} ${tmpDir}/
+rm -rf $tmpDir >& /dev/null
+@| @}
+
+To run the Dutch factuality is very simple. It is a Python script that
+finds out its own location. 
+
+@d run dutch factuality @{@%
+cd $MODDIR/feature_extractor
+cat | python ./rule_based_factuality.py
+@| @}
+
+
 
 
 \subsubsection{Nominal coreference-base}
@@ -4432,8 +4467,7 @@ git checkout m4_delink_commitname
 \label{sec:dark-entity-linker-script}
 
 @o m4_bindir/m4_delinkscript @{@%
-@< start of module-script @(m4_ontodir@) @>
-MODDIR=m4_amoddir/m4_delinkdir
+@< start of module-script @(m4_delinkdir@) @>
 cd \$MODDIR/
 cat | python m4_delinkpy
 @| @}
@@ -5555,7 +5589,8 @@ runmodule onto.naf    srl                     srl.naf
 runmodule srl.naf     m4_nomeventscript       nomev.naf
 runmodule nomev.naf   srl-dutch-nominals      psrl.naf
 runmodule psrl.naf    m4_framesrlscript       fsrl.naf
-runmodule fsrl.naf    m4_opiniscript          opin.naf
+runmodule fsrl.naf    m4_factualityscript     fact.naf
+runmodule fact.naf    m4_opiniscript          opin.naf
 runmodule opin.naf    m4_evcorefscript        \$outfile
 @| @}
 
@@ -5616,7 +5651,8 @@ runmodule onto.naf    srl                     srl.naf
 runmodule srl.naf     m4_nomeventscript       nomev.naf
 runmodule nomev.naf   srl-dutch-nominals      psrl.naf
 runmodule psrl.naf    m4_framesrlscript       fsrl.naf
-runmodule fsrl.naf    m4_opiniscript          opin.naf
+runmodule fsrl.naf    m4_factualityscript     fact.naf
+runmodule fact.naf    m4_opiniscript          opin.naf
 runmodule opin.naf    m4_evcorefscript        \$outfile
 else
   @< annotate english document @>
