@@ -143,11 +143,6 @@ m4_define(m4_ehu_modules_directory, components)m4_dnl
 m4_define(m4_ehu_user, newsreader)m4_dnl
 m4_dnl Modules
 m4_dnl
-m4_dnl EventCoreference
-m4_define(m4_eventcoreferenceversion, `v3.1.2')m4_dnl
-m4_define(m4_eventcoreference_commitname, 52765c55354fda9d5d3046e91d4b0f99898b014b)m4_dnl
-m4_define(m4_eventcoreferencegit, `https://github.com/cltl/EventCoreference.git')m4_dnl  Subdir. of modules
-m4_define(m4_eventcoreferencejar, EventCoreference-`'m4_eventcoreferenceversion`'-jar-with-dependencies.jar)m4_dnl
 m4_dnl Tokenizer
 m4_define(m4_tokenizername, ixa-pipe-tok)m4_dnl
 m4_define(m4_tokenizertex, \verb|m4_tokenizername|)m4_dnl
@@ -434,12 +429,21 @@ m4_dnl m4_define(m4_postsrlpy, vua-srl-dutch-additional-roles.py)m4_dnl
 m4_define(m4_postsrlpy, main.py)m4_dnl
 m4_dnl
 m4_dnl Ev. coref
-m4_define(m4_evcorefname, `vua-eventcoreference_v2')m4_dnl
+m4_dnl m4_define(m4_evcorefname, `vua-eventcoreference_v2')m4_dnl
+m4_dnl m4_define(m4_evcoreftex, `\verb|vua-eventcoreference_v2|')m4_dnl
+m4_dnl m4_define(m4_evcorefdir, `vua-eventcoreference_v2')m4_dnl
+m4_dnl m4_define(m4_evcoreftarball, 20151217_`'m4_evcorefdir`'.tgz)m4_dnl
+m4_dnl m4_define(m4_evcorefscript, evcoref)m4_dnl
+m4_dnl m4_define(m4_evcorefjar, EventCoreference-1.0-SNAPSHOT-jar-with-dependencies.jar)m4_dnl
 m4_define(m4_evcoreftex, `\verb|vua-eventcoreference_v2|')m4_dnl
-m4_define(m4_evcorefdir, `vua-eventcoreference_v2')m4_dnl
-m4_define(m4_evcoreftarball, 20151217_`'m4_evcorefdir`'.tgz)m4_dnl
+m4_dnl m4_define(m4_evcorefdir, `vua-eventcoreference_v2')m4_dnl
+m4_define(m4_evcorefdir, `vua-resources')m4_dnl
+m4_define(m4_evcorefgit, `https://github.com/cltl/EventCoreference.git')m4_dnl
+m4_define(m4_evcorefname, `EventCoreference')m4_dnl
 m4_define(m4_evcorefscript, evcoref)m4_dnl
-m4_define(m4_evcorefjar, EventCoreference-1.0-SNAPSHOT-jar-with-dependencies.jar)m4_dnl
+m4_define(m4_evcorefversion, `v3.1.2')m4_dnl
+m4_define(m4_evcorefjar, `EventCoreference-'m4_evcorefversion`-jar-with-dependencies.jar')m4_dnl
+m4_define(m4_evcorefcommit, `a01f02fc31a1e9248c7782ad50d23dd4f593e078')m4_dnl
 m4_dnl
 m4_dnl Naf2Sem
 m4_dnl
@@ -544,6 +548,8 @@ m4_dnl
 m4_dnl
 m4_dnl VUA-resources
 m4_define(m4_vua_resources_git, `https://github.com/cltl/vua-resources.git')m4_dnl
+m4_define(m4_vua_resources_dirname, `vua-resources')m4_dnl
+m4_define(m4_vua_resources_commitname, `e730ce672f2a13457393028b679e9147334c490e')m4_dnl
 m4_dnl
 m4_dnl
 m4_dnl Sematree

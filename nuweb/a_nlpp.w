@@ -161,12 +161,13 @@ pipeline from a frozen repository of the Newsreader Project.
     \centering
     \begin{footnotesize}
       \begin{tabular}{lllllll}
-        \textbf{Module}              & \textbf{Source}        & \textbf{Section}                     & \textbf{Commit}                    & \textbf{Script}              & \textbf{language} \\
-         Tokenizer                 & \url{m4_tokenizergit}  & \dref{sec:installtokenizer}          & \brevcomm{m4_tokenizer_commitname} & \texttt{m4_tokenizerscript}  & en/nl  \\
-         Topic detection           & \url{m4_topictoolgit}   & \dref{sec:topic-install}            & \brevcomm{m4_topic_commitname}     & \texttt{m4_underslas(m4_topicscript)} & en/nl     \\
+        \textbf{Module}             & \textbf{Source}        & \textbf{Section}                     & \textbf{Commit}                    & \textbf{Script}                       & \textbf{language} \\
+         Tokenizer                  & \url{m4_tokenizergit}  & \dref{sec:installtokenizer}          & \brevcomm{m4_tokenizer_commitname} & \texttt{m4_tokenizerscript}                  & en/nl  \\
+         Topic detection            & \url{m4_topictoolgit}  & \dref{sec:topic-install}             & \brevcomm{m4_topic_commitname}     & \texttt{m4_underslas(m4_topicscript)}        & en/nl  \\
           Morpho-syntactic parser   & \url{m4_morphpargit}   & \dref{sec:install-morphsynt-parser}  & \brevcomm{m4_morphpar_commitname}  & \texttt{m4_underslas(m4_morphparscript)}     & nl     \\
           \textsc{pos}-tagger       & snapshot               & \dref{sec:postagger}                 &  \ldots                            & \texttt{m4_underslas(m4_postagscript)}       & en     \\
           Named-entity rec/class    & \url{m4_nercgit}       & \dref{sec:nerc}                      & \brevcomm{m4_nerc_commitname}      & \texttt{m4_underslas(m4_nercscript)}         & en/nl  \\
+          Dark-entity relinker      & \url{m4_delinkgit}     & \dref{sec:derelink}                  & \brevcomm{m4_delink_commitname}    & \texttt{m4_underslas(m4_nercscript)}         & en/nl  \\
           Constituent parser        & snapshot               & \dref{sec:constparser}               &  \ldots                            & \texttt{m4_underslas(m4_consparscript)}      & en     \\
           Word-sense disamb. nl     & \url{m4_wsdgit}        & \dref{sec:wsd}                       & \brevcomm{m4_wsd_commitname}       & \texttt{m4_underslas(wsd)}                   & nl     \\
           Word-sense disamb. en     & snapshot               & \dref{sec:IMS-WSD}                   &  \ldots                            & \texttt{m4_underslas(ewsd)}                  & en     \\
@@ -177,8 +178,8 @@ pipeline from a frozen repository of the Newsreader Project.
           Coreference-base          & snapshot               & \dref{sec:nomcorefgraph}             &  \ldots                            & \texttt{m4_underslas(m4_corefbasescript)}    & en     \\
           Heideltime                & \url{m4_heidelgit}     & \dref{sec:heideltime}                & \brevcomm{m4_heidel_commitname}    & \texttt{m4_underslas(m4_heidelscript)}       & nl     \\
           Onto-tagger               & \url{m4_ontogit}       & \dref{sec:onto}                      & \brevcomm{m4_ontocommitname}       & \texttt{m4_underslas(m4_ontoscript)}         & nl     \\
-          Semantic Role labeling nl & \url{m4_srlgit}        & \dref{sec:SRL-module}                & \brevcomm{m4_srl_commitname}       & \texttt{m4_underslas(m4_srlscript)}           & nl     \\
-          Semantic Role labeling en & snapshot               & \dref{sec:srlserver}                 &  \ldots                            & \texttt{m4_underslas(m4_esrlscript)}          & en     \\
+          Semantic Role labeling nl & \url{m4_srlgit}        & \dref{sec:SRL-module}                & \brevcomm{m4_srl_commitname}       & \texttt{m4_underslas(m4_srlscript)}          & nl     \\
+          Semantic Role labeling en & snapshot               & \dref{sec:srlserver}                 &  \ldots                            & \texttt{m4_underslas(m4_esrlscript)}         & en     \\
           Nominal Event ann.        & \url{m4_ontogit}       & \dref{sec:onto}                      & \brevcomm{m4_ontocommitname}       & \texttt{m4_underslas(m4_nomeventscript)}     & nl     \\
           SRL dutch nominals        & \url{m4_srl_dn_git}    & \dref{sec:srl-dn}                    & \brevcomm{m4_srl_dn_commitname}    & \texttt{m4_underslas(m4_srl_dn_script)}      & nl     \\
           Framenet-SRL              & \url{m4_ontogit}       & \dref{sec:onto}                      & \brevcomm{m4_ontocommitname}       & \texttt{m4_underslas(m4_framesrlscript)}     & nl     \\
@@ -186,8 +187,9 @@ pipeline from a frozen repository of the Newsreader Project.
           FBK-temprel               & snapshot               & \dref{sec:FBK-temprel}               & \ldots                             & \texttt{m4_underslas(m4_fbktemprelscript)}   & en     \\
           FBK-causalrel             & snapshot               & \dref{sec:FBK-causalrel}             & \ldots                             & \texttt{m4_underslas(m4_fbkcausalrelscript)} & en     \\
           Opinion-miner             & \url{m4_opinigit}      & \dref{sec:opinimin}                  & \brevcomm{m4_opini_commitname}     & \texttt{m4_underslas(m4_opiniscript)}        & en/nl  \\
-          Event-coref               & snapshot               & \dref{sec:event-coref-module}        & \ldots                             & \texttt{m4_underslas(m4_evcorefscript)}      & en/nl  \\
-          Factuality tagger         & snapshot               & \dref{sec:factuality}                & \ldots                             & \texttt{m4_underslas(m4_factualityscript)}   & en     \\
+          Event-coref               & \url{m4_evcorefgit}    & \dref{sec:eventcoref}                & \brevcomm{m4_evcorefcommit}        & \texttt{m4_underslas(m4_evcorefscript)}      & en/nl  \\
+          Factuality tagger     & \url{m4_en_factualitygit}  & \dref{sec:factuality}                & \brevcomm{m4_en_factualitycommit}  & \texttt{m4_underslas(m4_factualityscript)}   & en     \\
+          Factuality tagger     & \url{m4_nl_factualitygit}  & \dref{sec:factuality}                & \brevcomm{m4_nl_factualitycommit}  & \texttt{m4_underslas(m4_factualityscript)}   & nl     \\
        \end{tabular}
     \end{footnotesize}
 @% %   \caption{List of the modules to be installed. Column description:
@@ -2660,6 +2662,24 @@ cd \$envdir/python
 git clone m4_vuapylibgit
 @| @}
 
+\subsubsection{vua-resources}
+\label{sec:vua-resources}
+
+Some modules created by the \textsc{cltl} group, notably the
+Event-coreference module, need resources that can be found in the
+\href{m4_vua_resources_git}{m4_vua_resources_dirname} github repo. So,
+we need to install that module.
+
+@d install vua-resources @{@%
+MODNAM=m4_vua_resources_dirname
+DIRNAM=m4_vua_resources_dirname
+GITU=m4_vua_resources_git
+GITC=m4_vua_resources_commitname
+@< install from github @>
+@| @}
+
+
+
 
 \subsubsection{SVMLight}
 \label{sec:svmlight}
@@ -5048,21 +5068,42 @@ rm -rf $tempdir
 \subsubsection{Event coreference}
 \label{sec:eventcoref}
 
-The event-coreference module is language-independent. Although the
-version in the \EHU{}-repo is 3.0, the version 2.0 used in this
-pipeline seems to be more recent, so we will use that.
+The event-coreference module is language-independent. It is a module
+in a jar-file that can be built with the Github
+\href{m4_evcorefgit}{m4_evcorefgit} repo. The module uses resources
+from the \verb|m4_vua_resources_dirname| Github repo.
 
 \paragraph{Module}
 \label{sec:event-coref-module}
 
-Install the module from the snapshot.
+The \verb|m4_vua_resources_dirname| has already been installed
+Install the EventCoreference-module from the Github resource:
+\begin{enumerate}
+\item Clone the correct commitset of the Github repo in a temprary
+  directory and cd into it.
+\item Run the install script.
+\item When all went well, a jar has been generated in subdir \verb|lib|. Move it to the jar directory.
+\item rm the temporary directory.
+\end{enumerate}
+
+@% @d install the event-coreference module @{@%
+@% @% @< get or have @(m4_evcoreftarball@) @>
+@% cd \$modulesdir
+@% tar -xzf \$snapshotsocket/m4_snapshotdirectory/m4_evcoreftarball
+@% cd m4_evcorefdir
+@% cp lib/m4_evcorefjar \$jarsdir
+@% @| @}
 
 @d install the event-coreference module @{@%
-@% @< get or have @(m4_evcoreftarball@) @>
-cd \$modulesdir
-tar -xzf \$snapshotsocket/m4_snapshotdirectory/m4_evcoreftarball
-cd m4_evcorefdir
-cp lib/m4_evcorefjar \$jarsdir
+tempdir=`mktemp -d -t EventCoreference.XXXXXX`
+cd $tempdir
+git clone m4_evcorefgit
+cd m4_evcorefname
+git checkout m4_evcorefcommit
+./install.sh
+mv lib/m4_evcorefjar $jarsdir/
+cd $piperoot
+rm -rf $tempdir
 @| @}
 
 
@@ -5072,15 +5113,15 @@ cp lib/m4_evcorefjar \$jarsdir
 
 @o m4_bindir/m4_evcorefscript @{@%
 @< start of module-script @(m4_evcorefdir@) @>
-RESOURCESDIR=$MODDIR/resources
+RESOURCESDIR=$modulesdir/m4_vua_resources_dirname
 JARFILE=\$jarsdir/m4_evcorefjar
 
 if
   [  "$naflang" == 'nl' ] 
 then
-  lang_resource="odwn_orbn_gwg-LMF_1.3.xml"
+  lang_resource="odwn_orbn_gwg-LMF_1.3.xml.gz"
 else
-  lang_resource="wneng-30.lmf.xml.xpos"
+  lang_resource="wneng-30.lmf.xml.xpos.gz"
 fi
 
 JAVAMODULE=eu.newsreader.eventcoreference.naf.EventCorefWordnetSim
@@ -5141,65 +5182,65 @@ Spotlight server.
 cat | iconv -f ISO8859-1 -t UTF-8 | $MODDIR/dbpedia_ner.py -url http://$spotlighthost:<!!>m4_spotlight_nl_port<!!>/rest/candidates
 @| @}
 
-\subsubsection{GetSemfromNaf}
-\label{sec:GetSemFromNaf}
-
-The \verb|naf2sem| module is a application that is hidden in the
-EventCoreference jar
-(\url{https://github.com/cltl/EventCoreference}). It uses resources
-from \texttt{https://github.com/cltl/vua-resources}, that has been
-installed by the ontotagger installer.
-
-
-\paragraph{Module}
-\label{sec:naf2semmod}
-
-@d install naf2sem @{@%
-n2sdir=`mktemp -d -t n2s.XXXXXX`
-cd $n2sdir
-MODNAM=EventCoreference
-GITC=m4_eventcoreference_commitname
-git clone m4_eventcoreferencegit
-cd $MODNAM
-git checkout $GITC
-set -e
-mvn clean
-mvn install
-@%jarfile=`find target -name "EventCoreference-v*-jar-with-dependencies.jar" -print`
-jarfile=m4_eventcoreferencejar
-if
-  [ -d "target/\$jarfile" ]
-then
-  mv target/\$jarfile \$jarsdir
-else
-  echo "Could not generate m4_eventcoreferencejar
-  exit 4
-fi
-cd "$modulesdir"
-rm -rf $n2sdir
-
-@| @}
-
-
-\paragraph{Script}
-\label{sec:naf2semscript}
-
-The script is not yet correct.
-
-@o m4_bindir/m4_naf2semscript @{@%
-@< start of module-script @(m4_dbpnerdir@) @>
-JAR=\$jarsdir/m4_eventcoreferencejar
-RESOURCES="\$modulesdir/vua-resources"
-DATA="../data2"
-
-java -Xmx2000m -cp "$LIB/EventCoreference-v3.1.2-jar-with-dependencies.jar" eu.newsreader.eventcoreference.naf.GetSemFromNafFolder --naf-folder "$DATA" --extension ".naf" --verbose --project dasym --all --ili "$RESOURCES/ili.ttl.gz" --perspective --source-frames "$RESOURCES/source-nl.txt" --non-entities
-
-# --eurovoc-en "$RESOURCES/mapping_eurovoc_skos.csv.gz" 
-# --no-doc-time
-# --no-context-time
-# --non-entities
-  
-@| @}
+@% \subsubsection{GetSemfromNaf}
+@% \label{sec:GetSemFromNaf}
+@% 
+@% The \verb|naf2sem| module is a application that is hidden in the
+@% EventCoreference jar
+@% (\url{https://github.com/cltl/EventCoreference}). It uses resources
+@% from \texttt{https://github.com/cltl/vua-resources}, that has been
+@% installed by the ontotagger installer.
+@% 
+@% 
+@% \paragraph{Module}
+@% \label{sec:naf2semmod}
+@% 
+@% @d install naf2sem @{@%
+@% n2sdir=`mktemp -d -t n2s.XXXXXX`
+@% cd $n2sdir
+@% MODNAM=EventCoreference
+@% GITC=m4_eventcoreference_commitname
+@% git clone m4_eventcoreferencegit
+@% cd $MODNAM
+@% git checkout $GITC
+@% set -e
+@% mvn clean
+@% mvn install
+@% @%jarfile=`find target -name "EventCoreference-v*-jar-with-dependencies.jar" -print`
+@% jarfile=m4_eventcoreferencejar
+@% if
+@%   [ -d "target/\$jarfile" ]
+@% then
+@%   mv target/\$jarfile \$jarsdir
+@% else
+@%   echo "Could not generate m4_eventcoreferencejar
+@%   exit 4
+@% fi
+@% cd "$modulesdir"
+@% rm -rf $n2sdir
+@% 
+@% @| @}
+@% 
+@% 
+@% \paragraph{Script}
+@% \label{sec:naf2semscript}
+@% 
+@% The script is not yet correct.
+@% 
+@% @o m4_bindir/m4_naf2semscript @{@%
+@% @< start of module-script @(m4_dbpnerdir@) @>
+@% JAR=\$jarsdir/m4_eventcoreferencejar
+@% RESOURCES="\$modulesdir/vua-resources"
+@% DATA="../data2"
+@% 
+@% java -Xmx2000m -cp "$LIB/EventCoreference-v3.1.2-jar-with-dependencies.jar" eu.newsreader.eventcoreference.naf.GetSemFromNafFolder --naf-folder "$DATA" --extension ".naf" --verbose --project dasym --all --ili "$RESOURCES/ili.ttl.gz" --perspective --source-frames "$RESOURCES/source-nl.txt" --non-entities
+@% 
+@% # --eurovoc-en "$RESOURCES/mapping_eurovoc_skos.csv.gz" 
+@% # --no-doc-time
+@% # --no-context-time
+@% # --non-entities
+@%   
+@% @| @}
 
 
 
