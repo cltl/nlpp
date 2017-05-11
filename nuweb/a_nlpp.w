@@ -3816,8 +3816,8 @@ rm -rf $scratchDir
 \label{sec:factuality}
 
 At this moment there is not yet a single factuality modules that
-server Dutsch as well as English. In spite of it's name, the
-\href{https://github.com/cltl/multilingual_factuality}{multilingual_factuality}
+server Dutch as well as English. In spite of it's name, the
+\href{https://github.com/cltl/multilingual_factuality}{multilingual\_factuality}
 module serves only Dutch on production-quality level. For English, we
 have the \href{https://github.com/cltl/vua_factuality}{VUA-factuality} module.
 
@@ -5012,7 +5012,6 @@ pip install rdflib
 
 
 @d install the post-SRL module @{@%
-@% @< get or have @(m4_postsrlball@) @>
 cd \$modulesdir
 if
   [ -d m4_postsrldir ]
@@ -5023,7 +5022,6 @@ else
   git clone m4_postsrlgit
   cd m4_postsrldir
 fi
-@% tar -xzf \$snapshotsocket/m4_snapshotdirectory/m4_postsrlball
 @| @}
 
 

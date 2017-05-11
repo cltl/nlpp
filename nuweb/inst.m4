@@ -428,7 +428,7 @@ m4_dnl SRL post
 m4_define(m4_postsrlgit, `https://github.com/newsreader/vua-srl-postprocess.git')m4_dnl 
 m4_define(m4_postsrldir, `vua-srl-postprocess')m4_dnl  Subdir. of modules
 m4_dnl m4_define(m4_postsrldir, `vua-srl-dutch-additional-roles')m4_dnl  Subdir. of modules
-m4_define(m4_postsrlball, 20150706`'m4_postsrldir`'.tgz )m4_dnl  Subdir. of modules
+m4_dnl m4_define(m4_postsrlball, 20150706`'m4_postsrldir`'.tgz )m4_dnl  Subdir. of modules
 m4_define(m4_postsrlscript, postsrl)m4_dnl
 m4_dnl m4_define(m4_postsrlpy, vua-srl-dutch-additional-roles.py)m4_dnl
 m4_define(m4_postsrlpy, main.py)m4_dnl
@@ -522,7 +522,7 @@ m4_dnl m4_define(m4_dbpnergit, https://github.com/rubenIzquierdo/dbpedia_ner.git
 m4_dnl m4_define(m4_nomeventball, vua-postprocess-nl.zip)m4_dnl
 m4_dnl m4_define(m4_nomeventball, 20151217_vua-nominal-event-detection-nl.tgz)m4_dnl
 m4_dnl m4_define(m4_nomeventball, 20151231_vua-nominal-event-detection-nl.tgz)m4_dnl
-m4_define(m4_nomeventball, 20160126_vua-nominal-event-detection-nl.tgz)m4_dnl
+m4_dnl m4_define(m4_nomeventball, 20160126_vua-nominal-event-detection-nl.tgz)m4_dnl
 m4_dnl  m4_define(m4_dbpner_commitname, ab1dcbd860f0ff29bc979f646dc382122a101fc2)m4_dnl
 m4_dnl m4_define(m4_nomeventdir, vua-postprocess-nl)m4_dnl
 m4_define(m4_nomeventdir, vua-nominal-event-detection-nl)m4_dnl
