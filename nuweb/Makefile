@@ -78,13 +78,6 @@ $(htmltarget) : $(htmlmaterial) $(htmldir)
 
 
 clean:
-	rm -rf $pipesocket/server-jre-7u72-linux-x64.tar.gz
-	rm -rf ../env/apache-maven-3.0.5
-	cd $piperoot
-	mv /home/paul/projecten/pipelines/nlpp/installed_modules old.modulelist
-	cat old.modulelist | gawk '/maven_installed/ {next}; {print}' >/home/paul/projecten/pipelines/nlpp/installed_modules
-	
-	rm -rf $snapshotsocket/t_nlpp_resources/Alpino-x86_64-linux-glibc2.5-20706-sicstus.tar.gz
 	rm -rf ../nuweb-1.58
 	
 
@@ -102,15 +95,17 @@ nlpp.pdf : nlpp.w $(W2PDF)  $(PDF_FIG_NAMES) $(PDFT_NAMES)
 
 htm : $(htmldir) $(htmltarget)
 
-DIRS = ../modules ../bin ../env/bin ../env/lib ../env/etc ../env/java ../env/java/jars ../env/apache-maven-3.0.5 ../env/python ../nuweb/bin 
+DIRS = ../modules ../bin ../env/bin ../env/lib ../env/etc ../nuweb/bin 
 
 $(DIRS) : 
 	$(MKDIR) $@
 
 sources : nlpp.w $(DIRS) $(NUWEB)
 	$(NUWEB) nlpp.w
-	chmod 775  ../bin/install-modules
-	chmod 775  ../bin/check_start_spotlight
+	chmod 775  ../env/bin/make_infrastructure
+	chmod 775  ../env/bin/clean_infrastructure
+	chmod 775  ../env/bin/tran
+	chmod 775  ../env/bin/install-modules
 	chmod -R 775  ../bin/*
 	chmod -R 775  ../env/bin/*
 	

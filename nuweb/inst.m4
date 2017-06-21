@@ -50,23 +50,34 @@ m4_dnl     m4_define(m4_usrlocaldir, m4_envdir`/usrlocal')m4_dnl
 m4_dnl     m4_define(m4_ausrlocaldir, m4_aenvdir`/usrlocal')m4_dnl
 m4_dnl     m4_define(m4_usrlocalbindir, m4_usrlocaldir/bin)m4_dnl
 m4_dnl     m4_define(m4_ausrlocalbindir, m4_ausrlocaldir/bin)m4_dnl
+m4_dnl
+m4_dnl Java
+m4_dnl
 m4_define(m4_ajavadir, m4_aenvdir`/java')m4_dnl   
 m4_define(m4_javadir, m4_envdir`/java')m4_dnl     
 m4_define(m4_ajardir, m4_ajavadir`/jars')m4_dnl     jars
 m4_define(m4_jardir, m4_javadir`/jars')m4_dnl     jars
-m4_define(m4_javatarball, server-jre-7u72-linux-x64.tar.gz)m4_dnl
+m4_dnl m4_define(m4_javatarball, server-jre-7u72-linux-x64.tar.gz)m4_dnl
+m4_define(m4_javatarball, jdk-8u131-linux-x64.tar.gz)m4_dnl
 m4_define(m4_javatarballurl, http://www.oracle.com/technetwork/java/javase/downloads/server-jre7-downloads-1931105.html)m4_dnl
-m4_define(m4_javajdk, jdk1.7.0_72)m4_dnl
+m4_dnl m4_define(m4_javajdk, jdk1.7.0_72)m4_dnl
+m4_define(m4_javajdk, jdk1.8.0_131)m4_dnl
 m4_define(m4_ahackdir, m4_aenvdir`/hacks')m4_dnl
 m4_define(m4_java16name, jre1.6.0_45)m4_dnl
 m4_define(m4_java16ball, jre-6u45-linux-x64.bin)m4_dnl
+m4_dnl
+m4_dnl Python
+m4_dnl
+m4_define(m4_pythonversion, 3.6)m4_dnl
 m4_define(m4_activepythonurl, http://www.activestate.com/activepython)m4_dnl
-m4_define(m4_activepythonball, ActivePython-2.7.8.10-linux-x86_64.tar.gz)m4_dnl
+m4_dnl m4_define(m4_activepythonball, ActivePython-2.7.8.10-linux-x86_64.tar.gz)m4_dnl
+m4_define(m4_activepythonball, ActivePython-3.6.0.3600-linux-x86_64-glibc-2.3.6-401834.tar.gz)m4_dnl
 m4_define(m4_apythonenvdir, m4_aenvdir/python)m4_dnl
 m4_define(m4_pythonenvdir, m4_envdir/python)m4_dnl
 m4_dnl
 m4_dnl Perl
 m4_dnl
+m4_define(m4_perl_version, 5)m4_dnl
 m4_define(m4_perl_ddir, perl-5.22.1)m4_dnl
 m4_define(m4_perl_ball, m4_perl_ddir`'.tar.gz)m4_dnl
 m4_define(m4_perl_url, http://www.cpan.org/src/5.0/`'m4_perl_ball)m4_dnl
@@ -80,7 +91,7 @@ m4_define(m4_snapshotkeyfilename, nrkey)m4_dnl
 m4_define(m4_snapshotkeyfile, m4_asocket/m4_snapshotkeyfilename)m4_dnl
 m4_dnl m4_define(m4_snapshotrootURL, kyoto.let.vu.nl~huygen/dutch_snapshots)m4_dnl
 m4_define(m4_snapshotrootURL, newsreader@@kyoto.let.vu.nl)m4_dnl
-m4_define(m4_snapshotdirectory, t_nlpp_resources)m4_dnl
+m4_define(m4_snapshotdirectory, v4.0.0.0_nlpp_resources)m4_dnl
 m4_define(m4_snapshotsocket, m4_asocket)m4_dnl
 m4_define(m4_asnapshotroot, m4_aprojroot/snapshots)m4_dnl
 m4_define(m4_snapshotroot, m4_projroot/snapshots)m4_dnl
@@ -149,8 +160,10 @@ m4_define(m4_tokenizertex, \verb|m4_tokenizername|)m4_dnl
 m4_define(m4_tokenizerversion, `1.8.0')m4_dnl
 m4_dnl m4_define(m4_tokenizer_commitname, c4d307eece4ef19aca365e3a08abd7f3324e3707)m4_dnl
 m4_dnl m4_define(m4_tokenizer_commitname, 410a97ba4a847d4dfea6a45b9ae09f4bfbbfdc5a)m4_dnl
-m4_define(m4_tokenizer_commitname, 56f83ce4b61680346f15e5d4e6de6293764f7383)m4_dnl
-m4_define(m4_tokenizergit, `https://github.com/ixa-ehu/ixa-pipe-tok.git')m4_dnl  Subdir. of modules
+m4_dnl m4_define(m4_tokenizer_commitname, 56f83ce4b61680346f15e5d4e6de6293764f7383)m4_dnl
+m4_define(m4_tokenizer_commitname, 1a69dbbf337aaf7a97bd21dffcfdbd7cb8ab0d83)m4_dnl
+m4_define(m4_tokenizergit, `https://github.com/PaulHuygen/ixa-pipe-tok.git')m4_dnl  Subdir. of modules
+m4_dnl m4_define(m4_tokenizergit, `https://github.com/ixa-ehu/ixa-pipe-tok.git')m4_dnl  Subdir. of modules
 m4_define(m4_tokenizerdir, ixa-pipe-tok)m4_dnl  Subdir. of modules
 m4_define(m4_tokenizerjar, ixa-pipe-tok-`'m4_tokenizerversion.jar)m4_dnl
 m4_define(m4_tokenizerscript, `tok')m4_dnl
@@ -161,8 +174,10 @@ m4_define(m4_topictooltex, \verb|m4_topictoolname|)m4_dnl
 m4_dnl m4_define(m4_topictooldir, EHU-topic.v30)m4_dnl
 m4_define(m4_topictooldir, m4_topictoolname)m4_dnl
 m4_define(m4_topictoolball, 20151220_EHU-topic.v30.tgz)m4_dnl
-m4_define(m4_topictoolgit, https://github.com/ialdabe/ixa-pipe-topic.git)m4_dnl
-m4_define(m4_topic_commitname, 40be8debb88093b426ae3520d60df60161968e27)m4_dnl
+m4_dnl m4_define(m4_topictoolgit, https://github.com/ialdabe/ixa-pipe-topic.git)m4_dnl
+m4_define(m4_topictoolgit, https://github.com/PaulHuygen/ixa-pipe-topic.git)m4_dnl
+m4_dnl m4_define(m4_topic_commitname, 40be8debb88093b426ae3520d60df60161968e27)m4_dnl
+m4_define(m4_topic_commitname, b2e0ef60badacd90b4f489bdf45f56a1956eb43e)m4_dnl
 m4_define(m4_topicscript, topic)m4_dnl
 m4_define(m4_jex_resources_en_ball, en-eurovoc-1.0.zip)m4_dnl
 m4_define(m4_jex_resources_nl_ball, nl-eurovoc-1.0.zip)m4_dnl
@@ -582,12 +597,25 @@ m4_define(m4_ticcdir, ticcutils-`'m4_ticcutilsversion`')m4_dnl
 m4_define(m4_ticc_desc_url, http://ilk.uvt.nl/ticcutils)m4_dnl
 m4_dnl
 m4_dnl KafNafParserPy
-m4_define(m4_kafnafversion, `feb 1, 2015')m4_dnl
+m4_dnl m4_define(m4_kafnafversion, `feb 1, 2015')m4_dnl
+m4_define(m4_kafnafversion, `1.87')m4_dnl
 m4_define(m4_kafnafgit, https://github.com/cltl/KafNafParserPy.git)m4_dnl
 m4_define(m4_kafnafdir, python/KafNafParserPy)m4_dnl
 m4_dnl
+m4_dnl lxml
+m4_define(m4_lxml_version, `3.8.0')m4_dnl
+m4_dnl
+m4_dnl Pyaml
+m4_define(m4_pyyaml_version, `3.12')m4_dnl
+m4_dnl
 m4_dnl Pynaf
 m4_define(m4_pynaf_gitpip_url, `git+https://github.com/ixa-ehu/pynaf.git')m4_dnl
+m4_dnl
+m4_dnl Networkx
+m4_define(m4_networkx_version, `1.11')m4_dnl
+m4_dnl
+m4_dnl requests
+m4_define(m4_requests_version, `2.18.1')m4_dnl
 m4_dnl
 m4_dnl VUA-pylib
 m4_define(m4_vuapylibgit, https://github.com/cltl/VUA_pylib.git)m4_dnl
