@@ -579,7 +579,7 @@ m4_dnl
 m4_dnl m4_define(m4_alpino_version, 20706)m4_dnl
 m4_define(m4_alpino_version, 21088)m4_dnl
 m4_dnl m4_define(m4_alpinosrc, Alpino-x86_64-linux-glibc2.5-`'m4_alpino_version`'-sicstus.tar.gz)
-m4_define(m4_alpinosrc, Alpino-x86_64-Linux-glibc2.19-`'m4_alpino_version`'-sicstus.tar.gz)
+m4_define(m4_alpinosrc, Alpino-x86_64-Linux-glibc-2.19-`'m4_alpino_version`'-sicstus.tar.gz)
 m4_dnl m4_define(m4_alpinourl, http://www.let.rug.nl/vannoord/alp/Alpino/binary/versions/Old/m4_alpinosrc)m4_dnl
 m4_define(m4_alpinourl, http://www.let.rug.nl/vannoord/alp/Alpino/versions/binary/latest.tar.gz)m4_dnl
 m4_define(m4_alpino_desc_url, http://www.let.rug.nl/~vannoord/alp/Alpino/)m4_dnl

@@ -78,8 +78,7 @@ $(htmltarget) : $(htmlmaterial) $(htmldir)
 
 
 clean:
-	rm -rf ../nuweb-1.58
-	
+	../env/bin/clean_infrastructure
 
 pdf : nlpp.pdf
 
@@ -106,6 +105,7 @@ sources : nlpp.w $(DIRS) $(NUWEB)
 	chmod 775  ../env/bin/clean_infrastructure
 	chmod 775  ../env/bin/tran
 	chmod 775  ../env/bin/install-modules
+	chmod 775  ../env/bin/langdetect.py
 	chmod -R 775  ../bin/*
 	chmod -R 775  ../env/bin/*
 	

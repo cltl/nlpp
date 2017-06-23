@@ -568,9 +568,13 @@ variables that point to the other directories.
 @o m4_projroot/progenv @{@%
 # Source this script
 @< get location of the script @(piperoot@) @>
-source \$piperoot/progenvv
 @< set variables that point to the directory-structure @>
 @< set environment parameters @>
+if
+  [ -e "\$piperoot/progenvv" ]
+then
+  source \$piperoot/progenvv
+fi
 export progenvset=0
 @| @}
 
@@ -916,7 +920,8 @@ rm -rf $transfile
 workfil=\$1
 tempfil=\$2
 mv \$workfil $tempfil
-gawk -f $trandir/chasbang.awk \$tempfil>$workfil 
+gawk -f $trandir/chasbang.awk \$tempfil>$workfil
+chmod 775 \$workfil
 @| @}
 
 @d make scripts executable @{@%
@@ -1234,21 +1239,21 @@ then
   echo "Not installing Alpino, because of existing directory \$envdir/Alpino"
 else
   if
-    [ ! -e "\$pipesocket/m4_snapshotdirectory/m4_alpinosrc" ]
+    [ ! -e "\$pipesocket/m4_snapshotdirectory/\$alpinosrc" ]
   then
     echo "Try to install the latest Alpino."
     alpinosrc=latest.tar.gz
     cd \$pipesocket/m4_snapshotdirectory
-    wget \$alpinourl
+    wget m4_alpinourl
     if
       [ $? -gt 0 ]
     then
       echo "Cannot install Alpino. Please install Alpino in \$envdir/Alpino"
       exit 4
     fi
-    cd \$envdir
-    tar -xzf \$alpinosrc
   fi
+  cd \$envdir
+  tar -xzf \$pipesocket/m4_snapshotdirectory/\$alpinosrc
 fi
 @| @}
   
