@@ -461,13 +461,14 @@ Let us generate a script to do the work:
 @<  get location of the script @(DIR@)@>
 cd $DIR
 source ../../progenv
-@< init make_infrastructure @>
+@< init make\_infrastructure @>
 @< set up Java @>
 @< set up Maven @>
 @< set up Python @>
 @< set up autoconf @>
 @< set up Perl @>
 @< install shared libs @>
+@< install Alpino @>
 
 @| @}
 
@@ -485,7 +486,7 @@ installation.
 @<  get location of the script @(DIR@)@>
 cd $DIR
 source ../../progenv
-@< init make_infrastructure @>
+@< init make\_infrastructure @>
 @< clean up after installation @>
 @| @}
 
@@ -508,7 +509,7 @@ then
 fi 
 @| @}
 
-@d init make_infrastructure @{@%
+@d init make\_infrastructure @{@%
 @< test presence of command @(git@) @>
 @< test presence of command @(tar@) @>
 @< test presence of command @(unzip@) @>
@@ -567,6 +568,7 @@ variables that point to the other directories.
 @o m4_projroot/progenv @{@%
 # Source this script
 @< get location of the script @(piperoot@) @>
+source \$piperoot/progenvv
 @< set variables that point to the directory-structure @>
 @< set environment parameters @>
 export progenvset=0
@@ -628,7 +630,7 @@ a single blow as parallel processes. We park the
 resources in a directory \verb|m4_snapshotdirectory|, located in the
 directory where the root of \NLPP{} also resides.
 
-@d init make_infrastructure @{@%
+@d init make\_infrastructure @{@%
 @< download everything @>
 wait
 @| @}
@@ -729,8 +731,8 @@ variables in the script that will be sourced in the running pipeline
 and set them in this script because we are going to need Java.
 
 @d set up java environment @{@%
-echo 'export JAVA_HOME=\$envdir/java/m4_javajdk' >> \$piperoot/progenv
-echo 'export PATH=$JAVA_HOME/bin:$PATH' >> \$piperoot/progenv
+echo 'export JAVA_HOME=\$envdir/java/m4_javajdk' >> \$piperoot/progenvv
+echo 'export PATH=$JAVA_HOME/bin:$PATH' >> \$piperoot/progenvv
 export JAVA_HOME=\$envdir/java/m4_javajdk
 export PATH=$JAVA_HOME/bin:$PATH
 @| @}
@@ -791,7 +793,7 @@ export PATH=${MAVEN_HOME}/bin:${PATH}
 
 When the installation has been finished, we do not need maven anymore.
 
-@d clean up afterwards @{@%
+@d clean up after installation @{@%
 cd \$envdir
 rm -rf m4_mavensubdir
 @| @}
@@ -802,10 +804,25 @@ rm -rf m4_mavensubdir
 Several modules in the pipeline run on Python version
 m4_pythonversion. If the command \verb|python| does not invoke that
 version, we can try install ActivePython, of which we have a tarball
-in the snapshot.
+in the snapshot. Versioning in Python is very confusing. It is the
+\href{https://www.python.org/dev/peps/pep-0394/}{official Python
+  policy} that \verb|/usr/bin/env python| points to Python version~2
+but that scripts with a shabang of 
+\verb|<!!>#<!!>! /usr/bin/env python| should be executable by
+Python version 2 as well as Python version 3.
 
-@d check presence of python in m4_pythonversion @{@%
-python --version 2>&1 | grep "Python m4_pythonversion" >/dev/null
+Our policy will be as follows:
+
+1. When installing, make sure that command \verb|python3| starts a
+    python~<!!>m4_pythonversion executable. If this is not the case,
+    install ActivePython version~<!!>m4_pythonversion.
+2. Generate a virtual environment. 
+3. Make sure that in our environmen command \verb|python| executes
+   python from the virtual environment.
+
+
+@d check presence of python3 in m4_pythonversion @{@%
+python3 --version 2>&1 | grep "Python m4_pythonversion" >/dev/null
 if
   [ $? == 0 ]
 then
@@ -816,7 +833,7 @@ fi
 @| @}
 
 @d set up Python @{@%
-@< check presence of python in m4_pythonversion @(python_OK@) @>
+@< check presence of python3 in m4_pythonversion @(python_OK@) @>
 if
   [ ! "\$python_OK" == "True" ]
 then
@@ -909,7 +926,7 @@ chmod 775  m4_envbindir/tran
 
 @o m4_envbindir/chasbang.awk @{@%
 #!/usr/bin/gawk -f
-BEGIN { shabang="#!/usr/bin/env python"}
+BEGIN { shabang="#!/usr/bin/env python3"}
 
 /^\#\!.*python.*/ { print shabang
                     next
@@ -960,7 +977,8 @@ find @1 -type f -exec file {} + \
 In order to be reproducible, we must make sure that Python packages
 are installed in the correct version. Therefore, we will install the
 packages beforehand and do not leave that to the install-scripts of
-the modules. Install the following packages:
+the modules. Descriptions of the packages can be found on
+\url{https://pypi.python.org}. Install the following packages:
 
 \begin{tabular}{lll}
   \textbf{package} & \textbf{version} & \textbf{module} \\
@@ -974,9 +992,10 @@ the modules. Install the following packages:
 @d  set up Python @{@%
 pip install KafNafParserPy==m4_kafnafversion
 pip install lxml==m4_lxml_version
+pip install networkx==m4_networkx_version
 pip install pyyaml==m4_pyyaml_version
 pip install requests==m4_requests_version
-pip install networkx==m4_networkx_version
+pip install six==m4_six_version
 @| @}
 
 
@@ -988,7 +1007,7 @@ installation of that package seems to be tricky and seems to depend on
 the availability of obscure stuff. So, we proceed as follows. First
 test whether Perl version~<!!>m4_perl_version<!!> is present on the
 host. If that is not the case, check whether we have a tarball named
-m4_perl_libball in the snapshot. If that is the case, install Perl
+\verb|m4_perl_libball| in the snapshot. If that is the case, install Perl
 from scratch and unpack the tarball. Otherwise, fail, and tell the
 user to install Perl and \verb|XML::LibXML|.
 
@@ -1071,8 +1090,8 @@ rm -rf $tempdir
 Make sure that modules use the correct Perl
 
 @d install perl @{@%
-echo 'export PERL_HOME=$envdir/perl' >> \$piperoot/progenv
-echo 'export PATH=$PERL_HOME/bin:$PATH' >> \$piperoot/progenv
+echo 'export PERL_HOME=$envdir/perl' >> \$piperoot/progenvv
+echo 'export PATH=$PERL_HOME/bin:$PATH' >> \$piperoot/progenvv
 export PERL_HOME=$envdir/perl
 export PATH=$PERL_HOME/bin:$PATH
 @| @}
@@ -1087,62 +1106,6 @@ tar -xzf \$pipesocket/m4_snapshotdirectory/m4_perl_libball
 @| @}
 
  
-\section{Install the modules}
-\label{sec:install-modules}
-
-We make a separate script to install the modules. By default, the modules
-will be installed in subdirectory \verb|modules| of the \NLPP{} root
-directory, but this is not necessarily so.
-
-The script \verb|install-modules| installs modules that are not yet present.
-
-@o m4_envbindir/m4_module_installer @{@%
-#!/bin/bash
-@<  get location of the script @(DIR@)@>
-cd $DIR
-source ../../progenv
-@< functions of the module-installer @>
-@< install the modules @>
-@| @}
-
-@d make scripts executable @{@%
-chmod 775  m4_envbindir/m4_module_installer
-@| @}
-
-
-
-Installing a module from Github is very simple:
-\begin{itemize}
-\item Skip installation if the module is already present. Otherwise:
-\item Clone the module in subdirectory \verb|modules|.
-\item \verb|cd| to that module and perform script \verb|install|. 
-\end{itemize}
-
-@d functions of the module-installer @{@%
-function gitinst (){
-   url=$1
-   dir=$2
-   commitset=$3
-   echo "Install $dir" >&2
-   cd \$piperoot/modules
-   if
-     [ -e $dir ]
-   then
-     echo "Not installing existing module $dir"
-   else
-     git clone $url
-     cd $dir
-     git checkout $commitset 
-     ./install
-   fi
-}
-@| @}
-
-@d install the modules @{@%
-gitinst m4_tokenizergit m4_tokenizername m4_tokenizer_commitname 
-gitinst m4_topictoolgit m4_topictoolname m4_topic_commitname 
-@| @}
-
 
 \subsection{Download materials}
 \label{sec:download}
@@ -1247,8 +1210,111 @@ rm -rf $shtmpdir
 @| @}
 
 
+\subsection{Alpino}
+\label{sec:Alpino}
+
+Install Alpino as a utility because it is so big, and hard to install
+on different platforms. Users may choose to install the utilities (and
+Alpino) by hand and then still install the modules with the script
+from this file.
+
+Alpino cannot be obtained from an open source repository and there
+does not seem to be a repository where all the older versions are
+stored. Therefore, if possible, we will use a copy from our secret
+archive if that is available. If that is not available, we will
+download the latest version of Alpino.
+
+
+@d install Alpino @{@%
+alpinosrc=m4_alpinosrc
+cd \$envdir
+if
+[ -d "Alpino" ]
+then
+  echo "Not installing Alpino, because of existing directory \$envdir/Alpino"
+else
+  if
+    [ ! -e "\$pipesocket/m4_snapshotdirectory/m4_alpinosrc" ]
+  then
+    echo "Try to install the latest Alpino."
+    alpinosrc=latest.tar.gz
+    cd \$pipesocket/m4_snapshotdirectory
+    wget \$alpinourl
+    if
+      [ $? -gt 0 ]
+    then
+      echo "Cannot install Alpino. Please install Alpino in \$envdir/Alpino"
+      exit 4
+    fi
+    cd \$envdir
+    tar -xzf \$alpinosrc
+  fi
+fi
+@| @}
+  
+
+@d set environment parameters @{@%
+export ALPINO_HOME=\$envdir/Alpino
+@|ALPINO_HOME @}
+
+
+
 \section{Installation of the modules}
 \label{sec:install}
+
+\section{Install the modules}
+\label{sec:install-modules}
+
+We make a separate script to install the modules. By default, the modules
+will be installed in subdirectory \verb|modules| of the \NLPP{} root
+directory, but this is not necessarily so.
+
+The script \verb|install-modules| installs modules that are not yet present.
+
+@o m4_envbindir/m4_module_installer @{@%
+#!/bin/bash
+@<  get location of the script @(DIR@)@>
+cd $DIR
+source ../../progenv
+@< functions of the module-installer @>
+@< install the modules @>
+@| @}
+
+@d make scripts executable @{@%
+chmod 775  m4_envbindir/m4_module_installer
+@| @}
+
+
+
+Installing a module from Github is very simple:
+\begin{itemize}
+\item Skip installation if the module is already present. Otherwise:
+\item Clone the module in subdirectory \verb|modules|.
+\item \verb|cd| to that module and perform script \verb|install|. 
+\end{itemize}
+
+@d functions of the module-installer @{@%
+function gitinst (){
+   url=$1
+   dir=$2
+   commitset=$3
+   echo "Install $dir" >&2
+   cd \$piperoot/modules
+   if
+     [ -e $dir ]
+   then
+     echo "Not installing existing module $dir"
+   else
+     git clone $url
+     cd $dir
+     git checkout $commitset 
+     ./install
+   fi
+}
+@| @}
+
+
+
 
 \subsection{Parameters in module-scripts}
 \label{sec:modulescriptparameters}
@@ -1266,39 +1332,89 @@ from
 following fragment reads the arguments \verb|-l language|, 
 \verb|-h spotlighthost| and \verb|-p spotlightport|:
 
-
-
-\subsection{Install modules}
-\label{sec:installmodules}
-
-The modules of \NLPP{} version~4 can be easily installed withe the following function:
-
-@d functions to install modules @{@%
-function install_module_from_github () {
-  gitowner=\$1
-  modulename=\$2
-  repo="https://github.com/"\$gitowner"/"\$modulename".git"
-  cd m4_amoddir
-  git clone \$repo
-  cd \$modulename
-  ./install
-  ./clean
-  }
+@d start of module-script @{@%
+@< get location of the script @(DIR@) @>
+cd \$DIR
+source ../../progenv
 @| @}
+
+
+
+
+@% \subsection{Install modules}
+@% \label{sec:installmodules}
+@% 
+@% The modules of \NLPP{} version~4 can be easily installed withe the following function:
+@% 
+@% @d functions to install modules @{@%
+@% function install_module_from_github () {
+@%   gitowner=\$1
+@%   modulename=\$2
+@%   repo="https://github.com/"\$gitowner"/"\$modulename".git"
+@%   cd m4_amoddir
+@%   git clone \$repo
+@%   cd \$modulename
+@%   ./install
+@%   ./clean
+@%   }
+@% @| @}
 
 
 \subsubsection{Tokeniser}
 \label{sec:installtokenizer}
 
+The tokenizer is the simples of the modules. It needs Java version~m4_javaversion. On installation it
+compiles a Java JAR file, and this is used in the run script.
+
+
 @d install the tokenizer @{@%
-  install_module_from_github PaulHuygen ixa-pipe-tok
+@%   install_module_from_github PaulHuygen ixa-pipe-tok
+gitinst m4_tokenizergit m4_tokenizername m4_tokenizer_commitname 
 @| @}
 
-@o m4_bindir/m4_tokenizerscript @{@%
+@o m4_bindir/m4_tokenizerscript @{@%b
 @< start of module-script @(\$jarsdir@)@>
 @% @< abort when the language is not English or Dutch @>
 cat | ../modules/ixa-pipe-tok/run
 @| @}
+
+\subsubsection{Topic detection tool.}
+\label{sec:installtopic_detection_tool}
+
+The topic detection tool uses Java.
+
+@d install the modules @{@%
+@%   install_module_from_github PaulHuygen ixa-pipe-tok
+gitinst m4_topictoolgit m4_topictoolname m4_topic_commitname 
+@| @}
+
+@o m4_bindir/m4_topic @{@%b
+@< start of module-script @(\$jarsdir@)@>
+cat | ../modules/m4_topictoolname/run
+@| @}
+
+\subsubsection{Morphosyntactic Parser and Alpino}
+\label{sec:mor}
+
+The morphosyntactic parser is in fact a wrapper around Alpino. We have
+installed Alpino in section~\ref{sec:alpino}. The morpho-syntactic
+parser expects Alpino to be located in \verb|\$envdir/Alpino|. 
+
+
+@d install the modules @{@%
+@%   install_module_from_github PaulHuygen ixa-pipe-tok
+gitinst m4_morphpargit m4_morphpardir m4_morphpar_commitname 
+@| @}
+
+@o m4_bindir/m4_morpharscript @{@%b
+@< start of module-script @(\$jarsdir@)@>
+cat | ../modules/m4_morphpardir/run
+@| @}
+
+
+
+
+
 
 
 \section{Utilities}
@@ -1332,6 +1448,11 @@ for k in root.attrib:
      language = root.attrib[k]
 print(language)
 @| @}
+
+@d make scripts executable @{@%
+chmod 775  m4_envbindir/langdetect.py
+@| @}
+
 
 
 The module-scripts depend on the existence of variable \verb|naflang|.
@@ -1465,7 +1586,8 @@ then
 @%    @< annotate dutch document @>
 @%   cat \$TESTIN    | \$BIND/tok                    > tok.naf
 runmodule \$infile    m4_tokenizername       tok.naf
-runmodule tok.naf     m4_topictoolname       \$outfile
+runmodule tok.naf     m4_topictoolname       top.naf
+runmodule top.naf     m4_morphpardir       \$outfile
 else
   @< annotate english document @>
 fi
@@ -1725,7 +1847,8 @@ all : @< all targets @>
 
 @d make targets @{@%
 clean:
-	@< clean up @>
+	../env/bin/clean_infrastructure
+@%	@< clean up @>
 
 @| @}
 

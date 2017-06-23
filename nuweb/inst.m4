@@ -59,6 +59,7 @@ m4_define(m4_ajardir, m4_ajavadir`/jars')m4_dnl     jars
 m4_define(m4_jardir, m4_javadir`/jars')m4_dnl     jars
 m4_dnl m4_define(m4_javatarball, server-jre-7u72-linux-x64.tar.gz)m4_dnl
 m4_define(m4_javatarball, jdk-8u131-linux-x64.tar.gz)m4_dnl
+m4_define(m4_javaversion, 1.8)m4_dnl
 m4_define(m4_javatarballurl, http://www.oracle.com/technetwork/java/javase/downloads/server-jre7-downloads-1931105.html)m4_dnl
 m4_dnl m4_define(m4_javajdk, jdk1.7.0_72)m4_dnl
 m4_define(m4_javajdk, jdk1.8.0_131)m4_dnl
@@ -196,10 +197,12 @@ m4_dnl
 m4_dnl Morphosyntactic parser
 m4_define(m4_morphparname, morphosyntactic_parser_nl)m4_dnl
 m4_define(m4_morphpartex, \verb|m4_morphparname|)m4_dnl
-m4_define(m4_morphpargit, https://github.com/cltl/morphosyntactic_parser_nl.git)m4_dnl  Subdir. of modules
+m4_dnl m4_define(m4_morphpargit, https://github.com/cltl/morphosyntactic_parser_nl.git)m4_dnl
+m4_define(m4_morphpargit, https://github.com/PaulHuygen/morphosyntactic_parser_nl.git)m4_dnl
 m4_dnl m4_define(m4_morphpar_commitname, `c6cabea2cc37ac3098c5927f5ec5b180ac31246f')m4_dnl
 m4_dnl m4_define(m4_morphpar_commitname, `807e938ce4ebb71afd9d7c7f42d9d9ac5f98a184')m4_dnl
-m4_define(m4_morphpar_commitname, `d5f002605d7c06545f24c84386342b79e5cb9c86')m4_dnl
+m4_dnl m4_define(m4_morphpar_commitname, `d5f002605d7c06545f24c84386342b79e5cb9c86')m4_dnl
+m4_define(m4_morphpar_commitname, `df759e2c16fd63a99d118e38b0a10b656978792e')m4_dnl
 m4_define(m4_morphpardir, morphosyntactic_parser_nl)m4_dnl  Subdir. of modules
 m4_define(m4_morphparscript, mor)m4_dnl
 m4_dnl
@@ -573,9 +576,12 @@ m4_define(m4_sematree_script, `sematree')m4_dnl
 m4_dnl
 m4_dnl Alpino
 m4_dnl
-m4_define(m4_alpino_version, 20706)m4_dnl
-m4_define(m4_alpinosrc, Alpino-x86_64-linux-glibc2.5-`'m4_alpino_version`'-sicstus.tar.gz)
-m4_define(m4_alpinourl, http://www.let.rug.nl/vannoord/alp/Alpino/binary/versions/Old/m4_alpinosrc)m4_dnl  
+m4_dnl m4_define(m4_alpino_version, 20706)m4_dnl
+m4_define(m4_alpino_version, 21088)m4_dnl
+m4_dnl m4_define(m4_alpinosrc, Alpino-x86_64-linux-glibc2.5-`'m4_alpino_version`'-sicstus.tar.gz)
+m4_define(m4_alpinosrc, Alpino-x86_64-Linux-glibc2.19-`'m4_alpino_version`'-sicstus.tar.gz)
+m4_dnl m4_define(m4_alpinourl, http://www.let.rug.nl/vannoord/alp/Alpino/binary/versions/Old/m4_alpinosrc)m4_dnl
+m4_define(m4_alpinourl, http://www.let.rug.nl/vannoord/alp/Alpino/versions/binary/latest.tar.gz)m4_dnl
 m4_define(m4_alpino_desc_url, http://www.let.rug.nl/~vannoord/alp/Alpino/)m4_dnl
 m4_define(m4_alpinodir, Alpino)m4_dnl  Subdir. of modules
 m4_define(m4_Alpinoscript, alpino)m4_dnl
@@ -616,6 +622,9 @@ m4_define(m4_networkx_version, `1.11')m4_dnl
 m4_dnl
 m4_dnl requests
 m4_define(m4_requests_version, `2.18.1')m4_dnl
+m4_dnl
+m4_dnl requests
+m4_define(m4_six_version, `1.10.0.')m4_dnl
 m4_dnl
 m4_dnl VUA-pylib
 m4_define(m4_vuapylibgit, https://github.com/cltl/VUA_pylib.git)m4_dnl
