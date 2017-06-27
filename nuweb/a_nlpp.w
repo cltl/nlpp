@@ -1331,6 +1331,17 @@ specification. The language can be passed as exported variable
 server. With the arguments \verb|-h| and \verb|-b| the host and port
 of a running Spotlight-server can be passed.
 
+Let us assess a ``Parameter-passing'' hierarchy for \verb|run|
+scripts. Basically a ``run'' script uses default values encoded in the
+\verb|run| script itself. These values can be overruled by environment
+parameters. Both default and enviroment parameter settings can be
+overruled by options that are provided to the \verb|run| commands.
+
+Let us adhere to the policy that we use short one-letter options in
+\verb|run| scripts, that can be parsed with \verb|getopts|.
+
+
+
 The code to obtain command-line arguments in Bash has been obtained
 from
 \href{http://stackoverflow.com/questions/192249/how-do-i-parse-command-line-arguments-in-bash}{Stackoverflow}. The
@@ -1379,7 +1390,6 @@ gitinst m4_tokenizergit m4_tokenizername m4_tokenizer_commitname
 
 @o m4_bindir/m4_tokenizerscript @{@%b
 @< start of module-script @(\$jarsdir@)@>
-@% @< abort when the language is not English or Dutch @>
 cat | ../modules/ixa-pipe-tok/run
 @| @}
 
@@ -1417,6 +1427,16 @@ cat | ../modules/m4_morphpardir/run
 @| @}
 
 
+\subsubsection{Pos tagger}
+\label{sec:pos-tagger}
+
+Use the pos-tagger from \EHU{} for English documents.
+
+
+@d install the modules @{@%
+@% install_module_from_github PaulHuygen ixa-pipe-tok
+gitinst m4_posgit m4_posdir m4_morphpar_commitname 
+@| @}
 
 
 
@@ -1575,7 +1595,8 @@ Similar for an English naf:
 
 @d annotate english document @{@%
   runmodule \$infile    m4_tokenizername       tok.naf
-  runmodule tok.naf     m4_topictoolname       \$outfile
+  runmodule tok.naf     m4_topictoolname       top.naf
+  runmodule top.naf     m4_posname       \$outfile
 @| @}
 
 Determine the language and select one of the above macro's to annotate

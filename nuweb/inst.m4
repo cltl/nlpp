@@ -187,11 +187,14 @@ m4_define(m4_jex_resources_nl_url, http://optima.jrc.it/Resources/Eurovoc/indexi
 m4_define(m4_topic_jar, ixa-pipe-topic-1.0.3.jar)m4_dnl
 m4_dnl
 m4_dnl Pos tagger
-m4_define(m4_posname, EHU-pos.v30)m4_dnl
+m4_dnl m4_define(m4_posname, EHU-pos.v30)m4_dnl
+m4_define(m4_posname, ixa-pipe-pos)m4_dnl
 m4_define(m4_postex, \verb|m4_posname|)m4_dnl
-m4_define(m4_posdir, EHU-pos.v30)m4_dnl
-m4_define(m4_posgit, `https://github.com/ixa-ehu/ixa-pipe-pos.git')m4_dnl
-m4_define(m4_posball,20151220_EHU-pos.v30.tgz)m4_dnl
+m4_define(m4_posdir, ixa-pipe-pos)m4_dnl
+m4_dnl m4_define(m4_posgit, `https://github.com/ixa-ehu/ixa-pipe-pos.git')m4_dnl
+m4_dnl m4_define(m4_posgit, `https://github.com/PaulHuygen/ixa-pipe-pos.git')m4_dnl
+m4_define(m4_posgit, `git@@github.com:PaulHuygen/ixa-pipe-pos.git')m4_dnl
+m4_dnl m4_define(m4_posball,20151220_EHU-pos.v30.tgz)m4_dnl
 m4_define(m4_postagscript, pos)m4_dnl
 m4_dnl
 m4_dnl Morphosyntactic parser
