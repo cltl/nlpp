@@ -178,7 +178,7 @@ m4_define(m4_topictoolball, 20151220_EHU-topic.v30.tgz)m4_dnl
 m4_dnl m4_define(m4_topictoolgit, https://github.com/ialdabe/ixa-pipe-topic.git)m4_dnl
 m4_define(m4_topictoolgit, https://github.com/PaulHuygen/ixa-pipe-topic.git)m4_dnl
 m4_dnl m4_define(m4_topic_commitname, 40be8debb88093b426ae3520d60df60161968e27)m4_dnl
-m4_define(m4_topic_commitname, b2e0ef60badacd90b4f489bdf45f56a1956eb43e)m4_dnl
+m4_define(m4_topic_commitname, b33259ec587b7ead20d9a2cc72d3c68bdbbae163)m4_dnl
 m4_define(m4_topicscript, topic)m4_dnl
 m4_define(m4_jex_resources_en_ball, en-eurovoc-1.0.zip)m4_dnl
 m4_define(m4_jex_resources_nl_ball, nl-eurovoc-1.0.zip)m4_dnl
@@ -191,7 +191,7 @@ m4_dnl m4_define(m4_posname, EHU-pos.v30)m4_dnl
 m4_define(m4_posname, ixa-pipe-pos)m4_dnl
 m4_define(m4_postex, \verb|m4_posname|)m4_dnl
 m4_define(m4_posdir, ixa-pipe-pos)m4_dnl
-m4_define(m4_pos_commitname, dea371c5c8c7cfca98104543e50c7d5daf456b5d)m4_dnl
+m4_define(m4_pos_commitname, 518fe51d3f196f0ea5695811425128181565b5d7)m4_dnl
 m4_dnl m4_define(m4_posgit, `https://github.com/ixa-ehu/ixa-pipe-pos.git')m4_dnl
 m4_dnl m4_define(m4_posgit, `https://github.com/PaulHuygen/ixa-pipe-pos.git')m4_dnl
 m4_define(m4_posgit, `git@@github.com:PaulHuygen/ixa-pipe-pos.git')m4_dnl

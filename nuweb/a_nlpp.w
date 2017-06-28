@@ -1383,7 +1383,7 @@ The tokenizer is the simples of the modules. It needs Java version~m4_javaversio
 compiles a Java JAR file, and this is used in the run script.
 
 
-@d install the tokenizer @{@%
+@d install the modules @{@%
 @%   install_module_from_github PaulHuygen ixa-pipe-tok
 gitinst m4_tokenizergit m4_tokenizername m4_tokenizer_commitname 
 @| @}
