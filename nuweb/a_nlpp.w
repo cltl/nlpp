@@ -1435,12 +1435,13 @@ Use the pos-tagger from \EHU{} for English documents.
 
 @d install the modules @{@%
 @% install_module_from_github PaulHuygen ixa-pipe-tok
-gitinst m4_posgit m4_posdir m4_morphpar_commitname 
+gitinst m4_posgit m4_posdir m4_pos_commitname 
 @| @}
 
-
-
-
+@o m4_bindir/m4_postagscript @{@%b
+@< start of module-script @(\$jarsdir@)@>
+cat | ../modules/m4_posdir/run
+@| @}
 
 \section{Utilities}
 \label{sec:utilities}

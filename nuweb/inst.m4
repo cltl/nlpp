@@ -191,6 +191,7 @@ m4_dnl m4_define(m4_posname, EHU-pos.v30)m4_dnl
 m4_define(m4_posname, ixa-pipe-pos)m4_dnl
 m4_define(m4_postex, \verb|m4_posname|)m4_dnl
 m4_define(m4_posdir, ixa-pipe-pos)m4_dnl
+m4_define(m4_pos_commitname, dea371c5c8c7cfca98104543e50c7d5daf456b5d)m4_dnl
 m4_dnl m4_define(m4_posgit, `https://github.com/ixa-ehu/ixa-pipe-pos.git')m4_dnl
 m4_dnl m4_define(m4_posgit, `https://github.com/PaulHuygen/ixa-pipe-pos.git')m4_dnl
 m4_define(m4_posgit, `git@@github.com:PaulHuygen/ixa-pipe-pos.git')m4_dnl
@@ -205,7 +206,8 @@ m4_define(m4_morphpargit, https://github.com/PaulHuygen/morphosyntactic_parser_n
 m4_dnl m4_define(m4_morphpar_commitname, `c6cabea2cc37ac3098c5927f5ec5b180ac31246f')m4_dnl
 m4_dnl m4_define(m4_morphpar_commitname, `807e938ce4ebb71afd9d7c7f42d9d9ac5f98a184')m4_dnl
 m4_dnl m4_define(m4_morphpar_commitname, `d5f002605d7c06545f24c84386342b79e5cb9c86')m4_dnl
-m4_define(m4_morphpar_commitname, `df759e2c16fd63a99d118e38b0a10b656978792e')m4_dnl
+m4_dnl m4_define(m4_morphpar_commitname, `df759e2c16fd63a99d118e38b0a10b656978792e')m4_dnl
+m4_define(m4_morphpar_commitname, `52a9ad750a71884b3d0a5430c8c0641035367c10')m4_dnl
 m4_define(m4_morphpardir, morphosyntactic_parser_nl)m4_dnl  Subdir. of modules
 m4_define(m4_morphparscript, mor)m4_dnl
 m4_dnl
