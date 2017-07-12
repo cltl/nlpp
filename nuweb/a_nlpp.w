@@ -1,6 +1,5 @@
 m4_include(inst.m4)m4_dnl
 m4_sinclude(../../local.m4)m4_dnl
-m4_sinclude(/tmp/local.m4)m4_dnl
 \documentclass[twoside,oldtoc]{artikel3}
 @% \documentclass[twoside]{article}
 \pagestyle{headings}
@@ -179,7 +178,7 @@ modules operate on a document.
         \textbf{Module}            & \textbf{Source}                 & \textbf{Resources } & \textbf{Section} & \textbf{Commit}                    & \textbf{Script}                       & \textbf{language} \\
          Tokenizer                 & \href{m4_tokenizergit}{Github}  & Java                & \dref{sec:installtokenizer}    & \brevcomm{m4_tokenizer_commitname} & \texttt{m4_tokenizerscript}                  & en/nl  \\
          Topic detection           & \href{m4_topictoolgit}{Github}  & Java                & \dref{sec:topic-install}       & \brevcomm{m4_topic_commitname}     & \texttt{m4_underslas(m4_topicscript)}        & en/nl  \\
-         Morpho-syntactic parser   & \href{m4_morphpargit}{Github}   & Python, Alpino      & \dref{sec:install-morphsynt-parser}  & \brevcomm{m4_morphpar_commitname}  & \texttt{m4_underslas(m4_morphparscript)}     & nl     \\
+         Morpho-syntactic parser   & \href{m4_morphpargit}{Github}   & Python, Alpino      & \dref{sec:install-morphsynt-parser}  & \brevcomm{m4_morphpar_commitname}  & \texttt{m4_underslas(m4_morparscript)}     & nl     \\
          \textsc{pos}-tagger       & snapshot                        &                     & \dref{sec:postagger}                 &  \ldots                            & \texttt{m4_underslas(m4_postagscript)}       & en     \\
          Named-entity rec/class    & \href{m4_nercgit}{Github}       &                     & \dref{sec:nerc}                      & \brevcomm{m4_nerc_commitname}      & \texttt{m4_underslas(m4_nercscript)}         & en/nl  \\
          Dark-entity relinker      & \href{m4_delinkgit}{Github}     &                     & \dref{sec:derelink}                  & \brevcomm{m4_delink_commitname}    & \texttt{m4_underslas(m4_nercscript)}         & en/nl  \\
@@ -391,7 +390,7 @@ Therefore, we have the following policy to achieve reproducibility:
   versions coincide.
 \item A script is constructed that reproducibly builds an environment
   for the pipeline on some software/hardware platform (e.g. Linux on
-  X64 CPU), using utilities that vave been stored in some non-open
+  X64 CPU), using utilities that have been stored in some non-open
   repository (to preclude copyright-problems). 
 \end{itemize}
 
@@ -466,9 +465,14 @@ source ../../progenv
 @< set up Maven @>
 @< set up Python @>
 @< set up autoconf @>
-@< set up Perl @>
+@% @< set up Perl @>
+@< install Perl @>
 @< install shared libs @>
 @< install Alpino @>
+@< install the Spotlight server @>
+@< install the treetagger utility @>
+@< install svmlib @>
+@< install boost @>
 
 @| @}
 
@@ -615,15 +619,21 @@ export javadir=$envdir/java
 export jarsdir=$javadir/jars
 @| @}
 
+Include a ``snapshot'' directory that contains non-open materials.
+
+@d set variables that point to the directory-structure @{@%
+export snapshotdir=\$pipesocket/v4.0.0.0_nlpp_resources
+@| @}
+
+
+
 Add the environment \verb|bin| directory to \verb|PATH|:
 
 @d set variables that point to the directory-structure @{@%
 export PATH=\$envbindir:\$pipebin:$PATH
 @| PATH @}
 
-@% While setting variables, \emph{source} a scripts that sets variables
-@% for directories of which we do not yet know where they are, e.g.{}
-@% paths to Python and Java that we may have to set up dynamically.
+
 
 \subsection{Download resources}
 \label{sec:download}
@@ -1077,7 +1087,7 @@ fi
 
 
 
-@d install perl @{@%
+@d install Perl @{@%
 tempdir=`mktemp -d -t perl.XXXXXX`
 cd $tempdir
 @% wget m4_perl_url
@@ -1110,7 +1120,408 @@ cd \$envdir/perl/lib
 tar -xzf \$pipesocket/m4_snapshotdirectory/m4_perl_libball
 @| @}
 
- 
+\subsection{Spotlight}
+\label{sec:spotlight}
+
+A Spotlight server occupies a lot of memory and we need two of them,
+one for each language. We may be lucky and have a spotlight server
+running somewhere. Nevertheless, let us be prepared to be able to
+install a server ourselves.
+
+
+\subsubsection{Install spotlight servers}
+\label{sec:install_spotlight_servers}
+
+
+Install Spotlight in the way that  Itziar Aldabe (\url{mailto:itziar.aldabe@@ehu.es}) described:
+
+The NED module works for English, Spanish, Dutch and Italian. The
+module returns multiple candidates and correspondences for all the
+languages. If you want to integrate it in your Dutch or Italian
+pipeline, you will need:
+
+\begin{enumerate}
+\item The jar file with the dbpedia-spotlight server. You need the
+  version that Aitor developed in order to correctly use the "candidates"
+  option. You can copy it from the English VM. The jar file name is
+  \verb|dbpedia-spotlight-0.7-jar-with-dependencies-candidates.jar|
+\item The Dutch/Italian model for the dbpedia-spotlight. You can download them from:
+    \url{http://spotlight.sztaki.hu/downloads/}
+\item The jar file with the NED module:
+    \verb|ixa-pipe-ned-1.0.jar|. You can copy it from the English VM
+    too.
+\item The file: \verb|wikipedia-db.v1.tar.gz|. You can download it
+  from:
+  \url{http://ixa2.si.ehu.es/ixa-pipes/models/wikipedia-db.v1.tar.gz}. This
+  file contains the required information to do the mappings between
+  the wikipedia-entries. The zip file contains three files:
+  wikipedia-db, wikipedia-db.p and wikipedia-db.t
+\end{enumerate}
+
+To start the dbpedia server:
+Italian server: 
+
+\begin{verbatim}
+java -jar -Xmx8g dbpedia-spotlight-0.7-jar-with-dependencies-candidates.jar \
+    it http://localhost:2050/rest 
+
+\end{verbatim}
+
+Dutch server:  
+
+\begin{verbatim}
+java -jar -Xmx8g dbpedia-spotlight-0.7-jar-with-dependencies-candidates.jar nl http://localhost:2060/rest 
+
+\end{verbatim}
+
+We set 8Gb for the English server, but the Italian and Dutch Spotlight will require less memory. 
+
+
+So, let us do that.
+
+First, get the Spotlight model data that we need:
+
+@d download stuff @{@%
+@< need to wget @(m4_spotlight_nl_model_ball@,m4_spotlight_download_url/m4_spotlight_nl_model_ball@) @>
+@< need to wget @(m4_spotlight_en_model_ball@,m4_spotlight_download_url/m4_spotlight_en_model_ball@) @>
+@< need to wget @(m4_wikipediadb_tarball@,m4_wikipediadb_url@) @>
+
+@| @}
+
+@d install the Spotlight server @{@%
+cd \$envdir
+tar -xzf \$snapshotsocket/m4_snapshotdirectory/m4_spotlightball
+cd \$envdir/spotlight
+tar -xzf \$snapshotsocket/m4_snapshotdirectory/m4_spotlight_nl_model_ball
+tar -xzf \$snapshotsocket/m4_snapshotdirectory/m4_spotlight_en_model_ball
+@| @}
+
+@d get spotlight model ball @{@%
+if
+  [ -e \$snapshotsocket/m4_snapshotdirectory/@1 ]
+then
+  tar -xzf \$snapshotsocket/m4_snapshotdirectory/@1
+else
+  wget m4_spotlight_download_url/@1
+  tar -xzf @1
+  rm @1
+fi
+
+@| @}
+
+We choose to put the Wikipedia database in the spotlight directory.
+
+@d install the Spotlight server @{@%
+cd \$envdir/spotlight
+tar -xzf \$snapshotsocket/\$snapshotdirectory/m4_wikipediadb_tarball
+@| @}
+
+
+\subsubsection{Check/start the Spotlight server}
+\label{sec:check-start-spotlight}
+
+The macro \verb|check/start spotlight| does the following:
+
+\begin{enumerate}
+\item Check whether spotlight runs on the default spotlighthost.
+\item If that is not the case, and the defaulthost is not
+  \verb|localhost|, check whether Spotlight runs on localhost.
+\item If a running spotlightserver is still not found, start a
+  spotlightserver on localhost.
+\end{enumerate}
+
+Start Spotlight, if it doesn't run already. Spotlight ought to run on
+localhost unless variable \verb|spotlighthost| exists. In that case,
+check whether a Spotlight server can be contacted on that
+host. Otherwise, change \verb|spotlighthost| to \verb|localhost| and
+check whether a Spotlight server runs there. If that is not the case,
+start up a Spotlight server on localhost.  
+
+The following script, \verb|check_start_spotlight|, has three
+optional arguments:
+
+\begin{description}
+\item[language:] Default is exported variable \verb|naflang| if it
+  exists, or \verb|en|.
+\item[spotlighthost:] Name of a host that probably runs a
+  Spotlightserver. Default: exported variable \verb|spotlighthost| if
+  it exists, or \verb|localhost|.
+\item[spotlightport:] Default: exported variable \verb|spotlightport|
+  if it exists or either m4_spotlight_en_port or m4_spotlight_nl_port for English resp. Dutch.
+\end{description}
+
+@o m4_bindir/check_start_spotlight @{@%
+#!/bin/bash
+@<  get location of the script @(DIR@)@>
+cd $DIR
+source ../progenv
+@< get commandline-arguments for check\_start\_spotlight @>
+@< set default arguments for Spotlight @>
+@| @}
+
+
+The code to obtain command-line arguments has been obtained from
+\href{http://stackoverflow.com/questions/192249/how-do-i-parse-command-line-arguments-in-bash}{Stackoverflow}. The
+following fragment reads the arguments \verb|-l language|,
+\verb|-h spotlighthost| and \verb|-p spotlightport|:
+
+
+@d get commandline-arguments for check\_start\_spotlight @{@%
+while [[ $# > 1 ]]
+do
+  key="$1"
+
+  case $key in
+    -l|--language)
+      naflang="$2"
+      shift # past argument
+    ;;
+    -h|--spothost)
+      spotlighthost="$2"
+      shift # past argument
+    ;;
+    -p|--spotport)
+    spotlightport="$2"
+    shift # past argument
+    ;;
+    *)
+            # unknown option
+    ;;
+  esac
+  shift # past argument or value
+done
+@| @}
+
+Fill in default values when they cannot be found in exported
+variables nor in command-line arguments.
+
+@d set default arguments for Spotlight @{@%
+if
+  [ "$spotlighthost" == "" ]
+then
+  spotlighthost=m4_spotlight_host
+fi
+if
+  [ "$spotlightport" == "" ]
+then
+  if
+    [ "$naflang" == "nl" ]
+  then
+      spotlightport=m4_spotlight_nl_port
+  else
+      spotlightport=m4_spotlight_en_port
+  fi
+fi
+@| @}
+
+@o m4_bindir/check_start_spotlight @{@%
+@< check listener on host, port @($spotlighthost@,$spotlightport@) @>
+if
+  [ \$spotlightrunning -ne 0 ]
+then
+  if 
+    [ ! "$spotlighthost" == "localhost" ]
+  then
+    export spotlighthost="localhost"
+    @< check listener on host, port @($spotlighthost@,$spotlightport@) @>
+  fi
+fi
+if
+  [ \$spotlightrunning -ne 0 ]
+then
+  @< start the Spotlight server on localhost @>
+fi
+echo $spotlighthost:$spotlightport
+@| @}
+
+@d make scripts executable @{@%
+chmod 775  m4_bindir/check_start_spotlight
+@| @}
+
+Use function \verb|check_start_spotlight| to find and exploit a
+running Spotlight-server or to die (with exit code 5) if no server can be found or
+created. The macro uses implicitly the exported variables
+\verb|spotlighthost| and \verb|spotlightport| if they exist. 
+
+@d find a spotlightserver or exit @{@%
+spothostport=`m4_abindir/check_start_spotlight -l \$naflang`
+export spotlighthost=`echo \$spothostport | gawk -F ":" '{print $1}'`
+export spotlightport=`echo \$spothostport | gawk -F":" '{print $2}'`
+echo "Spotlight server found on $spothostport." >&2 
+if
+  [ "\$spotlighthost" == "none" ]
+then
+  echo "No Spotlight-server found."
+  exit 5
+fi
+@| @}
+
+Set the port-number and the language resource for Spotlight, dependent
+of the language that the user gave as argument.
+
+@d get spotlight language parameters @{@%
+if
+  [ "$naflang" == "nl" ]
+then
+   spotlightport=m4_spotlight_nl_port
+@%   spotlightresource="nl"
+else
+  spotlightport=m4_spotlight_en_port
+@%   spotlightresource="en_2+2"
+fi
+@| @}
+
+The following macro has a hostname and a port-number as arguments. It
+checks whether something in the host listens on the port and sets
+variable \verb|success| accordingly:
+
+@d check listener on host, port @{@%
+exec 6<>/dev/tcp/@1/@2 2>/dev/null
+spotlightrunning=\$?
+exec 6<&-
+exec 6>&-
+@| @}
+
+If variable \verb|spotlighthost| does not exist, set it to
+localhost. Test whether a Spotlightserver runs on
+\verb|spotlighthost|. If that fails and \verb|spotlighthost| did not
+point to localhost, try localhost. 
+
+If the previous attempts were not succesfull, start the
+spotlightserver on localhost. 
+
+If some spotlightserver has been contacted, set variable
+\verb|spotlightrunning|. Otherwise exit. At the end variable
+\verb|spotlighthost| ought to contain the address of the Spotlight-host.
+
+@d try to obtain a running spotlightserver @{@%
+@< test whether spotlighthost runs @($spotlighthost@) @>
+if 
+  [ ! $spotlightrunning ]
+then
+  if
+    [ "$spotlighthost" != "localhost" ]
+  then
+    export spotlighthost=localhost
+    @< test whether spotlighthost runs @($spotlighthost@) @>
+  fi
+fi
+if
+  [ ! $spotlightrunning ]
+then
+  @< start the Spotlight server on localhost @>
+  @< test whether spotlighthost runs @($spotlighthost@) @>
+fi
+if
+  [ ! $spotlightrunning ]
+then
+  echo "Cannot start spotlight"
+  exit 4
+fi
+@| @}
+
+Test whether the Spotlightserver runs on a given host. The
+``spotlight-test'' does not really test Spotlight, but it tests
+whether something is listening on the port and host where we expect
+Spotlight. I found the test-construction that is used here on
+\href{http://stackoverflow.com/questions/9609130/quick-way-to-find-if-a-port-is-open-on-linux}{Stackoverflow}.
+If the test is positive, set variable \verb|spotlightrunning| to
+0. Otherwise, unset that variable.
+
+
+@d test whether spotlighthost runs @{@%
+exec 6<>/dev/tcp/@1/m4_spotlight_nl_port
+if
+  [ $? -eq 0 ]
+then
+  export spotlightrunning=0
+else
+  spotlightrunning=
+fi
+exec 6<&-
+exec 6>&-
+@| @}
+
+When trying to start the Spotlight-server on localhost, take care that
+only one process does this. So we do this:
+
+\begin{enumerate}
+\item Try to acquire a lock without waiting for it.
+\item If we got the lock, run the Spotlight java program in background.
+\item If we got the lock, release it.
+\item If we did not get the lock, wait for the lock to be released by
+  the process that started the spotlight-server.
+\end{enumerate}
+
+But first, we specify the resources for the Spotlight-server.
+
+@d start the Spotlight server on localhost @{@%
+if
+  [ "$naflang" == "nl" ]
+then
+  spotresource="nl"
+else
+  spotresource="en_2+2"
+fi
+spotlightjar=dbpedia-spotlight-0.7-jar-with-dependencies-candidates.jar 
+@| @}
+
+
+@d start the Spotlight server on localhost @{@%
+local oldd=`pwd`
+cd m4_aspotlightdir
+\$envbindir/sematree acquire spotlock 0
+gotit=\$?
+if
+  [ \$gotit == 0 ]
+then
+  java -jar -Xmx8g \$spotlightjar $spotresource \
+       http://localhost:$spotlightport/rest  &
+  @< wait until the spotlight server is up or faulty  @>
+  \$envbindir/sematree release spotlock
+else
+  @< wait until the spotlight server is up or faulty  @>
+fi
+cd \$oldd
+@| @}
+
+
+When the Sportlight server has been started, it takes op to a minute
+until it really listens on its port. When there is something wrong, it
+will never listen, of course. Therefore, we give it three minutes. If
+after that time still nothing listens, we set \verb|spotlighthost| to
+\verb|none|, indicating that something has gone wrong. 
+
+@d wait until the spotlight server is up or faulty @{@%
+trial=0
+maxtrials=12
+while
+  trial=$((trial+1))
+  @< check listener on host, port @($spotlighthost@,$spotlightport@) @>
+  [ $spotlightrunning -ne 0 ] && [ $trial -le $maxtrials ] 
+do
+  sleep 10
+done
+if
+  [ \$spotlightrunning -ne 0 ]
+then
+ export spotlighthost="none"
+fi
+@| @}
+
+
+Start the Spotlight if it is not already running. First find out what
+the host is on which we may expect to find a listening Spotlight.
+
+Variable \verb|spotlighthost| contains the address of the
+host where we expect to find Spotlight. If the expectation does not
+come true, and the Spotlighthost was not localhost, test whether
+Spotlight can be found on localhost. If the spotlight-server cannot be
+found, start it up on localhost.
+
+
+
+
 
 \subsection{Download materials}
 \label{sec:download}
@@ -1263,9 +1674,301 @@ export ALPINO_HOME=\$envdir/Alpino
 @|ALPINO_HOME @}
 
 
+\subsubsection{Treetagger}
+\label{sec:installtreetagger}
 
-\section{Installation of the modules}
-\label{sec:install}
+Installation of Treetagger goes as follows (See
+\href{http://www.cis.uni-muenchen.de/~schmid/tools/TreeTagger/}{Treetagger's homepage}):
+
+\begin{enumerate}
+\item Download and unpack the Treetagger tarball. This generates the
+  subdirectories \verb|bin|, \verb|cmd| and \verb|doc|
+\item Download and unpack the tagger-scripts tarball
+\end{enumerate}
+
+The location where Treetagger comes from and the location where it is going to reside:
+
+
+
+@d install the treetagger utility @{@%
+TREETAGDIR=m4_treetagdir
+TREETAGGER_HOME=\$envdir/\$TREETAGDIR
+TREETAG_BASIS_URL=m4_treetag_base_url
+@| TREETAGGER_HOME @}
+
+@d set environment parameters @{@%
+export TREETAGGER_HOME=\$envdir/m4_treetagdir
+@| @}
+
+The source tarball, scripts and the installation-script:
+
+@d install the treetagger utility @{@%
+TREETAGSRC=m4_treetagsrc
+TREETAGSCRIPTS=m4_treetagger_scripts
+TREETAG_INSTALLSCRIPT=m4_treetagger_installscript
+@| @}
+
+Parametersets:
+
+@d install the treetagger utility @{@%
+DUTCHPARS_UTF_GZ=m4_treetag_dutchparms       
+DUTCH_TAGSET=m4_treetag_dutch_tagset 
+DUTCHPARS_2_GZ=m4_treetag_dutchparms2
+@| @}
+
+Download everything in the target directory:
+
+@% @d download stuff @{@%
+@% @< need to wget @(\$TREETAGSRC@,\$TREETAG_BASIS_URL/\$TREETAGSRC@) @>
+@% @< need to wget @(\$TREETAGSCRIPTS@,\$TREETAG_BASIS_URL/\$TREETAGSCRIPTS   @) @>        
+@% @< need to wget @(\$TREETAG_INSTALLSCRIPT@,\$TREETAG_BASIS_URL/\$TREETAG_INSTALLSCRIPT @) @> 
+@% @< need to wget @(\$DUTCHPARS_UTF_GZ@,\$TREETAG_BASIS_URL/\$DUTCHPARS_UTF_GZ @) @>      
+@% @< need to wget @(\$DUTCH_TAGSET@,\$TREETAG_BASIS_URL/\$DUTCH_TAGSET@) @> 
+@% @< need to wget @(\$DUTCHPARS_2_GZ@,\$TREETAG_BASIS_URL/\$DUTCHPARS_2_GZ@) @>     
+@% @| @}
+
+@d install the treetagger utility @{@%
+@% mkdir -p \$modulesdir/\$TREETAGDIR
+mkdir -p \$envdir/\$TREETAGDIR
+cd \$envdir/\$TREETAGDIR
+wget \$TREETAG_BASIS_URL/\$TREETAGSRC            
+wget \$TREETAG_BASIS_URL/\$TREETAGSCRIPTS        
+wget \$TREETAG_BASIS_URL/\$TREETAG_INSTALLSCRIPT 
+wget \$TREETAG_BASIS_URL/\$DUTCHPARS_UTF_GZ      
+wget \$TREETAG_BASIS_URL/\$DUTCH_TAGSET          
+wget \$TREETAG_BASIS_URL/\$DUTCHPARS_2_GZ        
+@| @}
+
+Run the install-script:
+
+@d install the treetagger utility @{@%
+chmod 775 \$TREETAG_INSTALLSCRIPT
+./\$TREETAG_INSTALLSCRIPT
+@| @}
+
+The scripts in the \verb|cmd| subdirectory contain absolute paths. We
+can make the treetagger directory-structure location-independent by
+using relative paths, eg relative to \verb|TREETAGGER_HOME|
+
+@d install the treetagger utility @{@%
+@< make treetagger location-independent @>
+@| @}
+
+
+It works as follows:
+
+Many of the scripts in the \verb|cmd| subdirectory contain lines like:
+
+\begin{verbatim}
+BIN=<absolute path>/bin
+
+\end{verbatim}
+
+We read one of those scripts and extract the contents of
+\verb|<absolute path>| into variable \verb|indicator|. Then we replace
+in all scripts occurrences of this text with \verb|\${TREETAGGER_HOME}|. 
+
+@d make treetagger location-independent @{@%
+@< extract the absolute path from one of the scripts @>
+@< replace the absolute paths @>
+@| @}
+
+@d extract the absolute path from one of the scripts @{@%
+cmdir=\${TREETAGGER_HOME}/cmd
+probefile=`grep -l "^BIN=" \${cmdir}/* | head -n 1`
+@% indicator=`cat \$probefile | gawk '/^BIN=/ {match(\$0, /^BIN=(.*treetagger)\/bin/, arr); print arr[1]}'`
+indicator=`cat \$probefile | gawk '/^BIN=/ {@< matchscript @>}'`
+@| @}
+
+@d matchscript @{@%
+match(\$0, /^BIN=(.*treetagger)\/bin/, arr); print arr[1]@%
+@| @}
+
+
+@d replace the absolute paths @{@%
+sedcommand="s|\$indicator|\\${TREETAGGER_HOME}|g"
+tempfile=`mktemp -t mytemp.XXXXXX`
+for file in \${cmdir}/*
+do
+  mv \$file \$tempfile
+  cat \$tempfile | sed \$sedcommand >\$file
+done	   
+rm -rf $tempfile
+@| @}
+
+
+
+Make the treetagger utilities available for everybody.
+
+@d install the treetagger utility @{@%
+chmod -R o+rx \$envdir/\$TREETAGDIR/bin
+chmod -R o+rx \$envdir/\$TREETAGDIR/cmd
+chmod -R o+r \$envdir/\$TREETAGDIR/doc
+chmod -R o+rx \$envdir/\$TREETAGDIR/lib
+@% ./\$TREETAG_INSTALLSCRIPT
+@| @}
+
+
+
+Remove the tarballs:
+
+@d install the treetagger utility @{@%
+rm \$TREETAGSRC
+rm \$TREETAGSCRIPTS
+rm \$TREETAG_INSTALLSCRIPT
+rm \$DUTCHPARS_UTF_GZ
+rm \$DUTCH_TAGSET    
+rm \$DUTCHPARS_2_GZ
+@| @}
+
+
+\subsubsection{Timbl and Ticcutils}
+\label{sec:timbl}
+
+Timbl and Ticcutils are installed from their source-tarballs. The
+installation is not (yet?) completely reproducibe because it uses the
+C-compiler that happens to be available on the host. Installation involves:
+
+\begin{enumerate}
+\item Download the tarball in a temporary directory.
+\item Unpack the tarball.
+\item cd to the unpacked directory and perform \verb|./configure|,
+  \verb|make| and \verb|make install|. Note the argument that causes
+  the files to be installed in the \texttt{lib} and the \texttt{bin} sub-directories of the
+  \texttt{env} directory.
+\end{enumerate}
+
+@d install the ticcutils utility @{@%
+URL=m4_ticcurl
+TARB=m4_ticcsrc
+DIR=m4_ticcdir
+@< unpack ticcutils or timbl @>
+@| @}
+
+@d install the timbl utility @{@%
+@% URL=m4_timblurl
+TARB=m4_timblsrc
+DIR=m4_timbldir
+@< unpack ticcutils or timbl @>
+@| @}
+
+
+@d unpack ticcutils or timbl @{@%
+@% @< get or have @(\$TARB@) @>
+SUCCES=0
+ticbeldir=`mktemp -t -d tickbel.XXXXXX`
+cd \$ticbeldir
+tar -xzf \$snapshotsocket/m4_snapshotdirectory/\$TARB
+cd \$DIR
+sh ./bootstrap.sh
+./configure --prefix=\$envdir
+make 
+make install
+cd \$piperoot
+rm -rf \$ticbeldir
+@% @% wget \$URL
+@% SUCCES=\$?
+@% if
+@%   [ \$SUCCES -eq 0 ]
+@% then
+@%   tar -xzf \$TARB
+@%   SUCCES=\$?
+@%   rm -rf \$TARB
+@% fi
+@% if
+@%   [ \$SUCCES -eq 0 ]
+@% then
+@%   cd \$DIR
+@%   ./configure --prefix=\$envdir
+@%   make
+@%   make install
+@% fi
+@% cd \$piperoot
+@% rm -rf \$ticbeldir
+@% if
+@%   [ \$SUCCES -eq 0 ]
+@% then
+@%   @< logmess @(Installed \$DIR@) @>
+@% else
+@%   @< logmess @(NOT installed \$DIR@) @>
+@% fi
+@| @}
+
+When the installation has been transplanted, Timbl and Ticcutils have
+to be re-installed.
+
+@d  re-install modules after the transplantation @{@%
+@< install the ticcutils utility @>
+@< install the timbl utility @>
+@| @}
+
+
+
+
+\subsubsection{Svmlib}
+\label{sec:svmlib}
+
+
+Svmlib is needed by module svmwsd. That module can install svmlib by
+itself, but for now we try installation in the prog-environment. We
+set variable \verb|SVMLIB_HOME| to indicate where the module is
+located.
+
+@d set environment parameters @{@%
+export SVMLIB_HOME=\$envdir/svmlib
+@| SVMLIB_HOME @}
+
+
+@d install svmlib @{@%
+export SVMLIB_HOME=\${envdir}/svmlib
+tempdir=`mktemp -d -t svmlib.XXXXXX`
+cd \$tempdir
+wget m4_svm_url
+unzip m4_svmball
+rm m4_svmball
+oridir=`ls -1 | head -1`
+mv $oridir ${SVMLIB_HOME} 
+cd \${SVMLIB_HOME}/python
+rm -rf \$tempdir
+make
+cd $piperoot
+@| @}
+
+
+\subsubsection{The Boost library}
+\label{sec:boost}
+
+I have no idea how Boost works. Neither can I find out how to test
+whether boost has been installed already. So we install libbost
+according to
+\href{http://www.boost.org/doc/libs/1_55_0/doc/html/bbv2/installation.html}{this
+  manual and hope for the best.
+
+@d install boost @{@%
+boost_ball=boost-build-2014-10.tar.bz2
+boost_ball_url=https://github.com/boostorg/build/releases/download/2014.10/${boost_ball}
+tempdir=`mktemp -d -t boost.XXXXXX`
+cd $tempdir
+wget ${boost_ball_url}
+tar -xjf ${boost_ball}
+cd boost-build
+./bootstrap.sh --prefix=$envdir --with-libraries=graph,system,filesystem,program_options,regex
+./b2 --prefix=$envdir 
+cd $piperoot
+rm -rf $tempdir
+@| @}
+
+@d install boost @{@%
+cd \$envdir
+tar -xzf \$snapshotsocket/m4_snapshotdirectory/m4_ripped_boostball
+@| @}
+
+Zet de boost libraries in \verb|LD_LIBRARY_PATH|.
+
+@d set environment parameters @{@%
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$envdir/boost_1_54_0/stage/lib
+@| @}
+
 
 \section{Install the modules}
 \label{sec:install-modules}
@@ -1288,7 +1991,6 @@ source ../../progenv
 @d make scripts executable @{@%
 chmod 775  m4_envbindir/m4_module_installer
 @| @}
-
 
 
 Installing a module from Github is very simple:
@@ -1319,6 +2021,42 @@ function gitinst (){
 @| @}
 
 
+
+For each module we generate a script in the \verb|bin| subdirectory to make
+the module easier to use. The script does the following:
+
+\begin{enumerate}
+\item Find the directory of itself.
+\item Run script \verb|run| in the directory of the module, that can
+  be found as \verb|../<modulename>/run|. 
+\end{enumerate}
+
+@d contents of shorthand-script @{@%
+#!/bin/bash
+@< get location of the script @(thisdir@) @>
+scriptname=${0##*/}
+scriptpath=$thisdir/$scriptname
+cd ${thisdir}
+@< set the naflang parameter @>
+cat | ../modules/@1/run
+@| @}
+
+@d set the naflang parameter @{@%
+if
+  [ -z "${naflang}" ]
+then
+  naffile=`mktemp -t naf.XXXXXX`
+  cat >$naffile
+  naflang=`cat $naffile | python $envbindir/langdetect.py` 
+  export naflang
+  cat $naffile | $scriptpath
+  result=$?
+  rm $naffile
+  exit $result
+fi
+
+
+@| @}
 
 
 \subsection{Parameters in module-scripts}
@@ -1351,7 +2089,7 @@ following fragment reads the arguments \verb|-l language|,
 @d start of module-script @{@%
 @< get location of the script @(DIR@) @>
 cd \$DIR
-source ../../progenv
+source ../progenv
 @| @}
 
 
@@ -1389,8 +2127,8 @@ gitinst m4_tokenizergit m4_tokenizername m4_tokenizer_commitname
 @| @}
 
 @o m4_bindir/m4_tokenizerscript @{@%b
-@< start of module-script @(\$jarsdir@)@>
-cat | ../modules/ixa-pipe-tok/run
+@< contents of shorthand-script @(m4_tokenizerdir@) @>
+
 @| @}
 
 \subsubsection{Topic detection tool.}
@@ -1403,9 +2141,8 @@ The topic detection tool uses Java.
 gitinst m4_topictoolgit m4_topictoolname m4_topic_commitname 
 @| @}
 
-@o m4_bindir/m4_topic @{@%b
-@< start of module-script @(\$jarsdir@)@>
-cat | ../modules/m4_topictoolname/run
+@o m4_bindir/m4_topicscript @{@%b
+@< contents of shorthand-script @(m4_topictooldir@) @>
 @| @}
 
 \subsubsection{Morphosyntactic Parser and Alpino}
@@ -1421,9 +2158,8 @@ parser expects Alpino to be located in \verb|\$envdir/Alpino|.
 gitinst m4_morphpargit m4_morphpardir m4_morphpar_commitname 
 @| @}
 
-@o m4_bindir/m4_morpharscript @{@%b
-@< start of module-script @(\$jarsdir@)@>
-cat | ../modules/m4_morphpardir/run
+@o m4_bindir/m4_morparscript @{@%b
+@< contents of shorthand-script @(m4_morphpardir@) @>
 @| @}
 
 
@@ -1432,16 +2168,317 @@ cat | ../modules/m4_morphpardir/run
 
 Use the pos-tagger from \EHU{} for English documents.
 
-
 @d install the modules @{@%
 @% install_module_from_github PaulHuygen ixa-pipe-tok
 gitinst m4_posgit m4_posdir m4_pos_commitname 
 @| @}
 
 @o m4_bindir/m4_postagscript @{@%b
-@< start of module-script @(\$jarsdir@)@>
-cat | ../modules/m4_posdir/run
+@< contents of shorthand-script @(m4_posdir@) @>
 @| @}
+
+\subsubsection{Named entity recognition (NERC)}
+\label{sec:nerc}
+
+@d install the modules @{@%
+   gitinst m4_nercgit m4_nercdir m4_nerc_commitname 
+@| @}
+
+@o m4_bindir/m4_nercscript @{@%b
+@< contents of shorthand-script @(m4_nercdir@) @>
+@| @}
+
+\subsubsection{Word-sense disambiguation (WSD)}
+\label{sec:wsd}
+
+@d install the modules @{@%
+   gitinst m4_wsdgit m4_wsddir m4_wsd_commitname 
+@| @}
+
+@o m4_bindir/m4_wsdscript @{@%b
+@< contents of shorthand-script @(m4_wsddir@) @>
+@| @}
+
+
+
+\subsubsection{NED}
+\label{sec:ned}
+
+The \NED{} module is rather picky about the structure of the \NAF{}
+file. In any case, it does not accept a file that has been produced by
+the ontotagger. Hence, in a pipeline \NED{} should be executed before
+the ontotagger.
+
+
+The \NED{} module wants to consult the Dbpedia Spotlight server, so
+that one has to be installed somewhere. For this moment, let us
+suppose that it has been installed on localhost.
+
+@d install the modules @{@%
+   gitinst m4_nedgit m4_neddir m4_ned_commitname 
+@| @}
+
+@o m4_bindir/m4_nedscript @{@%b
+@< contents of shorthand-script @(m4_neddir@) @>
+@| @}
+
+
+\subsubsection{Dark-entity relinker}
+\label{sec:derel}
+
+The ``Dark Entity Relinker'' tries to link ``Dark entities'' (named
+entities that have not been recognized) to the link of a known entity
+with a similar name structure that has been found in the same text.
+
+@d install the modules @{@%
+   gitinst m4_delinkgit m4_delinkdir m4_delink_commitname 
+@| @}
+
+@o m4_bindir/m4_delinkscript @{@%b
+@< contents of shorthand-script @(m4_delinkdir@) @>
+@| @}
+
+\subsubsection{Heideltime}
+\label{sec:heideltime}
+
+The code for Heideltime can be found in
+\href{https://github.com/HeidelTime/heideltime}{Github}. This repo
+contains an adapted Jar file.
+
+Use Heideltime via a wrapper, \texttt{ixa-pipe-time}, obtained from
+\href{https://github.com/ixa-ehu/ixa-pipe-time}{Github}.
+
+Although suggested otherwise, Heideltime seems not to use
+Treetagger. It works 
+
+@d install the modules @{@%
+   gitinst m4_heidelgit m4_heideldir m4_heidel_commitname 
+@| @}
+
+@o m4_bindir/m4_heidelscript @{@%b
+@< contents of shorthand-script @(m4_heideldir@) @>
+@| @}
+
+
+\subsubsection{Ontotagger, Framenet-SRL and nominal events}
+\label{sec:onto}
+
+
+\begin{itemize}
+\item Een directory voor drie modules.
+\item Verwacht module \verb|vua-resources| in een parallelle directory.
+\end{itemize}
+
+
+The three modules ontotagger (aka ``predicatematrix''),
+Framenet-\textsc{srl} and nominal event detection are based on the
+same software packages and resources. The three modules need the same
+jar \verb|m4_ontojar|, they need resources from the
+\verb|cltl/vua_resources| Github repository and they are going to
+execute a script that resides in the scripts directory of the
+\verb|cltl/OntoTagger| repository. So, what we have to do is:
+
+\begin{enumerate}
+\item Install from the \verb|cltl/OntoTagger| repository.
+\item Create the jar and put it in an appropriate place. 
+\item install from the \verb|cltl\vua-resources| repository.
+\item generate a script fot each of the modules.
+\end{enumerate}
+
+In fact, items~2 and~3 are performed by script \verb|install.sh| from
+the OntoTagger repository.
+
+@d install the modules @{@%
+   gitinst m4_ontogit m4_ontodir m4_ontocommitname 
+@| @}
+
+The ``Ontotagger'' script:
+
+
+@o m4_bindir/m4_ontoscript @{@%
+@< contents of shorthand-script @(m4_ontodir@) @>
+
+@| @}
+
+The ``Nominal Event Coreference'' script:
+
+
+@o m4_bindir/m4_nomevscript @{@%
+@< contents of shorthand-script @(m4_nomevdir@) @>
+
+@| @}
+
+The ``Framenet SRL'' script:
+
+
+@o m4_bindir/m4_framesrlscript @{@%
+@< contents of shorthand-script @(m4_framesrldir@) @>
+
+@| @}
+
+
+
+\subsubsection{NED-reranker}
+\label{sec:nedrer}
+
+@d install the modules @{@%
+   gitinst m4_nedrergit m4_nedrerdir m4_nedrercommitname 
+@| @}
+
+
+@o m4_bindir/m4_nedrerscript @{@%
+@< contents of shorthand-script @(m4_nedrerdir@) @>
+
+@| @}
+
+\subsubsection{Wikify module}
+\label{sec:wikify}
+
+Wikify needs spotlight.
+
+@d install the modules @{@%
+   gitinst m4_wikify_git m4_wikifydir m4_wikify_commitname 
+@| @}
+
+
+@o m4_bindir/m4_wikifyscript @{@%
+@< contents of shorthand-script @(m4_wikifydir@) @>
+@| @}
+
+\subsubsection{UKB}
+\label{sec:ukb}
+
+The UKB WSD module is up to now only available from closed
+repositories.There exists a repository
+\href{https://github.com/ixa-ehu/ukb}{ukb} in Git, but this does not
+seem to include the scripts to process \textsc{naf}. Therefore, we
+need to have the repo available beforehand.
+
+
+@d install the modules @{@%
+# UKB
+if
+  [ -e \$snapshotdir/m4_ukbball ]
+then
+  cd \$modulesdir
+  tar -xzf \$snapshotdir/m4_ukbball
+else
+  echo "No UKB"
+  exit 1
+fi
+@| @}
+
+@o m4_bindir/m4_ukbcript @{@%
+@< contents of shorthand-script @(m4_ukbdir@) @>
+@| @}
+
+
+\subsubsection{IMS-WSD}
+\label{sec:IMS-WSD}
+
+In the previous version of \verb|nlpp| we implemented a ready-to run
+tarball (m4_ewsdball) from the closed newsreader-archive. The contents
+of that tarball are obtained from
+\href{https://github.com/rubenIzquierdo/it_makes_sense_WSD.git}{this github repo}.
+
+@d install the modules @{@%
+gitinst m4_ewsd_git m4_ewsddir m4_ewsd_commitname 
+@| @}
+
+@o m4_bindir/m4_ewsdscript @{@%
+@< contents of shorthand-script @(m4_ewsddir@) @>
+@| @}
+
+\subsubsection{Semantic Role labelling}
+\label{sec:SRL}
+
+@d install the modules @{@%
+gitinst m4_nl_srlgit m4_nl_srldir m4_nl_srl_commitname 
+@| @}
+
+@o m4_bindir/m4_nl_srlscript @{@%
+@< contents of shorthand-script @(m4_nl_srldir@) @>
+@| @}
+
+
+\subsubsection{srl-Dutch nominals}
+\label{sec:SRL}
+
+@d install the modules @{@%
+gitinst m4_srl_dn_git m4_srl_dn_dir m4_srl_dn_commitname 
+@| @}
+
+@o m4_bindir/m4_srl_dn_script @{@%
+@< contents of shorthand-script @(m4_srl_dn_dir@) @>
+@| @}
+
+\subsubsection{Factuality}
+\label{sec:factuality}
+
+We have module \verb|m4_en_factualitydir| to identify event-factuality
+in English texts and  module \verb|m4_nl_factualitydir| to identify event-factuality
+in non-English texts.
+
+@d install the modules @{@%
+gitinst m4_nl_factualitygit m4_nl_factualitydir m4_nl_factualitycommit 
+gitinst m4_en_factualitygit m4_en_factualitydir m4_nl_factualitycommit 
+@| @}
+
+The shorthandscript runs the module in \verb|m4_en_factualitydir| for
+english documents and it runs the module in  \verb|m4_nl_factualitydir| for
+documents in other languages.
+
+@o m4_bindir/m4_factualityscript @{@%
+#!/bin/bash
+@< get location of the script @(thisdir@) @>
+scriptname=${0##*/}
+scriptpath=$thisdir/$scriptname
+@< set the naflang parameter @>
+cd ${thisdir}
+if
+  [ "${naflang}" == "en" ]
+then
+  cat | ../modules/m4_en_factualitydir/run
+else
+  cat | ../modules/m4_nl_factualitydir/run
+fi
+
+@| @}
+
+\subsubsection{Opinion miner}
+\label{sec:opinimin}
+
+The opinion-miner needs models that are not yet available from an open
+repository. The installer expects the variable
+\verb|opinion_models_ball_path| to contain the full path to the
+tarball with the opinion-models.
+
+
+@d install the modules @{@%
+export opinion_models_ball_path=${snapshotdir}/models_opinion_miner_deluxePP.tgz
+gitinst m4_opinigit m4_opinidir m4_opini_commitname 
+@|opinion_models_ball_path @}
+
+@o m4_bindir/m4_opiniscript @{@%
+@< contents of shorthand-script @(m4_opinidir@) @>
+@| @}
+
+\subsubsection{Event coreference}
+\label{sec:eventcoref}
+
+The event-coreference module is language-independent. It is a module
+in a jar-file that can be built with the Github
+\href{m4_evcorefgit}{m4_evcorefgit} repo. The module uses resources
+from the \verb|m4_vua_resources_dirname| Github repo.
+
+@d install the modules @{@%
+gitinst m4_evcorefgit m4_evcorefdir m4_evcorefcommit 
+@| @}
+
+@o m4_bindir/m4_evcorefscript @{@%
+@< contents of shorthand-script @(m4_evcorefdir@) @>
+@| @}
+
 
 \section{Utilities}
 \label{sec:utilities}
@@ -1588,16 +2625,37 @@ Use the function to annotate a \NAF{} file that \verb|infile| points
 to and write the result in a file that  \verb|outfile| points to:
 
 @d annotate dutch document @{@%
-runmodule \$infile    m4_tokenizername       tok.naf
-runmodule tok.naf     m4_topictoolname       \$outfile
+runmodule \$infile    m4_tokenizername    tok.naf
+runmodule tok.naf     m4_topictoolname    top.naf
+runmodule top.naf     m4_morphpardir      pos.naf
+runmodule pos.naf     m4_nercdir          nerc.naf
+runmodule nerc.naf    m4_wsddir           wsd.naf
+runmodule wsd.naf     m4_neddir           ned.naf
+runmodule ned.naf     m4_delinkdir        derel.naf
+runmodule derel.naf   m4_heideldir        times.naf
+runmodule times.naf   m4_ontodir          onto.naf
+runmodule onto.naf    m4_nl_srldir        srl.naf
+runmodule srl.naf     m4_nomevdir         nomev.naf
+runmodule nomev.naf   m4_srl_dndir        psrl.naf
+runmodule psrl.naf    m4_framesrldir      fsrl.naf
+runmodule fsrl.naf    m4_nl_factualitydir fact.naf
+runmodule fact.naf    m4_evcorefdir       \$outfile
+
 @| @}
 
 Similar for an English naf:
 
 @d annotate english document @{@%
-  runmodule \$infile    m4_tokenizername       tok.naf
-  runmodule tok.naf     m4_topictoolname       top.naf
-  runmodule top.naf     m4_posname       \$outfile
+  runmodule \$infile    m4_tokenizername tok.naf
+  runmodule tok.naf     m4_topictoolname top.naf
+  runmodule top.naf     m4_posname       pos.naf
+  runmodule pos.naf     m4_nercdir       nerc.naf
+  runmodule nerc.naf    m4_wsddir        wsd.naf
+  runmodule wsd.naf     m4_neddir        ned.naf
+  runmodule ned.naf     m4_delinkdir     derel.naf
+  runmodule derel.naf   m4_nedrerdir     nedr.naf
+  runmodule nedr.naf    m4_wikifydir     wikif.naf
+  runmodule wikif.naf   m4_ukbdir        ukb.naf
 @| @}
 
 Determine the language and select one of the above macro's to annotate
@@ -1610,11 +2668,12 @@ export naflang
 if
  [ "\$naflang" == "nl" ]
 then
-@%    @< annotate dutch document @>
+  @< annotate dutch document @>
 @%   cat \$TESTIN    | \$BIND/tok                    > tok.naf
-runmodule \$infile    m4_tokenizername       tok.naf
-runmodule tok.naf     m4_topictoolname       top.naf
-runmodule top.naf     m4_morphpardir       \$outfile
+@% runmodule \$infile    m4_tokenizername       tok.naf
+@% runmodule tok.naf     m4_topictoolname       top.naf
+@% runmodule top.naf     m4_morphpardir         pos.naf
+@% runmodule pos.naf     m4_nercdir             \$outfile
 else
   @< annotate english document @>
 fi
@@ -1674,6 +2733,7 @@ cd \$workdir
 infile=in.naf
 outfile=out.naf
 @< get a testfile and set naflang or die @>
+@< find a spotlightserver or exit @>
 @< function to run a module @>
 @< annotate @>
 if

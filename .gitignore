@@ -27,4 +27,5 @@ nuweb/w2html
 nuweb/.fuse*
 nuweb/nw000*
 test.*
+progenv
 

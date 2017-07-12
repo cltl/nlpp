@@ -104,6 +104,7 @@ sources : nlpp.w $(DIRS) $(NUWEB)
 	chmod 775  ../env/bin/make_infrastructure
 	chmod 775  ../env/bin/clean_infrastructure
 	chmod 775  ../env/bin/tran
+	chmod 775  ../bin/check_start_spotlight
 	chmod 775  ../env/bin/install-modules
 	chmod 775  ../env/bin/langdetect.py
 	chmod -R 775  ../bin/*
