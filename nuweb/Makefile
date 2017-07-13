@@ -105,14 +105,15 @@ sources : nlpp.w $(DIRS) $(NUWEB)
 	chmod 775  ../env/bin/clean_infrastructure
 	chmod 775  ../env/bin/tran
 	chmod 775  ../bin/check_start_spotlight
-	chmod 775  ../env/bin/install-modules
+	chmod 775  ../env/bin/install_modules
 	chmod 775  ../env/bin/langdetect.py
 	chmod -R 775  ../bin/*
 	chmod -R 775  ../env/bin/*
 	
 
 install : sources
-	../bin/install-modules
+	../env/bin/make_infrastructure
+	../env/bin/install_modules
 
 
 testnl : install test.nl.in.naf

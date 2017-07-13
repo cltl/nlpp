@@ -145,7 +145,7 @@ m4_define(m4_svmball, master.zip)m4_dnl
 m4_dnl
 m4_dnl Module installer
 m4_dnl
-m4_define(m4_module_installer, install-modules)m4_dnl
+m4_define(m4_module_installer, install_modules)m4_dnl
 m4_dnl
 m4_dnl Snapshot repo
 m4_dnl m4_define(m4_snapshot_tarball, nl-pipeline_snapshots_20150127.tgz)m4_dnl
@@ -390,7 +390,7 @@ m4_dnl m4_define(m4_heidelscript, heideltime)m4_dnl
 m4_define(m4_heidelname, ixa-pipe-time)m4_dnl
 m4_define(m4_heideltex, \verb|m4_heidelname|)m4_dnl
 m4_define(m4_heideldir, ixa-pipe-time)m4_dnl
-m4_define(m4_heidelgit, https://github.com/ixa-ehu/ixa-pipe-time.git)m4_dnl
+m4_define(m4_heidelgit, git@@github.com:PaulHuygen/ixa-pipe-time.git)m4_dnl
 m4_define(m4_heidelhtml, https://github.com/ixa-ehu/ixa-pipe-time)m4_dnl
 m4_dnl m4_define(m4_heidel_commitname, 0fd3b5bd4c9a82b1624928a487b3a963a266f10c)m4_dnl
 m4_define(m4_heidel_commitname, 47a47e44faa7f540bf233531f4f6be97659825ea)m4_dnl
@@ -433,7 +433,7 @@ m4_dnl SRL
 m4_define(m4_nl_srlname, vua-srl-nl)m4_dnl
 m4_define(m4_nl_srldir, vua-srl-nl)m4_dnl
 m4_define(m4_nl_srlscript, srl)m4_dnl
-m4_define(m4_nl_srl_commitname, `')m4_dnl
+m4_define(m4_nl_srl_commitname, `060264b40e7b856a14408bfa2b56c6c036cfb1fe')m4_dnl
 m4_define(m4_en_srlname, EHU-srl-server)m4_dnl
 m4_define(m4_nl_srltex, \verb|m4_nl_srlname|)m4_dnl
 m4_define(m4_en_srltex, \verb|m4_en_srlname|)m4_dnl
@@ -452,8 +452,8 @@ m4_dnl
 m4_dnl SRL dutch nominals
 m4_define(m4_srl_dn_name, srl-dutch-nominals)m4_dnl
 m4_dnl m4_define(m4_srl_dn_git, https://github.com/newsreader/vua-srl-dutch-nominal-events)m4_dnl
-m4_define(m4_srl_dn_git, gitgithub.com:PaulHuygen/vua-srl-dutch-nominal-events.git)m4_dnl
-m4_define(m4_srl_dn_commitname, 6115b3168978acf809916cd2da512295d109d8fb)m4_dnl
+m4_define(m4_srl_dn_git, git@@github.com:PaulHuygen/vua-srl-dutch-nominal-events.git)m4_dnl
+m4_define(m4_srl_dn_commitname, 1c01df721a0411049d7ad4b5d3cd41a3ccd3eeb5)m4_dnl
 m4_define(m4_srl_dn_dir, vua-srl-dutch-nominal-events)m4_dnl
 m4_define(m4_srl_dn_script, srl-dutch-nominals)m4_dnl
 m4_define(m4_srl_dn_binary, vua-srl-dutch-additional-roles.py)m4_dnl

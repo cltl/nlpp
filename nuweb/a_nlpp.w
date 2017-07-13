@@ -175,27 +175,28 @@ modules operate on a document.
     \centering
     \begin{footnotesize}
       \begin{tabular}{lllllll}
+
         \textbf{Module}            & \textbf{Source}                 & \textbf{Resources } & \textbf{Section} & \textbf{Commit}                    & \textbf{Script}                       & \textbf{language} \\
          Tokenizer                 & \href{m4_tokenizergit}{Github}  & Java                & \dref{sec:installtokenizer}    & \brevcomm{m4_tokenizer_commitname} & \texttt{m4_tokenizerscript}                  & en/nl  \\
-         Topic detection           & \href{m4_topictoolgit}{Github}  & Java                & \dref{sec:topic-install}       & \brevcomm{m4_topic_commitname}     & \texttt{m4_underslas(m4_topicscript)}        & en/nl  \\
-         Morpho-syntactic parser   & \href{m4_morphpargit}{Github}   & Python, Alpino      & \dref{sec:install-morphsynt-parser}  & \brevcomm{m4_morphpar_commitname}  & \texttt{m4_underslas(m4_morparscript)}     & nl     \\
-         \textsc{pos}-tagger       & snapshot                        &                     & \dref{sec:postagger}                 &  \ldots                            & \texttt{m4_underslas(m4_postagscript)}       & en     \\
+         Topic detection           & \href{m4_topictoolgit}{Github}  & Java                & \dref{sec:installtopic_detection_tool}       & \brevcomm{m4_topic_commitname}     & \texttt{m4_underslas(m4_topicscript)}        & en/nl  \\
+         Morpho-syntactic parser   & \href{m4_morphpargit}{Github}   & Python, Alpino      & \dref{sec:mor}  & \brevcomm{m4_morphpar_commitname}  & \texttt{m4_underslas(m4_morparscript)}     & nl     \\
+         \textsc{pos}-tagger       & snapshot                        &                     & \dref{sec:post-agger}                 &  \ldots                            & \texttt{m4_underslas(m4_postagscript)}       & en     \\
          Named-entity rec/class    & \href{m4_nercgit}{Github}       &                     & \dref{sec:nerc}                      & \brevcomm{m4_nerc_commitname}      & \texttt{m4_underslas(m4_nercscript)}         & en/nl  \\
-         Dark-entity relinker      & \href{m4_delinkgit}{Github}     &                     & \dref{sec:derelink}                  & \brevcomm{m4_delink_commitname}    & \texttt{m4_underslas(m4_nercscript)}         & en/nl  \\
+         Dark-entity relinker      & \href{m4_delinkgit}{Github}     &                     & \dref{sec:derel}                  & \brevcomm{m4_delink_commitname}    & \texttt{m4_underslas(m4_nercscript)}         & en/nl  \\
          Constituent parser        & snapshot                        &                     & \dref{sec:constparser}               &  \ldots                            & \texttt{m4_underslas(m4_consparscript)}      & en     \\
          Word-sense disamb. nl     & \href{m4_wsdgit}{Github}        &                     & \dref{sec:wsd}                       & \brevcomm{m4_wsd_commitname}       & \texttt{m4_underslas(wsd)}                   & nl     \\
          Word-sense disamb. en     & snapshot                        &                     & \dref{sec:IMS-WSD}                   &  \ldots                            & \texttt{m4_underslas(ewsd)}                  & en     \\
-         Named entity/DBP          & snapshot                        &                     & \dref{sec:ned-module}                &  \ldots                            & \texttt{m4_underslas(ned)}                   & en/nl  \\
+         Named entity/DBP          & snapshot                        &                     & \dref{sec:ned}                &  \ldots                            & \texttt{m4_underslas(ned)}                   & en/nl  \\
          NED reranker              & snapshot                        &                     & \dref{sec:nedrer}                    &  \ldots                            & \texttt{m4_underslas(nedrerscript)}          & en     \\
          Wikify                    & snapshot                        &                     & \dref{sec:wikify}                    &  \ldots                            & \texttt{m4_underslas(m4_wikifyscript)}       & en     \\
          \UKB{}                    & snapshot                        &                     & \dref{sec:ukb}                       &  \ldots                            & \texttt{m4_underslas(m4_ukbscript)}          & en     \\
-         Coreference-base          & snapshot                        &                     & \dref{sec:nomcorefgraph}             &  \ldots                            & \texttt{m4_underslas(m4_corefbasescript)}    & en     \\
+         Coreference-base          & snapshot                        &                     & \dref{sec:corefbase}             &  \ldots                            & \texttt{m4_underslas(m4_corefbasescript)}    & en     \\
          Heideltime                & \href{m4_heidelgit}{Github}     &                     & \dref{sec:heideltime}                & \brevcomm{m4_heidel_commitname}    & \texttt{m4_underslas(m4_heidelscript)}       & nl     \\
          Onto-tagger               & \href{m4_ontogit}{Github}       &                     & \dref{sec:onto}                      & \brevcomm{m4_ontocommitname}       & \texttt{m4_underslas(m4_ontoscript)}         & nl     \\
-         Semantic Role labeling nl & \href{m4_srlgit}{Github}        &                     & \dref{sec:SRL-module}                & \brevcomm{m4_srl_commitname}       & \texttt{m4_underslas(m4_srlscript)}          & nl     \\
+         Semantic Role labeling nl & \href{m4_nl_srlgit}{Github}        &                     & \dref{sec:SRL}                & \brevcomm{m4_srl_commitname}       & \texttt{m4_underslas(m4_nl_srlscript)}          & nl     \\
          Semantic Role labeling en & snapshot                        &                     & \dref{sec:srlserver}                 &  \ldots                            & \texttt{m4_underslas(m4_esrlscript)}         & en     \\
          Nominal Event ann.        & \href{m4_ontogit}{Github}       &                     & \dref{sec:onto}                      & \brevcomm{m4_ontocommitname}       & \texttt{m4_underslas(m4_nomeventscript)}     & nl     \\
-         SRL dutch nominals        & \href{m4_srl_dn_git}{Github}    &                     & \dref{sec:srl-dn}                    & \brevcomm{m4_srl_dn_commitname}    & \texttt{m4_underslas(m4_srl_dn_script)}      & nl     \\
+         SRL dutch nominals        & \href{m4_srl_dn_git}{Github}    &                     & \dref{sec:SRL}                    & \brevcomm{m4_srl_dn_commitname}    & \texttt{m4_underslas(m4_srl_dn_script)}      & nl     \\
          Framenet-SRL              & \href{m4_ontogit}{Github}       &                     & \dref{sec:onto}                      & \brevcomm{m4_ontocommitname}       & \texttt{m4_underslas(m4_framesrlscript)}     & nl     \\
          FBK-time                  & snapshot                        &                     & \dref{sec:fbktime}                   & \ldots                             & \texttt{m4_underslas(m4_fbktimescript)}      & en     \\
          FBK-temprel               & snapshot                        &                     & \dref{sec:FBK-temprel}               & \ldots                             & \texttt{m4_underslas(m4_fbktemprelscript)}   & en     \\
@@ -296,9 +297,9 @@ table~\ref{tab:utillist}.
   \begin{tabular}{llll}
    \textbf{Module}  & \textbf{Version}    & \textbf{Section}   & \textbf{Source}                           \\
      \href{m4_kafnafgit}{KafNafParserPy}     
-                    & Feb 1, 2015   & \dref{sec:KafNafParserPy}  & \href{m4_kafnafgit}{Github}       \\
+                    & m4_kafnafversion   & \dref{sec:python-packages}  & \href{m4_kafnafgit}{Github}       \\
      \href{m4_alpino_desc_url}{Alpino}
-                    &  m4_alpino_version  & \dref{sec:install-alpino}  & \href{m4_alpinourl}{\textsc{rug}} \\
+                    &  m4_alpino_version  & \dref{sec:Alpino}  & \href{m4_alpinourl}{\textsc{rug}} \\
      \href{m4_ticc_desc_url}{Ticcutils}
                     & m4_ticcutilsversion   & \dref{sec:timbl}    & \href{m4_ticcurl}{\textsc{ilk}}          \\
      \href{m4_ticc_desc_url}{Timbl}
@@ -460,18 +461,32 @@ Let us generate a script to do the work:
 @<  get location of the script @(DIR@)@>
 cd $DIR
 source ../../progenv
+echo make_infrastructure `date`: 
+echo ' '
+@< next part @(Initialize@) @>
 @< init make\_infrastructure @>
+@< next part @(Java@) @>
 @< set up Java @>
+@< next part @(Maven@) @>
 @< set up Maven @>
+@< next part @(Python@) @>
 @< set up Python @>
+@< next part @(autoconf@) @>
 @< set up autoconf @>
+@< next part @(Perl@) @>
 @% @< set up Perl @>
 @< install Perl @>
+@< next part @(Shared libs@) @>
 @< install shared libs @>
+@< next part @(Alpino@) @>
 @< install Alpino @>
+@< next part @(Spotlight@) @>
 @< install the Spotlight server @>
+@< next part @(Treetagger@) @>
 @< install the treetagger utility @>
+@< next part @(Svmlib@) @>
 @< install svmlib @>
+@< next part @(Boost@) @>
 @< install boost @>
 
 @| @}
@@ -480,6 +495,11 @@ source ../../progenv
 chmod 775  m4_envbindir/make_infrastructure
 @| @}
 
+@d next part @{@%
+echo ' '
+echo make_infrastructure `date`: @1
+echo ' '
+@| @}
 
 
 Let us also make a script that cleans up the infra-structure after the
@@ -545,7 +565,7 @@ The directories have the following functions.
 \item[bin:] Contains for each of the applicable modules a script that
   reads \NAF{} input, passes it to the module in the \texttt{modules}
   directory and produces the output on standard out. Furthermore, the
-  subdirectory contains the script \texttt{m4_module_installer} that
+  subdirectory contains the script \verb|m4_module_installer| that
   performs the installation, and a script \texttt{test} that shows
   that the pipeline works in a trivial case.
 \item[env:] The programming environment. It contains a.o. the Java
@@ -657,7 +677,7 @@ only possible if a valid \verb|ssh| key resides in file \verb|nrkey|
 in the directory in which the nlpp root directory resides.
 
 @d download everything @{@%
- mkdir -p \$pipesocket/m4_snapshotdirectory
+mkdir -p \$pipesocket/m4_snapshotdirectory
 if
   [ -e m4_snapshotkeyfile ]
 then
@@ -1190,17 +1210,17 @@ First, get the Spotlight model data that we need:
 
 @d install the Spotlight server @{@%
 cd \$envdir
-tar -xzf \$snapshotsocket/m4_snapshotdirectory/m4_spotlightball
+tar -xzf \$pipesocket/m4_snapshotdirectory/m4_spotlightball
 cd \$envdir/spotlight
-tar -xzf \$snapshotsocket/m4_snapshotdirectory/m4_spotlight_nl_model_ball
-tar -xzf \$snapshotsocket/m4_snapshotdirectory/m4_spotlight_en_model_ball
+tar -xzf \$pipesocket/m4_snapshotdirectory/m4_spotlight_nl_model_ball
+tar -xzf \$pipesocket/m4_snapshotdirectory/m4_spotlight_en_model_ball
 @| @}
 
 @d get spotlight model ball @{@%
 if
-  [ -e \$snapshotsocket/m4_snapshotdirectory/@1 ]
+  [ -e \$pipesocket/m4_snapshotdirectory/@1 ]
 then
-  tar -xzf \$snapshotsocket/m4_snapshotdirectory/@1
+  tar -xzf \$pipesocket/m4_snapshotdirectory/@1
 else
   wget m4_spotlight_download_url/@1
   tar -xzf @1
@@ -1213,7 +1233,7 @@ We choose to put the Wikipedia database in the spotlight directory.
 
 @d install the Spotlight server @{@%
 cd \$envdir/spotlight
-tar -xzf \$snapshotsocket/\$snapshotdirectory/m4_wikipediadb_tarball
+tar -xzf \$pipesocket/\$snapshotdirectory/m4_wikipediadb_tarball
 @| @}
 
 
@@ -1858,7 +1878,7 @@ DIR=m4_timbldir
 SUCCES=0
 ticbeldir=`mktemp -t -d tickbel.XXXXXX`
 cd \$ticbeldir
-tar -xzf \$snapshotsocket/m4_snapshotdirectory/\$TARB
+tar -xzf \$pipesocket/m4_snapshotdirectory/\$TARB
 cd \$DIR
 sh ./bootstrap.sh
 ./configure --prefix=\$envdir
@@ -1939,28 +1959,28 @@ cd $piperoot
 \label{sec:boost}
 
 I have no idea how Boost works. Neither can I find out how to test
-whether boost has been installed already. So we install libbost
+whether boost has been installed already. So we install libboost
 according to
 \href{http://www.boost.org/doc/libs/1_55_0/doc/html/bbv2/installation.html}{this
-  manual and hope for the best.
+  manual} and hope for the best.
 
-@d install boost @{@%
-boost_ball=boost-build-2014-10.tar.bz2
-boost_ball_url=https://github.com/boostorg/build/releases/download/2014.10/${boost_ball}
-tempdir=`mktemp -d -t boost.XXXXXX`
-cd $tempdir
-wget ${boost_ball_url}
-tar -xjf ${boost_ball}
-cd boost-build
-./bootstrap.sh --prefix=$envdir --with-libraries=graph,system,filesystem,program_options,regex
-./b2 --prefix=$envdir 
-cd $piperoot
-rm -rf $tempdir
-@| @}
+@% @d install boost @{@%
+@% boost_ball=boost-build-2014-10.tar.bz2
+@% boost_ball_url=https://github.com/boostorg/build/releases/download/2014.10/${boost_ball}
+@% tempdir=`mktemp -d -t boost.XXXXXX`
+@% cd $tempdir
+@% wget ${boost_ball_url}
+@% tar -xjf ${boost_ball}
+@% cd boost-build
+@% ./bootstrap.sh --prefix=$envdir --with-libraries=graph,system,filesystem,program_options,regex
+@% ./b2 --prefix=$envdir 
+@% cd $piperoot
+@% rm -rf $tempdir
+@% @| @}
 
 @d install boost @{@%
 cd \$envdir
-tar -xzf \$snapshotsocket/m4_snapshotdirectory/m4_ripped_boostball
+tar -xzf \$pipesocket/m4_snapshotdirectory/m4_ripped_boostball
 @| @}
 
 Zet de boost libraries in \verb|LD_LIBRARY_PATH|.
@@ -1977,13 +1997,14 @@ We make a separate script to install the modules. By default, the modules
 will be installed in subdirectory \verb|modules| of the \NLPP{} root
 directory, but this is not necessarily so.
 
-The script \verb|install-modules| installs modules that are not yet present.
+The script \verb|install_modules| installs modules that are not yet present.
 
 @o m4_envbindir/m4_module_installer @{@%
 #!/bin/bash
 @<  get location of the script @(DIR@)@>
 cd $DIR
 source ../../progenv
+@< variables of the module-installer @>
 @< functions of the module-installer @>
 @< install the modules @>
 @| @}
@@ -2376,10 +2397,6 @@ fi
 \subsubsection{IMS-WSD}
 \label{sec:IMS-WSD}
 
-In the previous version of \verb|nlpp| we implemented a ready-to run
-tarball (m4_ewsdball) from the closed newsreader-archive. The contents
-of that tarball are obtained from
-\href{https://github.com/rubenIzquierdo/it_makes_sense_WSD.git}{this github repo}.
 
 @d install the modules @{@%
 gitinst m4_ewsd_git m4_ewsddir m4_ewsd_commitname 
@@ -2636,7 +2653,7 @@ runmodule derel.naf   m4_heideldir        times.naf
 runmodule times.naf   m4_ontodir          onto.naf
 runmodule onto.naf    m4_nl_srldir        srl.naf
 runmodule srl.naf     m4_nomevdir         nomev.naf
-runmodule nomev.naf   m4_srl_dndir        psrl.naf
+runmodule nomev.naf   m4_srl_dn_dir        psrl.naf
 runmodule psrl.naf    m4_framesrldir      fsrl.naf
 runmodule fsrl.naf    m4_nl_factualitydir fact.naf
 runmodule fact.naf    m4_evcorefdir       \$outfile
@@ -2791,7 +2808,7 @@ the sourced script itself is located.
 Write log messages to standard out if variable \verb|LOGLEVEL| is
 equal to~1.
 
-@d variables of m4_module_installer @{@%
+@d variables of the module-installer @{@%
 LOGLEVEL=1
 @| @}
 
@@ -3643,7 +3660,8 @@ The ``install'' target performs the complete installation.
 
 @d make targets @{@%
 install : sources
-	../bin/m4_module_installer
+	../env/bin/make_infrastructure
+	../env/bin/m4_module_installer
 
 @|install @}
 
@@ -3652,7 +3670,8 @@ install : sources
 
 
 The targets testnl and testen perform the test-script
-(section~\ref{sec:testscript}) to test the dutch resp. english pipeline.
+@%(section~\ref{sec:testscript})
+to test the dutch resp. english pipeline.
 
 @d make targets @{@%
 
