@@ -338,28 +338,28 @@ m4_define(m4_ewsdscript, ewsd)m4_dnl
 m4_dnl
 m4_dnl SRL-server
 m4_define(m4_srlserverdir, EHU-srl-server)m4_dnl
-m4_define(m4_srlserverball, 20151220_EHU-srl-server.tgz)m4_dnl
+m4_define(m4_srlserverball, 20170816_EHU-srl-server.tgz)m4_dnl
 m4_define(m4_srlserverport, 5005)m4_dnl
 m4_dnl
 m4_dnl FBK-time
 m4_define(m4_fbktimename, FBK-time.v30)m4_dnl
 m4_define(m4_fbktimetex, \verb|m4_fbktimename|)m4_dnl
 m4_define(m4_fbktimedir, FBK-time.v30)m4_dnl
-m4_define(m4_fbktimeball, 20160616_FBK-time.v30.tgz)m4_dnl
+m4_define(m4_fbktimeball, 20170816_FBK-time.v30.tgz)m4_dnl
 m4_define(m4_fbktimescript, FBK-time)m4_dnl
 m4_dnl
 m4_dnl FBK-temprel
 m4_define(m4_fbktemprelname, FBK-temprel.v30)m4_dnl
 m4_define(m4_fbktempreltex, \verb|m4_fbktemprelname|)m4_dnl
 m4_define(m4_fbktempreldir, FBK-temprel.v30)m4_dnl
-m4_define(m4_fbktemprelball, 20151220_FBK-temprel.v30.tgz)m4_dnl
+m4_define(m4_fbktemprelball, 20170816_FBK-temprel.v30.tgz)m4_dnl
 m4_define(m4_fbktemprelscript, FBK-temprel)m4_dnl
 m4_dnl
 m4_dnl FBK-causalrel
 m4_define(m4_fbkcausalrelname, FBK-causalrel.v30)m4_dnl
 m4_define(m4_fbkcausalreltex, \verb|m4_fbkcausalrelname|)m4_dnl
 m4_define(m4_fbkcausalreldir, FBK-causalrel.v30)m4_dnl
-m4_define(m4_fbkcausalrelball, 20151220_FBK-causalrel.v30.tgz)m4_dnl
+m4_define(m4_fbkcausalrelball, 20170816_FBK-causalrel.v30.tgz)m4_dnl
 m4_define(m4_fbkcausalrelscript, FBK-causalrel)m4_dnl
 m4_dnl
 m4_dnl ONTO
@@ -538,7 +538,8 @@ m4_define(m4_en_factualitydir, vua_factuality)m4_dnl
 m4_define(m4_nl_factualitydir, multilingual_factuality)m4_dnl
 m4_define(m4_en_factualitygit, `git@@github.com:PaulHuygen/vua_factuality.git')m4_dnl
 m4_define(m4_nl_factualitygit, `git@@github.com:PaulHuygen/multilingual_factuality.git')m4_dnl
-m4_define(m4_en_factualitycommit, `58fae1dc27d503642f4899460a3481417f044e95')m4_dnl
+m4_dnl m4_define(m4_en_factualitycommit, `58fae1dc27d503642f4899460a3481417f044e95')m4_dnl
+m4_define(m4_en_factualitycommit, `462303a6747a305f9578670a4e05c24448703d68')m4_dnl
 m4_define(m4_nl_factualitycommit, `a09d815212e047a1cef7109e8c299c9913278d67')m4_dnl
 m4_dnl m4_define(m4_factualityball, 20151220_VUA-factuality.v30.tgz)m4_dnl
 m4_dnl m4_dnl
@@ -606,16 +607,16 @@ m4_dnl
 m4_dnl Timbl
 m4_dnl m4_define(m4_timblsrc, http://ilk.uvt.nl/timbl/download-timbl.php)m4_dnl
 m4_define(m4_timblversion, 6.4.6)m4_dnl
-m4_define(m4_timblsrc,  timbl-`'m4_timblversion`'.tar.gz)m4_dnl
-m4_define(m4_timblurl,  http://software.ticc.uvt.nl/m4_timblsrc`')m4_dnl
+m4_define(m4_timblball,  timbl-`'m4_timblversion`'.tar.gz)m4_dnl
+m4_define(m4_timblurl,  http://software.ticc.uvt.nl/m4_timblball`')m4_dnl
 m4_define(m4_timbldir, timbl-m4_timblversion)m4_dnl  Subdir. of modules
 m4_define(m4_timbl_description_url, http://ilk.uvt.nl/timbl)m4_dnl
 m4_dnl m4_define(m4_timblscript, )m4_dnl
 m4_dnl
 m4_dnl Ticcutils
 m4_define(m4_ticcutilsversion, 0.7)m4_dnl
-m4_define(m4_ticcsrc, ticcutils-`'m4_ticcutilsversion`'.tar.gz)m4_dnl
-m4_define(m4_ticcurl, http://software.ticc.uvt.nl/`'m4_ticcsrc`')m4_dnl
+m4_define(m4_ticcball, ticcutils-`'m4_ticcutilsversion`'.tar.gz)m4_dnl
+m4_define(m4_ticcurl, http://software.ticc.uvt.nl/`'m4_ticcball`')m4_dnl
 m4_define(m4_ticcdir, ticcutils-`'m4_ticcutilsversion`')m4_dnl
 m4_define(m4_ticc_desc_url, http://ilk.uvt.nl/ticcutils)m4_dnl
 m4_dnl

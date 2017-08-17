@@ -164,54 +164,53 @@ modules operate on a document.
 
 \newcommand{\dref}[1]{\hyperref[#1]{\ref{#1}}}
 \newcommand{\brevcomm}[1]{\StrLeft{#1}{4}\ldots}
-@%\newcommand{\ghtail}[1]{\StrDel{#1}{https://github.com}}
-@%\newcommand{\brevgh}[1]{\def\aap{#1}\href{\aap}{Github: \alltt{\ghtail{\aap}}}}
+\newcommand{\ghtail}[1]{\StrDel{#1}{https://github.com}}
+\newcommand{\brevgh}[1]{\def\aap{#1}\href{\aap}{Github: \alltt{\ghtail{\aap}}}}
 
-\afterpage{%
-  \clearpage% Flush earlier floats (otherwise order might not be correct)
-  \thispagestyle{empty}% empty page style (?)
-  \begin{landscape}% Landscape page
+ \afterpage{%
+   \clearpage% Flush earlier floats (otherwise order might not be correct)
+   \thispagestyle{empty}% empty page style (?)
+   \begin{landscape}% Landscape page
 @% %\begin{table}[hbtp]
-    \centering
-    \begin{footnotesize}
-      \begin{tabular}{lllllll}
-
-        \textbf{Module}            & \textbf{Source}                 & \textbf{Resources } & \textbf{Section} & \textbf{Commit}                    & \textbf{Script}                       & \textbf{language} \\
-         Tokenizer                 & \href{m4_tokenizergit}{Github}  & Java                & \dref{sec:installtokenizer}    & \brevcomm{m4_tokenizer_commitname} & \texttt{m4_tokenizerscript}                  & en/nl  \\
-         Topic detection           & \href{m4_topictoolgit}{Github}  & Java                & \dref{sec:installtopic_detection_tool}       & \brevcomm{m4_topic_commitname}     & \texttt{m4_underslas(m4_topicscript)}        & en/nl  \\
-         Morpho-syntactic parser   & \href{m4_morphpargit}{Github}   & Python, Alpino      & \dref{sec:mor}  & \brevcomm{m4_morphpar_commitname}  & \texttt{m4_underslas(m4_morparscript)}     & nl     \\
-         \textsc{pos}-tagger       & snapshot                        &                     & \dref{sec:post-agger}                 &  \ldots                            & \texttt{m4_underslas(m4_postagscript)}       & en     \\
-         Named-entity rec/class    & \href{m4_nercgit}{Github}       &                     & \dref{sec:nerc}                      & \brevcomm{m4_nerc_commitname}      & \texttt{m4_underslas(m4_nercscript)}         & en/nl  \\
-         Dark-entity relinker      & \href{m4_delinkgit}{Github}     &                     & \dref{sec:derel}                  & \brevcomm{m4_delink_commitname}    & \texttt{m4_underslas(m4_nercscript)}         & en/nl  \\
-         Constituent parser        & snapshot                        &                     & \dref{sec:constparser}               &  \ldots                            & \texttt{m4_underslas(m4_consparscript)}      & en     \\
-         Word-sense disamb. nl     & \href{m4_wsdgit}{Github}        &                     & \dref{sec:wsd}                       & \brevcomm{m4_wsd_commitname}       & \texttt{m4_underslas(wsd)}                   & nl     \\
-         Word-sense disamb. en     & snapshot                        &                     & \dref{sec:IMS-WSD}                   &  \ldots                            & \texttt{m4_underslas(ewsd)}                  & en     \\
-         Named entity/DBP          & snapshot                        &                     & \dref{sec:ned}                &  \ldots                            & \texttt{m4_underslas(ned)}                   & en/nl  \\
-         NED reranker              & snapshot                        &                     & \dref{sec:nedrer}                    &  \ldots                            & \texttt{m4_underslas(nedrerscript)}          & en     \\
-         Wikify                    & snapshot                        &                     & \dref{sec:wikify}                    &  \ldots                            & \texttt{m4_underslas(m4_wikifyscript)}       & en     \\
-         \UKB{}                    & snapshot                        &                     & \dref{sec:ukb}                       &  \ldots                            & \texttt{m4_underslas(m4_ukbscript)}          & en     \\
-         Coreference-base          & snapshot                        &                     & \dref{sec:corefbase}             &  \ldots                            & \texttt{m4_underslas(m4_corefbasescript)}    & en     \\
-         Heideltime                & \href{m4_heidelgit}{Github}     &                     & \dref{sec:heideltime}                & \brevcomm{m4_heidel_commitname}    & \texttt{m4_underslas(m4_heidelscript)}       & nl     \\
-         Onto-tagger               & \href{m4_ontogit}{Github}       &                     & \dref{sec:onto}                      & \brevcomm{m4_ontocommitname}       & \texttt{m4_underslas(m4_ontoscript)}         & nl     \\
-         Semantic Role labeling nl & \href{m4_nl_srlgit}{Github}        &                     & \dref{sec:SRL}                & \brevcomm{m4_srl_commitname}       & \texttt{m4_underslas(m4_nl_srlscript)}          & nl     \\
-         Semantic Role labeling en & snapshot                        &                     & \dref{sec:srlserver}                 &  \ldots                            & \texttt{m4_underslas(m4_esrlscript)}         & en     \\
-         Nominal Event ann.        & \href{m4_ontogit}{Github}       &                     & \dref{sec:onto}                      & \brevcomm{m4_ontocommitname}       & \texttt{m4_underslas(m4_nomeventscript)}     & nl     \\
-         SRL dutch nominals        & \href{m4_srl_dn_git}{Github}    &                     & \dref{sec:SRL}                    & \brevcomm{m4_srl_dn_commitname}    & \texttt{m4_underslas(m4_srl_dn_script)}      & nl     \\
-         Framenet-SRL              & \href{m4_ontogit}{Github}       &                     & \dref{sec:onto}                      & \brevcomm{m4_ontocommitname}       & \texttt{m4_underslas(m4_framesrlscript)}     & nl     \\
-         FBK-time                  & snapshot                        &                     & \dref{sec:fbktime}                   & \ldots                             & \texttt{m4_underslas(m4_fbktimescript)}      & en     \\
-         FBK-temprel               & snapshot                        &                     & \dref{sec:FBK-temprel}               & \ldots                             & \texttt{m4_underslas(m4_fbktemprelscript)}   & en     \\
-         FBK-causalrel             & snapshot                        &                     & \dref{sec:FBK-causalrel}             & \ldots                             & \texttt{m4_underslas(m4_fbkcausalrelscript)} & en     \\
-         Opinion-miner             & \href{m4_opinigit}{Github}      &                     & \dref{sec:opinimin}                  & \brevcomm{m4_opini_commitname}     & \texttt{m4_underslas(m4_opiniscript)}        & en/nl  \\
-         Event-coref               & \href{m4_evcorefgit}{Github}    &                     & \dref{sec:eventcoref}                & \brevcomm{m4_evcorefcommit}        & \texttt{m4_underslas(m4_evcorefscript)}      & en/nl  \\
-         Factuality tagger     & \href{m4_en_factualitygit}{Github}  &                     & \dref{sec:factuality}                & \brevcomm{m4_en_factualitycommit}  & \texttt{m4_underslas(m4_factualityscript)}   & en     \\
-         Factuality tagger     & \href{m4_nl_factualitygit}{Github}  &                     & \dref{sec:factuality}                & \brevcomm{m4_nl_factualitycommit}  & \texttt{m4_underslas(m4_factualityscript)}   & nl     \\
-       \end{tabular}
-    \end{footnotesize}
-@% %   \caption{List of the modules to be installed. Column description:
-@% %     \textbf{directory:} Name of the subdirectory below subdirectory \texttt{modules} in
-@% %     which it is installed; \textbf{source:} From where the module has
-@% %     been obtained; \textbf{commit:} Commit-name or version-tag \textbf{script:} Script to be included in a pipeline. \textbf{Note:} The tokenizer module has been temporarily obtained from the snapshot, because the commit that we used has disappeared from the Github repository.}
-@% %   \label{tab:modulelist}
+     \centering
+     \begin{footnotesize}
+       \begin{tabular}{lllllll}
+         \textbf{Module}            & \textbf{Source}                 & \textbf{Resources } & \textbf{Section} & \textbf{Commit}                    & \textbf{Script}                       & \textbf{language} \\
+          Tokenizer                 & \href{m4_tokenizergit}{Github}  & Java                & \dref{sec:installtokenizer}    & \brevcomm{m4_tokenizer_commitname} & \texttt{m4_tokenizerscript}                  & en/nl  \\
+          Topic detection           & \href{m4_topictoolgit}{Github}  & Java                & \dref{sec:installtopic_detection_tool}       & \brevcomm{m4_topic_commitname}     & \texttt{m4_underslas(m4_topicscript)}        & en/nl  \\
+          Morpho-syntactic parser   & \href{m4_morphpargit}{Github}   & Python, Alpino      & \dref{sec:mor}  & \brevcomm{m4_morphpar_commitname}  & \texttt{m4_underslas(m4_morparscript)}     & nl     \\
+          \textsc{pos}-tagger       & snapshot                        &                     & \dref{sec:post-agger}                 &  \ldots                            & \texttt{m4_underslas(m4_postagscript)}       & en     \\
+          Named-entity rec/class    & \href{m4_nercgit}{Github}       &                     & \dref{sec:nerc}                      & \brevcomm{m4_nerc_commitname}      & \texttt{m4_underslas(m4_nercscript)}         & en/nl  \\
+          Dark-entity relinker      & \href{m4_delinkgit}{Github}     &                     & \dref{sec:derel}                  & \brevcomm{m4_delink_commitname}    & \texttt{m4_underslas(m4_nercscript)}         & en/nl  \\
+          Constituent parser        & snapshot                        &                     & \dref{sec:constparser}               &  \ldots                            & \texttt{m4_underslas(m4_consparscript)}      & en     \\
+          Word-sense disamb. nl     & \href{m4_wsdgit}{Github}        &                     & \dref{sec:wsd}                       & \brevcomm{m4_wsd_commitname}       & \texttt{m4_underslas(wsd)}                   & nl     \\
+          Word-sense disamb. en     & snapshot                        &                     & \dref{sec:IMS-WSD}                   &  \ldots                            & \texttt{m4_underslas(ewsd)}                  & en     \\
+          Named entity/DBP          & snapshot                        &                     & \dref{sec:ned}                &  \ldots                            & \texttt{m4_underslas(ned)}                   & en/nl  \\
+          NED reranker              & snapshot                        &                     & \dref{sec:nedrer}                    &  \ldots                            & \texttt{m4_underslas(nedrerscript)}          & en     \\
+          Wikify                    & snapshot                        &                     & \dref{sec:wikify}                    &  \ldots                            & \texttt{m4_underslas(m4_wikifyscript)}       & en     \\
+          \UKB{}                    & snapshot                        &                     & \dref{sec:ukb}                       &  \ldots                            & \texttt{m4_underslas(m4_ukbscript)}          & en     \\
+          Coreference-base          & snapshot                        &                     & \dref{sec:corefgraph}             &  \ldots                            & \texttt{m4_underslas(m4_corefgraphscript)}    & en     \\
+          Heideltime                & \href{m4_heidelgit}{Github}     &                     & \dref{sec:heideltime}                & \brevcomm{m4_heidel_commitname}    & \texttt{m4_underslas(m4_heidelscript)}       & nl     \\
+          Onto-tagger               & \href{m4_ontogit}{Github}       &                     & \dref{sec:onto}                      & \brevcomm{m4_ontocommitname}       & \texttt{m4_underslas(m4_ontoscript)}         & nl     \\
+          Semantic Role labeling nl & \href{m4_nl_srlgit}{Github}        &                     & \dref{sec:SRL}                & \brevcomm{m4_srl_commitname}       & \texttt{m4_underslas(m4_nl_srlscript)}          & nl     \\
+          Semantic Role labeling en & snapshot                        &                     & \dref{sec:srlserver}                 &  \ldots                            & \texttt{m4_underslas(m4_esrlscript)}         & en     \\
+          Nominal Event ann.        & \href{m4_ontogit}{Github}       &                     & \dref{sec:onto}                      & \brevcomm{m4_ontocommitname}       & \texttt{m4_underslas(m4_nomeventscript)}     & nl     \\
+          SRL dutch nominals        & \href{m4_srl_dn_git}{Github}    &                     & \dref{sec:SRL}                    & \brevcomm{m4_srl_dn_commitname}    & \texttt{m4_underslas(m4_srl_dn_script)}      & nl     \\
+          Framenet-SRL              & \href{m4_ontogit}{Github}       &                     & \dref{sec:onto}                      & \brevcomm{m4_ontocommitname}       & \texttt{m4_underslas(m4_framesrlscript)}     & nl     \\
+          FBK-time                  & snapshot                        &                     & \dref{sec:fbktime}                   & \ldots                             & \texttt{m4_underslas(m4_fbktimescript)}      & en     \\
+          FBK-temprel               & snapshot                        &                     & \dref{sec:FBK-temprel}               & \ldots                             & \texttt{m4_underslas(m4_fbktemprelscript)}   & en     \\
+          FBK-causalrel             & snapshot                        &                     & \dref{sec:FBK-causalrel}             & \ldots                             & \texttt{m4_underslas(m4_fbkcausalrelscript)} & en     \\
+          Opinion-miner             & \href{m4_opinigit}{Github}      &                     & \dref{sec:opinimin}                  & \brevcomm{m4_opini_commitname}     & \texttt{m4_underslas(m4_opiniscript)}        & en/nl  \\
+          Event-coref               & \href{m4_evcorefgit}{Github}    &                     & \dref{sec:eventcoref}                & \brevcomm{m4_evcorefcommit}        & \texttt{m4_underslas(m4_evcorefscript)}      & en/nl  \\
+          Factuality tagger     & \href{m4_en_factualitygit}{Github}  &                     & \dref{sec:factuality}                & \brevcomm{m4_en_factualitycommit}  & \texttt{m4_underslas(m4_factualityscript)}   & en     \\
+          Factuality tagger     & \href{m4_nl_factualitygit}{Github}  &                     & \dref{sec:factuality}                & \brevcomm{m4_nl_factualitycommit}  & \texttt{m4_underslas(m4_factualityscript)}   & nl     \\
+         \end{tabular}
+      \end{footnotesize}
+%   \caption{List of the modules to be installed. Column description:
+%     \textbf{directory:} Name of the subdirectory below subdirectory \texttt{modules} in
+%     which it is installed; \textbf{source:} From where the module has
+%     been obtained; \textbf{commit:} Commit-name or version-tag \textbf{script:} Script to be included in a pipeline. \textbf{Note:} The tokenizer module has been temporarily obtained from the snapshot, because the commit that we used has disappeared from the Github repository.}
+%   \label{tab:modulelist}
     \captionof{table}{%
       \label{tab:modulelist}
       List of the modules to be installed. Column description:
@@ -223,9 +222,9 @@ modules operate on a document.
  %      temporarily obtained from the snapshot, because the commit
  %      that we used has disappeared from the Github repository.
 }
-@% %\end{table}
-  \end{landscape}
-  \clearpage% Flush page
+ %\end{table}
+   \end{landscape}
+   \clearpage% Flush page
 @% }
 }
 
@@ -328,8 +327,8 @@ table~\ref{tab:utillist}.
 @%   Morphosynt. p. & Github & \verb|m4_morphpargit| \\
 @%   heideltime. & Github & \verb|m4_morphpargit| \\
 @%   Alpino             & \textsc{rug}  & \verb|m4_alpinosrc| \\
-@%   Ticcutils          & \textsc{ilk}  & m4_ticcsrc \\
-@%   Timble            & \textsc{ilk} & m4_timblsrc \\
+@%   Ticcutils          & \textsc{ilk}  & m4_ticcball \\
+@%   Timble            & \textsc{ilk} & m4_timblball \\
 @%  \end{tabular}
 @%  \end{footnotesize}
 @%  \caption{Sources of the modules}
@@ -360,8 +359,8 @@ table~\ref{tab:utillist}.
 An important goal of this pipeline is, to achieve reproducibility. It
 mean, that at some point in the future the annotation could be re-done
 on the document and it should produce a result that is identical as
-the result of the original annotation. In our casem reproducibility
-ivolves the following aspects:
+the result of the original annotation. In our case, reproducibility
+involves the following aspects:
 
 \begin{itemize}
 \item The annotated document ought to contain documentation about the
@@ -475,7 +474,7 @@ echo ' '
 @< set up autoconf @>
 @< next part @(Perl@) @>
 @% @< set up Perl @>
-@< install Perl @>
+@< conditionally install Perl @>
 @< next part @(Shared libs@) @>
 @< install shared libs @>
 @< next part @(Alpino@) @>
@@ -1033,7 +1032,22 @@ pip install networkx==m4_networkx_version
 pip install pyyaml==m4_pyyaml_version
 pip install requests==m4_requests_version
 pip install six==m4_six_version
+pip install pynaf
 @| @}
+
+\subsubsection{Pynaf hack}
+\label{sec:pynaf_hack}
+
+I could not get pynaf to work properly for
+\verb|EHU-corefgraph.v30|. Therefore, I made a hack to make it work.
+
+@d set up Python @{@%
+  cd $envlibdir/python3.6/site-packages/pynaf
+  mv __init__.py old.__init__.py
+  cp $snapshotdir/pynafhack ./__init__.py
+@| @}
+
+
 
 
 \subsection{Perl}
@@ -1108,8 +1122,33 @@ fi
 @| @}
 
 
+Install Perl if either Perl is not installed or the installed Perl has a version below 5.
 
-@d install Perl @{@%
+@d conditionally install Perl @{@%
+installPerl=1
+which perl >/dev/null
+res=$?
+if
+[ $res -gt 0 ]
+then
+  installPerl=0
+else
+  perlversion=`perl -e 'print $];'`
+  if
+    [ "${perlversion%%.*}" -lt 5 ]
+  then
+    installPerl=0
+  fi
+fi
+if
+  [ installPerl -gt 0 ]
+then
+  @< install Perl @>
+fi
+@| @}
+
+
+@d  install Perl @{@%
 tempdir=`mktemp -d -t perl.XXXXXX`
 cd $tempdir
 @% wget m4_perl_url
@@ -1121,8 +1160,8 @@ make test
 make install
 cd $progroot
 rm -rf $tempdir 
-
 @| @}
+
 
 Make sure that modules use the correct Perl
 
@@ -1860,16 +1899,23 @@ C-compiler that happens to be available on the host. Installation involves:
   \texttt{env} directory.
 \end{enumerate}
 
+@d download stuff @{@%
+  @< need to wget @(m4_timblball@,m4_timblurl@) @>
+  @< need to wget @(m4_ticcball@,m4_ticcurl@) @>
+@| @}
+
+
+
 @d install the ticcutils utility @{@%
 URL=m4_ticcurl
-TARB=m4_ticcsrc
+TARB=m4_ticcball
 DIR=m4_ticcdir
 @< unpack ticcutils or timbl @>
 @| @}
 
 @d install the timbl utility @{@%
 @% URL=m4_timblurl
-TARB=m4_timblsrc
+TARB=m4_timblball
 DIR=m4_timbldir
 @< unpack ticcutils or timbl @>
 @| @}
@@ -2044,6 +2090,22 @@ function gitinst (){
 @| @}
 
 
+@d functions of the module-installer @{@%
+function ballinst (){
+   ball=\$1
+   if
+      [ -e \$snapshotdir/\$ball ]
+   then
+     cd \$modulesdir
+     tar -xzf \$snapshotdir/\$ball
+   else
+     echo "Cannot find \$snapshotdir/\$ball"
+     exit 1
+   fi
+}
+@| @}
+
+
 
 For each module we generate a script in the \verb|bin| subdirectory to make
 the module easier to use. The script does the following:
@@ -2060,6 +2122,7 @@ the module easier to use. The script does the following:
 scriptname=${0##*/}
 scriptpath=$thisdir/$scriptname
 cd ${thisdir}
+source ../progenv
 @< set the naflang parameter @>
 cat | ../modules/@1/run
 @| @}
@@ -2379,15 +2442,16 @@ need to have the repo available beforehand.
 
 @d install the modules @{@%
 # UKB
-if
-  [ -e \$snapshotdir/m4_ukbball ]
-then
-  cd \$modulesdir
-  tar -xzf \$snapshotdir/m4_ukbball
-else
-  echo "No UKB"
-  exit 1
-fi
+ballinst m4_ukbball  
+@% if
+@%   [ -e \$snapshotdir/m4_ukbball ]
+@% then
+@%   cd \$modulesdir
+@%   tar -xzf \$snapshotdir/m4_ukbball
+@% else
+@%   echo "No UKB"
+@%   exit 1
+@% fi
 @| @}
 
 @o m4_bindir/m4_ukbcript @{@%
@@ -2436,16 +2500,55 @@ case.
 
 @d install the modules @{@%
 # eSRL-server
+ballinst  m4_srlserverball
+@% if
+@%   [ -e \$snapshotdir/m4_srlserverball ]
+@% then
+@%   cd \$modulesdir
+@%   tar -xzf \$snapshotdir/m4_srlserverball
+@% else
+@%   echo "No eSRL"
+@%   exit 1
+@% fi
+@| @}
+
+
+Generate script to start the eSRL server.
+
+@o m4_envbindir/start_eSRL_server @{@%
+#!/bin/bash
+@< get location of the script @(thisdir@) @>
+cd $thisdir
+cd ../../
+source ./progenv
+moddir=$modulesdir/EHU-srl-server
+cd $moddir
+pidFile=$envdir/SRLServer.pid
+echo $$ > ${pidFile}
+exec java -Xms2500m -cp ${moddir}/IXA-EHU-srl-3.0.jar ixa.srl.SRLServer en
+@| @}
+
+@o m4_envbindir/stop_eSRL_server @{@%
+#!/bin/bash
+@< get location of the script @(thisdir@) @>
+cd $thisdir
+cd ../../
+source ./progenv
+moddir=$modulesdir/EHU-srl-server
+cd $moddir
+pidFile=$envdir/SRLServer.pid
 if
-  [ -e \$snapshotdir/m4_serverball ]
+  [ -e ${pidFile} ]
 then
-  cd \$modulesdir
-  tar -xzf \$snapshotdir/m4_serverball
+  SRLServerPID=$(cat ${pidFile})
+  kill -9 $SRLServerPID
+  echo 'SRL Server with PID='$SRLServerPID' stopped'
+  rm -f ${pidFile}
 else
-  echo "No eSRL"
-  exit 1
+  echo 'SRL Server not running'
 fi
 @| @}
+
 
 
 
@@ -2465,7 +2568,13 @@ gitinst m4_srl_dn_git m4_srl_dn_dir m4_srl_dn_commitname
 \label{FBK-time}
 
 The three modules FBK-time, FBK-temprel, FBK-causalrel are, as far as
-I know, not open-source yet. So, now we need to install from sbapshot.
+I know, not open-source yet. So, now we need to install from snapshot.
+
+@d install the modules @{@%
+ballinst m4_fbktimeball
+ballinst m4_fbktemprelball
+ballinst m4_fbkcausalrelball
+@| @}
 
 
 
@@ -2478,7 +2587,7 @@ in non-English texts.
 
 @d install the modules @{@%
 gitinst m4_nl_factualitygit m4_nl_factualitydir m4_nl_factualitycommit 
-gitinst m4_en_factualitygit m4_en_factualitydir m4_nl_factualitycommit 
+gitinst m4_en_factualitygit m4_en_factualitydir m4_en_factualitycommit 
 @| @}
 
 The shorthandscript runs the module in \verb|m4_en_factualitydir| for
@@ -2490,6 +2599,9 @@ documents in other languages.
 @< get location of the script @(thisdir@) @>
 scriptname=${0##*/}
 scriptpath=$thisdir/$scriptname
+cd ${thisdir}
+cd ..
+source ./progenv
 @< set the naflang parameter @>
 cd ${thisdir}
 if
@@ -2547,15 +2659,16 @@ So, install the module from there.
 
 @d install the modules @{@%
 # EHU-corefgraph
-if
-  [ -e \$snapshotdir/m4_corefgraph_ball ]
-then
-  cd \$modulesdir
-  tar -xzf \$snapshotdir/m4_ukbball
-else
-  echo "No coreference-graph"
-  exit 1
-fi
+ballinst  m4_corefgraph_ball
+@% if
+@%   [ -e \$snapshotdir/m4_corefgraph_ball ]
+@% then
+@%   cd \$modulesdir
+@%   tar -xzf \$snapshotdir/m4_corefgraph_ball
+@% else
+@%   echo "No coreference-graph"
+@%   exit 1
+@% fi
 @| @}
 
 @o m4_bindir/m4_corefgraphscript @{@%
