@@ -484,6 +484,8 @@ echo ' '
 @< install the Spotlight server @>
 @< next part @(Treetagger@) @>
 @< install the treetagger utility @>
+@< install the ticcutils utility @>
+@< install the timbl utility @>
 @< next part @(Svmlib@) @>
 @< install svmlib @>
 @< next part @(Boost@) @>
@@ -1694,7 +1696,7 @@ export ALPINO_HOME=\$envdir/Alpino
 @|ALPINO_HOME @}
 
 
-\subsubsection{Treetagger}
+\subsection{Treetagger}
 \label{sec:installtreetagger}
 
 Installation of Treetagger goes as follows (See
@@ -1842,7 +1844,7 @@ rm \$DUTCHPARS_2_GZ
 @| @}
 
 
-\subsubsection{Timbl and Ticcutils}
+\subsection{Timbl and Ticcutils}
 \label{sec:timbl}
 
 Timbl and Ticcutils are installed from their source-tarballs. The
@@ -1914,8 +1916,8 @@ rm -rf \$ticbeldir
 @% fi
 @| @}
 
-When the installation has been transplanted, Timbl and Ticcutils have
-to be re-installed.
+@% When the installation has been transplanted, Timbl and Ticcutils have
+@% to be re-installed.
 
 @d  re-install modules after the transplantation @{@%
 @< install the ticcutils utility @>
@@ -1925,7 +1927,7 @@ to be re-installed.
 
 
 
-\subsubsection{Svmlib}
+\subsection{Svmlib}
 \label{sec:svmlib}
 
 
@@ -1955,7 +1957,7 @@ cd $piperoot
 @| @}
 
 
-\subsubsection{The Boost library}
+\subsection{The Boost library}
 \label{sec:boost}
 
 I have no idea how Boost works. Neither can I find out how to test
@@ -2368,7 +2370,6 @@ Wikify needs spotlight.
 
 \subsubsection{UKB}
 \label{sec:ukb}
-
 The UKB WSD module is up to now only available from closed
 repositories.There exists a repository
 \href{https://github.com/ixa-ehu/ukb}{ukb} in Git, but this does not
@@ -2403,7 +2404,7 @@ gitinst m4_ewsd_git m4_ewsddir m4_ewsd_commitname
 @| @}
 
 @o m4_bindir/m4_ewsdscript @{@%
-@< contents of shorthand-script @(m4_ewsddir@) @>
+@< contents of shorthand-script @(m4_ewsddir@) 
 @| @}
 
 \subsubsection{Semantic Role labelling}
@@ -2418,6 +2419,36 @@ gitinst m4_nl_srlgit m4_nl_srldir m4_nl_srl_commitname
 @| @}
 
 
+\subsubsection{SRL server for English}
+\label{sec:esrlserver}
+
+As far as I know, the English SRL for Newsreader,
+\verb|EHU-srl-server|, is not yet open-source. Therefore, we still have
+to rely on the v3.0 version from the Newsreader repository.
+
+This module has been set up as client-server application, making it
+less suitable for this general pipeline-structure. It means that the
+server ought to have been started before processing documents. 
+
+For now, we only implement the client. The client checks whether some
+process listens on port m4_srlserverport and aborts if that is not the
+case. 
+
+@d install the modules @{@%
+# eSRL-server
+if
+  [ -e \$snapshotdir/m4_serverball ]
+then
+  cd \$modulesdir
+  tar -xzf \$snapshotdir/m4_serverball
+else
+  echo "No eSRL"
+  exit 1
+fi
+@| @}
+
+
+
 \subsubsection{srl-Dutch nominals}
 \label{sec:SRL}
 
@@ -2428,6 +2459,15 @@ gitinst m4_srl_dn_git m4_srl_dn_dir m4_srl_dn_commitname
 @o m4_bindir/m4_srl_dn_script @{@%
 @< contents of shorthand-script @(m4_srl_dn_dir@) @>
 @| @}
+
+
+\subsubsection{FBK-time, FBK-temprel, FBK-causalrel}
+\label{FBK-time}
+
+The three modules FBK-time, FBK-temprel, FBK-causalrel are, as far as
+I know, not open-source yet. So, now we need to install from sbapshot.
+
+
 
 \subsubsection{Factuality}
 \label{sec:factuality}
@@ -2495,6 +2535,45 @@ gitinst m4_evcorefgit m4_evcorefdir m4_evcorefcommit
 @o m4_bindir/m4_evcorefscript @{@%
 @< contents of shorthand-script @(m4_evcorefdir@) @>
 @| @}
+
+\subsubsection{Corefgraph}
+\label{sec:corefgraph}
+
+The corefgraph module is currently still a hacked version of the
+module that can be found in the newsreader vs. 3.0 repository. It is
+stored in the snapshot-directory.
+
+So, install the module from there.
+
+@d install the modules @{@%
+# EHU-corefgraph
+if
+  [ -e \$snapshotdir/m4_corefgraph_ball ]
+then
+  cd \$modulesdir
+  tar -xzf \$snapshotdir/m4_ukbball
+else
+  echo "No coreference-graph"
+  exit 1
+fi
+@| @}
+
+@o m4_bindir/m4_corefgraphscript @{@%
+@< contents of shorthand-script @(m4_corefgraphdir@) @>
+@| @}
+
+
+\subsection{Constituent parser}
+\label{sec:constpars}
+
+@d install the modules @{@%
+gitinst m4_conspargit m4_conspardir m4_conspar_commit 
+@| @}
+
+@o m4_bindir/m4_consparscript @{@%
+@< contents of shorthand-script @(m4_conspardir@) @>
+@| @}
+
 
 
 \section{Utilities}
@@ -2663,16 +2742,25 @@ runmodule fact.naf    m4_evcorefdir       \$outfile
 Similar for an English naf:
 
 @d annotate english document @{@%
-  runmodule \$infile    m4_tokenizername tok.naf
-  runmodule tok.naf     m4_topictoolname top.naf
-  runmodule top.naf     m4_posname       pos.naf
-  runmodule pos.naf     m4_nercdir       nerc.naf
-  runmodule nerc.naf    m4_wsddir        wsd.naf
-  runmodule wsd.naf     m4_neddir        ned.naf
-  runmodule ned.naf     m4_delinkdir     derel.naf
-  runmodule derel.naf   m4_nedrerdir     nedr.naf
-  runmodule nedr.naf    m4_wikifydir     wikif.naf
-  runmodule wikif.naf   m4_ukbdir        ukb.naf
+runmodule \$infile    m4_tokenizername tok.naf
+runmodule tok.naf     m4_topictoolname top.naf
+runmodule top.naf     m4_posname       pos.naf
+runmodule pos.naf     m4_conspardir    parse.naf
+runmodule parse.naf   m4_nercdir       nerc.naf
+runmodule nerc.naf    m4_wsddir        wsd.naf
+runmodule wsd.naf     m4_neddir        ned.naf
+runmodule ned.naf     m4_delinkdir     derel.naf
+runmodule derel.naf   m4_nedrerdir     nedr.naf
+runmodule nedr.naf    m4_wikifydir     wikif.naf
+runmodule wikif.naf   m4_ukbdir        ukb.naf
+runmodule ukb.naf     m4_ewsddir       wsd.naf
+runmodule wsd.naf     m4_corefgraphdir corefg.naf
+runmodule corefg.naf  m4_srlserverdir  esrl.naf
+runmodule esrl.naf    m4_fbktimedir    ftime.naf
+runmodule ftime.naf   m4_fbktempreldir ftemp.naf
+runmodule ftemp.naf   m4_fbkcausalreldir fcausal.naf
+runmodule fcausal.naf m4_evcorefdir    evcoref.naf
+runmodule evcoref.naf m4_en_factualitydir fact.naf 
 @| @}
 
 Determine the language and select one of the above macro's to annotate

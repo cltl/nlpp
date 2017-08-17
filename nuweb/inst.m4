@@ -220,9 +220,12 @@ m4_dnl Constituent parser
 m4_define(m4_consparname, ixa-pipe-parse)m4_dnl
 m4_define(m4_consparversion, 1.1.1)m4_dnl
 m4_define(m4_conspartex, \verb|m4_consparname|)m4_dnl
-m4_define(m4_conspardir, EHU-parse.v30)m4_dnl
-m4_define(m4_consparball, 20151220_EHU-parse.v30.tgz)m4_dnl
-m4_define(m4_conspargit, `https://github.com/ixa-ehu/ixa-pipe-parse.git')m4_dnl
+m4_dnl m4_define(m4_conspardir, EHU-parse.v30)m4_dnl
+m4_define(m4_conspardir, ixa-pipe-parse)m4_dnl
+m4_dnl m4_define(m4_consparball, 20151220_EHU-parse.v30.tgz)m4_dnl
+m4_dnl m4_define(m4_conspargit, `https://github.com/ixa-ehu/ixa-pipe-parse.git')m4_dnl
+m4_define(m4_conspargit, `git@@github.com:PaulHuygen/ixa-pipe-parse.git')m4_dnl
+m4_define(m4_conspar_commit, bf8e91f829e963fe16684a12ad241f8b1aab251d)m4_dnl
 m4_define(m4_consparscript, constpars)m4_dnl
 m4_dnl
 m4_dnl NERC
@@ -283,7 +286,7 @@ m4_define(m4_wikipediadbmodule_url, http://ixa2.si.ehu.es/ixa-pipes/models/`'wik
 m4_dnl
 m4_dnl NED-reranker
 m4_define(m4_nedrergit, git@@github.com:PaulHuygen/NWRDomainModel.git)m4_dnl
-m4_define(m4_nedrercommitname, 509a84b2c5ac1c0f6589731bc8f1cf22c7a19814)m4_dnl
+m4_define(m4_nedrercommitname, 95e7ad06f48841dae98cc07c665effe095bae9d3)m4_dnl
 m4_define(m4_nedrername, domain_model)m4_dnl
 m4_define(m4_nedrertex, \verb|domain_model|)m4_dnl
 m4_dnl m4_define(m4_nedrerdir, VUA-popen-nedreranker.v30)m4_dnl
@@ -330,11 +333,10 @@ m4_dnl m4_define(m4_ewsdball, 20151220_VUA-ims-wsd.v30.tgz)m4_dnl
 m4_define(m4_ewsdname, it_makes_sense_WSD)m4_dnl
 m4_define(m4_ewsddir, it_makes_sense_WSD)m4_dnl
 m4_define(m4_ewsd_git, git@@github.com:PaulHuygen/it_makes_sense_WSD.git)m4_dnl
-m4_define(m4_ewsd_commitname, 79a39f53fd7aef20f7667325d239bc49cd6d6d28)m4_dnl
+m4_define(m4_ewsd_commitname, d8b5564a385cf7b69224c18dbcb306b0eb65bafb)m4_dnl
+m4_define(m4_ewsdscript, ewsd)m4_dnl
 m4_dnl
 m4_dnl SRL-server
-m4_define(m4_srlservername, ims-wsd)m4_dnl
-m4_define(m4_srlservertex, \verb|m4_ewsdname|)m4_dnl
 m4_define(m4_srlserverdir, EHU-srl-server)m4_dnl
 m4_define(m4_srlserverball, 20151220_EHU-srl-server.tgz)m4_dnl
 m4_define(m4_srlserverport, 5005)m4_dnl
@@ -540,18 +542,16 @@ m4_define(m4_en_factualitycommit, `58fae1dc27d503642f4899460a3481417f044e95')m4_
 m4_define(m4_nl_factualitycommit, `a09d815212e047a1cef7109e8c299c9913278d67')m4_dnl
 m4_dnl m4_define(m4_factualityball, 20151220_VUA-factuality.v30.tgz)m4_dnl
 m4_dnl m4_dnl
-m4_dnl m4_dnl Corefgraph (=coreference-base)
+m4_dnl m4_dnl Corefgraph
 m4_dnl m4_define(m4_corefgraphname, corefgraph)m4_dnl
 m4_dnl m4_define(m4_coreftex, \verb|corefgraph|)m4_dnl
 m4_dnl m4_define(m4_corefdir, EHU-corefgraph.v30)m4_dnl
 m4_dnl
-m4_dnl Coreference-base
+m4_dnl Coreference-graph
 m4_dnl
-m4_define(m4_corefbasedir, EHU-corefgraph.v30)m4_dnl  Subdir. of modules
-m4_define(m4_corefbasescript, coreference-base)m4_dnl
-m4_define(m4_corefbasegit, https://github.com/opener-project/coreference-base.git)m4_dnl
-m4_define(m4_corefbase_ball, 20151220_EHU-corefgraph.v30.tgz)m4_dnl
-m4_define(m4_corefbase_commitname, `bfa5aec0fa498e57fe14dd4d2c51365dd09a0757')m4_dnl
+m4_define(m4_corefgraphdir, EHU-corefgraph.v30)m4_dnl  Subdir. of modules
+m4_define(m4_corefgraphscript, coref-graph)m4_dnl
+m4_define(m4_corefgraph_ball, 20170814_EHU-corefgraph.v30.tgz)m4_dnl
 m4_dnl
 m4_dnl nomevents
 m4_dnl
