@@ -190,7 +190,7 @@ modules operate on a document.
          NED reranker              & snapshot                        &                     & \dref{sec:nedrer}                    &  \ldots                            & \texttt{m4_underslas(nedrerscript)}          & en     \\
          Wikify                    & snapshot                        &                     & \dref{sec:wikify}                    &  \ldots                            & \texttt{m4_underslas(m4_wikifyscript)}       & en     \\
          \UKB{}                    & snapshot                        &                     & \dref{sec:ukb}                       &  \ldots                            & \texttt{m4_underslas(m4_ukbscript)}          & en     \\
-         Coreference-base          & snapshot                        &                     & \dref{sec:corefbase}             &  \ldots                            & \texttt{m4_underslas(m4_corefbasescript)}    & en     \\
+         Coreference-base          & snapshot                        &                     & \dref{sec:corefbase}             &  \ldots                            & \texttt{m4_underslas(m4_corefgraphscript)}    & en     \\
          Heideltime                & \href{m4_heidelgit}{Github}     &                     & \dref{sec:heideltime}                & \brevcomm{m4_heidel_commitname}    & \texttt{m4_underslas(m4_heidelscript)}       & nl     \\
          Onto-tagger               & \href{m4_ontogit}{Github}       &                     & \dref{sec:onto}                      & \brevcomm{m4_ontocommitname}       & \texttt{m4_underslas(m4_ontoscript)}         & nl     \\
          Semantic Role labeling nl & \href{m4_nl_srlgit}{Github}        &                     & \dref{sec:SRL}                & \brevcomm{m4_srl_commitname}       & \texttt{m4_underslas(m4_nl_srlscript)}          & nl     \\
@@ -1149,6 +1149,16 @@ A Spotlight server occupies a lot of memory and we need two of them,
 one for each language. We may be lucky and have a spotlight server
 running somewhere. Nevertheless, let us be prepared to be able to
 install a server ourselves.
+
+\subsubsection{Set spotlight host and port}
+\label{sec:setspothostport}
+
+Maybe we do hot have to use the built-in spotlight. Tell the modules
+about this:
+
+@d set environment parameters @{@%
+export SPOTLIGHTHOST=m4_spotlight_host
+@| @}
 
 
 \subsubsection{Install spotlight servers}

@@ -165,7 +165,7 @@ m4_dnl Tokenizer
 m4_define(m4_tokenizername, ixa-pipe-tok)m4_dnl
 m4_define(m4_tokenizertex, \verb|m4_tokenizername|)m4_dnl
 m4_define(m4_tokenizerversion, `1.8.0')m4_dnl
-m4_define(m4_tokenizer_commitname, 1a69dbbf337aaf7a97bd21dffcfdbd7cb8ab0d83)m4_dnl
+m4_define(m4_tokenizer_commitname, 1a5b0f76e13315f9a1a75525e93d0789ccf9383c)m4_dnl
 m4_define(m4_tokenizergit, `https://github.com/PaulHuygen/ixa-pipe-tok.git')m4_dnl  Subdir. of modules
 m4_dnl m4_define(m4_tokenizergit, `https://github.com/ixa-ehu/ixa-pipe-tok.git')m4_dnl  Subdir. of modules
 m4_define(m4_tokenizerdir, ixa-pipe-tok)m4_dnl  Subdir. of modules
@@ -181,7 +181,7 @@ m4_define(m4_topictoolball, 20151220_EHU-topic.v30.tgz)m4_dnl
 m4_dnl m4_define(m4_topictoolgit, https://github.com/ialdabe/ixa-pipe-topic.git)m4_dnl
 m4_define(m4_topictoolgit, https://github.com/PaulHuygen/ixa-pipe-topic.git)m4_dnl
 m4_dnl m4_define(m4_topic_commitname, 40be8debb88093b426ae3520d60df60161968e27)m4_dnl
-m4_define(m4_topic_commitname, b33259ec587b7ead20d9a2cc72d3c68bdbbae163)m4_dnl
+m4_define(m4_topic_commitname, `31b0554d22e3a38f980086cfc7c4627d425344e9')m4_dnl
 m4_define(m4_topicscript, topic)m4_dnl
 m4_define(m4_jex_resources_en_ball, en-eurovoc-1.0.zip)m4_dnl
 m4_define(m4_jex_resources_nl_ball, nl-eurovoc-1.0.zip)m4_dnl
@@ -194,7 +194,7 @@ m4_dnl m4_define(m4_posname, EHU-pos.v30)m4_dnl
 m4_define(m4_posname, ixa-pipe-pos)m4_dnl
 m4_define(m4_postex, \verb|m4_posname|)m4_dnl
 m4_define(m4_posdir, ixa-pipe-pos)m4_dnl
-m4_define(m4_pos_commitname, 518fe51d3f196f0ea5695811425128181565b5d7)m4_dnl
+m4_define(m4_pos_commitname, f6de665c2b155828e9ca4d30b38451c5faaaeb9c)m4_dnl
 m4_dnl m4_define(m4_posgit, `https://github.com/ixa-ehu/ixa-pipe-pos.git')m4_dnl
 m4_dnl m4_define(m4_posgit, `https://github.com/PaulHuygen/ixa-pipe-pos.git')m4_dnl
 m4_define(m4_posgit, `git@@github.com:PaulHuygen/ixa-pipe-pos.git')m4_dnl
@@ -206,7 +206,7 @@ m4_define(m4_morphparname, morphosyntactic_parser_nl)m4_dnl
 m4_define(m4_morphpartex, \verb|m4_morphparname|)m4_dnl
 m4_dnl m4_define(m4_morphpargit, https://github.com/cltl/morphosyntactic_parser_nl.git)m4_dnl
 m4_define(m4_morphpargit, https://github.com/PaulHuygen/morphosyntactic_parser_nl.git)m4_dnl
-m4_define(m4_morphpar_commitname, `7cfb22ed99e9e72966da5dcafef5527628c16d16')m4_dnl
+m4_define(m4_morphpar_commitname, `29601f8ae3b267db41a36828745d317fb991bead')m4_dnl
 m4_define(m4_morphpardir, morphosyntactic_parser_nl)m4_dnl  Subdir. of modules
 m4_define(m4_morparscript, mor)m4_dnl
 m4_dnl
@@ -235,8 +235,7 @@ m4_define(m4_nercdir, ixa-pipe-nerc)m4_dnl  Subdir. of modules
 m4_define(m4_nerctex, \verb|m4_nercname|)m4_dnl
 m4_dnl m4_define(m4_nercgit, https://github.com/ixa-ehu/ixa-pipe-nerc)m4_dnl
 m4_define(m4_nercgit, git@@github.com:PaulHuygen/ixa-pipe-nerc.git)m4_dnl
-m4_dnl m4_define(m4_nerc_commitname, 5cacac28fcaa6e91d5f2a4cc9b486b24ac163641)m4_dnl
-m4_define(m4_nerc_commitname, b365a180e3e9989f2ff4afcb5957290bc4bfe45f)m4_dnl (20151215)
+m4_define(m4_nerc_commitname, e6197f960aeb383dd9c67cd329f8716dff96d7a0)m4_dnl
 m4_dnl m4_define(m4_EHU_nercdir, EHU-nerc.v30)m4_dnl  Subdir. of modules
 m4_dnl m4_define(m4_nercversion, 1.3.3)m4_dnl
 m4_dnl m4_define(m4_nercversion, 1.3.6)m4_dnl
@@ -270,7 +269,7 @@ m4_define(m4_ned_version, 1.1.1)m4_dnl
 m4_dnl m4_define(m4_nedgit, https://github.com/ixa-ehu/ixa-pipe-ned.git)m4_dnl
 m4_define(m4_nedgit, git@@github.com:PaulHuygen/ixa-pipe-ned.git)m4_dnl
 m4_dnl m4_define(m4_ned_commitname, 097458d879a0e30ef1736f56250d15b6b1356232)m4_dnl  
-m4_define(m4_ned_commitname, 0917a095e719ce909da5db97a5f36934cbc4f5e5)m4_dnl  
+m4_define(m4_ned_commitname, 211c3a0f4da7a8007fdc1493494fc2036169efd7)m4_dnl  
 m4_define(m4_neddir, ixa-pipe-ned)m4_dnl  Subdir. of modules
 m4_dnl m4_define(m4_nedjar, ixa-pipe-ned-1.0.jar)m4_dnl
 m4_define(m4_nedjar, ixa-pipe-ned-`'m4_ned_version`'.jar)m4_dnl
@@ -286,7 +285,7 @@ m4_define(m4_wikipediadbmodule_url, http://ixa2.si.ehu.es/ixa-pipes/models/`'wik
 m4_dnl
 m4_dnl NED-reranker
 m4_define(m4_nedrergit, git@@github.com:PaulHuygen/NWRDomainModel.git)m4_dnl
-m4_define(m4_nedrercommitname, 95e7ad06f48841dae98cc07c665effe095bae9d3)m4_dnl
+m4_define(m4_nedrercommitname, 6af97d8e25e451654af2a889561a78a1313ad66d)m4_dnl
 m4_define(m4_nedrername, domain_model)m4_dnl
 m4_define(m4_nedrertex, \verb|domain_model|)m4_dnl
 m4_dnl m4_define(m4_nedrerdir, VUA-popen-nedreranker.v30)m4_dnl
@@ -298,7 +297,7 @@ m4_dnl Wikify
 m4_define(m4_wikify_git, git@@github.com:PaulHuygen/ixa-pipe-wikify.git)m4_dnl
 m4_define(m4_wikifyname, ixa-pipe-wikify)m4_dnl
 m4_define(m4_wikifytex, \verb|m4_wikifyname|)m4_dnl
-m4_define(m4_wikify_commitname, 90a25e13c3a957178b51264277f69b5f258b7447)m4_dnl
+m4_define(m4_wikify_commitname, dc9e085dc3733d5f8367335f3980ac95dc127d17)m4_dnl
 m4_define(m4_wikifydir, ixa-pipe-wikify)m4_dnl
 m4_dnl m4_define(m4_wikifyball, 20151220_EHU-wikify.v30.tgz)m4_dnl
 m4_define(m4_wikifyscript, wikify)m4_dnl
@@ -311,7 +310,7 @@ m4_dnl m4_define(m4_ukbgit, git@@github.com:PaulHuygen/ukb.git)m4_dnl
 m4_dnl m4_define(m4_ukbdir, EHU-ukb.v30)m4_dnl
 m4_dnl m4_define(m4_ukbdir, ukb)m4_dnl
 m4_define(m4_ukbdir, EHU-ukb.v30)m4_dnl
-m4_define(m4_ukbball, 20170712_EHU-ukb.v30.tgz)m4_dnl
+m4_define(m4_ukbball, 20170906_EHU-ukb.v30.tgz)m4_dnl
 m4_define(m4_ukbscript, ukb)m4_dnl
 m4_dnl
 m4_dnl WSD
@@ -320,7 +319,7 @@ m4_dnl m4_define(m4_wsdsrc, m4_lisanlproot/mods/ukb)m4_dnl  Subdir. of modules
 m4_define(m4_wsdname, svm_wsd)m4_dnl
 m4_define(m4_wsdtex, \verb|m4_wsdname|)m4_dnl
 m4_define(m4_wsdgit, https://github.com/PaulHuygen/svm_wsd.git)m4_dnl
-m4_define(m4_wsd_commitname, `62080274247e2dd32226e730776f2d447e90e753')m4_dnl
+m4_define(m4_wsd_commitname, `eae13e95c215bc359431c50349a8aaf0270307c2')m4_dnl
 m4_define(m4_wsddir, svm_wsd)m4_dnl
 m4_define(m4_wsdscript, wsd)m4_dnl
 m4_define(m4_wsd_snapball, svm_wsd.tgz)m4_dnl
@@ -333,33 +332,34 @@ m4_dnl m4_define(m4_ewsdball, 20151220_VUA-ims-wsd.v30.tgz)m4_dnl
 m4_define(m4_ewsdname, it_makes_sense_WSD)m4_dnl
 m4_define(m4_ewsddir, it_makes_sense_WSD)m4_dnl
 m4_define(m4_ewsd_git, git@@github.com:PaulHuygen/it_makes_sense_WSD.git)m4_dnl
-m4_define(m4_ewsd_commitname, d8b5564a385cf7b69224c18dbcb306b0eb65bafb)m4_dnl
+m4_define(m4_ewsd_commitname, 58c3ec30d6f7f8e8a4f5cab7ff5bc42fecd610e8)m4_dnl
 m4_define(m4_ewsdscript, ewsd)m4_dnl
 m4_dnl
 m4_dnl SRL-server
 m4_define(m4_srlserverdir, EHU-srl-server)m4_dnl
-m4_define(m4_srlserverball, 20151220_EHU-srl-server.tgz)m4_dnl
+m4_dnl m4_define(m4_srlserverball, 20151220_EHU-srl-server.tgz)m4_dnl
+m4_define(m4_srlserverball, 20170906_EHU-srl-server.tgz)m4_dnl
 m4_define(m4_srlserverport, 5005)m4_dnl
 m4_dnl
 m4_dnl FBK-time
 m4_define(m4_fbktimename, FBK-time.v30)m4_dnl
 m4_define(m4_fbktimetex, \verb|m4_fbktimename|)m4_dnl
 m4_define(m4_fbktimedir, FBK-time.v30)m4_dnl
-m4_define(m4_fbktimeball, 20160616_FBK-time.v30.tgz)m4_dnl
+m4_define(m4_fbktimeball, 20170831_FBK-time.v30.tgz)m4_dnl
 m4_define(m4_fbktimescript, FBK-time)m4_dnl
 m4_dnl
 m4_dnl FBK-temprel
 m4_define(m4_fbktemprelname, FBK-temprel.v30)m4_dnl
 m4_define(m4_fbktempreltex, \verb|m4_fbktemprelname|)m4_dnl
 m4_define(m4_fbktempreldir, FBK-temprel.v30)m4_dnl
-m4_define(m4_fbktemprelball, 20151220_FBK-temprel.v30.tgz)m4_dnl
+m4_define(m4_fbktemprelball, 20170831_FBK-temprel.v30.tgz)m4_dnl
 m4_define(m4_fbktemprelscript, FBK-temprel)m4_dnl
 m4_dnl
 m4_dnl FBK-causalrel
 m4_define(m4_fbkcausalrelname, FBK-causalrel.v30)m4_dnl
 m4_define(m4_fbkcausalreltex, \verb|m4_fbkcausalrelname|)m4_dnl
 m4_define(m4_fbkcausalreldir, FBK-causalrel.v30)m4_dnl
-m4_define(m4_fbkcausalrelball, 20151220_FBK-causalrel.v30.tgz)m4_dnl
+m4_define(m4_fbkcausalrelball, 20170816_FBK-causalrel.v30.tgz)m4_dnl
 m4_define(m4_fbkcausalrelscript, FBK-causalrel)m4_dnl
 m4_dnl
 m4_dnl ONTO
@@ -368,7 +368,7 @@ m4_define(m4_ontotex, onto-tagger)m4_dnl
 m4_define(m4_ontodir, m4_ontoname)m4_dnl  Subdir. of modules
 m4_define(m4_ontogit, `git@@github.com:PaulHuygen/OntoTagger.git')m4_dnl  Subdir. of modules
 m4_define(m4_ontojar, ontotagger-1.0-jar-with-dependencies.jar)m4_dnl
-m4_define(m4_ontocommitname, `3177a4c64cc44aabbbe9cf96d5fa004a1f2afb19')m4_dnl
+m4_define(m4_ontocommitname, `31b0554d22e3a38f980086cfc7c4627d425344e9')m4_dnl
 m4_define(m4_ontoscript, onto)m4_dnl
 m4_define(m4_onto_subscript, predicate-matrix-tagger.sh)m4_dnl
 m4_dnl m4_define(m4_ontotarball, 20150724_vua-ontotagger-v1.0.tar.gz)m4_dnl  Subdir. of modules
@@ -395,7 +395,7 @@ m4_define(m4_heideldir, ixa-pipe-time)m4_dnl
 m4_define(m4_heidelgit, git@@github.com:PaulHuygen/ixa-pipe-time.git)m4_dnl
 m4_define(m4_heidelhtml, https://github.com/ixa-ehu/ixa-pipe-time)m4_dnl
 m4_dnl m4_define(m4_heidel_commitname, 0fd3b5bd4c9a82b1624928a487b3a963a266f10c)m4_dnl
-m4_define(m4_heidel_commitname, 364c2700c580d67d2ce9cbb8ebffbf3fa960e383)m4_dnl
+m4_define(m4_heidel_commitname, 76eed04f7332c41e289ca97b8ddec604235291bb)m4_dnl
 m4_define(m4_heidelscript, heideltime)m4_dnl
 m4_define(m4_heidelstandalonejar, de.unihd.dbs.heideltime.standalone.jar)m4_dnl
 m4_define(m4_heidelantske, 20151123_antske_heideltime_stuff.tgz)m4_dnl
@@ -435,7 +435,7 @@ m4_dnl SRL
 m4_define(m4_nl_srlname, vua-srl-nl)m4_dnl
 m4_define(m4_nl_srldir, vua-srl-nl)m4_dnl
 m4_define(m4_nl_srlscript, srl)m4_dnl
-m4_define(m4_nl_srl_commitname, `060264b40e7b856a14408bfa2b56c6c036cfb1fe')m4_dnl
+m4_define(m4_nl_srl_commitname, `9066185f4538543e887a1f61b679967cbe6eaeb8')m4_dnl
 m4_define(m4_en_srlname, EHU-srl-server)m4_dnl
 m4_define(m4_nl_srltex, \verb|m4_nl_srlname|)m4_dnl
 m4_define(m4_en_srltex, \verb|m4_en_srlname|)m4_dnl
@@ -455,7 +455,7 @@ m4_dnl SRL dutch nominals
 m4_define(m4_srl_dn_name, srl-dutch-nominals)m4_dnl
 m4_dnl m4_define(m4_srl_dn_git, https://github.com/newsreader/vua-srl-dutch-nominal-events)m4_dnl
 m4_define(m4_srl_dn_git, git@@github.com:PaulHuygen/vua-srl-dutch-nominal-events.git)m4_dnl
-m4_define(m4_srl_dn_commitname, 1c01df721a0411049d7ad4b5d3cd41a3ccd3eeb5)m4_dnl
+m4_define(m4_srl_dn_commitname, fcf3985e1ee380ba5392c3532c9e6d0f243d8247)m4_dnl
 m4_define(m4_srl_dn_dir, vua-srl-dutch-nominal-events)m4_dnl
 m4_define(m4_srl_dn_script, srl-dutch-nominals)m4_dnl
 m4_define(m4_srl_dn_binary, vua-srl-dutch-additional-roles.py)m4_dnl
@@ -484,7 +484,7 @@ m4_define(m4_evcorefname, `EventCoreference')m4_dnl
 m4_define(m4_evcorefscript, evcoref)m4_dnl
 m4_define(m4_evcorefversion, `v3.1.2')m4_dnl
 m4_define(m4_evcorefjar, `EventCoreference-'m4_evcorefversion`-jar-with-dependencies.jar')m4_dnl
-m4_define(m4_evcorefcommit, `24e818a23e9e492e24e2b26af8a09baf5d1d6289')m4_dnl
+m4_define(m4_evcorefcommit, `5c3ec554eb3c5a56c448b804f2047ab7e91a82d4')m4_dnl
 m4_dnl
 m4_dnl Naf2Sem
 m4_dnl
@@ -538,8 +538,8 @@ m4_define(m4_en_factualitydir, vua_factuality)m4_dnl
 m4_define(m4_nl_factualitydir, multilingual_factuality)m4_dnl
 m4_define(m4_en_factualitygit, `git@@github.com:PaulHuygen/vua_factuality.git')m4_dnl
 m4_define(m4_nl_factualitygit, `git@@github.com:PaulHuygen/multilingual_factuality.git')m4_dnl
-m4_define(m4_en_factualitycommit, `58fae1dc27d503642f4899460a3481417f044e95')m4_dnl
-m4_define(m4_nl_factualitycommit, `a09d815212e047a1cef7109e8c299c9913278d67')m4_dnl
+m4_define(m4_en_factualitycommit, `412f9917eb7a6e395c05af84abfc7d47aa12e825')m4_dnl
+m4_define(m4_nl_factualitycommit, `1f47e7bf4c584f8d5b4b74a0c5489ba28d15f37b')m4_dnl
 m4_dnl m4_define(m4_factualityball, 20151220_VUA-factuality.v30.tgz)m4_dnl
 m4_dnl m4_dnl
 m4_dnl m4_dnl Corefgraph
@@ -551,7 +551,7 @@ m4_dnl Coreference-graph
 m4_dnl
 m4_define(m4_corefgraphdir, EHU-corefgraph.v30)m4_dnl  Subdir. of modules
 m4_define(m4_corefgraphscript, coref-graph)m4_dnl
-m4_define(m4_corefgraph_ball, 20170814_EHU-corefgraph.v30.tgz)m4_dnl
+m4_define(m4_corefgraph_ball, 20170831_EHU-corefgraph.v30.tgz)m4_dnl
 m4_dnl
 m4_dnl nomevents
 m4_dnl
@@ -576,7 +576,7 @@ m4_define(m4_delinkpy, relinkDarkEntities.py)m4_dnl
 m4_dnl m4_define(m4_delinkgit, https://github.com/cltl/entity-relink-pipeline.git)m4_dnl
 m4_define(m4_delinkgit, git@@github.com:PaulHuygen/entity-relink-pipeline.git)m4_dnl
 m4_dnl m4_define(m4_delink_commitname, `3f6c50e027c955ceecc757c1c792fb7f8088da19')m4_dnl
-m4_define(m4_delink_commitname, `a534c5708c02217cc9bd1a3369db9c6a056711c0')m4_dnl
+m4_define(m4_delink_commitname, `d788b0c402343f9290d3c84c0501377a63e3d98a')m4_dnl
 m4_dnl
 m4_dnl Utilities
 m4_dnl
@@ -596,7 +596,7 @@ m4_dnl
 m4_dnl m4_define(m4_alpino_version, 20706)m4_dnl
 m4_define(m4_alpino_version, 21088)m4_dnl
 m4_dnl m4_define(m4_alpinosrc, Alpino-x86_64-linux-glibc2.5-`'m4_alpino_version`'-sicstus.tar.gz)
-m4_define(m4_alpinosrc, Alpino-x86_64-Linux-glibc-2.19-`'m4_alpino_version`'-sicstus.tar.gz)
+m4_define(m4_alpinosrc, Alpino-x86_64-Linux-glibc-2.19-`'m4_alpino_version`'-sicstus.tar.gz)m4_dnl
 m4_dnl m4_define(m4_alpinourl, http://www.let.rug.nl/vannoord/alp/Alpino/binary/versions/Old/m4_alpinosrc)m4_dnl
 m4_define(m4_alpinourl, http://www.let.rug.nl/vannoord/alp/Alpino/versions/binary/latest.tar.gz)m4_dnl
 m4_define(m4_alpino_desc_url, http://www.let.rug.nl/~vannoord/alp/Alpino/)m4_dnl
