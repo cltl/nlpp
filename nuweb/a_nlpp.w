@@ -811,7 +811,7 @@ rm -rf $shtmpdir
 
 
 
-\section{Java, Python en Perl}
+\section{Java, Python and Perl}
 \label{sec:environment}
 
 To be independent from the software environment of the host computer

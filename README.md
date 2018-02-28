@@ -12,6 +12,23 @@ Currently the installer has only been tested on Ubuntu or Centos Linux.
 
 ## Installation
 
+Although the intention was, that NLPP was independent of the host on
+which it runs and that it installs everything that it  needs by
+itself, this is not really the case. For example, when installing NLPP
+on a fresh Ubuntu host, thje following Ubuntu packages have to be
+installed first:
+
+- gawk
+- gcc
+- git
+- m4
+- make
+- mercurial
+- tcsh
+- virtualenv
+- wget
+- unzip
+
 Installation goes as follows:
 
 1. cd to the top-directory where you want the pipeline to be installed.

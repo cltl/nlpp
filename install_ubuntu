@@ -1,0 +1,7 @@
+#!/bin/bash
+# install_ubuntu -- install nlpp in a freash Ubuntu Linux host
+# 20180228 Paul Huygen
+apt-get install gawk gcc git m4 make mercurial tcsh virtualenv wget unzip
+git clone https://github.com/cltl/nlpp.git
+cd nlpp/nuweb
+make install

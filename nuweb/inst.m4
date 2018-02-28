@@ -110,7 +110,8 @@ m4_define(m4_maven_javaversion, 1.7)m4_dnl
 m4_dnl
 m4_dnl install-to-project-repo tool for Maven
 m4_dnl
-m4_define(m4_installtoprojectgit, https://github.com/carchrae/install-to-project-repo.git)m4_dnl
+m4_define(m4_installtoprojectgit, https://github.com/paulhuygen/install-to-project-repo.git)m4_dnl
+m4_dnl m4_define(m4_installtoprojectgit, https://github.com/carchrae/install-to-project-repo.git)m4_dnl
 m4_define(m4_installtoprojectdir, install-to-project-repo)m4_dnl
 m4_define(m4_installtoprojectpy, install-to-project-repo.py)m4_dnl
 m4_define(m4_installtoprojectpyurl, https://github.com/carchrae/install-to-project-repo/blob/master/m4_installtoprojectpy)m4_dnl
