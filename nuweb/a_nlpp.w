@@ -644,7 +644,8 @@ export jarsdir=$javadir/jars
 Include a ``snapshot'' directory that contains non-open materials.
 
 @d set variables that point to the directory-structure @{@%
-export snapshotdir=\$pipesocket/v4.0.0.0_nlpp_resources
+@% export snapshotdir=\$pipesocket/v4.0.0.0_nlpp_resources
+export snapshotdir=\$pipesocket/m4_snapshotdirectory
 @| @}
 
 
@@ -1294,7 +1295,7 @@ Unpack the spotlight ball as a subdirectory of \verb|env|
 
 @d install the Spotlight server @{@%
   cd $envdir
-  tar -xzf \$pipesocket/\$snapshotdirectory/m4_spotlight_full_ball
+  tar -xzf \$pipesocket/\$snapshotdir/m4_spotlight_full_ball
 @| @}
 
 
