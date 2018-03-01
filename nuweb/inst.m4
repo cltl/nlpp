@@ -485,7 +485,7 @@ m4_define(m4_evcoreftex, `\verb|vua-eventcoreference_v2|')m4_dnl
 m4_dnl m4_define(m4_evcorefdir, `vua-eventcoreference_v2')m4_dnl
 m4_define(m4_evcorefdir, `EventCoreference')m4_dnl
 m4_dnl m4_define(m4_evcorefgit, `git@@github.com:PaulHuygen/EventCoreference.git')m4_dnl
-m4_define(m4_evcorefgit, `http://github.com:PaulHuygen/EventCoreference.git')m4_dnl
+m4_define(m4_evcorefgit, `https://github.com:PaulHuygen/EventCoreference.git')m4_dnl
 m4_define(m4_evcorefname, `EventCoreference')m4_dnl
 m4_define(m4_evcorefscript, evcoref)m4_dnl
 m4_define(m4_evcorefversion, `v3.1.2')m4_dnl
