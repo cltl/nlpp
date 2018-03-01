@@ -284,7 +284,7 @@ m4_define(m4_wikipediadbmodule, wikipedia-db)m4_dnl
 m4_define(m4_wikipediadbmodule_url, http://ixa2.si.ehu.es/ixa-pipes/models/`'wikipediamodule`'.v1.tar.gz)m4_dnl
 m4_dnl
 m4_dnl NED-reranker
-m4_define(m4_nedrergit, https://github.com:PaulHuygen/NWRDomainModel.git)m4_dnl
+m4_define(m4_nedrergit, https://github.com/PaulHuygen/NWRDomainModel.git)m4_dnl
 m4_dnl m4_define(m4_nedrergit, git@@github.com:PaulHuygen/NWRDomainModel.git)m4_dnl
 m4_define(m4_nedrercommitname, 6af97d8e25e451654af2a889561a78a1313ad66d)m4_dnl
 m4_define(m4_nedrername, domain_model)m4_dnl
@@ -296,7 +296,7 @@ m4_define(m4_nedrerscript, nedrer)m4_dnl
 m4_dnl
 m4_dnl Wikify
 m4_dnl m4_define(m4_wikify_git, git@@github.com:PaulHuygen/ixa-pipe-wikify.git)m4_dnl
-m4_define(m4_wikify_git, https://github.com:PaulHuygen/ixa-pipe-wikify.git)m4_dnl
+m4_define(m4_wikify_git, https://github.com/PaulHuygen/ixa-pipe-wikify.git)m4_dnl
 m4_define(m4_wikifyname, ixa-pipe-wikify)m4_dnl
 m4_define(m4_wikifytex, \verb|m4_wikifyname|)m4_dnl
 m4_define(m4_wikify_commitname, dc9e085dc3733d5f8367335f3980ac95dc127d17)m4_dnl
@@ -335,7 +335,7 @@ m4_dnl m4_define(m4_ewsdball, 20151220_VUA-ims-wsd.v30.tgz)m4_dnl
 m4_define(m4_ewsdname, it_makes_sense_WSD)m4_dnl
 m4_define(m4_ewsddir, it_makes_sense_WSD)m4_dnl
 m4_dnl m4_define(m4_ewsd_git, git@@github.com:PaulHuygen/it_makes_sense_WSD.git)m4_dnl
-m4_define(m4_ewsd_git, https://github.com:PaulHuygen/it_makes_sense_WSD.git)m4_dnl
+m4_define(m4_ewsd_git, https://github.com/PaulHuygen/it_makes_sense_WSD.git)m4_dnl
 m4_define(m4_ewsd_commitname, 58c3ec30d6f7f8e8a4f5cab7ff5bc42fecd610e8)m4_dnl
 m4_define(m4_ewsdscript, ewsd)m4_dnl
 m4_dnl
@@ -370,7 +370,7 @@ m4_define(m4_ontoname, `OntoTagger')m4_dnl
 m4_define(m4_ontotex, onto-tagger)m4_dnl
 m4_define(m4_ontodir, m4_ontoname)m4_dnl  Subdir. of modules
 m4_dnl m4_define(m4_ontogit, `git@@github.com:PaulHuygen/OntoTagger.git')m4_dnl  Subdir. of modules
-m4_define(m4_ontogit, `https://github.com:PaulHuygen/OntoTagger.git')m4_dnl  Subdir. of modules
+m4_define(m4_ontogit, `https://github.com/PaulHuygen/OntoTagger.git')m4_dnl  Subdir. of modules
 m4_define(m4_ontojar, ontotagger-1.0-jar-with-dependencies.jar)m4_dnl
 m4_define(m4_ontocommitname, `31b0554d22e3a38f980086cfc7c4627d425344e9')m4_dnl
 m4_define(m4_ontoscript, onto)m4_dnl
@@ -397,7 +397,7 @@ m4_define(m4_heidelname, ixa-pipe-time)m4_dnl
 m4_define(m4_heideltex, \verb|m4_heidelname|)m4_dnl
 m4_define(m4_heideldir, ixa-pipe-time)m4_dnl
 m4_dnl m4_define(m4_heidelgit, git@@github.com:PaulHuygen/ixa-pipe-time.git)m4_dnl
-m4_define(m4_heidelgit, https://github.com:PaulHuygen/ixa-pipe-time.git)m4_dnl
+m4_define(m4_heidelgit, https://github.com/PaulHuygen/ixa-pipe-time.git)m4_dnl
 m4_define(m4_heidelhtml, https://github.com/ixa-ehu/ixa-pipe-time)m4_dnl
 m4_dnl m4_define(m4_heidel_commitname, 0fd3b5bd4c9a82b1624928a487b3a963a266f10c)m4_dnl
 m4_define(m4_heidel_commitname, 76eed04f7332c41e289ca97b8ddec604235291bb)m4_dnl
@@ -485,7 +485,7 @@ m4_define(m4_evcoreftex, `\verb|vua-eventcoreference_v2|')m4_dnl
 m4_dnl m4_define(m4_evcorefdir, `vua-eventcoreference_v2')m4_dnl
 m4_define(m4_evcorefdir, `EventCoreference')m4_dnl
 m4_dnl m4_define(m4_evcorefgit, `git@@github.com:PaulHuygen/EventCoreference.git')m4_dnl
-m4_define(m4_evcorefgit, `https://github.com:PaulHuygen/EventCoreference.git')m4_dnl
+m4_define(m4_evcorefgit, `https://github.com/PaulHuygen/EventCoreference.git')m4_dnl
 m4_define(m4_evcorefname, `EventCoreference')m4_dnl
 m4_define(m4_evcorefscript, evcoref)m4_dnl
 m4_define(m4_evcorefversion, `v3.1.2')m4_dnl
@@ -544,8 +544,8 @@ m4_define(m4_en_factualitydir, vua_factuality)m4_dnl
 m4_define(m4_nl_factualitydir, multilingual_factuality)m4_dnl
 m4_dnl m4_define(m4_en_factualitygit, `git@@github.com:PaulHuygen/vua_factuality.git')m4_dnl
 m4_dnl m4_define(m4_nl_factualitygit, `git@@github.com:PaulHuygen/multilingual_factuality.git')m4_dnl
-m4_define(m4_en_factualitygit, `https://github.com:PaulHuygen/vua_factuality.git')m4_dnl
-m4_define(m4_nl_factualitygit, `https://github.com:PaulHuygen/multilingual_factuality.git')m4_dnl
+m4_define(m4_en_factualitygit, `https://github.com/PaulHuygen/vua_factuality.git')m4_dnl
+m4_define(m4_nl_factualitygit, `https://github.com/PaulHuygen/multilingual_factuality.git')m4_dnl
 m4_define(m4_en_factualitycommit, `412f9917eb7a6e395c05af84abfc7d47aa12e825')m4_dnl
 m4_define(m4_nl_factualitycommit, `1f47e7bf4c584f8d5b4b74a0c5489ba28d15f37b')m4_dnl
 m4_dnl m4_define(m4_factualityball, 20151220_VUA-factuality.v30.tgz)m4_dnl
