@@ -313,6 +313,7 @@ m4_dnl m4_define(m4_ukbdir, EHU-ukb.v30)m4_dnl
 m4_dnl m4_define(m4_ukbdir, ukb)m4_dnl
 m4_define(m4_ukbdir, EHU-ukb.v30)m4_dnl
 m4_define(m4_ukbball, 20170906_EHU-ukb.v30.tgz)m4_dnl
+m4_define(m4_ukbball, 20170906_EHU-ukb.v30.tgz)m4_dnl
 m4_define(m4_ukbscript, ukb)m4_dnl
 m4_dnl
 m4_dnl WSD
@@ -340,7 +341,7 @@ m4_define(m4_ewsdscript, ewsd)m4_dnl
 m4_dnl
 m4_dnl SRL-server
 m4_define(m4_srlserverdir, EHU-srl-server)m4_dnl
-m4_define(m4_srlserverball, 20170906_EHU-srl-server.tgz)m4_dnl
+m4_define(m4_srlserverball, 20170912_EHU-srl-server.tgz)m4_dnl
 m4_define(m4_srlserverport, 5005)m4_dnl
 m4_dnl
 m4_dnl FBK-time
