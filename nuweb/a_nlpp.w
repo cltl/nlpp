@@ -1249,44 +1249,55 @@ java -jar -Xmx8g dbpedia-spotlight-0.7-jar-with-dependencies-candidates.jar nl h
 We set 8Gb for the English server, but the Italian and Dutch Spotlight will require less memory. 
 
 
-So, let us do that.
+So, that's how we did it. However, currently the url \verb|http://spotlight.sztaki.hu/downloads/| seems to be unreachable. Therefore, as a temporary measure, we just unpack a complete spotlight installation.
+
 
 First, get the Spotlight model data that we need:
 
-@d download stuff @{@%
-@< need to wget @(m4_spotlight_nl_model_ball@,m4_spotlight_download_url/m4_spotlight_nl_model_ball@) @>
-@< need to wget @(m4_spotlight_en_model_ball@,m4_spotlight_download_url/m4_spotlight_en_model_ball@) @>
-@< need to wget @(m4_wikipediadb_tarball@,m4_wikipediadb_url@) @>
+@% @d download stuff @{@%
+@% @< need to wget @(m4_spotlight_nl_model_ball@,m4_spotlight_download_url/m4_spotlight_nl_model_ball@) @>
+@% @< need to wget @(m4_spotlight_en_model_ball@,m4_spotlight_download_url/m4_spotlight_en_model_ball@) @>
+@% @< need to wget @(m4_wikipediadb_tarball@,m4_wikipediadb_url@) @>
+@% 
+@% @| @}
+@% 
+@% @d install the Spotlight server @{@%
+@% cd \$envdir
+@% tar -xzf \$pipesocket/m4_snapshotdirectory/m4_spotlightball
+@% cd \$envdir/spotlight
+@% tar -xzf \$pipesocket/m4_snapshotdirectory/m4_spotlight_nl_model_ball
+@% tar -xzf \$pipesocket/m4_snapshotdirectory/m4_spotlight_en_model_ball
+@% @| @}
+@% 
+@% @d get spotlight model ball @{@%
+@% if
+@%   [ -e \$pipesocket/m4_snapshotdirectory/@1 ]
+@% then
+@%   tar -xzf \$pipesocket/m4_snapshotdirectory/@1
+@% else
+@%   wget m4_spotlight_download_url/@1
+@%   tar -xzf @1
+@%   rm @1
+@% fi
+@% 
+@% @| @}
+@% 
+@% We choose to put the Wikipedia database in the spotlight directory.
+@% 
+@% @d install the Spotlight server @{@%
+@% cd \$envdir/spotlight
+@% tar -xzf \$pipesocket/\$snapshotdirectory/m4_wikipediadb_tarball
+@% @| @}
 
-@| @}
+Unpack the spotlight ball as a subdirectory of \verb|env|
+
 
 @d install the Spotlight server @{@%
-cd \$envdir
-tar -xzf \$pipesocket/m4_snapshotdirectory/m4_spotlightball
-cd \$envdir/spotlight
-tar -xzf \$pipesocket/m4_snapshotdirectory/m4_spotlight_nl_model_ball
-tar -xzf \$pipesocket/m4_snapshotdirectory/m4_spotlight_en_model_ball
+  cd $envdir
+  tar -xzf \$pipesocket/\$snapshotdirectory/m4_spotlight_full_ball
 @| @}
 
-@d get spotlight model ball @{@%
-if
-  [ -e \$pipesocket/m4_snapshotdirectory/@1 ]
-then
-  tar -xzf \$pipesocket/m4_snapshotdirectory/@1
-else
-  wget m4_spotlight_download_url/@1
-  tar -xzf @1
-  rm @1
-fi
 
-@| @}
-
-We choose to put the Wikipedia database in the spotlight directory.
-
-@d install the Spotlight server @{@%
-cd \$envdir/spotlight
-tar -xzf \$pipesocket/\$snapshotdirectory/m4_wikipediadb_tarball
-@| @}
 
 
 \subsubsection{Check/start the Spotlight server}

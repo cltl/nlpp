@@ -687,6 +687,7 @@ m4_define(m4_treetagdir, treetagger)m4_dnl
 m4_dnl
 m4_dnl Spotlight
 m4_dnl
+m4_define(m4_spotlight_full_ball, 20180301_spotlight.tgz)m4_dnl
 m4_define(m4_spotlighturl, http://spotlight.sztaki.hu)m4_dnl
 m4_dnl m4_define(m4_nedspotmodel_nl_url, m4_spotlighturl`'/downloads/archive/2014/`'m4_spotlight_nl_tarball)m4_dnl
 m4_define(m4_spotlightball, spotlightnl.tgz)m4_dnl
