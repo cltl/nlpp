@@ -1,0 +1,6 @@
+#!/bin/bash
+# ubuntu-install -- Install this on a fresh Ubuntu system
+# 20180302 Paul Huygen
+apt-get install build-essential g++ gawk gcc git m4 make mercurial tcsh virtualenv wget unzip
+cd nuweb
+make install
